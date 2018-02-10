@@ -1,5 +1,4 @@
 module.exports = {
-  parserPreset: './parser-preset',
   rules: {
     'type-enum': [
       2,
@@ -67,4 +66,10 @@ module.exports = {
     'type-case': [2, 'always', 'lower-case'], // type 必须小写
     'type-empty': [2, 'never'], // type 不能为空
   },
+  parserPreset: {
+    parserOpts: {
+      headerPattern: /^(:\w*:)(?:\((.*?)\))?\s((?:.*(?=\())|.*)(?:\(#(\d*)\))?/,
+      headerCorrespondence: ['type', 'scope', 'subject', 'ticket'],
+    }, // gitmoji commit 提取表达式 for commitlint
+  }, // 为 gitmoji 风格提供单独的解析器
 };
