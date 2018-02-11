@@ -1,3 +1,4 @@
+// 配置参数详解请参见 https://gist.github.com/arvinxx/ded06b2bd53095669445598b7b117dc3
 module.exports = {
   parser: 'babel-eslint',
   extends: 'airbnb',
@@ -35,14 +36,16 @@ module.exports = {
     'no-bitwise': [0],
     'no-cond-assign': [0],
     'import/no-unresolved': [0],
-    'comma-dangle': [ // comma 设置
-      'error', {
-        'arrays': 'always-multiline',
-        'objects': 'always-multiline',
-        'imports': 'always-multiline',
-        'exports': 'always-multiline',
-        'functions': 'ignore',
-      }],
+    'comma-dangle': [
+      'error',
+      {
+        arrays: 'always-multiline',
+        objects: 'always-multiline',
+        imports: 'always-multiline',
+        exports: 'always-multiline',
+        functions: 'ignore',
+      },
+    ],
     'function-paren-newline': [0],
     'no-restricted-globals': [0],
     'require-yield': [1],
@@ -51,7 +54,7 @@ module.exports = {
 
   parserOptions: {
     ecmaFeatures: {
-      experimentalObjectRestSpread: true,
+      experimentalObjectRestSpread: true, // 启用对实验性的objectRest/spreadProperties的支持
     },
   },
   settings: {
