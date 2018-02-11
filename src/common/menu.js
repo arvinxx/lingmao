@@ -1,7 +1,7 @@
 import { isUrl } from '../utils/utils';
 
 const menuData = [{
-  name: 'dashboard',
+  name: '仪表盘',
   icon: 'dashboard',
   path: 'dashboard',
   children: [{
