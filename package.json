@@ -16,6 +16,7 @@
     "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --ext .js",
+    "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "roadhog test",
     "test:component": "roadhog test ./src/components",
     "test:all": "node ./tests/run-tests.js"
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^6.1.0",
+    "@storybook/react": "^3.3.13",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-plugin-dva-hmr": "^0.4.1",
