@@ -25,14 +25,17 @@ const links = [
   },
 ];
 
+// TODO 了解 Fragment 的用法 @GQ @LJH @XY
 const copyright = (
   <Fragment>
+    {/* Fragment 提供空的Wrapper标签 */}
+    {/* 详情查看 https://reactjs.org/blog/2017/11/28/react-v16.2.0-fragment-support.html#support-for-fragment-syntax */}
     Copyright <Icon type="copyright" /> 2018 LEGION
   </Fragment>
 );
 
 class UserLayout extends React.PureComponent {
-  getPageTitle() {
+  getPageTitle() { // TODO:在 BasicLayout 也有该函数，可以考虑提取同一函数
     const { routerData, location } = this.props;
     const { pathname } = location;
     let title = 'LEGION';
