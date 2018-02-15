@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^6.1.0",
-    "@storybook/react": "^3.3.13",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-plugin-dva-hmr": "^0.4.1",
