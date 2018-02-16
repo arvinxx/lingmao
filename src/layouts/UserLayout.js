@@ -25,11 +25,11 @@ const links = [
   },
 ];
 
-// TODO 了解 Fragment 的用法 @GQ @LJH @XY
+// TODO 了解 Fragment 的用法 @GQ @LJH @XY Fragment
+// 提供空的Wrapper标签
+// 详情查看 https://reactjs.org/blog/2017/11/28/react-v16.2.0-fragment-support.html
 const copyright = (
   <Fragment>
-    {/* Fragment 提供空的Wrapper标签 */}
-    {/* 详情查看 https://reactjs.org/blog/2017/11/28/react-v16.2.0-fragment-support.html#support-for-fragment-syntax */}
     Copyright <Icon type="copyright" /> 2018 LEGION
   </Fragment>
 );
