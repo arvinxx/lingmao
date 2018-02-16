@@ -35,7 +35,8 @@ const copyright = (
 );
 
 class UserLayout extends React.PureComponent {
-  getPageTitle() { // TODO:在 BasicLayout 也有该函数，可以考虑提取同一函数
+  getPageTitle() {
+    // TODO:在 BasicLayout 也有该函数，可以考虑提取同一函数
     const { routerData, location } = this.props;
     const { pathname } = location;
     let title = 'LEGION';
