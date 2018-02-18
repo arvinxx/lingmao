@@ -5,12 +5,11 @@ import { getMenuData } from './menu';
 
 let routerDataCache;
 
-const modelNotExisted = (app, model) => (
+const modelNotExisted = (app, model) =>
   // eslint-disable-next-line
   !app._models.some(({ namespace }) => {
     return namespace === model.substring(model.lastIndexOf('/') + 1);
-  })
-);
+  });
 
 // wrapper of dynamic
 const dynamicWrapper = (app, models, component) => {
@@ -36,9 +35,7 @@ const dynamicWrapper = (app, models, component) => {
   // () => import('module')
   return dynamic({
     app,
-    models: () => models.filter(
-      model => modelNotExisted(app, model)).map(m => import(`../models/${m}.js`)
-    ),
+    models: () => models.filter(model => modelNotExisted(app, model)).map(m => import(`../models/${m}.js`)),
     // add routerData prop
     component: () => {
       if (!routerDataCache) {
@@ -46,10 +43,11 @@ const dynamicWrapper = (app, models, component) => {
       }
       return component().then((raw) => {
         const Component = raw.default || raw;
-        return props => createElement(Component, {
-          ...props,
-          routerData: routerDataCache,
-        });
+        return props =>
+          createElement(Component, {
+            ...props,
+            routerData: routerDataCache,
+          });
       });
     },
   });
@@ -73,6 +71,9 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    '/interview': {
+      component: dynamicWrapper(app, ['interview'], () => import('../routes/Interview/Interview')),
+    },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
     },
@@ -81,9 +82,6 @@ export const getRouterData = (app) => {
     },
     '/dashboard/workplace': {
       component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
-      // hideInBreadcrumb: true,
-      // name: '工作台',
-      // authority: 'admin',
     },
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
@@ -160,6 +158,7 @@ export const getRouterData = (app) => {
     '/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
+
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },

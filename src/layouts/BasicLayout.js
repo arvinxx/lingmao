@@ -123,6 +123,7 @@ class BasicLayout extends React.PureComponent {
       payload: collapsed,
     });
   };
+
   handleNoticeClear = (type) => {
     message.success(`清空了${type}`);
     this.props.dispatch({
@@ -130,6 +131,7 @@ class BasicLayout extends React.PureComponent {
       payload: type,
     });
   };
+
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
@@ -213,19 +215,19 @@ class BasicLayout extends React.PureComponent {
             <GlobalFooter
               links={[
                 {
-                  key: 'Pro 首页',
+                  key: '使用指南',
                   title: 'Pro 首页',
                   href: 'http://pro.ant.design',
                   blankTarget: true,
                 }, {
                   key: 'github',
                   title: <Icon type="github" />,
-                  href: 'https://github.com/ant-design/ant-design-pro',
+                  href: 'https://github.com/arvinxx/LEGION',
                   blankTarget: true,
                 }, {
-                  key: 'Ant Design',
-                  title: 'Ant Design',
-                  href: 'http://ant.design',
+                  key: '关于我们',
+                  title: '关于我们',
+                  href: 'http://arvinx.io',
                   blankTarget: true,
                 }]}
               copyright={
