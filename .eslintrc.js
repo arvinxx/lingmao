@@ -36,6 +36,8 @@ module.exports = {
     'no-bitwise': [0],
     'no-cond-assign': [0],
     'import/no-unresolved': [0],
+    'no-mixed-operators': [0],
+    'prefer-destructuring': [0],
     'comma-dangle': [
       'error',
       {
