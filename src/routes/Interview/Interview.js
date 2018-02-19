@@ -1,68 +1,74 @@
 import React from 'react';
-import { List, Card, Avatar, Progress } from 'antd';
+import { Tree, Card } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment/moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './BasicList.less';
 
-const paginationProps = {
-  showSizeChanger: true,
-  showQuickJumper: true,
-  pageSize: 5,
-  total: 50,
-};
+const TreeNode = Tree.TreeNode;
 
-const ListContent = ({ data: { owner, createdAt, percent, status } }) => (
-  <div>
-    <div>
-      <span>Owner</span>
-      <p>{owner}</p>
-    </div>
-    <div className={styles.listContentItem}>
-      <span>开始时间</span>
-      <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
-    </div>
-    <div className={styles.listContentItem}>
-      <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
-    </div>
-  </div>
-);
+@connect(({ interview }) => ({ interview }))
+export default class SearchTree extends React.Component {
+  state = {
+    expandedKeys: ['0-0-0', '0-0-1'],
+    autoExpandParent: true,
+    checkedKeys: ['0-0-0'],
+    selectedKeys: [],
+  };
 
-@connect(({ list, loading }) => ({ list, loading: loading.models.list }))
-export default class SearchTree extends React.PureComponent {
   componentDidMount() {
     this.props.dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 6,
-      },
+      type: 'interview/fetch',
     });
   }
 
+  onExpand = (expandedKeys) => {
+    console.log('onExpand', arguments);
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    this.setState({
+      expandedKeys,
+      autoExpandParent: false,
+    });
+  };
+  onCheck = (checkedKeys) => {
+    console.log('onCheck', checkedKeys);
+    this.setState({ checkedKeys });
+  };
+  onSelect = (selectedKeys, info) => {
+    console.log('onSelect', info);
+    this.setState({ selectedKeys });
+  };
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.title} key={item.key} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode {...item} />;
+    });
+  };
+
   render() {
-    const { list: { list }, loading } = this.props;
+    const { interview } = this.props;
 
     return (
       <PageHeaderLayout>
         <Card>
-          <List
-            size="large"
-            rowKey="id"
-            loading={loading}
-            pagination={paginationProps}
-            dataSource={list}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar src={item.logo} shape="square" size="large" />}
-                  title={<a href={item.href}>{item.title}</a>}
-                  description={item.subDescription}
-                />
-                <ListContent data={item} />
-              </List.Item>
-            )}
-          />
+          <Tree
+            checkable
+            onExpand={this.onExpand}
+            expandedKeys={this.state.expandedKeys}
+            autoExpandParent={this.state.autoExpandParent}
+            onCheck={this.onCheck}
+            checkedKeys={this.state.checkedKeys}
+            onSelect={this.onSelect}
+            selectedKeys={this.state.selectedKeys}
+          >
+            {this.renderTreeNodes(interview.record)}
+          </Tree>
         </Card>
       </PageHeaderLayout>
     );
