@@ -15,7 +15,7 @@
     "lint": "eslint --ext .js src mock tests && npm run lint:style",
     "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
     "lint-staged": "lint-staged",
-    "lint-staged:js": "eslint --ext .js",
+    "lint-staged:js": "eslint --ext .js --fix",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "roadhog test",
     "test:component": "roadhog test ./src/components",
@@ -70,6 +70,7 @@
     "eslint-plugin-react": "^7.0.1",
     "gh-pages": "^1.0.0",
     "husky": "^0.14.3",
+    "less-vars-to-js": "^1.2.1",
     "lint-staged": "^6.0.0",
     "mockjs": "^1.0.1-beta3",
     "pro-download": "^1.0.1",
@@ -86,7 +87,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx}": "lint-staged:js",
-    "**/*.less": "stylelint --syntax less"
+    "**/*.less": "stylelint --syntax less --fix"
   },
   "browserslist": [
     "> 1%",
