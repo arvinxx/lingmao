@@ -5,7 +5,6 @@ import { Link } from 'dva/router';
 import styles from './index.less';
 
 const { Sider } = Layout;
-const { SubMenu } = Menu;
 
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
@@ -134,27 +133,12 @@ export default class SiderMenu extends PureComponent {
   /**
    * get SubMenu or Item
    */
-  getSubMenuOrItem = (item) => {
-    if (item.children && item.children.some(child => child.name)) {
-      return (
-        <SubMenu
-          title={
-            item.icon ? (
-              <span>
-                {getIcon(item.icon)}
-                <span>{item.name}</span>
-              </span>
-            ) : (
-              item.name
-            )
-          }
-          key={item.path}
-        >
-          {this.getNavMenuItems(item.children)}
-        </SubMenu>
-      );
-    }
-    return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
+  getMenuItem = (item) => {
+    return (
+      <Menu.Item className={styles.submenu} key={item.path}>
+        {this.getMenuItemPath(item)}
+      </Menu.Item>
+    );
   };
   /**
    * 获得菜单子节点
@@ -167,7 +151,7 @@ export default class SiderMenu extends PureComponent {
     return menusData
       .filter(item => item.name && !item.hideInMenu)
       .map((item) => {
-        const ItemDom = this.getSubMenuOrItem(item);
+        const ItemDom = this.getMenuItem(item);
         return this.checkPermissionItem(item.authority, ItemDom);
       })
       .filter(item => !!item);
@@ -180,7 +164,7 @@ export default class SiderMenu extends PureComponent {
     }
     return `/${path || ''}`.replace(/\/+/g, '/');
   };
-  // permission to check
+  // 检验权限
   checkPermissionItem = (authority, ItemDom) => {
     if (this.props.Authorized && this.props.Authorized.check) {
       const { check } = this.props.Authorized;
@@ -191,8 +175,7 @@ export default class SiderMenu extends PureComponent {
   handleOpenChange = (openKeys) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = this.menus.some(
-      item =>
-        lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
+      item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
     );
     this.setState({
       openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
@@ -220,7 +203,7 @@ export default class SiderMenu extends PureComponent {
         collapsed={collapsed}
         breakpoint="lg"
         onCollapse={onCollapse}
-        width={256}
+        width={150}
         className={styles.sider}
       >
         <div className={styles.logo} key="logo">
@@ -231,12 +214,11 @@ export default class SiderMenu extends PureComponent {
         </div>
         <Menu
           key="Menu"
-          theme="dark"
           mode="inline"
           {...menuProps}
           onOpenChange={this.handleOpenChange}
           selectedKeys={selectedKeys}
-          style={{ padding: '16px 0', width: '100%' }}
+          className={styles.menu}
         >
           {this.getNavMenuItems(this.menus)}
         </Menu>
