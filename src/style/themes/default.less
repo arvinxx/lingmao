@@ -1,12 +1,12 @@
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
-@import "./colors";
+@import "./colors.less";
 
 // The prefix to use on all css classes from ant.
-@ant-prefix: tr;
+@ant-prefix: ant;
 
 // -------- Colors -----------
-@primary-color: @blue-4;
-@info-color: @blue-4;
+@primary-color: @blue-6;
+@info-color: @blue-6;
 @success-color: @green-4;
 @processing-color: @primary-color;
 @error-color: @red-4;
@@ -19,7 +19,7 @@
 @primary-1: @blue-1; // replace tint(@primary-color, 90%)
 @primary-2: @blue-2; // replace tint(@primary-color, 80%)
 @primary-3: @blue-3; // color used to control the text color in many active and hover states, replace tint(@primary-color, 20%)
-@primary-4: @blue-4; // color used to control the text color of active buttons, don't use, use @primary-color
+@primary-4: @blue-6; // color used to control the text color of active buttons, don't use, use @primary-color
 @primary-5: @blue-5; // replace shade(@primary-color, 5%)
 
 // Base Scaffolding Variables
@@ -84,14 +84,6 @@
 @ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
 @ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
 @ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
-
-// Default motion
-
-@motion-default-1: all .1s;
-@motion-default-2: all .2s;
-@motion-default-3: all .3s;
-@motion-default-4: all .4s;
-@motion-default-5: all .5s;
 
 // Border color
 @border-color-base: @transWhite-5; // base border outline a component
@@ -237,6 +229,8 @@
 @zindex-tooltip: 1060;
 
 // Animation
+@animation-duration-too-slow: .5s;
+@animation-duration-very-slow: .4s;
 @animation-duration-slow: .3s; // Modal
 @animation-duration-base: .2s;
 @animation-duration-fast: .1s; // Tooltip
@@ -314,8 +308,8 @@
 
 // Menu
 // ---
-@menu-inline-toplevel-item-height: 40px;
-@menu-item-height: 40px;
+@menu-inline-toplevel-item-height: 80px;
+@menu-item-height: 80px;
 @menu-collapsed-width: 80px;
 @menu-bg: @component-background;
 @menu-item-color: @text-color;

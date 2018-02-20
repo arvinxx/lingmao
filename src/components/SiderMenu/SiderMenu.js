@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import { Link } from 'dva/router';
+import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 
 const { Sider } = Layout;
@@ -120,8 +121,8 @@ export default class SiderMenu extends PureComponent {
         onClick={
           this.props.isMobile
             ? () => {
-                this.props.onCollapse(true);
-              }
+              this.props.onCollapse(true);
+            }
             : undefined
         }
       >
@@ -148,13 +149,10 @@ export default class SiderMenu extends PureComponent {
     if (!menusData) {
       return [];
     }
-    return menusData
-      .filter(item => item.name && !item.hideInMenu)
-      .map((item) => {
-        const ItemDom = this.getMenuItem(item);
-        return this.checkPermissionItem(item.authority, ItemDom);
-      })
-      .filter(item => !!item);
+    return menusData.filter(item => item.name && !item.hideInMenu).map((item) => {
+      const ItemDom = this.getMenuItem(item);
+      return this.checkPermissionItem(item.authority, ItemDom);
+    }).filter(item => !!item);
   };
   // conversion Path
   // 转化路径
@@ -175,15 +173,28 @@ export default class SiderMenu extends PureComponent {
   handleOpenChange = (openKeys) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const isMainMenu = this.menus.some(
-      item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
+      item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey),
     );
     this.setState({
       openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
     });
   };
 
+  toggle = () => {
+    const { collapsed, onCollapse } = this.props;
+    onCollapse(!collapsed);
+    this.triggerResizeEvent();
+  };
+
+  @Debounce(600)
+  triggerResizeEvent() { // eslint-disable-line
+    const event = document.createEvent('HTMLEvents');
+    event.initEvent('resize', true, false);
+    window.dispatchEvent(event);
+  }
+
   render() {
-    const { logo, collapsed, location: { pathname }, onCollapse } = this.props;
+    const { logo, collapsed, location: { pathname }, onCollapse, width } = this.props;
     const { openKeys } = this.state;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed
@@ -203,25 +214,32 @@ export default class SiderMenu extends PureComponent {
         collapsed={collapsed}
         breakpoint="lg"
         onCollapse={onCollapse}
-        width={150}
+        width={width}
         className={styles.sider}
       >
-        <div className={styles.logo} key="logo">
-          <Link to="/">
-            <img src={logo} alt="logo" />
-            <h1>LEGION</h1>
-          </Link>
+        <div className={styles.container}>
+          <div className={styles.logo} key="logo">
+            <Link to="/">
+              <img src={logo} alt="logo" />
+            </Link>
+          </div>
+          <Menu
+            key="Menu"
+            mode="inline"
+            {...menuProps}
+            onOpenChange={this.handleOpenChange}
+            selectedKeys={selectedKeys}
+            className={styles.menu}
+          >
+            {this.getNavMenuItems(this.menus)}
+          </Menu>
+          <Icon
+            className={styles.trigger}
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={this.toggle}
+          />
         </div>
-        <Menu
-          key="Menu"
-          mode="inline"
-          {...menuProps}
-          onOpenChange={this.handleOpenChange}
-          selectedKeys={selectedKeys}
-          className={styles.menu}
-        >
-          {this.getNavMenuItems(this.menus)}
-        </Menu>
+
       </Sider>
     );
   }

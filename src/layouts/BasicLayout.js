@@ -15,6 +15,7 @@ import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
+import styles from './BasicLayout.less';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -156,6 +157,8 @@ class BasicLayout extends React.PureComponent {
       currentUser, collapsed, fetchingNotices, notices, routerData, match, location,
     } = this.props;
     const bashRedirect = this.getBashRedirect();
+    const defaultSideWith = 140;
+
     const layout = (
       <Layout>
         <SiderMenu
@@ -167,8 +170,12 @@ class BasicLayout extends React.PureComponent {
           location={location}
           isMobile={this.state.isMobile}
           onCollapse={this.handleMenuCollapse}
+          width={defaultSideWith}
         />
-        <Layout>
+        <Layout
+          className={styles.layout}
+          style={{ paddingLeft: collapsed ? 80 : defaultSideWith }}
+        >
           <Header style={{ padding: 0 }}>
             <GlobalHeader
               logo={logo}

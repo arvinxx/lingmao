@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
-import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
 import NoticeIcon from '../NoticeIcon';
 import HeaderSearch from '../HeaderSearch';
@@ -39,20 +38,10 @@ export default class GlobalHeader extends PureComponent {
     });
     return groupBy(newNotices, 'type');
   }
-  toggle = () => {
-    const { collapsed, onCollapse } = this.props;
-    onCollapse(!collapsed);
-    this.triggerResizeEvent();
-  }
-  @Debounce(600)
-  triggerResizeEvent() { // eslint-disable-line
-    const event = document.createEvent('HTMLEvents');
-    event.initEvent('resize', true, false);
-    window.dispatchEvent(event);
-  }
+
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, isMobile, logo,
+      currentUser, fetchingNotices, isMobile, logo,
       onNoticeVisibleChange, onMenuClick, onNoticeClear,
     } = this.props;
     const menu = (
@@ -77,11 +66,6 @@ export default class GlobalHeader extends PureComponent {
             <Divider type="vertical" key="line" />,
           ]
         )}
-        <Icon
-          className={styles.trigger}
-          type={collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.toggle}
-        />
         <div className={styles.right}>
           <HeaderSearch
             className={`${styles.action} ${styles.search}`}
