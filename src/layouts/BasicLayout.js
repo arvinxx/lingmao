@@ -113,7 +113,7 @@ class BasicLayout extends React.PureComponent {
       urlParams.searchParams.delete('redirect');
       window.history.replaceState(null, 'redirect', urlParams.href);
     } else {
-      return '/dashboard/analysis';
+      return '/dashboard';
     }
     return redirect;
   };
@@ -219,12 +219,8 @@ class BasicLayout extends React.PureComponent {
                   title: 'Pro 首页',
                   href: 'http://pro.ant.design',
                   blankTarget: true,
-                }, {
-                  key: 'github',
-                  title: <Icon type="github" />,
-                  href: 'https://github.com/arvinxx/LEGION',
-                  blankTarget: true,
-                }, {
+                },
+                {
                   key: '关于我们',
                   title: '关于我们',
                   href: 'http://arvinx.io',
