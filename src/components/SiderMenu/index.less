@@ -50,6 +50,8 @@
   align-items: center;
   &:hover {
     background: @white-1;
+  }
+  a:hover {
     color: @heading-color;
   }
 }
@@ -70,7 +72,9 @@ i.trigger {
   .drawer .drawer-content {
     background: @base-white;
   }
-}
-:global(.ant-menu-item-active) {
-  color: @heading-color;
+  .ant-menu-item-selected {
+    a:hover {
+      color: @primary-color;
+    }
+  }
 }
