@@ -86,7 +86,10 @@
     "nightmare": "^2.10.0"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": "lint-staged:js",
+    "**/*.{js,jsx}": [
+      "prettier --trailing-comma all --single-quote --write",
+      "lint-staged:js"
+    ],
     "**/*.less": "stylelint --syntax less --fix"
   },
   "browserslist": [
