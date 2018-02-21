@@ -6,19 +6,19 @@
   "scripts": {
     "precommit": "npm run lint-staged",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "start": "cross-env BROWSER=none DISABLE_ESLINT=true roadhog dev",
-    "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true roadhog dev",
-    "build": "cross-env DISABLE_ESLINT=true roadhog build",
+    "start": "cross-env BROWSER=none ESLINT=none umi dev",
+    "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true umi dev",
+    "build": "cross-env DISABLE_ESLINT=true umi build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
-    "analyze": "cross-env ANALYZE=true roadhog build",
+    "analyze": "cross-env ANALYZE=true umi build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
     "lint": "eslint --ext .js src mock tests && npm run lint:style",
     "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --ext .js --fix",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "test": "roadhog test",
-    "test:component": "roadhog test ./src/components",
+    "test": "umi test",
+    "test:component": "umi test ./src/components",
     "test:all": "node ./tests/run-tests.js"
   },
   "dependencies": {
@@ -47,6 +47,8 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
     "react-fittext": "^1.0.0",
+    "umi": "^1.0.0-rc.19",
+    "umi-plugin-dva": "^0.1.4",
     "url-polyfill": "^1.0.10"
   },
   "devDependencies": {
