@@ -1,73 +1,28 @@
 import React from 'react';
-import { Tree, Card } from 'antd';
-import { connect } from 'dva';
 
+import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 
-const TreeNode = Tree.TreeNode;
+import 'react-reflex/styles.css';
 
-@connect(({ interview }) => ({ interview }))
-export default class SearchTree extends React.Component {
-  state = {
-    expandedKeys: ['0-0-0', '0-0-1'],
-    autoExpandParent: true,
-    checkedKeys: ['0-0-0'],
-    selectedKeys: [],
-  };
+import styles from './index.less';
+import DragableTree from '../../components/TreeList/DragableTree';
+import ListInput from '../../components/ListInput/index';
 
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'interview/fetch',
-    });
-  }
-
-  onExpand = (expandedKeys) => {
-    console.log('onExpand', arguments);
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    this.setState({
-      expandedKeys,
-      autoExpandParent: false,
-    });
-  };
-  onCheck = (checkedKeys) => {
-    console.log('onCheck', checkedKeys);
-    this.setState({ checkedKeys });
-  };
-  onSelect = (selectedKeys, info) => {
-    console.log('onSelect', info);
-    this.setState({ selectedKeys });
-  };
-  renderTreeNodes = (data) => {
-    return data.map((item) => {
-      if (item.children) {
-        return (
-          <TreeNode title={item.title} key={item.key} dataRef={item}>
-            {this.renderTreeNodes(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode {...item} />;
-    });
-  };
-
+export default class ReflexBasicSplitterDemo extends React.Component {
   render() {
-    const { interview } = this.props;
-
+    const minPanelSize = 300;
     return (
-      <Card>
-        <Tree
-          checkable
-          onExpand={this.onExpand}
-          expandedKeys={this.state.expandedKeys}
-          autoExpandParent={this.state.autoExpandParent}
-          onCheck={this.onCheck}
-          checkedKeys={this.state.checkedKeys}
-          onSelect={this.onSelect}
-          selectedKeys={this.state.selectedKeys}
-        >
-          {this.renderTreeNodes(interview.record)}
-        </Tree>
-      </Card>
+      <div className={styles.container}>
+        <div className={styles.toolbar}>Header</div>
+        <ReflexContainer orientation="vertical">
+          <ReflexElement className={styles['left-container']} minSize={minPanelSize} />
+          <ReflexSplitter />
+          <ReflexElement className={styles['right-container']} minSize={minPanelSize}>
+            <DragableTree />
+            <ListInput />
+          </ReflexElement>
+        </ReflexContainer>
+      </div>
     );
   }
 }

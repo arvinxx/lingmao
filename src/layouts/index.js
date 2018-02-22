@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react';
-import { Icon, Layout } from 'antd';
+import { Layout } from 'antd';
 import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
 
-import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
 import styles from './index.less';
 
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 
 const redirectData = [];
 const getRedirect = (item) => {
@@ -53,29 +52,6 @@ const BasicLayout = (props) => {
         <Content className={styles.content}>
           <Fragment>{props.children}</Fragment>
         </Content>
-        <Footer style={{ padding: 0 }}>
-          <GlobalFooter
-            links={[
-              {
-                key: '使用指南',
-                title: 'Pro 首页',
-                href: 'http://pro.ant.design',
-                blankTarget: true,
-              },
-              {
-                key: '关于我们',
-                title: '关于我们',
-                href: 'http://arvinx.io',
-                blankTarget: true,
-              },
-            ]}
-            copyright={
-              <Fragment>
-                Copyright <Icon type="copyright" /> 2018 LEGION
-              </Fragment>
-            }
-          />
-        </Footer>
       </Layout>
     </Layout>
   );
@@ -84,5 +60,5 @@ export default withRouter(
   connect(({ user, global }) => ({
     currentUser: user.currentUser,
     collapsed: global.collapsed,
-  }))(BasicLayout),
+  }))(BasicLayout)
 );

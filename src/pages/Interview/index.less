@@ -1,0 +1,30 @@
+@import '../../style/themes/default';
+
+.container {
+  width: 100%;
+  background: @base-white;
+}
+
+.left-container {
+  //background: @red-2;
+}
+
+.right-container {
+  //background: @green-1;
+}
+
+.toolbar {
+  background: @base-black;
+  padding: 1.6rem;
+  color: @transWhite-2;
+  //border-bottom: 1px solid @white-3;
+  box-shadow: @shadow-1;
+}
+
+:global {
+  .reflex-layout.vertical > .reflex-splitter {
+    border: none;
+    background: @white-3;
+    width: 2px;
+  }
+}
