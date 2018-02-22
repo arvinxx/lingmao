@@ -1,18 +1,19 @@
 import React from 'react';
-import { Layout } from 'antd';
-import { connect } from 'dva';
+import ContentLayout from '../layouts/ContentLayout';
+
 import styles from './index.less';
 
-@connect(({ global }) => ({
-  collapsed: global.collapsed,
-}))
 class Index extends React.PureComponent {
   render() {
     return (
-      <Layout>
-        <div className={styles.container}>Index Page</div>
-      </Layout>
+      <ContentLayout>
+        <div className={styles.container} >
+          Index Page
+
+        </div>
+      </ContentLayout>
     );
   }
 }
+
 export default Index;
