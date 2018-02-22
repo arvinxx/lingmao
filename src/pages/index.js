@@ -7,14 +7,6 @@ import styles from './index.less';
   collapsed: global.collapsed,
 }))
 class Index extends React.PureComponent {
-  // handleMenuCollapse = (collapsed) => {
-  //   console.log(this.props.dispatch);
-  //   this.props.dispatch({
-  //     type: 'global/changeLayoutCollapsed',
-  //     payload: collapsed,
-  //   });
-  // };
-
   render() {
     return (
       <Layout>
@@ -23,5 +15,4 @@ class Index extends React.PureComponent {
     );
   }
 }
-
 export default Index;

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Icon, Layout } from 'antd';
 import { connect } from 'dva';
-import { withRouter } from 'react-router-dom';
+import withRouter from 'umi/withRouter';
 
 import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
@@ -12,9 +12,6 @@ import styles from './BasicLayout.less';
 
 const { Content, Footer } = Layout;
 
-/**
- * 根据菜单取得重定向地址.
- */
 const redirectData = [];
 const getRedirect = (item) => {
   if (item && item.children) {
@@ -41,21 +38,6 @@ const BasicLayout = (props) => {
       payload: collapsedState,
     });
   };
-  // const bashRedirect = () => {
-  //   // According to the url parameter to redirect
-  //   // 这里是重定向的,重定向到 url 的 redirect 参数所示地址
-  //   const urlParams = new URL(window.location.href);
-  //
-  //   const redirect = urlParams.searchParams.get('redirect');
-  //   // Remove the parameters in the url
-  //   if (redirect) {
-  //     urlParams.searchParams.delete('redirect');
-  //     window.history.replaceState(null, 'redirect', urlParams.href);
-  //   } else {
-  //     return '/interview';
-  //   }
-  //   return redirect;
-  // };
 
   return (
     <Layout>
