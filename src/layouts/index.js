@@ -60,5 +60,5 @@ export default withRouter(
   connect(({ user, global }) => ({
     currentUser: user.currentUser,
     collapsed: global.collapsed,
-  }))(BasicLayout)
+  }))(BasicLayout),
 );
