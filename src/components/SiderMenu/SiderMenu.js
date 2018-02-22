@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import pathToRegexp from 'path-to-regexp';
-import { Link } from 'dva/router';
+import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 
@@ -25,52 +25,10 @@ export default class SiderMenu extends PureComponent {
   constructor(props) {
     super(props);
     this.menus = props.menuData;
-    this.state = {
-      openKeys: this.getDefaultCollapsedSubMenus(props),
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.location.pathname !== this.props.location.pathname) {
-      this.setState({
-        openKeys: this.getDefaultCollapsedSubMenus(nextProps),
-      });
-    }
   }
 
   /**
-   * Convert pathname to openKeys
-   * /list/search/articles = > ['list','/list/search']
-   * @param  props
-   */
-  getDefaultCollapsedSubMenus(props) {
-    const { location: { pathname } } = props || this.props;
-    // eg. /list/search/articles = > ['','list','search','articles']
-    let snippets = pathname.split('/');
-    // Delete the end
-    // eg.  delete 'articles'
-    snippets.pop();
-    // Delete the head
-    // eg. delete ''
-    snippets.shift();
-    // eg. After the operation is completed, the array should be ['list','search']
-    // eg. Forward the array as ['list','list/search']
-    snippets = snippets.map((item, index) => {
-      // If the array length > 1
-      if (index > 0) {
-        // eg. search => ['list','search'].join('/')
-        return snippets.slice(0, index + 1).join('/');
-      }
-      // index 0 to not do anything
-      return item;
-    });
-    snippets = snippets.map(item => this.getSelectedMenuKeys(`/${item}`)[0]);
-    // eg. ['list','list/search']
-    return snippets;
-  }
-
-  /**
-   * Recursively flatten the data
+   * 递归地将 json 格式数据转成列表
    * [{path:string},{path:string}] => {path,path2}
    * @param  menus
    */
@@ -88,22 +46,23 @@ export default class SiderMenu extends PureComponent {
   }
 
   /**
-   * Get selected child nodes
+   * 去掉前缀 /user => user
    * /user/chen => ['user','/user/:id']
    */
   getSelectedMenuKeys = (path) => {
     const flatMenuKeys = this.getFlatMenuKeys(this.menus);
     return flatMenuKeys.filter(item => pathToRegexp(`/${item}(.*)`).test(path));
   };
+
   /**
    * 判断是否是http链接.返回 Link 或 a
-   * Judge whether it is http link.return a or Link
    * @memberof SiderMenu
    */
   getMenuItemPath = (item) => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const { target, name } = item;
+
     // Is it a http link
     if (/^https?:\/\//.test(itemPath)) {
       return (
@@ -116,23 +75,17 @@ export default class SiderMenu extends PureComponent {
     return (
       <Link
         to={itemPath}
-        target={target}
+        // target={target}
         replace={itemPath === this.props.location.pathname}
-        onClick={
-          this.props.isMobile
-            ? () => {
-              this.props.onCollapse(true);
-            }
-            : undefined
-        }
       >
         {icon}
         <span>{name}</span>
       </Link>
     );
   };
+
   /**
-   * get SubMenu or Item
+   * 获得 MenuItem VDOM
    */
   getMenuItem = (item) => {
     return (
@@ -141,28 +94,42 @@ export default class SiderMenu extends PureComponent {
       </Menu.Item>
     );
   };
+
   /**
-   * 获得菜单子节点
+   * 展示 Menu 内容
    * @memberof SiderMenu
    */
   getNavMenuItems = (menusData) => {
     if (!menusData) {
       return [];
     }
-    return menusData.filter(item => item.name && !item.hideInMenu).map((item) => {
-      const ItemDom = this.getMenuItem(item);
-      return this.checkPermissionItem(item.authority, ItemDom);
-    }).filter(item => !!item);
+    return menusData
+      .filter(item => item.name && !item.hideInMenu)
+      .map((item) => {
+        const ItemDom = this.getMenuItem(item);
+        return this.checkPermissionItem(item.authority, ItemDom);
+      })
+      .filter(item => !!item);
   };
-  // conversion Path
-  // 转化路径
+
+  /**
+   * 转化路径
+   * @author ArvinX
+   * @date 2018/2/22
+   */
   conversionPath = (path) => {
     if (path && path.indexOf('http') === 0) {
       return path;
     }
     return `/${path || ''}`.replace(/\/+/g, '/');
   };
-  // 检验权限
+
+  /**
+   * 检验权限
+   * @author ArvinX
+   * @date 2018/2/22
+   * @Description:
+   */
   checkPermissionItem = (authority, ItemDom) => {
     if (this.props.Authorized && this.props.Authorized.check) {
       const { check } = this.props.Authorized;
@@ -170,16 +137,13 @@ export default class SiderMenu extends PureComponent {
     }
     return ItemDom;
   };
-  handleOpenChange = (openKeys) => {
-    const lastOpenKey = openKeys[openKeys.length - 1];
-    const isMainMenu = this.menus.some(
-      item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey),
-    );
-    this.setState({
-      openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
-    });
-  };
 
+  /**
+   * 改变 menu 的展示样式
+   * @author ArvinX
+   * @date 2018/2/22
+   * @Description:
+   */
   toggle = () => {
     const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
@@ -187,7 +151,8 @@ export default class SiderMenu extends PureComponent {
   };
 
   @Debounce(600)
-  triggerResizeEvent() { // eslint-disable-line
+  // eslint-disable-next-line
+  triggerResizeEvent() {
     const event = document.createEvent('HTMLEvents');
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
@@ -195,18 +160,10 @@ export default class SiderMenu extends PureComponent {
 
   render() {
     const { logo, collapsed, location: { pathname }, onCollapse, width } = this.props;
-    const { openKeys } = this.state;
     // Don't show popup menu when it is been collapsed
-    const menuProps = collapsed
-      ? {}
-      : {
-        openKeys,
-      };
+    const menuProps = collapsed ? {} : {};
     // if pathname can't match, use the nearest parent's key
-    let selectedKeys = this.getSelectedMenuKeys(pathname);
-    if (!selectedKeys.length) {
-      selectedKeys = [openKeys[openKeys.length - 1]];
-    }
+    const selectedKeys = this.getSelectedMenuKeys(pathname);
     return (
       <Sider
         trigger={null}
@@ -227,7 +184,6 @@ export default class SiderMenu extends PureComponent {
             key="Menu"
             mode="inline"
             {...menuProps}
-            onOpenChange={this.handleOpenChange}
             selectedKeys={selectedKeys}
             className={styles.menu}
           >
@@ -239,7 +195,6 @@ export default class SiderMenu extends PureComponent {
             onClick={this.toggle}
           />
         </div>
-
       </Sider>
     );
   }

@@ -7,10 +7,7 @@ class Index extends React.PureComponent {
   render() {
     return (
       <ContentLayout>
-        <div className={styles.container} >
-          Index Page
-
-        </div>
+        <div className={styles.container}>Index Page</div>
       </ContentLayout>
     );
   }

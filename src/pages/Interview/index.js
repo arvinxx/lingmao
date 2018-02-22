@@ -2,7 +2,6 @@ import React from 'react';
 import { Tree, Card } from 'antd';
 import { connect } from 'dva';
 
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const TreeNode = Tree.TreeNode;
 
@@ -55,22 +54,20 @@ export default class SearchTree extends React.Component {
     const { interview } = this.props;
 
     return (
-      <PageHeaderLayout>
-        <Card>
-          <Tree
-            checkable
-            onExpand={this.onExpand}
-            expandedKeys={this.state.expandedKeys}
-            autoExpandParent={this.state.autoExpandParent}
-            onCheck={this.onCheck}
-            checkedKeys={this.state.checkedKeys}
-            onSelect={this.onSelect}
-            selectedKeys={this.state.selectedKeys}
-          >
-            {this.renderTreeNodes(interview.record)}
-          </Tree>
-        </Card>
-      </PageHeaderLayout>
+      <Card>
+        <Tree
+          checkable
+          onExpand={this.onExpand}
+          expandedKeys={this.state.expandedKeys}
+          autoExpandParent={this.state.autoExpandParent}
+          onCheck={this.onCheck}
+          checkedKeys={this.state.checkedKeys}
+          onSelect={this.onSelect}
+          selectedKeys={this.state.selectedKeys}
+        >
+          {this.renderTreeNodes(interview.record)}
+        </Tree>
+      </Card>
     );
   }
 }

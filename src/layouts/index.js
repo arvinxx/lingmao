@@ -8,7 +8,7 @@ import SiderMenu from '../components/SiderMenu';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
-import styles from './BasicLayout.less';
+import styles from './index.less';
 
 const { Content, Footer } = Layout;
 
@@ -31,14 +31,13 @@ getMenuData().forEach(getRedirect);
 const BasicLayout = (props) => {
   const { collapsed, location } = props;
   const defaultSideWith = 140;
-
   const handleMenuCollapse = (collapsedState) => {
     props.dispatch({
       type: 'global/changeLayoutCollapsed',
       payload: collapsedState,
     });
   };
-
+  console.log(collapsed);
   return (
     <Layout>
       <SiderMenu
@@ -47,11 +46,11 @@ const BasicLayout = (props) => {
         menuData={getMenuData()}
         collapsed={collapsed}
         location={location}
-        onCollapse={state => handleMenuCollapse(state)}
+        onCollapse={handleMenuCollapse}
         width={defaultSideWith}
       />
       <Layout className={styles.layout} style={{ paddingLeft: collapsed ? 80 : defaultSideWith }}>
-        <Content>
+        <Content className={styles.content}>
           <Fragment>{props.children}</Fragment>
         </Content>
         <Footer style={{ padding: 0 }}>
@@ -81,7 +80,9 @@ const BasicLayout = (props) => {
     </Layout>
   );
 };
-export default connect(({ user, global }) => ({
-  currentUser: user.currentUser,
-  collapsed: global.collapsed,
-}))(withRouter(BasicLayout));
+export default withRouter(
+  connect(({ user, global }) => ({
+    currentUser: user.currentUser,
+    collapsed: global.collapsed,
+  }))(BasicLayout),
+);

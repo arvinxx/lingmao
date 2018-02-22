@@ -19,12 +19,12 @@ const menuData = [
   {
     name: '竞品分析',
     icon: 'database',
-    path: 'analysis',
+    path: 'result/success',
   },
   {
     name: '用户画像',
     icon: 'user',
-    path: 'persona',
+    path: 'dashboard/workplace',
   },
   {
     name: '账户',
