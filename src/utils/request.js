@@ -1,7 +1,9 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
-import store from '../index';
+
+// eslint-disable-next-line no-underscore-dangle
+const store = window.g_app._store;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -20,6 +22,7 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;

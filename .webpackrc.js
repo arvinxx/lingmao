@@ -1,5 +1,4 @@
 export default {
-  entry: 'src/index.js',
   extraBabelPlugins: [
     'transform-decorators-legacy',
     ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
@@ -11,10 +10,6 @@ export default {
   },
   ignoreMomentLocale: true,
   theme: './src/theme.js',
-  html: {
-    template: './src/index.ejs',
-  },
-  publicPath: '/',
+  publicPath: '/public/',
   disableDynamicImport: true,
-  hash: true,
 };
