@@ -1,0 +1,29 @@
+@import '../../style/themes/default';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.item {
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.2rem;
+}
+
+.input {
+  border: none;
+  border-radius: 0;
+  &:focus {
+    border: none;
+    box-shadow: none;
+  }
+}
+
+.circle {
+  border: 3px solid #666;
+  border-radius: 4px;
+}
