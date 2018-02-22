@@ -26,7 +26,11 @@ const desc2 = (
 
 const extra = (
   <Fragment>
-    <div style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)', fontWeight: '500', marginBottom: 20 }}>项目名称</div>
+    <div
+      style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)', fontWeight: '500', marginBottom: 20 }}
+    >
+      项目名称
+    </div>
     <Row style={{ marginBottom: 16 }}>
       <Col xs={24} sm={12} md={12} lg={12} xl={6}>
         <span style={{ color: 'rgba(0, 0, 0, 0.85)' }}>项目 ID：</span>
