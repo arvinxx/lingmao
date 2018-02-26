@@ -5,23 +5,30 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 
 import styles from './index.less';
-import DragableTree from '../../components/TreeList/DragableTree';
 import ListInput from '../../components/ListInput/index';
+import EditableTagGroup from './TagInput';
 
 export default class ReflexBasicSplitterDemo extends React.Component {
   render() {
-    const minPanelSize = 300;
+    const minPanelSize = 150;
     return (
       <div className={styles.container}>
-        <div className={styles.toolbar}>Header</div>
-        <ReflexContainer orientation="vertical">
-          <ReflexElement className={styles['left-container']} minSize={minPanelSize} />
-          <ReflexSplitter />
-          <ReflexElement className={styles['right-container']} minSize={minPanelSize}>
-            <DragableTree />
-            <ListInput />
-          </ReflexElement>
-        </ReflexContainer>
+        <div className={styles.header}>Header</div>
+        <div className={styles.card}>
+          <ReflexContainer orientation="horizontal">
+            <ReflexElement className={styles['up-container']} minSize={minPanelSize}>
+              <ListInput />
+            </ReflexElement>
+            <ReflexSplitter>
+              <div className={styles['splitter-container']}>
+                <div className={styles.splitter} />
+              </div>
+            </ReflexSplitter>
+            <ReflexElement className={styles['down-container']} minSize={minPanelSize}>
+              <EditableTagGroup />
+            </ReflexElement>
+          </ReflexContainer>
+        </div>
       </div>
     );
   }

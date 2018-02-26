@@ -2,29 +2,86 @@
 
 .container {
   width: 100%;
-  background: @base-white;
+  background: @white-2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.left-container {
+.up-container {
   //background: @red-2;
 }
 
-.right-container {
-  //background: @green-1;
+.down-container {
+  background: @white-1;
 }
 
-.toolbar {
-  background: @base-black;
+.header {
+  background: @base-white;
   padding: 1.6rem;
-  color: @transWhite-2;
-  //border-bottom: 1px solid @white-3;
-  box-shadow: @shadow-1;
+  color: @text-color;
+  border-bottom: 1px solid @white-3;
+  width: 100%;
+}
+
+.card {
+  background: @base-white;
+  box-shadow: @shadow-2;
+  margin: 2rem;
+  height: 100%;
+  border-radius: 4px;
+  width: 736px;
+}
+
+.splitter-point {
+  content: '';
+  width: 3px;
+  height: 3px;
+  display: block;
+  background: @transBlack-6;
+  border-radius: 50%;
+}
+
+.splitter {
+  .splitter-point;
+  position: relative;
+  bottom: -3px;
+
+  &::before {
+    .splitter-point;
+    position: absolute;
+    left: -6px;
+  }
+  &::after {
+    .splitter-point;
+    position: absolute;
+    right: -6px;
+  }
+}
+
+.splitter-line {
+  border: none;
+  background: @transBlack-6;
+  height: 1px;
+}
+
+.splitter-container {
+  width: 24px;
+  height: 8px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
 }
 
 :global {
-  .reflex-layout.vertical > .reflex-splitter {
-    border: none;
-    background: @white-3;
-    width: 2px;
+  .reflex-layout.horizontal > .reflex-splitter {
+    .splitter-line;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    &:hover {
+      .splitter-line;
+      height: 2px;
+    }
   }
 }
