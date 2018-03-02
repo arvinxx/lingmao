@@ -8,20 +8,18 @@
   align-items: center;
 }
 
-.up-container {
-  //background: @red-2;
-}
-
-.down-container {
-  background: @white-1;
-}
-
 .header {
   background: @base-white;
   padding: 1.6rem;
   color: @text-color;
   border-bottom: 1px solid @white-3;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tool-container {
+  display: flex;
 }
 
 .card {
@@ -31,6 +29,14 @@
   height: 100%;
   border-radius: 4px;
   width: 736px;
+}
+
+.up-container {
+  //background: @red-2;
+}
+
+.down-container {
+  background: @white-1;
 }
 
 .splitter-point {

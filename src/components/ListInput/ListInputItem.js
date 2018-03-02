@@ -16,15 +16,15 @@ import styles from './ListInputItem.less';
 const Container = styled.div`
   margin-left: ${(props) => props.indent}px;
   padding-left: ${(props) => props.indent}px;
-  border-left: ${(props) => (props.root ? '0px solid #e5e5e5' : '1px solid #e5e5e5')};
-  border-color: ${(props) => (props.focusId === props.id ? '#c8c8c8' : '#e5e5e5')};
+  border-left: ${(props) => (props.root ? '0' : '1px solid #edeff1')};
+  border-color: ${(props) => (props.focusId === props.id ? '#ced1d7' : '#edeff1')};
+  transition: border 0.2s;
 `;
 const CircleContainer = styled.div`
-  width: ${(props) => props.indent * 2}px;
-  height: ${(props) => props.indent * 2}px;
-  border-radius: ${(props) => props.indent * 2}px;
+  width: ${(props) => props.indent * 2} px;
+  height: ${(props) => props.indent * 2} px;
+  border-radius: ${(props) => props.indent * 2} px;
   border: 6px solid transparent;
-  background-clip: content-box;
   cursor: pointer;
   transition: border 0.2s;
   display: flex;
@@ -161,6 +161,7 @@ class ListInputItem extends Component {
                   onTabChange={onTabChange}
                   focusId={focusId}
                   onFocusChanged={onFocusChanged}
+                  indent={indent}
                   onPressEnter={onPressEnter}
                   onDelete={onDelete}
                   onDirectionChange={onDirectionChange}

@@ -57,7 +57,7 @@ export default class EditableTagGroup extends React.Component {
     });
   };
 
-  saveInputRef = input => (this.input = input); // eslint-disable-line
+  saveInputRef = (input) => (this.input = input); // eslint-disable-line
 
   render() {
     const { dimensions, inputVisible, inputValue, selectedTags } = this.state;

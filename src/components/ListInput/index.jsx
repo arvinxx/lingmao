@@ -351,8 +351,7 @@ export default class ListInput extends Component {
         if (parentParentNode) {
           node.parent_id = parentParentNode.id;
           // parentNode.right_id = node.id
-        }
-        else if (parentNode && parentNode.id == 'root') {
+        } else if (parentNode && parentNode.id == 'root') {
         }
       }
       if (node && !node.left_id) {
@@ -380,8 +379,7 @@ export default class ListInput extends Component {
               }
               node.left_id = parentNode.id;
               parentNode.right_id = node.id;
-            }
-            else {
+            } else {
               console.log('left', childLastId, childLastNode);
 
               if (childLastId) {
@@ -392,8 +390,7 @@ export default class ListInput extends Component {
           }
         }
       }
-    }
-    else {
+    } else {
       // right => set this.parent = right_id
       if (node && node.left_id) {
         const childLastId = releations.filter(
@@ -484,8 +481,7 @@ export default class ListInput extends Component {
     let { focusId } = this.state;
     if (isFocus) {
       focusId = id;
-    }
-    else {
+    } else {
       focusId = null;
     }
     this.setState({ focusId });
@@ -507,8 +503,7 @@ export default class ListInput extends Component {
       new_releation.left_id = null;
       new_releation.right_id = firstChild.id;
       firstChild.left_id = new_releation.id;
-    }
-    else {
+    } else {
       // 插入当前位置后面
       console.log('插入当前位置后面', node, rightNode);
 
@@ -584,8 +579,7 @@ export default class ListInput extends Component {
       if (leftNode && rightNode) {
         leftNode.right_id = rightNode.id;
         rightNode.left_id = leftNode.id;
-      }
-      else {
+      } else {
         if (leftNode && !rightNode) {
           leftNode.right_id = null;
         }
@@ -596,8 +590,7 @@ export default class ListInput extends Component {
       let new_releation = null;
       if (leftNode) {
         new_releation = leftNode;
-      }
-      else if (parentNode) new_releation = parentNode;
+      } else if (parentNode) new_releation = parentNode;
       const focusId = new_releation ? new_releation.id : null;
       this.check(_.clone(releations));
 
