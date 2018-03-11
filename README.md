@@ -1,5 +1,7 @@
 # LEGION
 
+[![Build Status](https://travis-ci.org/arvinxx/LEGION.svg?branch=master)](https://travis-ci.org/arvinxx/LEGION)
+
 > And he asked him，What is the name？
 >
 > And he answered，saying，My name is Legion：for we are many.”
