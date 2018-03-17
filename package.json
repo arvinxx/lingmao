@@ -4,8 +4,6 @@
   "description": "A revolution solution for design research",
   "private": true,
   "scripts": {
-    "precommit": "npm run lint-staged",
-    "commitmsg": "commitlint -e $GIT_PARAMS",
     "start": "cross-env BROWSER=none ESLINT=none umi dev",
     "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true umi dev",
     "build": "cross-env DISABLE_ESLINT=true umi build",
@@ -16,6 +14,8 @@
     "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
     "lint-staged": "lint-staged",
     "lint-staged:js": "eslint --ext .js --fix",
+    "precommit": "npm run lint-staged",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "umi test",
     "test:component": "umi test ./src/components",
