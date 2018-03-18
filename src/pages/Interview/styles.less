@@ -1,0 +1,85 @@
+@import '../../style/themes/default';
+
+.container {
+  width: 100%;
+  background: @white-2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  box-shadow: @shadow-2;
+  margin: 2rem;
+  height: 100%;
+  border-radius: 4px;
+  width: 736px;
+}
+
+.up-container {
+  background: @base-white;
+}
+
+.down-container {
+  background: @white-1;
+}
+
+.touch {
+  width: 100%;
+  //background: @gold-3;
+  height: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splitter-container {
+  width: 24px;
+  height: 8px;
+  position: absolute;
+}
+
+.splitter-point {
+  content: '';
+  width: 3px;
+  height: 3px;
+  display: block;
+  background: @transBlack-6;
+  border-radius: 50%;
+}
+
+.splitter {
+  .splitter-point;
+  position: relative;
+  bottom: -3px;
+
+  &::before {
+    .splitter-point;
+    position: absolute;
+    left: -6px;
+  }
+  &::after {
+    .splitter-point;
+    position: absolute;
+    right: -6px;
+  }
+}
+
+.splitter-line {
+  border: none;
+  background: @transBlack-6;
+  height: 1px;
+}
+
+:global {
+  .reflex-layout.horizontal > .reflex-splitter {
+    .splitter-line;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    &:hover {
+      .splitter-line;
+      height: 2px;
+    }
+  }
+}
