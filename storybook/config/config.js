@@ -1,7 +1,8 @@
 import { configure } from '@storybook/react';
+import '@storybook/addon-console';
 
 function loadStories() {
-  require('../src/stories/index.js');
+  require('../index');
   // You can require as many stories as you need.
 }
 

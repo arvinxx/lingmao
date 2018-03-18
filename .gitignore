@@ -90,3 +90,6 @@ $RECYCLE.BIN/
 
 .umi
 .umi/*
+
+package-lock.json
+.jest-result-for-storybook.json
