@@ -1,7 +1,6 @@
 import React from 'react';
-
 import { Tag, Input, Icon } from 'antd';
-import styles from './TagInput.less';
+import styles from './styles.less';
 
 const CheckableTag = Tag.CheckableTag;
 

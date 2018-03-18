@@ -8,11 +8,8 @@ import styled from 'styled-components';
 import styles from './ListInputItem.less';
 
 /**
- * @Description: styled-components 样式配置
- * @author ArvinX
- * @date 2018/2/23
+ *  styled-components 样式配置
  */
-
 const Container = styled.div`
   margin-left: ${(props) => props.indent}px;
   padding-left: ${(props) => props.indent}px;
