@@ -23,7 +23,7 @@ addDecorator(
     background: 'white',
     backdrop: '#fafafa',
     border: '#f9f9f9 1px dashed',
-  })
+  }),
 );
 
 storiesOf('Button', module).addWithJSX('with text', () => (
@@ -46,5 +46,5 @@ storiesOf('Component', module).add(
       <Button>Click Here</Button>
       ~~~
     
-    `)(() => <Button>Click Here</Button>)
+    `)(() => <Button>Click Here</Button>),
 );

@@ -4,7 +4,7 @@ const menuData = [
   {
     name: '总览',
     icon: 'dashboard',
-    path: 'dashboard/analysis',
+    path: 'dashboard',
   },
   {
     name: '访谈',
@@ -14,17 +14,17 @@ const menuData = [
   {
     name: '数据处理',
     icon: 'calculator',
-    path: 'dashboard/monitor',
+    path: 'data',
   },
   {
     name: '竞品分析',
     icon: 'database',
-    path: 'result/success',
+    path: 'competitors',
   },
   {
     name: '用户画像',
     icon: 'user',
-    path: 'dashboard/workplace',
+    path: 'result/success',
   },
   {
     name: '账户',

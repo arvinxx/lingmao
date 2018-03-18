@@ -8,6 +8,7 @@ import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
 import styles from './index.less';
+import Header from '../components/Header';
 
 const { Content } = Layout;
 
@@ -49,6 +50,7 @@ const BasicLayout = (props) => {
         width={defaultSideWith}
       />
       <Layout className={styles.layout} style={{ paddingLeft: collapsed ? 80 : defaultSideWith }}>
+        <Header />
         <Content className={styles.content}>
           <Fragment>{props.children}</Fragment>
         </Content>
@@ -60,5 +62,5 @@ export default withRouter(
   connect(({ user, global }) => ({
     currentUser: user.currentUser,
     collapsed: global.collapsed,
-  }))(BasicLayout),
+  }))(BasicLayout)
 );

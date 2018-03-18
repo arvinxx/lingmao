@@ -18,11 +18,25 @@
 
 .up-container {
   background: @base-white;
-
 }
 
 .down-container {
   background: @white-1;
+}
+
+.touch {
+  width: 100%;
+  //background: @gold-3;
+  height: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splitter-container {
+  width: 24px;
+  height: 8px;
+  position: absolute;
 }
 
 .splitter-point {
@@ -55,14 +69,6 @@
   border: none;
   background: @transBlack-6;
   height: 1px;
-}
-
-.splitter-container {
-  width: 24px;
-  height: 8px;
-  position: absolute;
-  display: flex;
-  justify-content: center;
 }
 
 :global {

@@ -5,13 +5,10 @@ import numeral from 'numeral';
 import Authorized from '../../utils/Authorized';
 import { Pie, WaterWave, Gauge, TagCloud } from '../../components/Charts';
 import NumberInfo from '../../components/NumberInfo';
-import CountDown from '../../components/CountDown';
 import ActiveChart from '../../components/ActiveChart';
 import styles from './Monitor.less';
 
 const { Secured } = Authorized;
-
-const targetTime = new Date().getTime() + 3900000;
 
 // use permission as a parameter
 const havePermissionAsync = new Promise((resolve) => {
@@ -48,14 +45,9 @@ export default class Monitor extends PureComponent {
                   />
                 </Col>
                 <Col md={6} sm={12} xs={24}>
-                  <NumberInfo
-                    subTitle="销售目标完成率"
-                    total="92%"
-                  />
+                  <NumberInfo subTitle="销售目标完成率" total="92%" />
                 </Col>
-                <Col md={6} sm={12} xs={24}>
-                  <NumberInfo subTitle="活动剩余时间" total={<CountDown target={targetTime} />} />
-                </Col>
+                <Col md={6} sm={12} xs={24} />
                 <Col md={6} sm={12} xs={24}>
                   <NumberInfo
                     subTitle="每秒交易总额"
@@ -66,7 +58,10 @@ export default class Monitor extends PureComponent {
               </Row>
               <div className={styles.mapChart}>
                 <Tooltip title="等待后期实现">
-                  <img src="https://gw.alipayobjects.com/zos/rmsportal/HBWnDEUXCnGnGrRfrpKa.png" alt="map" />
+                  <img
+                    src="https://gw.alipayobjects.com/zos/rmsportal/HBWnDEUXCnGnGrRfrpKa.png"
+                    alt="map"
+                  />
                 </Tooltip>
               </div>
             </Card>
@@ -105,11 +100,7 @@ export default class Monitor extends PureComponent {
         </Row>
         <Row gutter={24}>
           <Col xl={12} lg={24} sm={24} xs={24}>
-            <Card
-              title="各品类占比"
-              bordered={false}
-              className={styles.pieCard}
-            >
+            <Card title="各品类占比" bordered={false} className={styles.pieCard}>
               <Row style={{ padding: '16px 0' }}>
                 <Col span={8}>
                   <Pie
@@ -147,20 +138,22 @@ export default class Monitor extends PureComponent {
             </Card>
           </Col>
           <Col xl={6} lg={12} sm={24} xs={24}>
-            <Card title="热门搜索" loading={loading} bordered={false} bodyStyle={{ overflow: 'hidden' }}>
-              <TagCloud
-                data={tags}
-                height={161}
-              />
+            <Card
+              title="热门搜索"
+              loading={loading}
+              bordered={false}
+              bodyStyle={{ overflow: 'hidden' }}
+            >
+              <TagCloud data={tags} height={161} />
             </Card>
           </Col>
           <Col xl={6} lg={12} sm={24} xs={24}>
-            <Card title="资源剩余" bodyStyle={{ textAlign: 'center', fontSize: 0 }} bordered={false}>
-              <WaterWave
-                height={161}
-                title="补贴资金剩余"
-                percent={34}
-              />
+            <Card
+              title="资源剩余"
+              bodyStyle={{ textAlign: 'center', fontSize: 0 }}
+              bordered={false}
+            >
+              <WaterWave height={161} title="补贴资金剩余" percent={34} />
             </Card>
           </Col>
         </Row>
