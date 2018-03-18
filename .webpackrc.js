@@ -5,7 +5,7 @@ export default {
   ],
   env: {
     development: {
-      extraBabelPlugins: ['dva-hmr'],
+      extraBabelPlugins: ['react-hot-loader/babel'],
     },
   },
   ignoreMomentLocale: true,
