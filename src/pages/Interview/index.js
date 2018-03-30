@@ -1,13 +1,12 @@
-import React from 'react';
-
+import React, { Component } from 'react';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 
 import 'react-reflex/styles.css';
 
+import { TagInput, TreeList } from '../../components';
 import styles from './styles.less';
-import { ListInput, TagInput } from '../../components';
 
-export default class ReflexBasicSplitterDemo extends React.Component {
+export default class Interview extends Component {
   render() {
     const minPanelSize = 150;
     return (
@@ -15,7 +14,7 @@ export default class ReflexBasicSplitterDemo extends React.Component {
         <div className={styles.card}>
           <ReflexContainer orientation="horizontal">
             <ReflexElement flex="0.5" className={styles['up-container']} minSize={minPanelSize}>
-              <ListInput />
+              <TreeList />
             </ReflexElement>
             <ReflexSplitter>
               <div className={styles.touch}>

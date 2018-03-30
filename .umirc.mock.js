@@ -3,7 +3,8 @@ import { getRule, postRule } from './mock/rule';
 import { getActivities, getNotice, getFakeList, getTreeData } from './mock/api';
 import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
-import { node } from './mock/nodes';
+import node from './mock/nodes';
+import tag from './mock/tags';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
@@ -69,6 +70,11 @@ const proxy = {
     'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }],
   }),
   'GET /api/node': node,
+  'GET /api/labels': tag,
+  'POST /api/labels': (req, res) => {
+    console.log(req);
+  },
+
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/fake_tree_data': getTreeData,
   'GET /api/profile/basic': getProfileBasicData,
