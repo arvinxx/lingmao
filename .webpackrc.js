@@ -1,6 +1,5 @@
 export default {
   extraBabelPlugins: [
-    'transform-decorators-legacy',
     ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
   ],
   env: {
@@ -10,5 +9,4 @@ export default {
   },
   ignoreMomentLocale: true,
   theme: './src/theme.js',
-  disableDynamicImport: true,
 };
