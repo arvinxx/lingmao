@@ -5,7 +5,7 @@ import { connect } from 'dva';
 const TreeNode = Tree.TreeNode;
 
 @connect(({ interview }) => ({ interview }))
-export default class SearchTree extends React.Component {
+export default class Index extends React.Component {
   state = {
     expandedKeys: ['0-0-0', '0-0-1'],
     autoExpandParent: true,

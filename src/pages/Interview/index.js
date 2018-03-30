@@ -5,8 +5,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 
 import styles from './styles.less';
-import ListInput from '../../components/ListInput';
-import TagInput from '../../components/TagInput';
+import { ListInput, TagInput } from '../../components';
 
 export default class ReflexBasicSplitterDemo extends React.Component {
   render() {
