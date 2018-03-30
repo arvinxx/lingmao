@@ -18,7 +18,6 @@ export default class Index extends Component<any, any> {
 
   titleChange = (e) => {
     const text = e.target.value;
-    console.log(text);
     this.props.dispatch({
       type: 'interview/changeTitle',
       payload: text,

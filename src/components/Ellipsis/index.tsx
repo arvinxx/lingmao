@@ -3,9 +3,6 @@ import { Tooltip } from 'antd';
 import classNames from 'classnames';
 import styles from './index.less';
 
-/* eslint react/no-did-mount-set-state: 0 */
-/* eslint no-param-reassign: 0 */
-
 const isSupportLineClamp = document.body.style.webkitLineClamp !== undefined;
 
 const EllipsisText = ({ text, length, tooltip, ...other }) => {
@@ -42,7 +39,21 @@ const EllipsisText = ({ text, length, tooltip, ...other }) => {
   );
 };
 
-export default class Ellipsis extends Component {
+interface EllipsisProps {
+  tooltip?: boolean;
+  length?: number;
+  lines?: number;
+  style?: React.CSSProperties;
+  className?:string;
+}
+
+export default class Ellipsis extends Component<EllipsisProps, any> {
+  shadow: any;
+  node: any;
+  content: any;
+  root: any;
+  shadowChildren: any;
+
   state = {
     text: '',
     targetCount: 0,

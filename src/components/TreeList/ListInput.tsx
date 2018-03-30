@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
-import ListInputItem from './ListInputItem';
+import ListInputItem from '../ListInput/ListInputItem';
 import {connect} from 'dva';
 
 

@@ -6,70 +6,92 @@ import styles from './styles.less';
 
 const CheckableTag = Tag.CheckableTag;
 
-@connect(({interview, loading}) => ({
-  interview,
-  loading: loading.models.interview,
+@connect(({ labels, loading }) => ({
+  labels,
+  loading: loading.models.labels,
 }))
-export default class EditableTagGroup extends Component<any, any> {
+export default class Index extends Component<any, any> {
   state = {
-    inputVisible: false,
+    inputVisible: true,
     inputValue: '',
   };
+  input: object[] = [];
+  selectedInput = {};
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'interview/fetchLabels',
+      type: 'labels/fetchLabels',
+    });
+    this.setState({
+      inputVisible: false,
     });
   }
 
-  handleChange(label: string, checked: boolean) {
-    const {selectedLabels} = this.props.interview;
+  handleSelected(label: string, checked: boolean) {
+    const { selectedLabels } = this.props.labels;
     const nextSelectedLabels = checked
       ? [...selectedLabels, label]
       : selectedLabels.filter((t) => t !== label);
     this.props.dispatch({
-      type: 'interview/selectLabels',
+      type: 'labels/selectLabels',
       payload: nextSelectedLabels,
     });
   }
 
+  saveInputRef = (input, dimension) => {
+    const inputObj = { dimension, input };
+    const inputArr = this.input;
+    if (inputArr.length === 0) {
+      this.input = [...inputArr, inputObj];
+    } else {
+      this.input = inputArr.some((item: object) => item.dimension === dimension)
+        ? inputArr
+        : [...inputArr, inputObj];
+    }
+  };
 
-  saveInputRef = (input) => (this.input = input); // eslint-disable-line
-
-  showInput = () => {
-    this.setState({inputVisible: true}, () => this.input.focus());
+  showInput = (dimension) => {
+    console.log(dimension);
+    const getInput = this.input.filter((item: object) => item.dimension === dimension);
+    console.log(getInput);
+    this.selectedInput = getInput.length > 0 ? getInput[0].input : {};
+    console.log(this.selectedInput);
+    this.setState(
+      { inputVisible: true }
+      // , () => {
+      //   if (this.selectedInput !== {}) this.selectedInput.focus();
+      // }
+    );
   };
 
   handleInputChange = (e) => {
-    this.setState({inputValue: e.target.value});
+    this.setState({ inputValue: e.target.value });
   };
 
   handleInputConfirm = () => {
-    const state = this.state;
-    const inputValue = state.inputValue;
-    let {labels} = this.props.interview;
+    const { inputValue } = this.state;
+    let { labels } = this.props.labels;
     if (inputValue && labels.indexOf(inputValue) === -1) {
       labels = [...labels, inputValue];
     }
     this.props.dispatch({
-      type: 'interview/addLabels',
+      type: 'labels/addLabels',
       payload: labels,
     });
     this.setState({
       inputVisible: false,
-      inputValue: '',
     });
   };
 
   render() {
-    const {inputVisible, inputValue} = this.state;
+    const { inputVisible, inputValue } = this.state;
 
-    const {labels, selectedLabels} = this.props.interview;
-    const AddLabels = (dimension) => (
-      <div>
-        {inputVisible && (
+    const { labels, selectedLabels } = this.props.labels;
+    const AddLabels = (dimension) => {
+      if (inputVisible)
+        return (
           <Input
-            ref={this.saveInputRef}
+            ref={(input) => this.saveInputRef(input, dimension)}
             key={`${dimension}-add`}
             type="text"
             size="small"
@@ -79,14 +101,19 @@ export default class EditableTagGroup extends Component<any, any> {
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
-        )}
-        {!inputVisible && (
-          <Tag key={`${dimension}-addk`} onClick={this.showInput} className={styles.plus}>
+        );
+      else {
+        return (
+          <Tag
+            key={`${dimension}-addk`}
+            onClick={(e) => this.showInput(dimension)}
+            className={styles.plus}
+          >
             <Icon key={`${dimension}-icon`} type="plus" />
           </Tag>
-        )}
-      </div>
-    );
+        );
+      }
+    };
     const getDimension = (dimension, values) => {
       return (
         <div key={dimension} className={styles['dimension-container']}>
@@ -99,7 +126,7 @@ export default class EditableTagGroup extends Component<any, any> {
                 <CheckableTag
                   key={`${value}-tags`}
                   checked={selectedLabels.indexOf(value) > -1}
-                  onChange={(checked) => this.handleChange(value, checked)}
+                  onChange={(checked) => this.handleSelected(value, checked)}
                 >
                   {value}
                 </CheckableTag>
