@@ -7,7 +7,11 @@ module.exports = {
     rules: [
       {
         test: /\.less$/,
-        loaders: ['style-loader', 'css-loader', 'less-loader'],
+        loaders: [
+          'style-loader',
+          'css-loader?sourceMap&modules&localIdentName=[local]___[hash:base64:5]!!',
+          'less-loader?{"sourceMap":true}',
+        ],
         include: path.resolve(__dirname, '../../'),
       },
       {
@@ -19,7 +23,7 @@ module.exports = {
         test: /\.module\.less$/,
         loader: [
           'css?sourceMap&modules&localIdentName=[local]___[hash:base64:5]!!',
-          'postcss!',
+          'postcss',
           `less-loader?{"sourceMap":true,"modifyVars":${JSON.stringify(theme)}}`,
         ],
       },
