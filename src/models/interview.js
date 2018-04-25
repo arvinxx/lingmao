@@ -1,4 +1,4 @@
-import { fakeTreeData } from '../services/api';
+import { queryNode } from '../services/api';
 
 export default {
   namespace: 'interview',
@@ -8,7 +8,7 @@ export default {
   },
   effects: {
     * fetch(_, { call, put }) {
-      const response = yield call(fakeTreeData);
+      const response = yield call(queryNode);
       yield put({
         type: 'queryRecord',
         payload: Array.isArray(response) ? response : [],

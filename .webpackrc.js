@@ -10,6 +10,5 @@ export default {
   },
   ignoreMomentLocale: true,
   theme: './src/theme.js',
-  publicPath: '/public/',
   disableDynamicImport: true,
 };

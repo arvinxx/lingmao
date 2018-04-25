@@ -3,14 +3,14 @@ import ContentLayout from '../layouts/ContentLayout';
 
 import styles from './index.less';
 
-class Index extends React.PureComponent {
+class Xindex extends React.PureComponent {
   render() {
     return (
       <ContentLayout>
-        <div className={styles.container}>Index Page</div>
+        <div className={styles.container}>Indexhj Page</div>
       </ContentLayout>
     );
   }
 }
 
-export default Index;
+export default Xindex;

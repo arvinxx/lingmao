@@ -1,6 +1,6 @@
 import React from 'react';
-
 import ListInput from './ListInput';
+
 import styles from './styles.less';
 
 export default class Index extends React.Component {

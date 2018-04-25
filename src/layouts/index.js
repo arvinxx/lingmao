@@ -37,7 +37,9 @@ const BasicLayout = (props) => {
       payload: collapsedState,
     });
   };
-  console.log(collapsed);
+  if (location.pathname === '/user/login') {
+    return <div>{props.children}</div>;
+  }
   return (
     <Layout>
       <SiderMenu

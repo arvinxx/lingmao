@@ -7,27 +7,29 @@
 }
 
 .item {
-  margin-left: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 3.2rem;
+  height: 24px;
   &:hover {
     background: @red-1;
   }
 }
-
-.input {
-  border: none;
-  border-radius: 0;
-  &:focus {
-    border: none;
-    box-shadow: none;
-  }
-}
-
 .circle {
   border: 3px solid @transBlack-2;
   border-radius: 50%;
-  //background: @base-black;
+}
+
+:global {
+  .ant-input-affix-wrapper .ant-input-prefix {
+    left: @padding-xs;
+  }
+  .ant-input {
+    border: none;
+    border-radius: 0;
+    &:focus {
+      border: none;
+      box-shadow: none;
+    }
+    width: 80%;
+  }
 }

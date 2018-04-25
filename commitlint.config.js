@@ -1,4 +1,3 @@
-// ESlint 配置详情参阅： https://gist.github.com/arvinxx/ded06b2bd53095669445598b7b117dc3
 module.exports = {
   rules: {
     'type-enum': [

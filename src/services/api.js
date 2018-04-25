@@ -81,3 +81,6 @@ export async function fakeRegister(params) {
 export async function queryNotices() {
   return request('/api/notices');
 }
+export async function queryNode() {
+  return request('/api/node');
+}

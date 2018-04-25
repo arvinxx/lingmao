@@ -42,7 +42,7 @@ export default class LoginPage extends Component {
 
   renderMessage = content => (
     <Alert
-      style={{ marginBottom: 24 }}
+      style={{ marginBottom: 12 }}
       message={content}
       type="error"
       showIcon

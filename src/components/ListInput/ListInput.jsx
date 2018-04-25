@@ -1,17 +1,52 @@
 /* eslint-disable */
+
 import React, { Component } from 'react';
 import _ from 'lodash';
 import ListInputItem from './ListInputItem';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+// fake data generator
+const getItems = (count) =>
+  Array.from({ length: count }, (v, k) => k).map((k) => ({
+    id: `item-${k}`,
+    content: `item ${k}`,
+  }));
+
+// a little function to help us with reordering the result
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: 'none',
+  padding: 2 * 2,
+  margin: `0 0 2px 0`,
+
+  borderTop: isDragging ? '1px solid lightgreen' : 'white',
+
+  // styles we need to apply on draggables
+  ...draggableStyle,
+});
 
 export default class ListInput extends Component {
   constructor(props) {
     super(props);
     console.log('AppView props', props);
     this.buildDefaultData();
+    // this.state = {
+    //   items: getItems(10),
+    // };
+    this.onDragEnd = this.onDragEnd.bind(this);
   }
   componentWillUnmount = () => {
     this.save();
   };
+
   save = () => {
     const json = this.toJson();
     localStorage.setItem('NodeJSON', json);
@@ -77,9 +112,8 @@ export default class ListInput extends Component {
   };
 
   toJson = () => {
-    const { data, node, releations } = this.state;
-    const json = JSON.stringify(data.children);
-    return json;
+    const { data } = this.state;
+    return JSON.stringify(data.children);
   };
 
   parseJson = (json) => {
@@ -97,7 +131,7 @@ export default class ListInput extends Component {
   parseOriginData = (root, data) => {
     let nodes = [];
     let releations = [];
-    if (root.id == 'root') {
+    if (root.id === 'root') {
       nodes.push(root);
       releations.push({
         id: 'root',
@@ -131,7 +165,7 @@ export default class ListInput extends Component {
     });
     lastNode = null;
     _.forEach(levelReleations, (node, k) => {
-      if (lastNode && node.left_id == lastNode.id) {
+      if (lastNode && node.left_id === lastNode.id) {
         lastNode.right_id = node.id;
       }
       lastNode = node;
@@ -154,26 +188,27 @@ export default class ListInput extends Component {
       releations,
     };
   };
+
   generateStateData = (root, nodes, releations) => {
     const node = root;
     let parentNode = null;
-    if (node) parentNode = _.find(releations, (d) => d.id == node.parent_id);
+    if (node) parentNode = _.find(releations, (d) => d.id === node.parent_id);
     let leftNode = null;
-    if (node) leftNode = _.find(releations, (d) => d.id == node.left_id);
+    if (node) leftNode = _.find(releations, (d) => d.id === node.left_id);
     let rightNode = null;
-    if (node) rightNode = _.find(releations, (d) => d.id == node.right_id);
+    if (node) rightNode = _.find(releations, (d) => d.id === node.right_id);
     let parentParentNode = null;
     if (parentNode) {
-      parentParentNode = _.find(releations, (d) => d.id == parentNode.parent_id);
+      parentParentNode = _.find(releations, (d) => d.id === parentNode.parent_id);
     }
 
     const data = Array.new;
-    const childrenIds = releations.filter((d) => d.parent_id == root.id).map((d) => d.id);
+    const childrenIds = releations.filter((d) => d.parent_id === root.id).map((d) => d.id);
     const childrenNodes = nodes.filter((d) => _.includes(childrenIds, d.id));
-    let childFirstId = releations.filter((d) => d.parent_id == root.id && d.left_id == null)[0];
+    let childFirstId = releations.filter((d) => d.parent_id === root.id && d.left_id === null)[0];
     let childFirstNode = null;
     if (childFirstId) {
-      childFirstNode = _.find(nodes, (d) => d.id == childFirstId.id);
+      childFirstNode = _.find(nodes, (d) => d.id === childFirstId.id);
     }
     // console.log(childFirstId, childFirstNode)
     const chainChildren = new Array();
@@ -181,21 +216,21 @@ export default class ListInput extends Component {
       // console.log('while',childFirstId, childFirstNode)
 
       chainChildren.push(_.clone(childFirstNode));
-      childFirstId = _.find(releations, (d) => d.id == childFirstId.right_id);
+      childFirstId = _.find(releations, (d) => d.id === childFirstId.right_id);
       childFirstNode = null;
       if (childFirstId) {
-        childFirstNode = _.find(nodes, (d) => d.id == childFirstId.id);
+        childFirstNode = _.find(nodes, (d) => d.id === childFirstId.id);
       }
     }
     _.forEach(chainChildren, (tempNode) => {
-      if (tempNode == root) alert('死循环了');
+      if (tempNode === root) alert('死循环了');
       this.generateStateData(tempNode, nodes, releations);
     });
     root.children = chainChildren;
 
     // _.forEach(rootNodes, (node)=>{
     //   let children = Array.new
-    //   let rootNodeIds = releations.filter(d => d.parent_id == root.id).map(d=>d.id)
+    //   let rootNodeIds = releations.filter(d => d.parent_id === root.id).map(d=>d.id)
     //   let rootNodes = nodes.filter(d => _.includes(rootNodeIds, d.id))
     //   if (!_.isEmpty(children)) node.children = children
     // })
@@ -205,11 +240,29 @@ export default class ListInput extends Component {
     //   releations
     // }
   };
+
+  /**
+   * 拖动效果
+   * @param  result 拖动后的文件样式
+   */
+  onDragEnd(result) {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items = reorder(this.state.items, result.source.index, result.destination.index);
+
+    this.setState({
+      items,
+    });
+  }
+
   onTextChange = (id, text) => {
     const { data, nodes, releations } = this.state;
     console.log('onTextChange', id, text, data);
     const rootNode = { id: 'root' };
-    _.find(nodes, (d) => d.id == id).text = text;
+    _.find(nodes, (d) => d.id === id).text = text;
     this.generateStateData(rootNode, nodes, releations);
     this.setState(
       {
@@ -217,7 +270,7 @@ export default class ListInput extends Component {
         nodes,
         releations,
       },
-      () => this.save(),
+      () => this.save()
     );
 
     // let temp = data
@@ -237,21 +290,23 @@ export default class ListInput extends Component {
     // this.setState({data})
     console.log('setState', data);
   };
-  printNode = (releations, node, depth) => {
-    console.log(_.times(depth, () => '--').join('') + node.id);
-    const children = _.filter(releations, (d) => d.parent_id == node.id);
-    let leftNode = _.find(releations, (d) => d.parent_id == node.id && d.left_id == null);
-    while (leftNode) {
-      this.printNode(releations, leftNode, depth + 1);
-      leftNode = _.find(releations, (d) => d.parent_id == node.id && d.left_id == leftNode.id);
-    }
-    return node;
-  };
-  printReleations = (releations) => {
-    // console.log('')
-    const node = _.find(releations, (d) => d.id == 'root');
-    this.printNode(releations, node, -1);
-  };
+
+  //
+  // printNode = (releations, node, depth) => {
+  //   console.log(_.times(depth, () => '--').join('') + node.id);
+  //   const children = _.filter(releations, (d) => d.parent_id == node.id);
+  //   let leftNode = _.find(releations, (d) => d.parent_id == node.id && d.left_id == null);
+  //   while (leftNode) {
+  //     this.printNode(releations, leftNode, depth + 1);
+  //     leftNode = _.find(releations, (d) => d.parent_id == node.id && d.left_id == leftNode.id);
+  //   }
+  //   return node;
+  // };
+  // printReleations = (releations) => {
+  //   // console.log('')
+  //   const node = _.find(releations, (d) => d.id == 'root');
+  //   this.printNode(releations, node, -1);
+  // };
 
   onTabChange = (id, isLeft) => {
     const { data, nodes, releations } = this.state;
@@ -285,7 +340,7 @@ export default class ListInput extends Component {
       // left => set this.parent = left_id
 
       if (node && node.left_id) {
-        if (node.parent_id != 'root') {
+        if (node.parent_id !== 'root') {
           node.right_id = null;
           node.left_id = node.parent_id;
           if (leftNode) leftNode.right_id = null;
@@ -308,9 +363,9 @@ export default class ListInput extends Component {
         }
       }
       if (node && !node.left_id) {
-        if (node.parent_id != 'root') {
+        if (node.parent_id !== 'root') {
           const childLastId = releations.filter(
-            (d) => d.parent_id == parentNode.parent_id && d.right_id == null,
+            (d) => d.parent_id == parentNode.parent_id && d.right_id == null
           )[0];
           let childLastNode = null;
           if (childLastId) {
@@ -347,7 +402,7 @@ export default class ListInput extends Component {
       // right => set this.parent = right_id
       if (node && node.left_id) {
         const childLastId = releations.filter(
-          (d) => d.parent_id == leftNode.id && d.right_id == null,
+          (d) => d.parent_id == leftNode.id && d.right_id == null
         )[0];
         let childLastNode = null;
         if (childLastId) {
@@ -382,7 +437,7 @@ export default class ListInput extends Component {
         nodes,
         releations,
       },
-      () => this.save(),
+      () => this.save()
     );
 
     // _.flattenDeep(data).find( (obj)=> obj.id == id).text = text
@@ -392,22 +447,23 @@ export default class ListInput extends Component {
 
     console.log('end----------------------onTabChange------------------------------------end');
   };
+
   check = (releations) => {
     _.forEach(releations, (v, k) => {
       const temp = _.compact([v.parent_id, v.left_id, v.right_id]);
-      if (_.size(temp) != _.size(_.uniq(temp))) {
+      if (_.size(temp) !== _.size(_.uniq(temp))) {
         console.log('出错的 releations', releations);
         alert('错误了');
       }
     });
     const left_ids = _.compact(_.map(releations, (d) => d.left_id));
     const right_ids = _.compact(_.map(releations, (d) => d.right_id));
-    if (_.size(left_ids) != _.size(_.uniq(left_ids))) {
+    if (_.size(left_ids) !== _.size(_.uniq(left_ids))) {
       console.log('出错的 releations', releations);
 
       alert('错误了');
     }
-    if (_.size(right_ids) != _.size(_.uniq(right_ids))) {
+    if (_.size(right_ids) !== _.size(_.uniq(right_ids))) {
       console.log('出错的 releations', releations);
 
       alert('错误了');
@@ -417,18 +473,19 @@ export default class ListInput extends Component {
       const ids = _.map(v, (d) => d.id);
       const temp_left_ids = _.compact(_.map(v, (d) => d.left_id));
       const temp_right_ids = _.compact(_.map(v, (d) => d.right_id));
-      if (_.size(temp_left_ids) != _.size(_.uniq(temp_left_ids))) {
+      if (_.size(temp_left_ids) !== _.size(_.uniq(temp_left_ids))) {
         console.log('出错的 releations', releations);
 
         alert('错误了');
       }
-      if (_.size(temp_right_ids) != _.size(_.uniq(temp_right_ids))) {
+      if (_.size(temp_right_ids) !== _.size(_.uniq(temp_right_ids))) {
         console.log('出错的 releations', releations);
 
         alert('错误了');
       }
     });
   };
+
   onFocusChanged = (id, isFocus) => {
     console.log('onFocusChanged', id, isFocus);
     let { focusId } = this.state;
@@ -439,6 +496,7 @@ export default class ListInput extends Component {
     }
     this.setState({ focusId });
   };
+
   onPressEnter = (id) => {
     console.log('onPressEnter', id);
     let { data, nodes, releations } = this.state;
@@ -485,7 +543,7 @@ export default class ListInput extends Component {
         releations,
         focusId: new_releation.id,
       },
-      () => this.save(),
+      () => this.save()
     );
     console.log('end onPressEnter setState', rootNode, nodes, _.cloneDeep(releations));
     this.printReleations(_.cloneDeep(releations));
@@ -548,8 +606,8 @@ export default class ListInput extends Component {
       this.check(_.clone(releations));
 
       this.setState({ focusId }, () => {
-        releations = _.filter(releations, (d) => d.id != id);
-        nodes = _.filter(nodes, (d) => d.id != id);
+        releations = _.filter(releations, (d) => d.id !== id);
+        nodes = _.filter(nodes, (d) => d.id !== id);
         // this.setState({releations, nodes})
         // let rootNode = {id: 'root'}
         this.generateStateData(rootNode, nodes, releations);
@@ -560,7 +618,7 @@ export default class ListInput extends Component {
             releations,
             focusId,
           },
-          () => this.save(),
+          () => this.save()
         );
         this.domFocus(focusId);
         console.log('end onDelete setState', rootNode, nodes, _.cloneDeep(releations), focusId);
@@ -568,6 +626,7 @@ export default class ListInput extends Component {
       });
     }
   };
+
   onDirectionChange = (id, direction) => {
     console.log('onDirectionChange', id, direction);
     const { data, nodes, releations } = this.state;
@@ -579,21 +638,21 @@ export default class ListInput extends Component {
     // console.log('onDirectionChange', id)
     const rootNode = { id: 'root' };
     // _.find(releations, d => d.id == id).text = text
-    const node = _.find(releations, (d) => d.id == id);
+    const node = _.find(releations, (d) => d.id === id);
     let parentNode = null;
-    if (node) parentNode = _.find(releations, (d) => d.id == node.parent_id);
+    if (node) parentNode = _.find(releations, (d) => d.id === node.parent_id);
     let leftNode = null;
-    if (node) leftNode = _.find(releations, (d) => d.id == node.left_id);
+    if (node) leftNode = _.find(releations, (d) => d.id === node.left_id);
     let rightNode = null;
-    if (node) rightNode = _.find(releations, (d) => d.id == node.right_id);
+    if (node) rightNode = _.find(releations, (d) => d.id === node.right_id);
     let parentParentNode = null;
     if (parentNode) {
-      parentParentNode = _.find(releations, (d) => d.id == parentNode.parent_id);
+      parentParentNode = _.find(releations, (d) => d.id === parentNode.parent_id);
     }
-    const childFirstId = releations.filter((d) => d.parent_id == node.id && d.left_id == null)[0];
+    const childFirstId = releations.filter((d) => d.parent_id === node.id && d.left_id === null)[0];
 
     let focusId = null;
-    if (direction == 'up') {
+    if (direction === 'up') {
       if (leftNode) focusId = leftNode.id;
       if (!leftNode && parentNode) focusId = parentNode.id;
       if (focusId) {
@@ -602,7 +661,7 @@ export default class ListInput extends Component {
         });
       }
     }
-    if (direction == 'down') {
+    if (direction === 'down') {
       focusId = null;
       if (rightNode) focusId = rightNode.id;
       if (!rightNode && childFirstId && childFirstId.id) {
@@ -616,6 +675,7 @@ export default class ListInput extends Component {
       }
     }
   };
+
   domFocus = (id) => {
     const input_id = `input_of_${id}`;
     const element = document.getElementById(input_id);
@@ -631,17 +691,44 @@ export default class ListInput extends Component {
     const indent = 8; // 控制缩进的尺寸
     return (
       <ListInputItem
-        root
-        children={this.state.data.children}
-        onTabChange={this.onTabChange}
-        onTextChange={this.onTextChange}
-        focusId={this.state.focusId}
-        onFocusChanged={this.onFocusChanged}
-        onPressEnter={this.onPressEnter}
-        onDelete={this.onDelete}
-        onDirectionChange={this.onDirectionChange}
-        indent={indent}
+        root // 传递该节点是否为根节点
+        children={this.state.data.children} // 传递数据流
+        onTabChange={this.onTabChange} // Tab 键功能-缩进
+        onTextChange={this.onTextChange} // 文本数据输入
+        focusId={this.state.focusId} // 聚焦对象
+        onFocusChanged={this.onFocusChanged} // 改变聚焦对象
+        onPressEnter={this.onPressEnter} // 按回车的效果
+        onDelete={this.onDelete} // delete 键效果
+        onDirectionChange={this.onDirectionChange} // 上下左右键光标位置移动控制
+        indent={indent} // 缩进尺寸
       />
+      // <DragDropContext onDragEnd={this.onDragEnd}>
+      //   <Droppable droppableId="droppable">
+      //     {(provided, snapshot) => (
+      //       <div ref={provided.innerRef}>
+      //         {this.state.items.map((item, index) => (
+      //           <Draggable key={item.id} draggableId={item.id} index={index}>
+      //             {(provided, snapshot) => (
+      //               <div>
+      //                 <div
+      //                   ref={provided.innerRef}
+      //                   {...provided.draggableProps}
+      //                   {...provided.dragHandleProps}
+      //                   style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+      //                 >
+      //                   {item.content}
+      //
+      //                 </div>
+      //                 {provided.placeholder}
+      //               </div>
+      //             )}
+      //           </Draggable>
+      //         ))}
+      //         {provided.placeholder}
+      //       </div>
+      //     )}
+      //   </Droppable>
+      // </DragDropContext>
     );
   }
 }
