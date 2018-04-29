@@ -9,7 +9,5 @@ before_script:
 
 test:
   stage: test
-  only:
-    - develop
   script:
    - npm run cov

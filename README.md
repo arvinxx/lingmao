@@ -1,6 +1,6 @@
 # LEGION
-[![pipeline status](https://gitlab.com/arvinxx/lingmao-frontend/badges/develop/pipeline.svg)](https://gitlab.com/arvinxx/lingmao-frontend/commits/develop)
-[![coverage report](https://gitlab.com/arvinxx/lingmao-frontend/badges/develop/coverage.svg)](https://gitlab.com/arvinxx/lingmao-frontend/commits/develop)
+[![pipeline status](https://gitlab.com/arvinxx/lingmao-frontend/badges/master/pipeline.svg)](https://gitlab.com/arvinxx/lingmao-frontend/commits/master)
+[![coverage report](https://gitlab.com/arvinxx/lingmao-frontend/badges/master/coverage.svg)](https://gitlab.com/arvinxx/lingmao-frontend/commits/master)
 
 > And he asked him，What is the name？
 >
