@@ -43,7 +43,7 @@ export default class Register extends Component {
           state: {
             account,
           },
-        })
+        }),
       );
     }
   }

@@ -40,7 +40,7 @@ export default class LoginPage extends Component {
     });
   };
 
-  renderMessage = (content) => (
+  renderMessage = content => (
     <Alert style={{ marginBottom: 12 }} message={content} type="error" showIcon />
   );
 
@@ -52,17 +52,17 @@ export default class LoginPage extends Component {
         <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
           <Tab key="account" tab="账户密码登录">
             {login.status === 'error' &&
-            login.type === 'account' &&
-            !login.submitting &&
-            this.renderMessage('账户或密码错误')}
+              login.type === 'account' &&
+              !login.submitting &&
+              this.renderMessage('账户或密码错误')}
             <UserName name="userName" placeholder="请输入账号" />
             <Password name="password" placeholder="请输入密码" />
           </Tab>
           <Tab key="mobile" tab="手机号登录">
             {login.status === 'error' &&
-            login.type === 'mobile' &&
-            !login.submitting &&
-            this.renderMessage('验证码错误')}
+              login.type === 'mobile' &&
+              !login.submitting &&
+              this.renderMessage('验证码错误')}
             <Mobile name="mobile" />
             <Captcha name="captcha" />
           </Tab>
