@@ -1,7 +1,6 @@
-@import "~antd/lib/style/themes/default.less";
+@import '~antd/lib/style/themes/default.less';
 
 .login {
-
   .tabs {
     padding: 0 2px;
     margin: 0 -2px;
@@ -10,8 +9,13 @@
         font-size: 16px;
         line-height: 24px;
       }
-      .ant-input-affix-wrapper .ant-input:not(:first-child) {
-        padding-left: 34px;
+      .ant-input-affix-wrapper {
+        .ant-input:not(:first-child) {
+          padding-left: 34px;
+        }
+        .ant-input {
+          width: 100%;
+        }
       }
     }
   }
@@ -22,12 +26,10 @@
       margin-bottom: 24px;
       text-align: center;
     }
-
     .ant-form-item {
       margin-bottom: 24px;
     }
   }
-
   .prefixIcon {
     font-size: @font-size-base;
     color: @disabled-color;
@@ -41,5 +43,12 @@
   .submit {
     width: 100%;
     margin-top: 24px;
+  }
+}
+
+:global {
+
+  .ant-checkbox-wrapper {
+    user-select: none;
   }
 }
