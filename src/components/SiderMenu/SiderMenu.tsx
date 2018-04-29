@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactNode } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './styles.less';
 
-const { Sider } = Layout;
+const {Sider} = Layout;
 
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
-const getIcon = (icon) => {
+const getIcon: ReactNode = (icon) => {
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={styles.icon} />;
   }
@@ -21,7 +21,18 @@ const getIcon = (icon) => {
   return icon;
 };
 
-export default class SiderMenu extends PureComponent {
+interface MenuObj {
+  name: string,
+  icon: string | ReactNode,
+  path: string,
+  children?: MenuObj,
+  target: string
+}
+
+export default class SiderMenu extends PureComponent<any> {
+
+  menus: Array<MenuObj>;
+
   constructor(props) {
     super(props);
     this.menus = props.menuData;
@@ -32,9 +43,9 @@ export default class SiderMenu extends PureComponent {
    * [{path:string},{path:string}] => {path,path2}
    * @param  menus
    */
-  getFlatMenuKeys(menus) {
-    let keys = [];
-    menus.forEach((item) => {
+  getFlatMenuKeys(menus): string[] {
+    let keys: string[] = [];
+    menus.forEach((item: MenuObj) => {
       if (item.children) {
         keys.push(item.path);
         keys = keys.concat(this.getFlatMenuKeys(item.children));
@@ -51,17 +62,17 @@ export default class SiderMenu extends PureComponent {
    */
   getSelectedMenuKeys = (path) => {
     const flatMenuKeys = this.getFlatMenuKeys(this.menus);
-    return flatMenuKeys.filter(item => pathToRegexp(`/${item}(.*)`).test(path));
+    return flatMenuKeys.filter((item) => pathToRegexp(`/${item}(.*)`).test(path));
   };
 
   /**
    * 判断是否是http链接.返回 Link 或 a
    * @memberof SiderMenu
    */
-  getMenuItemPath = (item) => {
+  getMenuItemPath = (item: MenuObj) => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
-    const { target, name } = item;
+    const {target, name} = item;
 
     // Is it a http link
     if (/^https?:\/\//.test(itemPath)) {
@@ -104,18 +115,16 @@ export default class SiderMenu extends PureComponent {
       return [];
     }
     return menusData
-      .filter(item => item.name && !item.hideInMenu)
+      .filter((item) => item.name && !item.hideInMenu)
       .map((item) => {
         const ItemDom = this.getMenuItem(item);
         return this.checkPermissionItem(item.authority, ItemDom);
       })
-      .filter(item => !!item);
+      .filter((item) => !!item);
   };
 
   /**
    * 转化路径
-   * @author ArvinX
-   * @date 2018/2/22
    */
   conversionPath = (path) => {
     if (path && path.indexOf('http') === 0) {
@@ -126,13 +135,10 @@ export default class SiderMenu extends PureComponent {
 
   /**
    * 检验权限
-   * @author ArvinX
-   * @date 2018/2/22
-   * @Description:
    */
   checkPermissionItem = (authority, ItemDom) => {
     if (this.props.Authorized && this.props.Authorized.check) {
-      const { check } = this.props.Authorized;
+      const {check} = this.props.Authorized;
       return check(authority, ItemDom);
     }
     return ItemDom;
@@ -140,12 +146,9 @@ export default class SiderMenu extends PureComponent {
 
   /**
    * 改变 menu 的展示样式
-   * @author ArvinX
-   * @date 2018/2/22
-   * @Description:
    */
   toggle = () => {
-    const { collapsed, onCollapse } = this.props;
+    const {collapsed, onCollapse} = this.props;
     onCollapse(!collapsed);
     this.triggerResizeEvent();
   };
@@ -159,7 +162,7 @@ export default class SiderMenu extends PureComponent {
   }
 
   render() {
-    const { logo, collapsed, location: { pathname }, onCollapse, width } = this.props;
+    const {logo, collapsed, location: {pathname}, onCollapse, width} = this.props;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed ? {} : {};
     // if pathname can't match, use the nearest parent's key
