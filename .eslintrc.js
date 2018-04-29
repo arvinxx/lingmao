@@ -12,7 +12,7 @@ module.exports = {
     jasmine: true,
   },
   rules: {
-    'react/jsx-filename-extension': [1, { extensions: ['.js'] }], // 取消 jsx 格式限制
+    'react/jsx-filename-extension': [1, { extensions: ['.js', 'jsx'] }], // 取消 jsx 格式限制
     'jsx-a11y/anchor-is-valid': [0], // 不用在 Link 中添加 anchor
     'react/prop-types': [0], // 暂时不进行 prop-types 验证
     'object-curly-newline': [0], // 对象不用新建一行

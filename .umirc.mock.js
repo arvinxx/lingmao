@@ -2,8 +2,9 @@ import mockjs from 'mockjs';
 import { getRule, postRule } from './mock/rule';
 import { getActivities, getNotice, getFakeList, getTreeData } from './mock/api';
 import { getFakeChartData } from './mock/chart';
-import { imgMap } from './mock/utils';
 import { getProfileBasicData } from './mock/profile';
+import node from './mock/nodes';
+import tag from './mock/tags';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
@@ -36,17 +37,20 @@ const proxy = {
       name: 'John Brown',
       age: 32,
       address: 'New York No. 1 Lake Park',
-    }, {
+    },
+    {
       key: '2',
       name: 'Jim Green',
       age: 42,
       address: 'London No. 1 Lake Park',
-    }, {
+    },
+    {
       key: '3',
       name: 'Joe Black',
       age: 32,
       address: 'Sidney No. 1 Lake Park',
-    }],
+    },
+  ],
   'GET /api/project/notice': getNotice,
   'GET /api/activities': getActivities,
   'GET /api/rule': getRule,
@@ -65,7 +69,12 @@ const proxy = {
   'GET /api/tags': mockjs.mock({
     'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }],
   }),
-  'GET /api/fake_list': getFakeList,
+  'GET /api/node': node,
+  'GET /api/labels': tag,
+  'POST /api/labels': (req, res) => {
+    console.log(req);
+  },
+
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/fake_tree_data': getTreeData,
   'GET /api/profile/basic': getProfileBasicData,
@@ -100,41 +109,40 @@ const proxy = {
   'GET /api/notices': getNotices,
   'GET /api/500': (req, res) => {
     res.status(500).send({
-      'timestamp': 1513932555104,
-      'status': 500,
-      'error': 'error',
-      'message': 'error',
-      'path': '/base/category/list',
+      timestamp: 1513932555104,
+      status: 500,
+      error: 'error',
+      message: 'error',
+      path: '/base/category/list',
     });
   },
   'GET /api/404': (req, res) => {
     res.status(404).send({
-      'timestamp': 1513932643431,
-      'status': 404,
-      'error': 'Not Found',
-      'message': 'No message available',
-      'path': '/base/category/list/2121212',
+      timestamp: 1513932643431,
+      status: 404,
+      error: 'Not Found',
+      message: 'No message available',
+      path: '/base/category/list/2121212',
     });
   },
   'GET /api/403': (req, res) => {
     res.status(403).send({
-      'timestamp': 1513932555104,
-      'status': 403,
-      'error': 'Unauthorized',
-      'message': 'Unauthorized',
-      'path': '/base/category/list',
+      timestamp: 1513932555104,
+      status: 403,
+      error: 'Unauthorized',
+      message: 'Unauthorized',
+      path: '/base/category/list',
     });
   },
   'GET /api/401': (req, res) => {
     res.status(401).send({
-      'timestamp': 1513932555104,
-      'status': 401,
-      'error': 'Unauthorized',
-      'message': 'Unauthorized',
-      'path': '/base/category/list',
+      timestamp: 1513932555104,
+      status: 401,
+      error: 'Unauthorized',
+      message: 'Unauthorized',
+      path: '/base/category/list',
     });
   },
 };
 
-export default noProxy ? {} : delay(proxy, 1000);
-
+export default (noProxy ? {} : delay(proxy, 1000));

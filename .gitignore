@@ -90,3 +90,8 @@ $RECYCLE.BIN/
 
 .umi
 .umi/*
+
+package-lock.json
+yarn.lock
+.jest-result-for-storybook.json
+coverage/

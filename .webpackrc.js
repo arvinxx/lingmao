@@ -1,15 +1,17 @@
 export default {
-  extraBabelPlugins: [
-    'transform-decorators-legacy',
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-  ],
+  extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
   env: {
     development: {
-      extraBabelPlugins: ['dva-hmr'],
+      extraBabelPlugins: ['react-hot-loader/babel'],
     },
   },
   ignoreMomentLocale: true,
   theme: './src/theme.js',
-  publicPath: '/public/',
-  disableDynamicImport: true,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:7001/',
+      // 'changeOrigin': true,
+      //'pathRewrite': { '^/api': '' },
+    },
+  },
 };

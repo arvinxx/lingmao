@@ -1,6 +1,6 @@
 # LEGION
-
-[![Build Status](https://travis-ci.org/arvinxx/LEGION.svg?branch=master)](https://travis-ci.org/arvinxx/LEGION)
+[![pipeline status](https://gitlab.com/arvinxx/lingmao-frontend/badges/develop/pipeline.svg)](https://gitlab.com/arvinxx/lingmao-frontend/commits/develop)
+[![coverage report](https://gitlab.com/arvinxx/lingmao-frontend/badges/develop/coverage.svg)](https://gitlab.com/arvinxx/lingmao-frontend/commits/develop)
 
 > And he asked him，What is the name？
 >

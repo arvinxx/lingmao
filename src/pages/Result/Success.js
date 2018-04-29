@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button, Row, Col, Icon, Steps, Card } from 'antd';
 import Result from '../../components/Result';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const { Step } = Steps;
 
@@ -19,13 +18,17 @@ const desc2 = (
     <div style={{ margin: '8px 0 4px' }}>
       周毛毛<Icon type="dingding-o" style={{ color: '#00A0E9', marginLeft: 8 }} />
     </div>
-    <div><a href="">催一下</a></div>
+    <div>
+      <a href="">催一下</a>
+    </div>
   </div>
 );
 
 const extra = (
   <Fragment>
-    <div style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)', fontWeight: '500', marginBottom: 20 }}>
+    <div
+      style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)', fontWeight: '500', marginBottom: 20 }}
+    >
       项目名称
     </div>
     <Row style={{ marginBottom: 16 }}>
@@ -60,19 +63,17 @@ const actions = (
 );
 
 export default () => (
-  <PageHeaderLayout>
-    <Card bordered={false}>
-      <Result
-        type="success"
-        title="提交成功"
-        description="提交结果页用于反馈一系列操作任务的处理结果，
+  <Card bordered={false}>
+    <Result
+      type="success"
+      title="提交成功"
+      description="提交结果页用于反馈一系列操作任务的处理结果，
         如果仅是简单操作，使用 Message 全局提示反馈即可。
         本文字区域可以展示简单的补充说明，如果有类似展示
         “单据”的需求，下面这个灰色区域可以呈现比较复杂的内容。"
-        extra={extra}
-        actions={actions}
-        style={{ marginTop: 48, marginBottom: 16 }}
-      />
-    </Card>
-  </PageHeaderLayout>
+      extra={extra}
+      actions={actions}
+      style={{ marginTop: 48, marginBottom: 16 }}
+    />
+  </Card>
 );
