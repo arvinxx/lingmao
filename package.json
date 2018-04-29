@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none ESLINT=none umi dev",
-    "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none umi dev",
+    "start:no-proxy": "cross-env NO_PROXY=true BROWSER=none ESLINT=none umi dev",
     "build": "cross-env ESLINT=none umi build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true umi build",
@@ -26,6 +26,7 @@
   "dependencies": {
     "@antv/data-set": "^0.8.5",
     "@babel/polyfill": "^7.0.0-beta.40",
+    "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
     "bizcharts": "^3.1.5",
     "bizcharts-plugin-slider": "^2.0.3",
@@ -48,7 +49,7 @@
     "react-hot-loader": "^4.0.1",
     "react-reflex": "^2.2.3",
     "styled-components": "^3.2.2",
-    "umi": "^1.1.5",
+    "umi": "^1.2.4",
     "umi-plugin-dva": "^0.6.1",
     "url-polyfill": "^1.0.12"
   },
@@ -84,6 +85,7 @@
     "pro-download": "^1.0.1",
     "redbox-react": "^1.5.0",
     "regenerator-runtime": "^0.11.1",
+    "roadhog-api-doc": "latest",
     "rollbar": "^2.3.4",
     "storybook-addon-jsx": "^5.3.0",
     "storybook-host": "^4.1.5",
