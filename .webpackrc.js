@@ -7,11 +7,14 @@ export default {
   },
   ignoreMomentLocale: true,
   theme: './src/theme.js',
-  proxy: {
-    '/api': {
-      target: 'http://localhost:7001/',
-      // 'changeOrigin': true,
-      //'pathRewrite': { '^/api': '' },
-    },
-  },
+
+  proxy: process.env.NO_PROXY
+    ? null
+    : {
+        '/api': {
+          target: 'http://localhost:7001/',
+          // 'changeOrigin': true,
+          //'pathRewrite': { '^/api': '' },
+        },
+      },
 };
