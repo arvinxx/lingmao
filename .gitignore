@@ -94,3 +94,4 @@ $RECYCLE.BIN/
 package-lock.json
 yarn.lock
 .jest-result-for-storybook.json
+coverage/
