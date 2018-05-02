@@ -16,11 +16,11 @@ const menuData = [
     icon: 'calculator',
     path: 'data',
   },
-  {
-    name: '竞品分析',
-    icon: 'database',
-    path: 'competitors',
-  },
+  // {
+  //   name: '竞品分析',
+  //   icon: 'database',
+  //   path: 'competitors',
+  // },
   {
     name: '用户画像',
     icon: 'user',

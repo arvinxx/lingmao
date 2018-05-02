@@ -1,18 +1,9 @@
-import _TreeList from './TreeList';
-import _TagInput from './TagInput';
-import _Upload from './Upload';
-import _Ellipsis from './Ellipsis';
-import _SiderMenu from './SiderMenu';
-import _Header from './Header';
-import _Authorized from './Authorized';
-import _Login from './Login';
-
-
-export const TreeList = _TreeList;
-export const Login = _Login;
-export const TagInput = _TagInput;
-export const Upload = _Upload;
-export const Ellipsis = _Ellipsis;
-export const SiderMenu= _SiderMenu;
-export const Header= _Header;
-export const Authorized= _Authorized;
+export { default as TreeList } from './TreeList';
+export { default as Result } from './Result';
+export { default as Login } from './Login';
+export { default as TagInput } from './TagInput';
+export { default as Upload } from './Upload';
+export { default as Ellipsis } from './Ellipsis';
+export { default as SiderMenu } from './SiderMenu';
+export { default as Header } from './Header';
+export { default as Authorized } from './Authorized';

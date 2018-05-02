@@ -1,18 +1,25 @@
-import { queryNode } from '../services/api';
+import { queryDocument, saveDocument } from '../services/api';
 
 export default {
   namespace: 'interview',
   state: {
-    title: '记录',
-    node: [],
+    title: '',
+    records: [],
+    id: '',
+    dimensions: [],
+    selectedLabels: [],
   },
   effects: {
-    * fetchNode(_, { call, put }) {
-      const response = yield call(queryNode);
+    *fetchDocument(_, { call, put }) {
+      const response = yield call(queryDocument);
       yield put({
-        type: 'saveNode',
+        type: 'querryDocument',
         payload: Array.isArray(response) ? response : [],
       });
+    },
+    *saveDocument({ payload }, { call }) {
+      console.log(payload);
+      yield call(saveDocument, payload);
     },
   },
   reducers: {
@@ -20,10 +27,14 @@ export default {
       return { ...state, title };
     },
 
-    saveNode(state, action) {
+    querryDocument(state, action) {
+      const { title, records, _id, dimensions } = action.payload[0];
       return {
         ...state,
-        node: action.payload,
+        records,
+        title,
+        id: _id,
+        dimensions,
       };
     },
     changeNode(state, { payload: node }) {

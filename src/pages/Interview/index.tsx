@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Input } from 'antd';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 
@@ -18,10 +20,28 @@ const data = [
 ];
 
 const labels = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-export default class Interview extends Component {
+
+@connect(({ interview, loading }) => ({
+  interview,
+  loading: loading.models.interview,
+}))
+export default class Interview extends Component<any, any> {
   state = {
     value: 0,
   };
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'interview/fetchDocument',
+    });
+  }
+  componentWillUnmount() {
+    const { title, records, id } = this.props.interview;
+
+    this.props.dispatch({
+      type: 'interview/saveDocument',
+      payload: { title, id },
+    });
+  }
   onChange = (e) => {
     console.log('radio checked', e.target.value);
     this.setState({
@@ -41,9 +61,16 @@ export default class Interview extends Component {
     );
   };
 
+  titleChange = (e) => {
+    const text = e.target.value;
+    this.props.dispatch({
+      type: 'interview/changeTitle',
+      payload: text,
+    });
+  };
   render() {
     const minPanelSize = 150;
-
+    const { title, records, dimensions } = this.props.interview;
     const AdvancedOpts = () => {
       return (
         <RadioGroup
@@ -110,7 +137,10 @@ export default class Interview extends Component {
         <div className={styles.center}>
           <ReflexContainer orientation="horizontal">
             <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
-              <TreeList />
+              <div className={styles.warpper}>
+                <Input className={styles.title} onChange={this.titleChange} value={title} />
+                <TreeList records={records} />
+              </div>
             </ReflexElement>
             <ReflexSplitter>
               <div className={styles.touch}>
@@ -120,7 +150,7 @@ export default class Interview extends Component {
               </div>
             </ReflexSplitter>
             <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-              <TagInput />
+              <TagInput dimensions={dimensions} />
             </ReflexElement>
           </ReflexContainer>
         </div>

@@ -19,9 +19,6 @@ export default class Index extends Component<any, any> {
   selectedInput = {};
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'labels/fetchLabels',
-    });
     this.setState({
       inputVisible: false,
     });
@@ -70,13 +67,13 @@ export default class Index extends Component<any, any> {
 
   handleInputConfirm = () => {
     const { inputValue } = this.state;
-    let { labels } = this.props.labels;
-    if (inputValue && labels.indexOf(inputValue) === -1) {
-      labels = [...labels, inputValue];
+    let { dimensions } = this.props;
+    if (inputValue && dimensions.indexOf(inputValue) === -1) {
+      dimensions = [...dimensions, inputValue];
     }
     this.props.dispatch({
       type: 'labels/addLabels',
-      payload: labels,
+      payload: dimensions,
     });
     this.setState({
       inputVisible: false,
@@ -86,7 +83,8 @@ export default class Index extends Component<any, any> {
   render() {
     const { inputVisible, inputValue } = this.state;
 
-    const { labels, selectedLabels } = this.props.labels;
+    const { dimensions } = this.props;
+    const { selectedLabels } = this.props.labels;
     const AddLabels = (dimension) => {
       if (inputVisible)
         return (
@@ -140,7 +138,7 @@ export default class Index extends Component<any, any> {
 
     return (
       <div className={styles.container}>
-        {labels.map((label) => {
+        {dimensions.map((label) => {
           return getDimension(label.key, label.values);
         })}
         <div className={styles['dimension-container']}>

@@ -1,12 +1,14 @@
 @import '../../styles/themes/default';
 
 .container {
+
   width: 100%;
   background: @white-2;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: 12px 8px;
+  height: 100%;
 }
 
 .base-card {
@@ -124,13 +126,15 @@
     .ant-menu-item::after {
       border-right: 0;
     }
-    .ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title {
+    .ant-menu-inline .ant-menu-item,
+    .ant-menu-inline .ant-menu-submenu-title {
       width: calc(100%);
     }
   }
 }
 
 .center {
+  display: flex;
   align-self: center;
   width: 736px;
   margin: 2rem;
@@ -139,10 +143,24 @@
 
 .up-container {
   background: @base-white;
+
+  .warpper {
+    padding: @padding-lg 48px;
+    height: 100%;
+  }
+
+  .title {
+    font-size: @font-size-lg;
+    font-weight: bold;
+    padding-left: @padding-sm;
+    border-bottom: @border-width-base @border-style-base @background-color-base;
+    color: @text-color;
+  }
 }
 
 .down-container {
   background: @white-1;
+  user-select: none;
 }
 
 .touch {

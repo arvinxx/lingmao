@@ -1,3 +1,5 @@
+@import './styles/themes/default';
+
 html,
 body,
 :global(#root) {
@@ -24,10 +26,14 @@ html {
 }
 
 body .ant-layout {
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 // temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
 .ant-spin-container {
   overflow: visible !important;
+}
+
+tr:nth-child(2n) {
+  background-color: @transBlack-9;
 }

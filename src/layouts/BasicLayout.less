@@ -1,10 +1,12 @@
-@import "../styles/index";
+@import '../styles/index';
 
 .layout {
   transition: padding-left @animation-duration-base;
   min-height: 100%;
-}
-
-.content {
-  display: flex;
+  :global {
+    .ant-layout-content {
+      display: block;
+      min-height: 100%;
+    }
+  }
 }

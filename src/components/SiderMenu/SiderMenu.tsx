@@ -1,11 +1,11 @@
 import React, { PureComponent, ReactNode } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import pathToRegexp from 'path-to-regexp';
-import Link from 'umi/link';
+import { Link } from 'dva/router';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './styles.less';
 
-const {Sider} = Layout;
+const { Sider } = Layout;
 
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
@@ -21,16 +21,21 @@ const getIcon: ReactNode = (icon) => {
   return icon;
 };
 
+export const getMeunMatcheys = (flatMenuKeys, path) => {
+  return flatMenuKeys.filter((item) => {
+    return pathToRegexp(item).test(path);
+  });
+};
+
 interface MenuObj {
-  name: string,
-  icon: string | ReactNode,
-  path: string,
-  children?: MenuObj,
-  target: string
+  name: string;
+  icon: string | ReactNode;
+  path: string;
+  children?: MenuObj;
+  target: string;
 }
 
 export default class SiderMenu extends PureComponent<any> {
-
   menus: Array<MenuObj>;
 
   constructor(props) {
@@ -72,7 +77,7 @@ export default class SiderMenu extends PureComponent<any> {
   getMenuItemPath = (item: MenuObj) => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
-    const {target, name} = item;
+    const { target, name } = item;
 
     // Is it a http link
     if (/^https?:\/\//.test(itemPath)) {
@@ -138,7 +143,7 @@ export default class SiderMenu extends PureComponent<any> {
    */
   checkPermissionItem = (authority, ItemDom) => {
     if (this.props.Authorized && this.props.Authorized.check) {
-      const {check} = this.props.Authorized;
+      const { check } = this.props.Authorized;
       return check(authority, ItemDom);
     }
     return ItemDom;
@@ -148,7 +153,7 @@ export default class SiderMenu extends PureComponent<any> {
    * 改变 menu 的展示样式
    */
   toggle = () => {
-    const {collapsed, onCollapse} = this.props;
+    const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
     this.triggerResizeEvent();
   };
@@ -162,7 +167,7 @@ export default class SiderMenu extends PureComponent<any> {
   }
 
   render() {
-    const {logo, collapsed, location: {pathname}, onCollapse, width} = this.props;
+    const { logo, collapsed, location: { pathname }, onCollapse, width } = this.props;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed ? {} : {};
     // if pathname can't match, use the nearest parent's key

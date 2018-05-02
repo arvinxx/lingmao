@@ -1,9 +1,42 @@
-@import "~antd/lib/style/themes/default.less";
+@import '../../styles/themes/default';
 
-.card {
-  margin-bottom: 24px;
+.container {
+  background: @white-2;
+  min-height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: none;
 }
 
+.left {
+  box-shadow: @shadow-1;
+  flex: none;
+  min-width: 600px;
+  margin: 24px;
+  :global {
+    .ant-table-tbody > tr > td {
+      border-bottom: 0;
+    }
+  }
+}
+
+.right {
+  flex: none;
+  box-shadow: @shadow-0;
+
+  width: 400px;
+  :global {
+    .ant-collapse-item {
+      border-bottom: 0;
+      .ant-collapse-header {
+        line-height: 20px;
+        font-size: @font-size-base;
+        color: @dark-5;
+      }
+    }
+  }
+}
 .heading {
   font-size: 14px;
   line-height: 22px;
@@ -40,7 +73,7 @@
   border-bottom: 1px solid @border-color-split;
   padding: 8px 16px;
   cursor: pointer;
-  transition: all .3s;
+  transition: all 0.3s;
   &:hover {
     background: @primary-1;
   }
@@ -87,4 +120,9 @@
 .optional {
   color: @text-color-secondary;
   font-style: normal;
+}
+:global {
+  .ant-table-thead {
+    background: @transBlack-9;
+  }
 }
