@@ -1,4 +1,5 @@
 export default {
+  loading: './src/components/loading',
   plugins: [
     'umi-plugin-dva',
     [
