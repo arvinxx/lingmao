@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+import Link from 'umi/link';
 import { Checkbox, Alert, Icon } from 'antd';
 import { Login } from '../../components';
 import styles from './Login.less';
@@ -11,7 +11,7 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
   login,
   submitting: loading.effects['login/login'],
 }))
-export default class LoginPage extends Component {
+export default class LoginPage extends Component<any> {
   state = {
     type: 'account',
     autoLogin: true,
@@ -40,7 +40,7 @@ export default class LoginPage extends Component {
     });
   };
 
-  renderMessage = content => (
+  renderMessage = (content) => (
     <Alert style={{ marginBottom: 12 }} message={content} type="error" showIcon />
   );
 
@@ -70,7 +70,7 @@ export default class LoginPage extends Component {
             <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>
               自动登录
             </Checkbox>
-            <Link style={{ float: 'right' }} to="/user/register">
+            <Link className={styles.forget} to="/user/register">
               忘记密码
             </Link>
           </div>

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link } from 'dva/router';
+import Link from 'umi/link';
+import { routerRedux } from 'dva/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
 import styles from './Register.less';
+import Timer = NodeJS.Timer;
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -24,8 +26,9 @@ const passwordProgressMap = {
   register,
   submitting: loading.effects['register/submit'],
 }))
+// @ts-ignore
 @Form.create()
-export default class Register extends Component {
+export default class Register extends Component<any,any> {
   state = {
     count: 0,
     confirmDirty: false,
@@ -33,6 +36,7 @@ export default class Register extends Component {
     help: '',
     prefix: '86',
   };
+  interval: Timer;
 
   componentWillReceiveProps(nextProps) {
     const account = this.props.form.getFieldValue('mail');
@@ -43,7 +47,7 @@ export default class Register extends Component {
           state: {
             account,
           },
-        }),
+        })
       );
     }
   }

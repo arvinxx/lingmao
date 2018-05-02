@@ -1,4 +1,4 @@
-const nodes = [
+const records = [
   {
     id: '2eb162461a26ce0b7',
     text: '2003年的金融大丑闻',
@@ -87,45 +87,10 @@ const nodes = [
     ],
   },
 ];
-//
-// const number = [
-//   {
-//     title: '0-0',
-//     key: '0-0',
-//     children: [
-//       {
-//         title: '0-0-0',
-//         key: '0-0-0',
-//         children: [
-//           { title: '0-0-0-0', key: '0-0-0-0' },
-//           { title: '0-0-0-1', key: '0-0-0-1' },
-//           { title: '0-0-0-2', key: '0-0-0-2' },
-//         ],
-//       }, {
-//         title: '0-0-1',
-//         key: '0-0-1',
-//         children: [
-//           { title: '0-0-1-0', key: '0-0-1-0' },
-//           { title: '0-0-1-1', key: '0-0-1-1' },
-//           { title: '0-0-1-2', key: '0-0-1-2' },
-//         ],
-//       }, {
-//         title: '0-0-2',
-//         key: '0-0-2',
-//       }],
-//   },
-//   {
-//     title: '0-1',
-//     key: '0-1',
-//     children: [
-//       { title: '0-1-0-0', key: '0-1-0-0' },
-//       { title: '0-1-0-1', key: '0-1-0-1' },
-//       { title: '0-1-0-2', key: '0-1-0-2' },
-//     ],
-//   }, {
-//     title: '0-2',
-//     key: '0-2',
-//   },
-// ];
 
-export default nodes;
+const document = {
+  title: 'hello',
+  records,
+};
+export default document;
+

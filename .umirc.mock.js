@@ -3,7 +3,7 @@ import { getRule, postRule } from './mock/rule';
 import { getActivities, getNotice, getFakeList, getTreeData } from './mock/api';
 import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
-import node from './mock/nodes';
+import node from './mock/document';
 import tag from './mock/tags';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';

@@ -13,10 +13,10 @@ export default {
     * submit({payload}, {call, put}) {
       const response = yield call(register,payload);
       console.log(response);
-      // yield put({
-      //   type: 'registerHandle',
-      //   payload: response,
-      // });
+      yield put({
+        type: 'registerHandle',
+        payload: response,
+      });
     },
   },
   reducers: {
