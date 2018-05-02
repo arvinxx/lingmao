@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "jsx": "react",
     "sourceMap": true,
+    "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
     "noUnusedParameters": false,
     "noUnusedLocals": false,

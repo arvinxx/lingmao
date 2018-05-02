@@ -9,12 +9,12 @@ export default {
   theme: './src/theme.js',
 
   proxy: process.env.NO_PROXY
-    ? null
-    : {
+    ? {
         '/api': {
           target: 'http://localhost:7001/',
-          // 'changeOrigin': true,
-          //'pathRewrite': { '^/api': '' },
+          changeOrigin: true,
+          pathRewrite: { '^/api': '' },
         },
-      },
+      }
+    : {},
 };
