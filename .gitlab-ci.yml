@@ -1,5 +1,11 @@
 image: node:8
 
+stages:
+ - test
+ - build
+ - release
+ - deploy
+
 cache:
   paths:
   - node_modules/
@@ -11,3 +17,37 @@ test:
   stage: test
   script:
    - npm run cov
+lint:
+  stage: test
+  script:
+   - npm run lint
+
+build:
+  stage: build
+  script:
+    - echo 'deployd!'
+   #- npm run build
+
+release:
+  stage: release
+  image: docker:latest
+  only:
+    - tag
+  services:
+    - docker:dind
+  script:
+    - echo 'release!'
+#  before_script:
+#      - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+#  script:
+#      - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:$CI_COMMIT_TAG --pull .
+#      - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:$CI_COMMIT_TAG
+#  after_script:
+#    - docker logout ${CI_REGISTRY}
+
+deploy:
+  stage: deploy
+  script:
+  - echo 'deployd!'
+  only:
+  - master
