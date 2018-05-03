@@ -6,7 +6,7 @@ import Authorized from '../../utils/Authorized';
 import { Pie, WaterWave, Gauge, TagCloud } from '../../components/Charts';
 import NumberInfo from '../../components/NumberInfo';
 import ActiveChart from '../../components/ActiveChart';
-import styles from './Monitor.less';
+import styles from './index.less';
 
 const { Secured } = Authorized;
 
@@ -20,11 +20,11 @@ const havePermissionAsync = new Promise((resolve) => {
   monitor,
   loading: loading.models.monitor,
 }))
-export default class Monitor extends PureComponent {
+export default class Index extends PureComponent {
   componentDidMount() {
-    this.props.dispatch({
-      type: 'monitor/fetchTags',
-    });
+    // this.props.dispatch({
+    //   type: 'monitor/fetchTags',
+    // });
   }
 
   render() {
