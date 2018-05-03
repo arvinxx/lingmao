@@ -4,7 +4,7 @@ import { Upload, Icon, message } from 'antd';
 const Dragger = Upload.Dragger;
 import styles from './styles.less';
 
-class index extends Component {
+class index extends Component<any> {
   onChange(info) {
     const status = info.file.status;
     if (status !== 'uploading') {
@@ -18,14 +18,10 @@ class index extends Component {
   }
 
   render() {
-    const props = {
-      name: 'file',
-      multiple: true,
-      action: '//jsonplaceholder.typicode.com/posts/',
-    };
+    const params = this.props.params;
 
     return (
-      <Dragger {...props}>
+      <Dragger {...params}>
         <p className="ant-upload-drag-icon">
           <Icon type="inbox" />
         </p>

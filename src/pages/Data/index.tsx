@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { Card, Form, Tabs, Collapse } from 'antd';
 
 import { connect } from 'dva';
+
+import { Header } from '../../components';
 import TableForm from './component.TableForm';
 import styles from './style.less';
 const TabPane = Tabs.TabPane;
@@ -32,6 +34,12 @@ const tableData = [
   },
 ];
 
+const header = {
+  left: ['left', 'right', 'down'],
+  center: ['数据表格', '检验图表', '降维图表', '聚类结果', '分析汇总'],
+  right: ['calendar', 'desktop'],
+};
+
 //@ts-ignore
 @Form.create()
 class AdvancedForm extends PureComponent<any, any> {
@@ -52,7 +60,8 @@ class AdvancedForm extends PureComponent<any, any> {
     const { form } = this.props;
     const { getFieldDecorator } = form;
 
-    return (
+    return [
+      <Header data={header} />,
       <div className={styles.container}>
         <Card bordered={false} className={styles.left}>
           {getFieldDecorator('members', {
@@ -64,13 +73,16 @@ class AdvancedForm extends PureComponent<any, any> {
             <TabPane tab="预处理" key="1">
               <div className={styles.advanced}>
                 <Collapse bordered={false} defaultActiveKey={['1']}>
-                  <Panel className={styles.panel} header="数据编码" key="1">
+                  <Panel className={styles.panel} header="数据文件" key="1">
+                    数据
+                  </Panel>
+                  <Panel className={styles.panel} header="数据编码" key="2">
                     数据编码
                   </Panel>
-                  <Panel className={styles.panel} header="维度匹配" key="2">
+                  <Panel className={styles.panel} header="维度匹配" key="3">
                     维度匹配
                   </Panel>
-                  <Panel className={styles.panel} header="有效性检验" key="3">
+                  <Panel className={styles.panel} header="有效性检验" key="4">
                     有效性检验
                   </Panel>
                 </Collapse>
@@ -98,8 +110,8 @@ class AdvancedForm extends PureComponent<any, any> {
             </TabPane>
           </Tabs>
         </Card>
-      </div>
-    );
+      </div>,
+    ];
   }
 }
 

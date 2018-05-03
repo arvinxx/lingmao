@@ -12,6 +12,8 @@ const testComp = (
 
 const { AuthorizedRoute } = Authorized;
 
+
+
 class Index extends React.PureComponent {
   render() {
     return (

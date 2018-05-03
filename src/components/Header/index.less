@@ -2,7 +2,7 @@
 
 .header {
   background: @base-white;
-  padding: 1.6rem;
+  padding: 0 16px;
   color: @text-color;
   border-bottom: 1px solid @white-3;
   width: 100%;
@@ -12,4 +12,25 @@
 
 .tool-container {
   display: flex;
+  align-items: center;
+  .icon {
+    height: 24px;
+    margin: 0 8px;
+    display: table;
+    &::before {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+}
+:global {
+  .ant-tabs-bar {
+    border-bottom: 0;
+    //border-image: linear-gradient(#439afc, #99f5ff) 1 1;
+    margin: 0;
+  }
+  .ant-tabs-ink-bar {
+    height: 3px;
+    background: linear-gradient(to right, #439afc, #99f5ff);
+  }
 }

@@ -15,3 +15,11 @@ export async function saveDocument(params) {
 export async function queryLabels() {
   return request('/api/labels');
 }
+
+export async function uploadDocument(params) {
+  console.log(params);
+  return request('/api/upload', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
 
-import { Header, SiderMenu } from '../components';
+import { SiderMenu } from '../components';
 
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
@@ -11,8 +11,6 @@ import data from '../common/header';
 
 import styles from './BasicLayout.less';
 import logo from '../assets/logo.png';
-
-const { Content } = Layout;
 
 const redirectData = [];
 const getRedirect = (item) => {
@@ -57,10 +55,7 @@ export default class BasicLayout extends Component {
           width={defaultSideWith}
         />
         <Layout className={styles.layout} style={{ paddingLeft: collapsed ? 80 : defaultSideWith }}>
-          <Header data={data} />
-          <Content className={styles.content}>
-            <Fragment>{children}</Fragment>
-          </Content>
+          <Fragment>{children}</Fragment>
         </Layout>
       </Layout>
     );

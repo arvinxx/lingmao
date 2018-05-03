@@ -1,23 +1,22 @@
 import React from 'react';
+import { Tabs, Icon } from 'antd';
+const TabPane = Tabs.TabPane;
+
 import styles from './index.less';
 
 export default (props) => {
-  const { left1, left2, left3, center1, center2, right1, right2 } = props.data;
+  const { left, center, right } = props.data;
+  function callback(key) {
+    console.log(key);
+  }
+
   return (
     <div className={styles.header}>
-      <div className={styles['tool-container']}>
-        <div>{left1}</div>
-        <div>{left2}</div>
-        <div>{left3}</div>
-      </div>
-      <div className={styles['tool-container']}>
-        <div>{center1}</div>
-        <div>{center2}</div>
-      </div>
-      <div className={styles['tool-container']}>
-        <div>{right1}</div>
-        <div>{right2}</div>
-      </div>
+      <div className={styles['tool-container']}>{left.map((item) => <Icon type={item} className={styles.icon} />)}</div>
+      <Tabs defaultActiveKey="1" onChange={callback} className={styles['tool-container']}>
+        {center.map((item, index) => <TabPane tab={item} key={index} />)}
+      </Tabs>
+      <div className={styles['tool-container']}>{right.map((item) => <Icon type={item} className={styles.icon}/>)}</div>
     </div>
   );
 };
