@@ -26,10 +26,10 @@
   box-shadow: @shadow-0;
 
   width: 400px;
-  :global {
-    .ant-collapse-item {
-      border-bottom: 0;
-      .ant-collapse-header {
+  .panel {
+    border-bottom: 0;
+    :global {
+      .ant-collapse-item > .ant-collapse-header {
         line-height: 20px;
         font-size: @font-size-base;
         color: @dark-5;
@@ -37,6 +37,19 @@
     }
   }
 }
+:global {
+  .ant-card-body {
+    padding-top: 0;
+  }
+
+  .ant-tabs-nav-scroll {
+    text-align: center;
+  }
+  .ant-table-thead {
+    background: @transBlack-9;
+  }
+}
+
 .heading {
   font-size: 14px;
   line-height: 22px;
@@ -120,9 +133,4 @@
 .optional {
   color: @text-color-secondary;
   font-style: normal;
-}
-:global {
-  .ant-table-thead {
-    background: @transBlack-9;
-  }
 }

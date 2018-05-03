@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Card, Form, Radio, Collapse } from 'antd';
+import { Card, Form, Tabs, Collapse } from 'antd';
 
 import { connect } from 'dva';
-import TableForm from './TableForm';
+import TableForm from './component.TableForm';
 import styles from './style.less';
+const TabPane = Tabs.TabPane;
+
 const Panel = Collapse.Panel;
 
 const tableData = [
@@ -37,7 +39,9 @@ class AdvancedForm extends PureComponent<any, any> {
     width: '100%',
     value: 0,
   };
-
+  callback = (key) => {
+    console.log(key);
+  };
   onChange = (e) => {
     console.log('radio checked', e.target.value);
     this.setState({
@@ -55,16 +59,44 @@ class AdvancedForm extends PureComponent<any, any> {
             initialValue: tableData,
           })(<TableForm />)}
         </Card>
-        <Card title="数据情况" bordered={false} className={styles.right}>
-          <div className={styles.advanced}>
-            <Collapse bordered={false} defaultActiveKey={['1']}>
-              <Panel className={styles.sss} header="数据编码" key="encode">
-                {getFieldDecorator('members', {
-                  initialValue: tableData,
-                })(<TableForm />)}
-              </Panel>
-            </Collapse>
-          </div>
+        <Card bordered={false} className={styles.right}>
+          <Tabs defaultActiveKey="1" onChange={this.callback} size="large">
+            <TabPane tab="预处理" key="1">
+              <div className={styles.advanced}>
+                <Collapse bordered={false} defaultActiveKey={['1']}>
+                  <Panel className={styles.panel} header="数据编码" key="1">
+                    数据编码
+                  </Panel>
+                  <Panel className={styles.panel} header="维度匹配" key="2">
+                    维度匹配
+                  </Panel>
+                  <Panel className={styles.panel} header="有效性检验" key="3">
+                    有效性检验
+                  </Panel>
+                </Collapse>
+              </div>
+            </TabPane>
+            <TabPane tab="降维" key="2">
+              <Collapse bordered={false} defaultActiveKey={['1']}>
+                <Panel className={styles.panel} header="选择维度" key="1">
+                  选择维度
+                </Panel>
+                <Panel className={styles.panel} header="维度选项" key="2" disabled>
+                  维度选项
+                </Panel>
+              </Collapse>
+            </TabPane>
+            <TabPane tab="聚类" key="3">
+              <Collapse bordered={false} defaultActiveKey={['1']}>
+                <Panel className={styles.panel} header="选择维度" key="1">
+                  选择维度
+                </Panel>
+                <Panel className={styles.panel} header="聚类方法" key="2" disabled>
+                  聚类方法
+                </Panel>
+              </Collapse>
+            </TabPane>
+          </Tabs>
         </Card>
       </div>
     );
