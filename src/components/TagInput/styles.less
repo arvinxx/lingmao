@@ -51,6 +51,23 @@
   justify-content: flex-end;
   width: 96px;
   text-align: right;
+  .delete {
+    color: @white-5;
+    opacity: 0;
+    cursor: pointer;
+    transition: @animation-duration-base;
+    &:active {
+      color: @dark-2;
+      transform: scale(0.9);
+    }
+    &:hover {
+      color: @white-7;
+      transform: scale(1.1);
+    }
+  }
+  &:hover .delete {
+    opacity: 1;
+  }
 }
 
 .tag-container {
@@ -59,7 +76,21 @@
   margin-left: @padding-md;
 }
 
+.exist-key {
+  .key-container;
+  max-width: 72px;
+  background: none;
+  &:focus {
+    background-color: @base-white;
+  }
+}
+
 .add-key {
   .key-container;
   color: @text-color-secondary;
+  padding-right: 0;
+  background: none;
+  &:focus {
+    background-color: @base-white;
+  }
 }

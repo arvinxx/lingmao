@@ -3,7 +3,8 @@ import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 
 // eslint-disable-next-line no-underscore-dangle
-const store = window.g_app._store;
+
+const store = process.env.NODE_ENV === 'test' ? null : window.g_app._store;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',

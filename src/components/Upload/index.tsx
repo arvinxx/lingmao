@@ -4,7 +4,7 @@ import { Upload, Icon, message } from 'antd';
 const Dragger = Upload.Dragger;
 import styles from './styles.less';
 
-class index extends Component<any> {
+class index extends Component<any, any> {
   onChange(info) {
     const status = info.file.status;
     if (status !== 'uploading') {

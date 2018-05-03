@@ -48,11 +48,11 @@ export default class Interview extends Component<any, any> {
     });
   }
   componentWillUnmount() {
-    const { title, records, id } = this.props.interview;
+    const { title, records, id, dimensions, selectedLabels } = this.props.interview;
 
     this.props.dispatch({
       type: 'interview/saveDocument',
-      payload: { title, id },
+      payload: { title, id, records, dimensions, selectedLabels },
     });
   }
   onChange = (e) => {
@@ -81,6 +81,18 @@ export default class Interview extends Component<any, any> {
       payload: text,
     });
   };
+
+  handleSelected(label: string, checked: boolean) {
+    const { selectedLabels } = this.props;
+    const nextSelectedLabels = checked
+      ? [...selectedLabels, label]
+      : selectedLabels.filter((t) => t !== label);
+    this.props.dispatch({
+      type: 'interview/selectLabels',
+      payload: nextSelectedLabels,
+    });
+  }
+
   AdvancedOpts = () => {
     return (
       <RadioGroup
@@ -103,7 +115,7 @@ export default class Interview extends Component<any, any> {
       </RadioGroup>
     );
   };
-  LabelDisplay = () => (
+  LabelDisplay = (labels) => (
     <Menu
       onClick={this.handleClick}
       style={{ width: 200 }}
@@ -116,8 +128,7 @@ export default class Interview extends Component<any, any> {
   );
   render() {
     const minPanelSize = 150;
-    const { title, records, dimensions } = this.props.interview;
-
+    const { title, records, dimensions, selectedLabels } = this.props.interview;
     return [
       <Header data={header} />,
       <Content className={styles.content}>
@@ -165,13 +176,17 @@ export default class Interview extends Component<any, any> {
                 </div>
               </ReflexSplitter>
               <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-                <TagInput dimensions={dimensions} />
+                <TagInput
+                  dimensions={dimensions}
+                  selectedLabels={selectedLabels}
+                  dispatch={this.props.dispatch}
+                />
               </ReflexElement>
             </ReflexContainer>
           </div>
           <div className={styles.right}>
-            标签
-            {this.LabelDisplay()}
+            <div className={styles.title}>标签</div>
+            {this.LabelDisplay(labels)}
           </div>
         </div>
       </Content>,
