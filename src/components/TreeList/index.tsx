@@ -1,11 +1,13 @@
-import React, {Component,} from 'react';
-import {Tree} from 'antd';
+import React, { Component } from 'react';
+import { Tree } from 'antd';
 import InputCell from './Input';
+import './index.less';
 
 const TreeNode = Tree.TreeNode;
 
 interface TreeListProps {
-  records: object[]
+  records: object[];
+  dispatch: any;
 }
 
 export default class TreeList extends Component<TreeListProps, any> {
@@ -26,12 +28,12 @@ export default class TreeList extends Component<TreeListProps, any> {
   };
   onCheck = (checkedKeys) => {
     console.log('onCheck', checkedKeys);
-    this.setState({checkedKeys});
+    this.setState({ checkedKeys });
   };
 
   onSelect = (selectedKeys, info: object) => {
     console.log('onSelect', info);
-    this.setState({selectedKeys});
+    this.setState({ selectedKeys });
   };
 
   onDragEnter = (info) => {
@@ -91,20 +93,28 @@ export default class TreeList extends Component<TreeListProps, any> {
 
   renderTreeNodes = (data: object[]) => {
     return data.map((item) => {
-      const {children, id, text} = item;
+      const { children, id, text } = item;
       if (children) {
         return (
-          <TreeNode title={<InputCell id={`input_of_${id}`} text={text} />} key={id} dataRef={item}>
+          <TreeNode
+            title={<InputCell id={`input_of_${id}`} text={text} dispatch={this.props.dispatch} />}
+            key={id}
+            dataRef={item}
+          >
             {this.renderTreeNodes(children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={id} title={<InputCell id={`input_of_${id}`} text={text} />} />;
+      return (
+        <TreeNode
+          key={id}
+          title={<InputCell id={`input_of_${id}`} text={text} dispatch={this.props.dispatch} />}
+        />
+      );
     });
   };
 
   render() {
-
     return (
       <Tree
         // showLine
@@ -115,7 +125,7 @@ export default class TreeList extends Component<TreeListProps, any> {
         //checkable
         //checkedKeys={this.state.checkedKeys}
         onSelect={this.onSelect}
-        draggable
+        // draggable
         // onDragEnter={this.onDragEnter}
         // onDrop={this.onDrop}
         //selectedKeys={this.state.selectedKeys}

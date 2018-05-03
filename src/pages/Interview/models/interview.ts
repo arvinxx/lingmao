@@ -5,7 +5,14 @@ export default {
   namespace: 'interview',
   state: {
     title: '',
-    records: [],
+    records: [
+      {
+        id: '',
+        text: '',
+        collapsed: false,
+        children: [],
+      },
+    ],
     id: '',
     dimensions: [
       {

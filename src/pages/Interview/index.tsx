@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { Radio, List, Collapse, Menu, Input, Layout } from 'antd';
+import { Radio, List, Collapse, Menu, Input, Layout, Button, InputNumber,Icon } from 'antd';
 import 'react-reflex/styles.css';
 
 import { TagInput, TreeList, Upload, Ellipsis, Header } from '../../components';
@@ -70,6 +70,8 @@ export default class Interview extends Component<any, any> {
     return (
       <Menu.Item className={styles.labels} key={item}>
         {item}
+        <Icon type="close" className={styles.close} />
+
       </Menu.Item>
     );
   };
@@ -136,6 +138,26 @@ export default class Interview extends Component<any, any> {
           <div className={styles.left}>
             <div className={styles.upload}>
               <Upload params={UploadProps} />
+              <div className={styles['button-container']}>
+                <Button
+                  type="primary"
+                  ghost
+                  disabled
+                  size={'small'}
+                  className={styles['button-style']}
+                >
+                  上传提纲
+                </Button>
+                <Button
+                  type="primary"
+                  ghost
+                  disabled
+                  size={'small'}
+                  className={styles['button-style']}
+                >
+                  上传记录
+                </Button>
+              </div>
               <div className={styles.preview}>
                 <List
                   header={<div style={{ textAlign: 'center' }}>前三行预览</div>}
@@ -153,8 +175,21 @@ export default class Interview extends Component<any, any> {
               </div>
               <div className={styles.advanced}>
                 <Collapse bordered={false} defaultActiveKey={['1']}>
-                  <Panel className={styles.sss} header="高级选项" key="advanced-1">
+                  <Panel className={styles['adv-opts']} header="高级选项" key="1">
+                    <div className={styles.description}>格式化参数</div>
                     {this.AdvancedOpts()}
+                    <div className={styles.delete}>
+                      删除前
+                      <InputNumber
+                        className={styles['delete-number']}
+                        min={1}
+                        size="small"
+                        max={10}
+                        defaultValue={3}
+                        onChange={(e) => console.log('changed', e)}
+                      />
+                      条内容
+                    </div>
                   </Panel>
                 </Collapse>
               </div>
@@ -165,7 +200,7 @@ export default class Interview extends Component<any, any> {
               <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
                 <div className={styles.warpper}>
                   <Input className={styles.title} onChange={this.titleChange} value={title} />
-                  <TreeList records={records} />
+                  <TreeList records={records} dispatch={this.props.dispatch} />
                 </div>
               </ReflexElement>
               <ReflexSplitter>

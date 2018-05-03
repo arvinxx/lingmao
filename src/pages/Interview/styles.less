@@ -34,6 +34,17 @@
     }
   }
 
+  .button-container {
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-around;
+    .button-style {
+      //width: 74px;
+      padding: 0 10px;
+      border-radius: 16px;
+    }
+  }
+
   .preview {
     margin: 12px 0;
     background: @white-1;
@@ -67,23 +78,53 @@
   .advanced {
     height: 200px;
 
+    .description {
+      margin: -4px 0 8px 24px;
+      color: @dark-6;
+    }
     .radio-group {
-      margin-left: 16px;
+      margin-left: 24px;
       .radio-style {
         display: block;
-        height: 30px;
-        line-height: 30px;
+        height: 26px;
+        line-height: 26px;
         font-size: @font-size-base;
+        color: @white-7;
+        &:hover {
+          color: @dark-6;
+        }
       }
     }
+
+    .delete {
+      margin: 16px 0 0 16px;
+      font-size: @font-size-sm;
+      .delete-number {
+        //border-radius: 10px;
+        width: 40px;
+        margin: 0 8px;
+        :global {
+          .ant-input-number {
+            font-size: @font-size-sm;
+          }
+        }
+      }
+    }
+
     :global {
+      .ant-radio-wrapper-checked > span {
+        color: @dark-6;
+      }
       .ant-collapse-item {
         border-bottom: 0;
         .ant-collapse-header {
           line-height: 20px;
           font-size: @font-size-base;
-          color: @dark-5;
+          color: @dark-6;
         }
+      }
+      .ant-radio {
+        vertical-align: middle;
       }
       .ant-radio-inner {
         width: 12px;
@@ -113,11 +154,34 @@
   .labels {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 40px;
     user-select: none;
     &:hover {
       background: @white-1;
       color: @text-color;
+      .close {
+        opacity: 1;
+      }
+    }
+    .close {
+      color: @white-5;
+      opacity: 0;
+      cursor: pointer;
+      transition: @animation-duration-base;
+      &:active {
+        color: @dark-2;
+        transform: scale(0.4);
+      }
+      &:hover {
+        color: @white-7;
+        transform: scale(1.1);
+      }
+    }
+    :global {
+      .ant-menu-item-selected:hover ~ .close {
+        opacity: 1;
+      }
     }
   }
   :global {
@@ -125,6 +189,7 @@
       background: @white-1;
       color: @heading-color;
     }
+
     .ant-menu-item-selected::after {
       border-right: 0;
     }

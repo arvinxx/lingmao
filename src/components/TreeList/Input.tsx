@@ -1,16 +1,21 @@
-import React, {PureComponent} from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
-import {Input} from 'antd';
-import {connect} from 'dva';
+import { Input } from 'antd';
+import { connect } from 'dva';
 
 import styles from './Input.less';
-
+const { TextArea } = Input;
 interface InputCellProps {
-  id: string,
-  text: string
+  id: string;
+  text: string;
+  dispatch: any;
 }
 
-export default class InputCell extends PureComponent<InputCellProps> {
+export default class InputCell extends Component<InputCellProps> {
+  state = {
+    tempText: '',
+    isFocus: false,
+  };
   /**
    * 获取得到 TextChange 函数 并根据 id 修改内容
    * @param e 触发事件
@@ -24,14 +29,13 @@ export default class InputCell extends PureComponent<InputCellProps> {
     // });
   };
 
-
   /**
    * 按下键后的处理行为
    */
   onKeyDown = (e) => {
-    const {onTabChange, id, onDelete, onDirectionChange} = this.props;
+    const { onTabChange, id, onDelete, onDirectionChange } = this.props;
 
-    const {keyCode, shiftKey} = e;
+    const { keyCode, shiftKey } = e;
     // console.log(`${id} onKeyDown`,e, target, key, keyCode, shiftKey, ctrlKey, altKey)
     if (keyCode === 9 && shiftKey) {
       // console.log("shift +  Tab clicked!")
@@ -65,29 +69,28 @@ export default class InputCell extends PureComponent<InputCellProps> {
     }
   };
 
-// onBlur = (e) => {
-//   console.log(e);
-// };
+  // onBlur = (e) => {
+  //   console.log(e);
+  // };
   onFocus = (e) => {
     console.log(e);
   };
-// onPressEnter = (e) => {
-//   console.log(e);
-// };
+  // onPressEnter = (e) => {
+  //   console.log(e);
+  // };
 
   render() {
-    const {text, id} = this.props;
+    const { text, id } = this.props;
     return (
       <div className={styles.item}>
-        <Input
-          id={`input_of_${id}`}
-          ref="input" //eslint-disable-line
+        <TextArea
+           ref="input" //eslint-disable-line
           className={styles.input}
           value={text}
-          defaultValue={text}
           onChange={this.onChange}
           //onKeyDown={this.onKeyDown}
           // autoFocus={id === focusId}
+          autosize
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onPressEnter={this.onPressEnter}

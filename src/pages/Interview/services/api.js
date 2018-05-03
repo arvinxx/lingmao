@@ -4,8 +4,8 @@ export async function queryDocument() {
   return request('/api/documents');
 }
 export async function saveDocument(params) {
-  const { id, title,dimensions ,selectedLabels} = params;
-  const data = { id, title ,dimensions,selectedLabels};
+  const { id, title, dimensions, selectedLabels } = params;
+  const data = { id, title, dimensions, selectedLabels };
   return request('/api/documents', {
     method: 'POST',
     'Content-Type': 'application/json; charset=utf-8',
