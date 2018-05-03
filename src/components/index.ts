@@ -7,3 +7,6 @@ export { default as Ellipsis } from './Ellipsis';
 export { default as SiderMenu } from './SiderMenu';
 export { default as Header } from './Header';
 export { default as Authorized } from './Authorized';
+export { default as ActiveChart } from './ActiveChart';
+export { default as NumberInfo } from './NumberInfo';
+export * from './Charts';

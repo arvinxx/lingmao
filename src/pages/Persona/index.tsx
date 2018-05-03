@@ -62,7 +62,7 @@ const actions = (
   </Fragment>
 );
 
-class Success extends Component {
+class Index extends Component {
   propTypes = {};
 
   defaultProps = {};
@@ -85,4 +85,4 @@ class Success extends Component {
   }
 }
 
-export default Success;
+export default Index;

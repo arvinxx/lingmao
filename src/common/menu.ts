@@ -24,7 +24,7 @@ const menuData = [
   {
     name: '用户画像',
     icon: 'user',
-    path: 'result/success',
+    path: 'persona',
   },
   {
     name: '账户',
