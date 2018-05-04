@@ -1,33 +1,33 @@
 import React, { Component } from 'react';
 
 import { Tag, Input, Icon, Popconfirm, message } from 'antd';
+import { findIndex } from 'lodash';
 
 import styles from './styles.less';
 
 const CheckableTag = Tag.CheckableTag;
 
 interface ILabelSelectProps {
-  dimensions: Array<object>;
+  dimensions: Array<{
+    _id: string;
+    key: string;
+    values: [string];
+    inputVisible: boolean;
+    valueEditable: boolean;
+  }>;
   selectedLabels: Array<string>;
   dispatch: any;
 }
+interface ILabelSelectStates {
+  newKey: string;
+  newValue: string;
+}
 
-export default class Index extends Component<ILabelSelectProps, any> {
+export default class Index extends Component<ILabelSelectProps,any> {
   state = {
-    inputVisible: true,
-    inputValue: '',
     newKey: '',
-    oldTempKey: '',
-    ChangeKey: false,
+    newValue: '',
   };
-  input: object[] = [];
-  selectedInput = {};
-
-  componentDidMount() {
-    this.setState({
-      inputVisible: false,
-    });
-  }
 
   handleSelected(label: string, checked: boolean) {
     const { selectedLabels } = this.props;
@@ -41,58 +41,30 @@ export default class Index extends Component<ILabelSelectProps, any> {
     });
   }
 
-  saveInputRef = (input, dimension) => {
-    const inputObj = { dimension, input };
-    const inputArr = this.input;
-    if (inputArr.length === 0) {
-      this.input = [...inputArr, inputObj];
-    } else {
-      this.input = inputArr.some((item: object) => item.dimension === dimension)
-        ? inputArr
-        : [...inputArr, inputObj];
-    }
-  };
-
-  showInput = (dimension) => {
-    console.log(dimension);
-    const getInput = this.input.filter((item: object) => item.dimension === dimension);
-    console.log(getInput);
-    this.selectedInput = getInput.length > 0 ? getInput[0].input : {};
-    console.log(this.selectedInput);
-    this.setState(
-      { inputVisible: true }
-      // , () => {
-      //   if (this.selectedInput !== {}) this.selectedInput.focus();
-      // }
-    );
-  };
-
-  OldKeyChange = (e) => {
-    // 只能填入一次信息
-    this.setState({ ChangeKey: true });
-    this.setState({ oldTempKey: e.target.value });
-  };
-  OldKeyBlur = (oldKey) => {
-    // 只能填入一次信息
+  oldKeyChange = (e, id) => {
     this.props.dispatch({
       type: 'interview/changeDimensionKey',
-      payload: { oldKey, newKey: this.state.oldTempKey },
+      payload: { id, newKey: e.target.value },
     });
-    this.setState({ ChangeKey: false });
   };
-
-  OldKeyDelete = (oldKey) => {
+  oldKeyDelete = (id) => {
     this.props.dispatch({
       type: 'interview/deleteDimensionKey',
-      payload: oldKey,
+      payload: id,
     });
   };
 
-  NewKeyOnInput = (e) => {
+  oldValueDelete = (id, value) => {
+    this.props.dispatch({
+      type: 'interview/deleteDimensionValue',
+      payload: { id, value },
+    });
+  };
+
+  newKeyOnInput = (e) => {
     this.setState({ newKey: e.target.value });
   };
-  NewKeyOnBlur = (e) => {
-    console.log(e);
+  newKeyOnBlur = (e) => {
     this.props.dispatch({
       type: 'interview/addDimensionKey',
       payload: this.state.newKey,
@@ -100,123 +72,117 @@ export default class Index extends Component<ILabelSelectProps, any> {
     this.state.newKey = '';
   };
 
-  handleInputConfirm = () => {
-    const { inputValue } = this.state;
-    let { dimensions } = this.props;
-    if (inputValue && dimensions.indexOf(inputValue) === -1) {
-      dimensions = [...dimensions, { inputValue }];
-    }
+  newValueOnInput = (e) => {
+    this.setState({ newValue: e.target.value });
+  };
+  handleValuesClick = (e) => {};
+  newValueOnConfirm = (e, id) => {
+    const { newValue } = this.state;
     this.props.dispatch({
-      type: 'interview/addLabels',
-      payload: dimensions,
+      type: 'interview/addDimensionValue',
+      payload: { id, newValue },
     });
     this.setState({
-      inputVisible: false,
+      newValue: '',
     });
   };
 
-  AddLabels = (dimension, inputVisible, inputValue) => {
+  showValueInput = (id) => {
+    this.props.dispatch({
+      type: 'interview/showValueInput',
+      payload: id,
+    });
+  };
+  hideValueInput = (id) => {
+    this.props.dispatch({
+      type: 'interview/hideValueInput',
+      payload: id,
+    });
+  };
+
+  ValueInputComponent = (id, inputVisible, inputValue) => {
     if (inputVisible)
       return (
         <Input
-          ref={(input) => this.saveInputRef(input, dimension)}
-          key={`${dimension}-add`}
+          key={`${id}-add`}
           type="text"
           size="small"
           className={styles.input}
           value={inputValue}
-          onChange={this.handleInputChange}
-          onBlur={this.handleInputConfirm}
-          onPressEnter={this.handleInputConfirm}
+          onChange={this.newValueOnInput}
+          onPressEnter={(e) => this.newValueOnConfirm(e, id)}
+          onBlur={()=>this.hideValueInput(id)}
         />
       );
     else {
       return (
-        <Tag
-          key={`${dimension}-addk`}
-          onClick={(e) => this.showInput(dimension)}
-          className={styles.plus}
-        >
-          <Icon key={`${dimension}-icon`} type="plus" />
+        <Tag key={`${id}-addk`} onClick={() => this.showValueInput(id)} className={styles.plus}>
+          <Icon key={`${id}-icon`} type="plus" />
         </Tag>
       );
     }
   };
 
-  confirmMessage = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
-  };
-
-  cancelMessage = (e) => {
-    console.log(e);
-    message.error('Click on No');
-  };
-
   render() {
-    const { inputVisible, inputValue } = this.state;
-
+    const {  newValue } = this.state;
     const { dimensions, selectedLabels } = this.props;
-    const getDimension = (key, values, _id) => {
-      return (
-        <div key={_id} className={styles['dimension-container']}>
-          <div className={styles['key-container']}>
-            <div>
-              <Popconfirm
-                title="确认要删除吗?"
-                onConfirm={() => this.OldKeyDelete(key)}
-                okText="是"
-                cancelText="否"
-              >
-                <Icon type="close" className={styles.delete} />
-              </Popconfirm>
-              <Input
-                key={'keyof' + key}
-                className={styles['exist-key']}
-                value={this.state.ChangeKey === true ? this.state.oldTempKey : key}
-                placeholder={key}
-                onChange={this.OldKeyChange}
-                onBlur={() => this.OldKeyBlur(key)}
-              />
-            </div>
-          </div>
-          <div className={styles['tag-container']}>
-            {values.map((value) => {
-              return (
-                <CheckableTag
-                  key={`${value}-tags`}
-                  checked={selectedLabels.indexOf(value) > -1}
-                  onChange={(checked) => this.handleSelected(value, checked)}
-                >
-                  {value}
-                </CheckableTag>
-              );
-            })}
-            {this.AddLabels(key, inputVisible, inputValue)}
-          </div>
-        </div>
-      );
-    };
 
     return (
       <div className={styles.container}>
         {dimensions.map((dimension) => {
-          console.log(dimension);
-          const { key, values, _id } = dimension;
-
-          return getDimension(key, values, _id);
+          const { key, values, _id, inputVisible, valueEditable } = dimension;
+          return (
+            <div key={_id} className={styles['dimension-container']}>
+              <div className={styles['key-container']}>
+                <div>
+                  <Popconfirm
+                    title="确认要删除吗?"
+                    onConfirm={() => this.oldKeyDelete(_id)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Icon type="close" className={styles.delete} />
+                  </Popconfirm>
+                  <Input
+                    key={'keyof' + _id}
+                    className={styles['exist-key']}
+                    value={key}
+                    placeholder={key}
+                    onChange={(e) => {
+                      this.oldKeyChange(e, _id);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className={styles['tag-container']}>
+                {values.map((value) => {
+                  if (valueEditable) {
+                  } else {
+                    return (
+                      <CheckableTag
+                        key={`${value}-tags`}
+                        checked={selectedLabels.indexOf(value) > -1} // onClick={this.handleValuesClick}
+                        onChange={(checked) => this.handleSelected(value, checked)}
+                      >
+                        {value}
+                      </CheckableTag>
+                    );
+                  }
+                })}
+                {this.ValueInputComponent(_id, inputVisible, newValue)}
+              </div>
+            </div>
+          );
         })}
         <div className={styles['dimension-container']}>
           <Input
             className={styles['add-key']}
             value={this.state.newKey}
             placeholder="添加条目"
-            onChange={this.NewKeyOnInput}
-            onBlur={this.NewKeyOnBlur}
+            onChange={this.newKeyOnInput}
+            onBlur={this.newKeyOnBlur}
+            onPressEnter={this.newKeyOnBlur}
           />
-          <div className={styles['tag-container']}>
-            {this.AddLabels('new', inputVisible, inputValue)}
-          </div>
         </div>
       </div>
     );

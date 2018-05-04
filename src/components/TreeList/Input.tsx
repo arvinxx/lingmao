@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import styles from './Input.less';
 const { TextArea } = Input;
 interface InputCellProps {
-  id: string;
+  _id: string;
   text: string;
   dispatch: any;
 }
@@ -16,45 +16,45 @@ export default class InputCell extends Component<InputCellProps> {
     tempText: '',
     isFocus: false,
   };
+
   /**
    * 获取得到 TextChange 函数 并根据 id 修改内容
-   * @param e 触发事件
    */
-  onChange = (e) => {
+  onChange = (e, id) => {
     const text = e.target.value;
     console.log(text);
-    // this.props.dispatch({
-    //   type: 'interview/changed',
-    //   payload: text
-    // });
+    this.props.dispatch({
+      type: 'interview/changeRecordText',
+      payload: { id, newText: e.target.value },
+    });
   };
 
   /**
    * 按下键后的处理行为
    */
   onKeyDown = (e) => {
-    const { onTabChange, id, onDelete, onDirectionChange } = this.props;
+    const { onTabChange, _id, onDelete, onDirectionChange } = this.props;
 
     const { keyCode, shiftKey } = e;
     // console.log(`${id} onKeyDown`,e, target, key, keyCode, shiftKey, ctrlKey, altKey)
     if (keyCode === 9 && shiftKey) {
       // console.log("shift +  Tab clicked!")
       if (onTabChange) {
-        onTabChange(id, true);
+        onTabChange(_id, true);
         e.preventDefault();
       }
     }
     if (keyCode === 9 && !shiftKey) {
       // console.log("Tab clicked!")
       if (onTabChange) {
-        onTabChange(id, false);
+        onTabChange(_id, false);
         e.preventDefault();
       }
     }
     if (keyCode === 8 && _.isEmpty(this.props.text)) {
       // console.log("Backspace clicked");
       if (onDelete) {
-        onDelete(id);
+        onDelete(_id);
         e.preventDefault();
       }
     }
@@ -65,7 +65,7 @@ export default class InputCell extends Component<InputCellProps> {
         39: 'right',
         40: 'down',
       };
-      onDirectionChange(id, temp[keyCode.toString()]);
+      onDirectionChange(_id, temp[keyCode.toString()]);
     }
   };
 
@@ -80,14 +80,15 @@ export default class InputCell extends Component<InputCellProps> {
   // };
 
   render() {
-    const { text, id } = this.props;
+    const { text, _id } = this.props;
     return (
       <div className={styles.item}>
         <TextArea
-           ref="input" //eslint-disable-line
+          key={'textArea' + _id}
+          ref="input" //eslint-disable-line
           className={styles.input}
           value={text}
-          onChange={this.onChange}
+          onChange={(e) => this.onChange(e, _id)}
           //onKeyDown={this.onKeyDown}
           // autoFocus={id === focusId}
           autosize

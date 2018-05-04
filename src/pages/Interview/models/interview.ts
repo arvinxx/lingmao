@@ -7,17 +7,20 @@ export default {
     title: '',
     records: [
       {
-        id: '',
+        _id: '',
         text: '',
         collapsed: false,
         children: [],
       },
     ],
-    id: '',
+    _id: '',
     dimensions: [
       {
+        _id: '',
         key: '',
         values: [],
+        inputVisible: false,
+        valueEditable: false,
       },
     ],
     selectedLabels: [],
@@ -31,7 +34,7 @@ export default {
       });
     },
     *saveDocument({ payload }, { call }) {
-      console.log(payload);
+      console.log({...this.state});
       yield call(saveDocument, payload);
     },
   },
@@ -42,16 +45,18 @@ export default {
 
     querryDocument(state, action) {
       let { title, records, _id, dimensions, selectedLabels } = action.payload[0];
+      console.log(action.payload[0]);
       if (isNull(dimensions)) {
         dimensions = [
           {
+            _id: '',
             key: '',
             values: [''],
           },
         ];
       }
-      if (isNull(records)) {
-        records = [{ text: '', _id: 'null' }];
+      if (records.length === 0) {
+        records = [{ text: '', id: 'new' }];
       }
       if (isNull(title)) {
         title = '';
@@ -63,21 +68,33 @@ export default {
         ...state,
         records,
         title,
-        id: _id,
+        _id,
         dimensions,
         selectedLabels,
       };
     },
-    changeNode(state, { payload: node }) {
-      return { ...state, node };
-    },
 
-    appendRecord(state, action) {
+    changeRecordText(state, { payload }) {
+      const { id, newText } = payload;
+      const records = state.records;
+
+      const index = findIndex(records, (record: any) => record._id === id);
+      // 判断是否存在含有该 id 的元素，如果存在 index 必然大于 -1
+      if (index > -1) {
+        records[index].text = newText;
+        return {
+          ...state,
+          records,
+        };
+      } else return state;
+    },
+    addRecordText(state, { payload: newRecord }) {
       return {
         ...state,
-        record: state.record.concat(action.payload),
+        records: state.records.concat(newRecord),
       };
     },
+
     addDimensionKey(state, { payload: newDimension }) {
       if (newDimension === '') {
         return state;
@@ -87,24 +104,77 @@ export default {
           dimensions: [...state.dimensions, { key: newDimension, values: [] }],
         };
     },
-    deleteDimensionKey(state, { payload: oldKey }) {
+    deleteDimensionKey(state, { payload: id }) {
       return {
         ...state,
-        dimensions: state.dimensions.filter((dim) => dim.key !== oldKey),
+        dimensions: state.dimensions.filter((dim) => dim._id !== id),
       };
     },
     changeDimensionKey(state, { payload }) {
-      const { oldKey, newKey } = payload;
+      const { id, newKey } = payload;
       const dimensions = state.dimensions;
-      const existNum = findIndex(dimensions, (dim) => dim.key === oldKey);
-      if (existNum > -1) {
-        dimensions[existNum].key = newKey;
+      const index = findIndex(dimensions, (dim: any) => dim._id === id);
+      // 判断是否存在含有该 id 的元素，如果存在 index 必然大于 -1
+      if (index > -1) {
+        dimensions[index].key = newKey;
         return {
           ...state,
           dimensions,
         };
       } else return state;
     },
+
+    addDimensionValue(state, { payload }) {
+      const { id, newValue } = payload;
+      const dimensions = state.dimensions;
+      const index = findIndex(dimensions, (dim: any) => dim._id === id);
+      // 判断是否存在含有该 id 的元素，如果存在 index 必然大于 -1
+      if (index > -1) {
+        dimensions[index].values.push(newValue);
+        return {
+          ...state,
+          dimensions,
+        };
+      } else return state;
+    },
+    deleteDimensionValue(state, { payload }) {
+      const { id, deleteValue } = payload;
+      const dimensions = state.dimensions;
+      const index = findIndex(dimensions, (dim: any) => dim._id === id);
+      if (index > -1) {
+        // 直接使用 oldValues.filter((value) => value !== deleteValue) 无法改变数组内容
+        const oldValues = dimensions[index].values;
+        dimensions[index].values = oldValues.filter((value) => value !== deleteValue);
+        return {
+          ...state,
+          dimensions: dimensions,
+        };
+      }
+    },
+
+    showValueInput(state, { payload: id }) {
+      const dimensions = state.dimensions;
+      const index = findIndex(dimensions, (dim: any) => dim._id === id);
+      if (index > -1) {
+        dimensions[index].inputVisible = true;
+        return {
+          ...state,
+          dimensions,
+        };
+      } else return state;
+    },
+    hideValueInput(state, { payload: id }) {
+      const dimensions = state.dimensions;
+      const index = findIndex(dimensions, (dim: any) => dim._id === id);
+      if (index > -1) {
+        dimensions[index].inputVisible = false;
+        return {
+          ...state,
+          dimensions,
+        };
+      } else return state;
+    },
+
     selectLabels(state, { payload: selectedLabels }) {
       return { ...state, selectedLabels };
     },

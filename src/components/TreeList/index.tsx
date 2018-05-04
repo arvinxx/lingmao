@@ -91,15 +91,15 @@ export default class TreeList extends Component<TreeListProps, any> {
     });
   };
 
-  renderTreeNodes = (data: object[]) => {
-    return data.map((item) => {
-      const { children, id, text } = item;
+  renderTreeNodes = (records: object[]) => {
+    return records.map((record: any) => {
+      const { children, _id, text } = record;
       if (children) {
         return (
           <TreeNode
-            title={<InputCell id={`input_of_${id}`} text={text} dispatch={this.props.dispatch} />}
-            key={id}
-            dataRef={item}
+            title={<InputCell _id={_id} text={text} dispatch={this.props.dispatch} />}
+            key={_id}
+            dataRef={record}
           >
             {this.renderTreeNodes(children)}
           </TreeNode>
@@ -107,8 +107,8 @@ export default class TreeList extends Component<TreeListProps, any> {
       }
       return (
         <TreeNode
-          key={id}
-          title={<InputCell id={`input_of_${id}`} text={text} dispatch={this.props.dispatch} />}
+          key={_id}
+          title={<InputCell _id={_id} text={text} dispatch={this.props.dispatch} />}
         />
       );
     });

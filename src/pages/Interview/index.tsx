@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { Radio, List, Collapse, Menu, Input, Layout, Button, InputNumber,Icon } from 'antd';
+import { Radio, List, Collapse, Menu, Input, Layout, Button, InputNumber, Icon } from 'antd';
 import 'react-reflex/styles.css';
 
 import { TagInput, TreeList, Upload, Ellipsis, Header } from '../../components';
 import styles from './styles.less';
+import { interview as header } from '../../common/header';
+
 import { uploadDocument } from './services/api';
 
 const RadioGroup = Radio.Group;
@@ -28,12 +30,6 @@ const UploadProps = {
   // customRequest:uploadDocument
 };
 
-const header = {
-  left: ['left', 'right', 'down'],
-  center: ['记录', '标签'],
-  right: ['warning', 'unlock'],
-};
-
 @connect(({ interview, loading }) => ({
   interview,
   loading: loading.models.interview,
@@ -48,11 +44,11 @@ export default class Interview extends Component<any, any> {
     });
   }
   componentWillUnmount() {
-    const { title, records, id, dimensions, selectedLabels } = this.props.interview;
+    const { title, records, _id, dimensions, selectedLabels } = this.props.interview;
 
     this.props.dispatch({
       type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedLabels },
+      payload: { title, _id, records, dimensions, selectedLabels },
     });
   }
   onChange = (e) => {
@@ -71,7 +67,6 @@ export default class Interview extends Component<any, any> {
       <Menu.Item className={styles.labels} key={item}>
         {item}
         <Icon type="close" className={styles.close} />
-
       </Menu.Item>
     );
   };
@@ -132,7 +127,7 @@ export default class Interview extends Component<any, any> {
     const minPanelSize = 150;
     const { title, records, dimensions, selectedLabels } = this.props.interview;
     return [
-      <Header data={header} />,
+      <Header header={header}  />,
       <Content className={styles.content}>
         <div className={styles.container}>
           <div className={styles.left}>

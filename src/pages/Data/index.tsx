@@ -4,6 +4,8 @@ import { Card, Form, Tabs, Collapse } from 'antd';
 import { connect } from 'dva';
 
 import { Header } from '../../components';
+import { data as header } from '../../common/header';
+
 import TableForm from './component.TableForm';
 import styles from './style.less';
 const TabPane = Tabs.TabPane;
@@ -34,12 +36,6 @@ const tableData = [
   },
 ];
 
-const header = {
-  left: ['left', 'right', 'down'],
-  center: ['数据表格', '检验图表', '降维图表', '聚类结果', '分析汇总'],
-  right: ['calendar', 'desktop'],
-};
-
 //@ts-ignore
 @Form.create()
 class AdvancedForm extends PureComponent<any, any> {
@@ -61,7 +57,7 @@ class AdvancedForm extends PureComponent<any, any> {
     const { getFieldDecorator } = form;
 
     return [
-      <Header data={header} />,
+      <Header header={header} />,
       <div className={styles.container}>
         <Card bordered={false} className={styles.left}>
           {getFieldDecorator('members', {
