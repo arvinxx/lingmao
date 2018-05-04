@@ -23,23 +23,22 @@ interface ILabelSelectStates {
   newValue: string;
 }
 
-export default class Index extends Component<ILabelSelectProps,any> {
+export default class Index extends Component<ILabelSelectProps, any> {
   state = {
     newKey: '',
     newValue: '',
   };
 
-  handleSelected(label: string, checked: boolean) {
-    const { selectedLabels } = this.props;
-    const nextSelectedLabels = checked
-      ? [...selectedLabels, label]
-      : selectedLabels.filter((t) => t !== label);
-
+  newValueOnConfirm = (id) => {
+    const { newValue } = this.state;
     this.props.dispatch({
-      type: 'interview/selectLabels',
-      payload: nextSelectedLabels,
+      type: 'interview/addDimensionValue',
+      payload: { id, newValue },
     });
-  }
+    this.setState({
+      newValue: '',
+    });
+  };
 
   oldKeyChange = (e, id) => {
     this.props.dispatch({
@@ -76,15 +75,41 @@ export default class Index extends Component<ILabelSelectProps,any> {
     this.setState({ newValue: e.target.value });
   };
   handleValuesClick = (e) => {};
-  newValueOnConfirm = (e, id) => {
+  newValueOnBlur = (id) => {
     const { newValue } = this.state;
     this.props.dispatch({
       type: 'interview/addDimensionValue',
       payload: { id, newValue },
     });
+    this.props.dispatch({
+      type: 'interview/hideValueInput',
+      payload: id,
+    });
     this.setState({
       newValue: '',
     });
+  };
+  ValueInputComponent = (id, inputVisible, inputValue) => {
+    if (inputVisible)
+      return (
+        <Input
+          key={`${id}-add`}
+          type="text"
+          size="small"
+          className={styles.input}
+          value={inputValue}
+          onChange={this.newValueOnInput}
+          onPressEnter={(e) => this.newValueOnConfirm(id)}
+          onBlur={() => this.newValueOnBlur(id)}
+        />
+      );
+    else {
+      return (
+        <Tag key={`${id}-addk`} onClick={() => this.showValueInput(id)} className={styles.plus}>
+          <Icon key={`${id}-icon`} type="plus" />
+        </Tag>
+      );
+    }
   };
 
   showValueInput = (id) => {
@@ -100,31 +125,20 @@ export default class Index extends Component<ILabelSelectProps,any> {
     });
   };
 
-  ValueInputComponent = (id, inputVisible, inputValue) => {
-    if (inputVisible)
-      return (
-        <Input
-          key={`${id}-add`}
-          type="text"
-          size="small"
-          className={styles.input}
-          value={inputValue}
-          onChange={this.newValueOnInput}
-          onPressEnter={(e) => this.newValueOnConfirm(e, id)}
-          onBlur={()=>this.hideValueInput(id)}
-        />
-      );
-    else {
-      return (
-        <Tag key={`${id}-addk`} onClick={() => this.showValueInput(id)} className={styles.plus}>
-          <Icon key={`${id}-icon`} type="plus" />
-        </Tag>
-      );
-    }
-  };
+  handleSelected(id: string, checked: boolean) {
+    const { selectedLabels } = this.props;
+    const nextSelectedLabels = checked
+      ? [...selectedLabels, id]
+      : selectedLabels.filter((t) => t !== id);
+
+    this.props.dispatch({
+      type: 'interview/selectLabels',
+      payload: nextSelectedLabels,
+    });
+  }
 
   render() {
-    const {  newValue } = this.state;
+    const { newValue } = this.state;
     const { dimensions, selectedLabels } = this.props;
 
     return (
@@ -155,16 +169,17 @@ export default class Index extends Component<ILabelSelectProps,any> {
                 </div>
               </div>
               <div className={styles['tag-container']}>
-                {values.map((value) => {
+                {values.map((value: any) => {
+                  const { text, _id } = value;
                   if (valueEditable) {
                   } else {
                     return (
                       <CheckableTag
-                        key={`${value}-tags`}
-                        checked={selectedLabels.indexOf(value) > -1} // onClick={this.handleValuesClick}
-                        onChange={(checked) => this.handleSelected(value, checked)}
+                        key={_id}
+                        checked={selectedLabels.indexOf(_id) > -1} // onClick={this.handleValuesClick}
+                        onChange={(checked) => this.handleSelected(_id, checked)}
                       >
-                        {value}
+                        {text}
                       </CheckableTag>
                     );
                   }

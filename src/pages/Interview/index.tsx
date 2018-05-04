@@ -8,7 +8,6 @@ import { TagInput, TreeList, Upload, Ellipsis, Header } from '../../components';
 import styles from './styles.less';
 import { interview as header } from '../../common/header';
 
-import { uploadDocument } from './services/api';
 
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
@@ -27,7 +26,6 @@ const UploadProps = {
   name: 'file',
   multiple: true,
   action: 'http://localhost:8000/api/upload',
-  // customRequest:uploadDocument
 };
 
 @connect(({ interview, loading }) => ({

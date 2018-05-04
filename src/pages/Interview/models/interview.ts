@@ -34,7 +34,7 @@ export default {
       });
     },
     *saveDocument({ payload }, { call }) {
-      console.log({...this.state});
+      // console.log(this.state);
       yield call(saveDocument, payload);
     },
   },
@@ -51,18 +51,18 @@ export default {
           {
             _id: '',
             key: '',
-            values: [''],
+            values: [],
           },
         ];
       }
       if (records.length === 0) {
-        records = [{ text: '', id: 'new' }];
+        records = [{ text: '', _id: '' }];
       }
       if (isNull(title)) {
         title = '';
       }
       if (isNull(selectedLabels)) {
-        selectedLabels = [''];
+        selectedLabels = [];
       }
       return {
         ...state,
@@ -74,6 +74,12 @@ export default {
       };
     },
 
+    addRecordText(state, { payload: newRecord }) {
+      return {
+        ...state,
+        records: state.records.concat({ text: newRecord, _id: Date.parse(new Date().toString()) }),
+      };
+    },
     changeRecordText(state, { payload }) {
       const { id, newText } = payload;
       const records = state.records;
@@ -88,12 +94,6 @@ export default {
         };
       } else return state;
     },
-    addRecordText(state, { payload: newRecord }) {
-      return {
-        ...state,
-        records: state.records.concat(newRecord),
-      };
-    },
 
     addDimensionKey(state, { payload: newDimension }) {
       if (newDimension === '') {
@@ -101,7 +101,10 @@ export default {
       } else
         return {
           ...state,
-          dimensions: [...state.dimensions, { key: newDimension, values: [] }],
+          dimensions: [
+            ...state.dimensions,
+            { key: newDimension, values: [], _id: Date.parse(new Date().toString()) },
+          ],
         };
     },
     deleteDimensionKey(state, { payload: id }) {
@@ -127,10 +130,10 @@ export default {
     addDimensionValue(state, { payload }) {
       const { id, newValue } = payload;
       const dimensions = state.dimensions;
+
       const index = findIndex(dimensions, (dim: any) => dim._id === id);
-      // 判断是否存在含有该 id 的元素，如果存在 index 必然大于 -1
       if (index > -1) {
-        dimensions[index].values.push(newValue);
+        dimensions[index].values.push({ text: newValue, _id: Date.parse(new Date().toString()) });
         return {
           ...state,
           dimensions,

@@ -3,6 +3,8 @@ import { connect } from 'dva';
 import { Row, Col, Card, Tooltip, Layout } from 'antd';
 import numeral from 'numeral';
 import Authorized from '../../utils/Authorized';
+import { dashboard as header } from '../../common/header';
+
 import { Pie, WaterWave, Gauge, TagCloud } from '../../components/Charts';
 import { ActiveChart, Header, NumberInfo } from '../../components';
 import styles from './index.less';
@@ -15,12 +17,6 @@ const havePermissionAsync = new Promise((resolve) => {
   // Call resolve on behalf of passed
   setTimeout(() => resolve(), 1000);
 });
-
-const header = {
-  left: ['left', 'right', 'down'],
-  center: ['用户', '标签'],
-  right: ['warning', 'unlock'],
-};
 
 @Secured(havePermissionAsync)
 @connect(({ dashboard, loading }) => ({
@@ -40,7 +36,7 @@ export default class Index extends PureComponent<any, any> {
 
     return (
       <Fragment>
-        <Header data={header} />,
+        <Header header={header} />,
         <Content className={styles.content}>
           <div className={styles.container}>
             <Row gutter={24}>
