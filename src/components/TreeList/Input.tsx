@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { Input } from 'antd';
-import { connect } from 'dva';
 
 import styles from './Input.less';
 const { TextArea } = Input;
 interface InputCellProps {
-  _id: string;
+  id: string;
   text: string;
   dispatch: any;
 }
@@ -33,28 +32,28 @@ export default class InputCell extends Component<InputCellProps> {
    * 按下键后的处理行为
    */
   onKeyDown = (e) => {
-    const { onTabChange, _id, onDelete, onDirectionChange } = this.props;
+    const { onTabChange, id, onDelete, onDirectionChange } = this.props;
 
     const { keyCode, shiftKey } = e;
     // console.log(`${id} onKeyDown`,e, target, key, keyCode, shiftKey, ctrlKey, altKey)
     if (keyCode === 9 && shiftKey) {
       // console.log("shift +  Tab clicked!")
       if (onTabChange) {
-        onTabChange(_id, true);
+        onTabChange(id, true);
         e.preventDefault();
       }
     }
     if (keyCode === 9 && !shiftKey) {
       // console.log("Tab clicked!")
       if (onTabChange) {
-        onTabChange(_id, false);
+        onTabChange(id, false);
         e.preventDefault();
       }
     }
-    if (keyCode === 8 && _.isEmpty(this.props.text)) {
+    if (keyCode === 8 && isEmpty(this.props.text)) {
       // console.log("Backspace clicked");
       if (onDelete) {
-        onDelete(_id);
+        onDelete(id);
         e.preventDefault();
       }
     }
@@ -65,30 +64,30 @@ export default class InputCell extends Component<InputCellProps> {
         39: 'right',
         40: 'down',
       };
-      onDirectionChange(_id, temp[keyCode.toString()]);
+      onDirectionChange(id, temp[keyCode.toString()]);
     }
   };
 
-  // onBlur = (e) => {
-  //   console.log(e);
-  // };
+  onBlur = (e) => {
+    console.log(e);
+  };
   onFocus = (e) => {
     console.log(e);
   };
-  // onPressEnter = (e) => {
-  //   console.log(e);
-  // };
+  onPressEnter = (e) => {
+    console.log(e);
+  };
 
   render() {
-    const { text, _id } = this.props;
+    const { text, id } = this.props;
     return (
       <div className={styles.item}>
         <TextArea
-          key={'textArea' + _id}
+          key={id}
           ref="input" //eslint-disable-line
           className={styles.input}
           value={text}
-          onChange={(e) => this.onChange(e, _id)}
+          onChange={(e) => this.onChange(e, id)}
           //onKeyDown={this.onKeyDown}
           // autoFocus={id === focusId}
           autosize

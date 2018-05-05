@@ -4,7 +4,6 @@ export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
-
 export function getTimeDistance(type) {
   const now = new Date();
   const oneDay = 1000 * 60 * 60 * 24;
@@ -93,6 +92,25 @@ export function digitUppercase(n) {
 
   return s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
 }
+
+/**
+ * 返回数组 index
+ * @param arr 含有 {id:'x'} 的数组
+ * @param id
+ * @example
+ * const arr = ([{id:'3'},{id:'4'}])
+ * findIndexById(arr,'4') => 1
+ * findIndexById(arr,'6') => undefined
+ */
+export const findIndexById = (arr, id) => {
+  const index = arr.findIndex((i) => i.id === id);
+  if (index > -1) {
+    return index;
+  }
+};
+export const generateId = () => {
+  return new Date().valueOf();
+};
 
 function getRelation(str1, str2) {
   if (str1 === str2) {

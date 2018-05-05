@@ -61,7 +61,7 @@ export default class TreeList extends Component<TreeListProps, any> {
         }
       });
     };
-    const data = [...this.props.nodes];
+    const data = this.props.records;
     let dragObj;
     loop(data, dragKey, (item, index, arr) => {
       arr.splice(index, 1);
@@ -93,12 +93,12 @@ export default class TreeList extends Component<TreeListProps, any> {
 
   renderTreeNodes = (records: object[]) => {
     return records.map((record: any) => {
-      const { children, _id, text } = record;
+      const { children, id, text } = record;
       if (children) {
         return (
           <TreeNode
-            title={<InputCell _id={_id} text={text} dispatch={this.props.dispatch} />}
-            key={_id}
+            title={<InputCell id={id} text={text} dispatch={this.props.dispatch} />}
+            key={id}
             dataRef={record}
           >
             {this.renderTreeNodes(children)}
@@ -107,8 +107,8 @@ export default class TreeList extends Component<TreeListProps, any> {
       }
       return (
         <TreeNode
-          key={_id}
-          title={<InputCell _id={_id} text={text} dispatch={this.props.dispatch} />}
+          key={id}
+          title={<InputCell id={id} text={text} dispatch={this.props.dispatch} />}
         />
       );
     });

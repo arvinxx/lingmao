@@ -1,11 +1,11 @@
-import request from '../../../utils/request';
+import request from "../utils/request";
 
 export async function queryDocument() {
   return request('/api/documents');
 }
 export async function saveDocument(params) {
-  const { _id, title, dimensions, records, selectedLabels } = params;
-  const data = { _id, title, dimensions, records, selectedLabels };
+  const { id, title, dimensions, records, selectedLabels } = params;
+  const data = { id, title, dimensions, records, selectedLabels };
   return request('/api/documents', {
     method: 'POST',
     'Content-Type': 'application/json; charset=utf-8',

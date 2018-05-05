@@ -9,7 +9,7 @@ const CheckableTag = Tag.CheckableTag;
 
 interface ILabelSelectProps {
   dimensions: Array<{
-    _id: string;
+    id: string;
     key: string;
     values: [string];
     inputVisible: boolean;
@@ -23,21 +23,10 @@ interface ILabelSelectStates {
   newValue: string;
 }
 
-export default class Index extends Component<ILabelSelectProps, any> {
+export default class Index extends Component<ILabelSelectProps, ILabelSelectStates> {
   state = {
     newKey: '',
     newValue: '',
-  };
-
-  newValueOnConfirm = (id) => {
-    const { newValue } = this.state;
-    this.props.dispatch({
-      type: 'interview/addDimensionValue',
-      payload: { id, newValue },
-    });
-    this.setState({
-      newValue: '',
-    });
   };
 
   oldKeyChange = (e, id) => {
@@ -71,10 +60,12 @@ export default class Index extends Component<ILabelSelectProps, any> {
     this.state.newKey = '';
   };
 
+  handleValuesClick = (e) => {
+  };
+
   newValueOnInput = (e) => {
     this.setState({ newValue: e.target.value });
   };
-  handleValuesClick = (e) => {};
   newValueOnBlur = (id) => {
     const { newValue } = this.state;
     this.props.dispatch({
@@ -89,6 +80,17 @@ export default class Index extends Component<ILabelSelectProps, any> {
       newValue: '',
     });
   };
+  newValueOnConfirm = (id) => {
+    const { newValue } = this.state;
+    this.props.dispatch({
+      type: 'interview/addDimensionValue',
+      payload: { id, newValue },
+    });
+    this.setState({
+      newValue: '',
+    });
+  };
+
   ValueInputComponent = (id, inputVisible, inputValue) => {
     if (inputVisible)
       return (
@@ -144,47 +146,47 @@ export default class Index extends Component<ILabelSelectProps, any> {
     return (
       <div className={styles.container}>
         {dimensions.map((dimension) => {
-          const { key, values, _id, inputVisible, valueEditable } = dimension;
+          const { key, values, id, inputVisible, valueEditable } = dimension;
           return (
-            <div key={_id} className={styles['dimension-container']}>
+            <div key={id} className={styles['dimension-container']}>
               <div className={styles['key-container']}>
                 <div>
                   <Popconfirm
                     title="确认要删除吗?"
-                    onConfirm={() => this.oldKeyDelete(_id)}
+                    onConfirm={() => this.oldKeyDelete(id)}
                     okText="是"
                     cancelText="否"
                   >
                     <Icon type="close" className={styles.delete} />
                   </Popconfirm>
                   <Input
-                    key={'keyof' + _id}
+                    key={'keyof' + id}
                     className={styles['exist-key']}
                     value={key}
                     placeholder={key}
                     onChange={(e) => {
-                      this.oldKeyChange(e, _id);
+                      this.oldKeyChange(e, id);
                     }}
                   />
                 </div>
               </div>
               <div className={styles['tag-container']}>
                 {values.map((value: any) => {
-                  const { text, _id } = value;
+                  const { text, id } = value;
                   if (valueEditable) {
                   } else {
                     return (
                       <CheckableTag
-                        key={_id}
-                        checked={selectedLabels.indexOf(_id) > -1} // onClick={this.handleValuesClick}
-                        onChange={(checked) => this.handleSelected(_id, checked)}
+                        key={id}
+                        checked={selectedLabels.indexOf(id) > -1} // onClick={this.handleValuesClick}
+                        onChange={(checked) => this.handleSelected(id, checked)}
                       >
                         {text}
                       </CheckableTag>
                     );
                   }
                 })}
-                {this.ValueInputComponent(_id, inputVisible, newValue)}
+                {this.ValueInputComponent(id, inputVisible, newValue)}
               </div>
             </div>
           );
