@@ -36,8 +36,38 @@
   color: @transBlack-4;
 }
 
+.input-border {
+  border: solid 1px @white-5;
+  border-radius: 4px;
+}
+.input-border-hover {
+  border: solid 1px @white-7;
+  border-radius: 4px;
+}
 .input {
   width: 80px;
+  .input-border;
+
+  &:focus {
+    .input-border;
+  }
+  &:hover {
+    .input-border-hover;
+  }
+}
+.value-input {
+  width: 50px;
+  height: 24px;
+  margin-right: 16px;
+  padding-left: 10px;
+  font-size: @font-size-sm;
+  .input-border;
+  &:focus {
+    .input-border;
+  }
+  &:hover {
+    .input-border-hover;
+  }
 }
 
 .dimension-container {
@@ -79,9 +109,17 @@
 .exist-key {
   .key-container;
   max-width: 72px;
+  height: 28px;
   background: none;
+  margin-left: 4px;
+  &:hover {
+    background-color: @base-white;
+
+    .input-border-hover;
+  }
   &:focus {
     background-color: @base-white;
+    .input-border;
   }
 }
 
@@ -90,7 +128,15 @@
   color: @text-color-secondary;
   padding-right: 0;
   background: none;
-  &:focus {
+
+  &:hover {
     background-color: @base-white;
+    padding-right: 11px;
+    .input-border-hover;
+  }
+  &:focus {
+    padding-right: 11px;
+    background-color: @base-white;
+    .input-border;
   }
 }
