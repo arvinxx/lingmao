@@ -1,23 +1,6 @@
 @import '../../styles/themes/default';
 
 :global {
-  .ant-tag {
-    height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 12px;
-    margin-right: @padding-md;
-
-    &-checkable {
-      background: @base-white;
-      border: 1px solid @transBlack-6;
-    }
-    &-checkable-checked {
-      background-color: @primary-color;
-      border: 1px solid @primary-color;
-    }
-  }
   ::-webkit-scrollbar {
     width: 12px;
   }
@@ -31,7 +14,8 @@
 .plus {
   background: @base-white;
   border-color: @transBlack-6;
-  padding: 0;
+  padding-left: 5px;
+  margin-right: 0;
   width: 24px;
   color: @transBlack-4;
 }
@@ -70,6 +54,56 @@
   }
 }
 
+.icon-delete {
+  color: @white-5;
+  opacity: 0;
+  cursor: pointer;
+  transition: @animation-duration-base;
+  &:active {
+    color: @dark-2;
+    transform: scale(0.9);
+  }
+  &:hover {
+    color: @white-7;
+    transform: scale(1.1);
+  }
+}
+.value-container {
+  display: inline-flex;
+  justify-content: flex-end;
+  margin-right: 8px;
+
+  .value-delete {
+    .icon-delete;
+    font-size: @font-size-sm;
+    margin-left: 2px;
+    display: flex;
+    align-self: center;
+  }
+  &:hover .value-delete {
+    opacity: 1;
+  }
+
+  :global {
+    .ant-tag {
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 0;
+      padding: 0 12px;
+      &-checkable {
+        background: @base-white;
+        border: 1px solid @transBlack-6;
+      }
+      &-checkable-checked {
+        background-color: @primary-color;
+        border: 1px solid @primary-color;
+      }
+    }
+  }
+}
+
 .dimension-container {
   &:not(:last-child) {
     margin-bottom: @padding-md;
@@ -82,18 +116,7 @@
   width: 96px;
   text-align: right;
   .delete {
-    color: @white-5;
-    opacity: 0;
-    cursor: pointer;
-    transition: @animation-duration-base;
-    &:active {
-      color: @dark-2;
-      transform: scale(0.9);
-    }
-    &:hover {
-      color: @white-7;
-      transform: scale(1.1);
-    }
+    .icon-delete;
   }
   &:hover .delete {
     opacity: 1;

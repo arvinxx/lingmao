@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Tag, Input, Icon, Popconfirm, message } from 'antd';
-import { findIndex } from 'lodash';
 
 import styles from './styles.less';
 
@@ -42,12 +41,6 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
     });
   };
 
-  oldValueDelete = (id, value) => {
-    this.props.dispatch({
-      type: 'interview/deleteDimensionValue',
-      payload: { id, value },
-    });
-  };
 
   newKeyOnInput = (e) => {
     this.setState({ newKey: e.target.value });
@@ -60,10 +53,16 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
     this.state.newKey = '';
   };
 
-  oldValueOnEdit = (e, id, vid) => {
+  oldValueChange = (e, id, vid) => {
     this.props.dispatch({
       type: 'interview/changeDimensionValue',
       payload: { id, vid, newValue: e.target.value },
+    });
+  };
+  oldValueDelete = (id, vid) => {
+    this.props.dispatch({
+      type: 'interview/deleteDimensionValue',
+      payload: { id, vid },
     });
   };
 
@@ -157,21 +156,31 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
           size="small"
           className={styles['value-input']}
           value={text}
-          onChange={(e) => this.oldValueOnEdit(e, id, vid)}
+          onChange={(e) => this.oldValueChange(e, id, vid)}
           onPressEnter={() => this.hideValueEdit(id, vid)}
           onBlur={() => this.hideValueEdit(id, vid)}
         />
       );
     } else {
       return (
-        <CheckableTag
-          key={vid}
-          checked={selectedLabels.indexOf(vid) > -1}
-          onDoubleClick={() => this.showValueEdit(id, vid)}
-          onChange={(checked) => this.handleSelected(vid, checked)}
-        >
-          {text}
-        </CheckableTag>
+        <div className={styles['value-container']}>
+          <CheckableTag
+            key={vid}
+            checked={selectedLabels.indexOf(vid) > -1}
+            onDoubleClick={() => this.showValueEdit(id, vid)}
+            onChange={(checked) => this.handleSelected(vid, checked)}
+          >
+            {text}
+          </CheckableTag>
+          <Popconfirm
+            title="确认要删除吗?"
+            onConfirm={() => this.oldValueDelete(id, vid)}
+            okText="是"
+            cancelText="否"
+          >
+            <Icon type="close" className={styles['value-delete']} />
+          </Popconfirm>
+        </div>
       );
     }
   };
@@ -184,7 +193,7 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
           key={`${id}-add`}
           type="text"
           size="small"
-          ref='input'
+          ref="input"
           className={styles.input}
           value={newValue}
           onChange={this.newValueOnInput}

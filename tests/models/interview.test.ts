@@ -255,13 +255,18 @@ describe('Reducers', () => {
         {
           id: '3',
           key: '1',
-          values: ['eee', '444', 's3'],
+          values: [{ id: 'ed', text: 'eee' }, { id: '4', text: '444' }, { id: '5', text: 's3' }],
+        },
+        {
+          id: '5',
+          key: '1',
+          values: [{ id: 'ed', text: 'eee' }, { id: '4', text: '444' }, { id: '5', text: 's3' }],
         },
       ],
     };
     const action = {
       type: 'interview/deleteDimensionValue',
-      payload: { id: '3', deleteValue: '444' },
+      payload: { id: '3', vid: '5' },
     };
 
     expect(reducer(state, action)).toEqual({
@@ -269,7 +274,12 @@ describe('Reducers', () => {
         {
           id: '3',
           key: '1',
-          values: ['eee', 's3'],
+          values: [{ id: 'ed', text: 'eee' }, { id: '4', text: '444' }],
+        },
+        {
+          id: '5',
+          key: '1',
+          values: [{ id: 'ed', text: 'eee' }, { id: '4', text: '444' }, { id: '5', text: 's3' }],
         },
       ],
     });

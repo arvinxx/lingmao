@@ -34,7 +34,6 @@ import App from './index';
 // const { wrapper, props } = setup();
 describe('TagInput 正常渲染样式', () => {
   // case1
-
   // it('TagInput Component should be render', () => {
   //   expect(wrapper.find('.dimension-container').exists());
   // });

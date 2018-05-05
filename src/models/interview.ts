@@ -94,6 +94,7 @@ export default {
         records,
       };
     },
+
     addDimensionKey(state, { payload: newDimension }) {
       if (newDimension === '') {
         return state;
@@ -131,12 +132,12 @@ export default {
       } else return state;
     },
     deleteDimensionValue(state, { payload }) {
-      const { id, deleteValue } = payload;
+      const { id, vid } = payload;
       const dimensions = state.dimensions;
       const index = findIndexById(dimensions, id);
       // 直接使用 oldValues.filter((value) => value !== deleteValue) 无法改变数组内容
       const oldValues = dimensions[index].values;
-      dimensions[index].values = oldValues.filter((value) => value !== deleteValue);
+      dimensions[index].values = oldValues.filter((v) => v.id !== vid);
       return {
         ...state,
         dimensions: dimensions,
