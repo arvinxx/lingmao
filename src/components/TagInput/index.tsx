@@ -60,7 +60,11 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
     this.state.newKey = '';
   };
 
-  handleValuesClick = (e) => {
+  oldValueOnEdit = (e, id, vid) => {
+    this.props.dispatch({
+      type: 'interview/changeDimensionValue',
+      payload: { id, vid, newValue: e.target.value },
+    });
   };
 
   newValueOnInput = (e) => {
@@ -103,58 +107,21 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
       payload: id,
     });
   };
-  showValueEdit = (id) => {
+
+  showValueEdit = (id, vid) => {
+    console.log('show');
     this.props.dispatch({
       type: 'interview/showValueEdit',
-      payload: id,
+      payload: { id, vid },
     });
   };
-  hideValueEdit = (id) => {
+  hideValueEdit = (id, vid) => {
     this.props.dispatch({
       type: 'interview/hideValueEdit',
-      payload: id,
+      payload: { id, vid },
     });
   };
-  ValueLabelComponent = (id, valueEditable, text) => {
-    const { selectedLabels } = this.props;
-    if (valueEditable) {
-      return <div>111</div>;
-    } else {
-      return (
-        <CheckableTag
-          key={id}
-          checked={selectedLabels.indexOf(id) > -1}
-          // onClick={this.handleValuesClick}
-          onChange={(checked) => this.handleSelected(id, checked)}
-        >
-          {text}
-        </CheckableTag>
-      );
-    }
-  };
 
-  ValueInputComponent = (id, inputVisible, inputValue) => {
-    if (inputVisible)
-      return (
-        <Input
-          key={`${id}-add`}
-          type="text"
-          size="small"
-          className={styles.input}
-          value={inputValue}
-          onChange={this.newValueOnInput}
-          onPressEnter={(e) => this.newValueOnConfirm(id)}
-          onBlur={() => this.newValueOnBlur(id)}
-        />
-      );
-    else {
-      return (
-        <Tag key={`${id}-addk`} onClick={() => this.showValueInput(id)} className={styles.plus}>
-          <Icon key={`${id}-icon`} type="plus" />
-        </Tag>
-      );
-    }
-  };
   keyComponent = (id, key) => {
     return (
       <div>
@@ -179,6 +146,61 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
     );
   };
 
+  ValueLabelComponent = (id, vid, editable, text) => {
+    const { selectedLabels } = this.props;
+
+    if (editable) {
+      return (
+        <Input
+          key={`${vid}-edit`}
+          type="text"
+          size="small"
+          className={styles['value-input']}
+          value={text}
+          onChange={(e) => this.oldValueOnEdit(e, id, vid)}
+          onPressEnter={() => this.hideValueEdit(id, vid)}
+          onBlur={() => this.hideValueEdit(id, vid)}
+        />
+      );
+    } else {
+      return (
+        <CheckableTag
+          key={vid}
+          checked={selectedLabels.indexOf(vid) > -1}
+          onDoubleClick={() => this.showValueEdit(id, vid)}
+          onChange={(checked) => this.handleSelected(vid, checked)}
+        >
+          {text}
+        </CheckableTag>
+      );
+    }
+  };
+  ValueInputComponent = (id, inputVisible) => {
+    const { newValue } = this.state;
+
+    if (inputVisible)
+      return (
+        <Input
+          key={`${id}-add`}
+          type="text"
+          size="small"
+          ref='input'
+          className={styles.input}
+          value={newValue}
+          onChange={this.newValueOnInput}
+          onPressEnter={(e) => this.newValueOnConfirm(id)}
+          onBlur={() => this.newValueOnBlur(id)}
+        />
+      );
+    else {
+      return (
+        <Tag key={`${id}-addk`} onClick={() => this.showValueInput(id)} className={styles.plus}>
+          <Icon key={`${id}-icon`} type="plus" />
+        </Tag>
+      );
+    }
+  };
+
   handleSelected(id: string, checked: boolean) {
     const { selectedLabels } = this.props;
     const nextSelectedLabels = checked
@@ -192,21 +214,20 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
   }
 
   render() {
-    const { newValue } = this.state;
     const { dimensions } = this.props;
     return (
       <div className={styles.container}>
         {dimensions.map((dimension) => {
-          const { key, values, id, inputVisible, valueEditable } = dimension;
+          const { key, values, id, inputVisible } = dimension;
           return (
             <div key={id} className={styles['dimension-container']}>
               <div className={styles['key-container']}>{this.keyComponent(id, key)}</div>
               <div className={styles['tag-container']}>
                 {values.map((value: any) => {
-                  const { text, id } = value;
-                  return this.ValueLabelComponent(id, valueEditable, text);
+                  const { text, id: vid, editable } = value;
+                  return this.ValueLabelComponent(id, vid, editable, text);
                 })}
-                {this.ValueInputComponent(id, inputVisible, newValue)}
+                {this.ValueInputComponent(id, inputVisible)}
               </div>
             </div>
           );

@@ -212,6 +212,42 @@ describe('Reducers', () => {
     });
     reset();
   });
+  it('changeDimensionValue', () => {
+    const reducer = reducers.changeDimensionValue;
+    const state = {
+      dimensions: [
+        {
+          id: '3',
+          key: '1',
+          values: [{ text: '31', id: '22' }, { text: '42', id: '1' }],
+        },
+        {
+          id: '43',
+          key: '1',
+          values: [{ text: 'sad', id: '1' }, { text: 'daqw', id: '4' }],
+        },
+      ],
+    };
+    const action = {
+      type: 'interview/addDimensionValue',
+      payload: { id: '3', vid: '22', newValue: 'dsa' },
+    };
+
+    expect(reducer(state, action)).toEqual({
+      dimensions: [
+        {
+          id: '3',
+          key: '1',
+          values: [{ text: 'dsa', id: '22' }, { text: '42', id: '1' }],
+        },
+        {
+          id: '43',
+          key: '1',
+          values: [{ text: 'sad', id: '1' }, { text: 'daqw', id: '4' }],
+        },
+      ],
+    });
+  });
   it('deleteDimensionValue', () => {
     const reducer = reducers.deleteDimensionValue;
     const state = {
@@ -312,29 +348,51 @@ describe('Reducers', () => {
       dimensions: [
         {
           id: '3',
-          valueEditable: false,
+          values: [
+            {
+              id: '1',
+              editable: false,
+            },
+            { id: '2', editable: false },
+          ],
         },
         {
           id: '4',
-          valueEditable: false,
+          values: [
+            {
+              id: '2',
+              editable: false,
+            },
+          ],
         },
       ],
     };
 
     const action = {
       type: 'interview/showValueInput',
-      payload: '3',
+      payload: { id: '3', vid: '1' },
     };
 
     expect(reducer(state, action)).toEqual({
       dimensions: [
         {
           id: '3',
-          valueEditable: true,
+          values: [
+            {
+              id: '1',
+              editable: true,
+            },
+            { id: '2', editable: false },
+          ],
         },
         {
           id: '4',
-          valueEditable: false,
+          values: [
+            {
+              id: '2',
+              editable: false,
+            },
+          ],
         },
       ],
     });
@@ -345,29 +403,51 @@ describe('Reducers', () => {
       dimensions: [
         {
           id: '3',
-          valueEditable: false,
+          values: [
+            {
+              id: '1',
+              editable: false,
+            },
+            { id: '2', editable: true },
+          ],
         },
         {
           id: '4',
-          valueEditable: true,
+          values: [
+            {
+              id: '2',
+              editable: false,
+            },
+          ],
         },
       ],
     };
 
     const action = {
       type: 'interview/hideValueEdit',
-      payload: '4',
+      payload: { id: '3', vid: '2' },
     };
 
     expect(reducer(state, action)).toEqual({
       dimensions: [
         {
           id: '3',
-          valueEditable: false,
+          values: [
+            {
+              id: '1',
+              editable: false,
+            },
+            { id: '2', editable: false },
+          ],
         },
         {
           id: '4',
-          valueEditable: false,
+          values: [
+            {
+              id: '2',
+              editable: false,
+            },
+          ],
         },
       ],
     });

@@ -19,9 +19,14 @@ export default {
       {
         id: '',
         key: '',
-        values: [],
+        values: [
+          {
+            id: '',
+            text: '',
+            editable: false,
+          },
+        ],
         inputVisible: false,
-        valueEditable: false,
       },
     ],
     selectedLabels: [],
@@ -35,7 +40,6 @@ export default {
       });
     },
     *saveDocument({ payload }, { call }) {
-      // console.log(this.state);
       yield call(saveDocument, payload);
     },
   },
@@ -119,7 +123,6 @@ export default {
     addDimensionValue(state, { payload }) {
       const { id, newValue } = payload;
       const dimensions = state.dimensions;
-
       //不加入空值标签
       if (newValue !== '') {
         const index = findIndexById(dimensions, id);
@@ -137,6 +140,22 @@ export default {
       return {
         ...state,
         dimensions: dimensions,
+      };
+    },
+    changeDimensionValue(state, { payload }) {
+      const { id, vid, newValue } = payload;
+      const dimensions = state.dimensions;
+      // dimensions
+      //   .findIndex((i) => i.id === id)
+      //   .values.findIndex((i) => i.id === vid).text = newValue;
+      const index = findIndexById(dimensions, id);
+      const newValues = dimensions[index].values;
+      const vIndex = findIndexById(newValues, vid);
+      newValues[vIndex].text = newValue;
+      dimensions[index].values = newValues;
+      return {
+        ...state,
+        dimensions,
       };
     },
 
@@ -158,19 +177,28 @@ export default {
         dimensions,
       };
     },
-    showValueEdit(state, { payload: id }) {
+    showValueEdit(state, { payload }) {
+      const { id, vid } = payload;
       const dimensions = state.dimensions;
       const index = findIndexById(dimensions, id);
-      dimensions[index].valueEditable = true;
+      const newValues = dimensions[index].values;
+      const vIndex = findIndexById(newValues, vid);
+      newValues[vIndex].editable = true;
+      dimensions[index].values = newValues;
       return {
         ...state,
         dimensions,
       };
     },
-    hideValueEdit(state, { payload: id }) {
+    hideValueEdit(state, { payload }) {
+      const { id, vid } = payload;
+
       const dimensions = state.dimensions;
       const index = findIndexById(dimensions, id);
-      dimensions[index].valueEditable = false;
+      const newValues = dimensions[index].values;
+      const vIndex = findIndexById(newValues, vid);
+      newValues[vIndex].editable = false;
+      dimensions[index].values = newValues;
       return {
         ...state,
         dimensions,
