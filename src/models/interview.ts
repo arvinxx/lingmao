@@ -158,6 +158,24 @@ export default {
         dimensions,
       };
     },
+    showValueEdit(state, { payload: id }) {
+      const dimensions = state.dimensions;
+      const index = findIndexById(dimensions, id);
+      dimensions[index].valueEditable = true;
+      return {
+        ...state,
+        dimensions,
+      };
+    },
+    hideValueEdit(state, { payload: id }) {
+      const dimensions = state.dimensions;
+      const index = findIndexById(dimensions, id);
+      dimensions[index].valueEditable = false;
+      return {
+        ...state,
+        dimensions,
+      };
+    },
 
     selectLabels(state, { payload: selectedLabels }) {
       return { ...state, selectedLabels };

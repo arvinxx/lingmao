@@ -91,6 +91,48 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
     });
   };
 
+  showValueInput = (id) => {
+    this.props.dispatch({
+      type: 'interview/showValueInput',
+      payload: id,
+    });
+  };
+  hideValueInput = (id) => {
+    this.props.dispatch({
+      type: 'interview/hideValueInput',
+      payload: id,
+    });
+  };
+  showValueEdit = (id) => {
+    this.props.dispatch({
+      type: 'interview/showValueEdit',
+      payload: id,
+    });
+  };
+  hideValueEdit = (id) => {
+    this.props.dispatch({
+      type: 'interview/hideValueEdit',
+      payload: id,
+    });
+  };
+  ValueLabelComponent = (id, valueEditable, text) => {
+    const { selectedLabels } = this.props;
+    if (valueEditable) {
+      return <div>111</div>;
+    } else {
+      return (
+        <CheckableTag
+          key={id}
+          checked={selectedLabels.indexOf(id) > -1}
+          // onClick={this.handleValuesClick}
+          onChange={(checked) => this.handleSelected(id, checked)}
+        >
+          {text}
+        </CheckableTag>
+      );
+    }
+  };
+
   ValueInputComponent = (id, inputVisible, inputValue) => {
     if (inputVisible)
       return (
@@ -113,18 +155,28 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
       );
     }
   };
-
-  showValueInput = (id) => {
-    this.props.dispatch({
-      type: 'interview/showValueInput',
-      payload: id,
-    });
-  };
-  hideValueInput = (id) => {
-    this.props.dispatch({
-      type: 'interview/hideValueInput',
-      payload: id,
-    });
+  keyComponent = (id, key) => {
+    return (
+      <div>
+        <Popconfirm
+          title="确认要删除吗?"
+          onConfirm={() => this.oldKeyDelete(id)}
+          okText="是"
+          cancelText="否"
+        >
+          <Icon type="close" className={styles.delete} />
+        </Popconfirm>
+        <Input
+          key={'keyof' + id}
+          className={styles['exist-key']}
+          value={key}
+          placeholder={key}
+          onChange={(e) => {
+            this.oldKeyChange(e, id);
+          }}
+        />
+      </div>
+    );
   };
 
   handleSelected(id: string, checked: boolean) {
@@ -141,50 +193,18 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
 
   render() {
     const { newValue } = this.state;
-    const { dimensions, selectedLabels } = this.props;
-
+    const { dimensions } = this.props;
     return (
       <div className={styles.container}>
         {dimensions.map((dimension) => {
           const { key, values, id, inputVisible, valueEditable } = dimension;
           return (
             <div key={id} className={styles['dimension-container']}>
-              <div className={styles['key-container']}>
-                <div>
-                  <Popconfirm
-                    title="确认要删除吗?"
-                    onConfirm={() => this.oldKeyDelete(id)}
-                    okText="是"
-                    cancelText="否"
-                  >
-                    <Icon type="close" className={styles.delete} />
-                  </Popconfirm>
-                  <Input
-                    key={'keyof' + id}
-                    className={styles['exist-key']}
-                    value={key}
-                    placeholder={key}
-                    onChange={(e) => {
-                      this.oldKeyChange(e, id);
-                    }}
-                  />
-                </div>
-              </div>
+              <div className={styles['key-container']}>{this.keyComponent(id, key)}</div>
               <div className={styles['tag-container']}>
                 {values.map((value: any) => {
                   const { text, id } = value;
-                  if (valueEditable) {
-                  } else {
-                    return (
-                      <CheckableTag
-                        key={id}
-                        checked={selectedLabels.indexOf(id) > -1} // onClick={this.handleValuesClick}
-                        onChange={(checked) => this.handleSelected(id, checked)}
-                      >
-                        {text}
-                      </CheckableTag>
-                    );
-                  }
+                  return this.ValueLabelComponent(id, valueEditable, text);
                 })}
                 {this.ValueInputComponent(id, inputVisible, newValue)}
               </div>

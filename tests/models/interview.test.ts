@@ -273,7 +273,7 @@ describe('Reducers', () => {
     });
   });
   it('hideValueInput', () => {
-    const reducer = reducers.showValueInput;
+    const reducer = reducers.hideValueInput;
     const state = {
       dimensions: [
         {
@@ -288,7 +288,7 @@ describe('Reducers', () => {
     };
 
     const action = {
-      type: 'interview/showValueInput',
+      type: 'interview/hideValueInput',
       payload: '4',
     };
 
@@ -300,7 +300,74 @@ describe('Reducers', () => {
         },
         {
           id: '4',
-          inputVisible: true,
+          inputVisible: false,
+        },
+      ],
+    });
+  });
+
+  it('showValueEdit', () => {
+    const reducer = reducers.showValueEdit;
+    const state = {
+      dimensions: [
+        {
+          id: '3',
+          valueEditable: false,
+        },
+        {
+          id: '4',
+          valueEditable: false,
+        },
+      ],
+    };
+
+    const action = {
+      type: 'interview/showValueInput',
+      payload: '3',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      dimensions: [
+        {
+          id: '3',
+          valueEditable: true,
+        },
+        {
+          id: '4',
+          valueEditable: false,
+        },
+      ],
+    });
+  });
+  it('hideValueEdit', () => {
+    const reducer = reducers.hideValueEdit;
+    const state = {
+      dimensions: [
+        {
+          id: '3',
+          valueEditable: false,
+        },
+        {
+          id: '4',
+          valueEditable: true,
+        },
+      ],
+    };
+
+    const action = {
+      type: 'interview/hideValueEdit',
+      payload: '4',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      dimensions: [
+        {
+          id: '3',
+          valueEditable: false,
+        },
+        {
+          id: '4',
+          valueEditable: false,
         },
       ],
     });
