@@ -32,14 +32,18 @@ const setup = () => {
   };
 };
 const { wrapper, props } = setup();
-describe('TagInput', () => {
+describe('TagInput 正常渲染样式', () => {
   // case1
 
   it('TagInput Component should be render', () => {
     expect(wrapper.find('.dimension-container').exists());
   });
 
-  describe('new key Component', () => {
+
+});
+
+describe('添加内容', () => {
+  describe('单击左侧关键字区添加关键字', () => {
     it('should change newKey state when onChange is called', () => {
       const mockNewKeyChange = {
         target: {
@@ -49,10 +53,44 @@ describe('TagInput', () => {
       wrapper.find('.add-key').simulate('change', mockNewKeyChange);
       expect(wrapper.state().newKey).toEqual('Test');
     });
-    it('should disptach addKey and clean newKey when pressEnter or blur is called', () => {
 
-      wrapper.find('.add-key').simulate('blur');
-      expect(wrapper.state().newKey).toEqual('');
+  });
+  describe('点击右侧加号按钮添加新值', () => {
+
+  });
+});
+describe('记录标签值', () => {
+
+});
+describe('修改内容', () => {
+  describe('编辑关键字', () => {
+    describe('修改完毕后按回车保存修改', () => {
+      it('should disptach addKey and clean newKey when press Entered', () => {
+      });
+      describe('双击左侧关键字进入编辑模式', () => {
+
+      });
+      describe('撤销修改按 ESC 退出', () => {
+
+      });
+      describe('鼠标单击空白时取消激活，并保存修改内容', () => {
+        it('should disptach addDimensionKey and clean newKey when input blur', () => {
+          // wrapper.find('.add-key').simulate('blur');
+          // expect(wrapper.state().newKey).toEqual('');
+        });
+
+      });
+    });
+    describe('编辑值', () => {
+      describe('鼠标悬浮 2 秒后在右上角出现删除和编辑按钮', () => {
+
+      });
+      describe('点击编辑按即可编辑', () => {
+
+      });
+      describe('点击删除按钮即可删除', () => {
+
+      });
     });
   });
 });

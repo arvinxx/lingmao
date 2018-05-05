@@ -1,6 +1,7 @@
 import { effects } from 'dva/saga';
-import model from './models/interview';
-import { queryDocument, saveDocument } from './services/api';
+import model from '../../src/models/interview';
+import { queryDocument, saveDocument } from '../../src/services/interview';
+import { generateId } from '../../src/utils/utils';
 
 import { set, reset } from 'mockdate';
 
@@ -46,7 +47,7 @@ describe('Reducers', () => {
       records: [
         {
           text: 'dsa',
-          _id: Date.parse(new Date().toString()),
+          id: generateId(),
         },
       ],
     });
@@ -60,13 +61,13 @@ describe('Reducers', () => {
     const state = {
       records: [
         {
-          _id: '1',
+          id: '1',
           text: 'delete',
           collapsed: false,
           children: [],
         },
         {
-          _id: '3',
+          id: '3',
           text: '',
           collapsed: false,
           children: [],
@@ -81,13 +82,13 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       records: [
         {
-          _id: '1',
+          id: '1',
           text: 'delete',
           collapsed: false,
           children: [],
         },
         {
-          _id: '3',
+          id: '3',
           text: 'hello',
           collapsed: false,
           children: [],
@@ -111,7 +112,7 @@ describe('Reducers', () => {
       dimensions: [
         {
           key: 'dsa',
-          _id: Date.parse(new Date().toString()),
+          id: generateId(),
           values: [],
         },
       ],
@@ -124,9 +125,9 @@ describe('Reducers', () => {
     const reducer = reducers.deleteDimensionKey;
     const state = {
       dimensions: [
-        { key: '1', _id: '34', values: [] },
-        { key: '2', _id: '21', values: [] },
-        { key: '3', _id: '4', values: [] },
+        { key: '1', id: '34', values: [] },
+        { key: '2', id: '21', values: [] },
+        { key: '3', id: '4', values: [] },
       ],
     };
     const action = {
@@ -135,7 +136,7 @@ describe('Reducers', () => {
     };
 
     expect(reducer(state, action)).toEqual({
-      dimensions: [{ key: '1', _id: '34', values: [] }, { key: '3', _id: '4', values: [] }],
+      dimensions: [{ key: '1', id: '34', values: [] }, { key: '3', id: '4', values: [] }],
     });
   });
 
@@ -146,12 +147,12 @@ describe('Reducers', () => {
       dimensions: [
         {
           key: '34',
-          _id: '222',
+          id: '222',
           values: [],
         },
         {
           key: '31',
-          _id: '111',
+          id: '111',
           values: [],
         },
       ],
@@ -165,12 +166,12 @@ describe('Reducers', () => {
       dimensions: [
         {
           key: 'eed',
-          _id: '222',
+          id: '222',
           values: [],
         },
         {
           key: '31',
-          _id: '111',
+          id: '111',
           values: [],
         },
       ],
@@ -184,7 +185,7 @@ describe('Reducers', () => {
     const state = {
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           key: '1',
           values: [],
         },
@@ -198,11 +199,11 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           key: '1',
           values: [
             {
-              _id: Date.parse(new Date().toString()),
+              id: generateId(),
               text: 'dsa',
             },
           ],
@@ -216,7 +217,7 @@ describe('Reducers', () => {
     const state = {
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           key: '1',
           values: ['eee', '444', 's3'],
         },
@@ -230,7 +231,7 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           key: '1',
           values: ['eee', 's3'],
         },
@@ -243,11 +244,11 @@ describe('Reducers', () => {
     const state = {
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           inputVisible: false,
         },
         {
-          _id: '4',
+          id: '4',
           inputVisible: false,
         },
       ],
@@ -261,11 +262,11 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           inputVisible: true,
         },
         {
-          _id: '4',
+          id: '4',
           inputVisible: false,
         },
       ],
@@ -276,11 +277,11 @@ describe('Reducers', () => {
     const state = {
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           inputVisible: false,
         },
         {
-          _id: '4',
+          id: '4',
           inputVisible: true,
         },
       ],
@@ -294,11 +295,11 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       dimensions: [
         {
-          _id: '3',
+          id: '3',
           inputVisible: false,
         },
         {
-          _id: '4',
+          id: '4',
           inputVisible: true,
         },
       ],
