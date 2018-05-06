@@ -38,7 +38,7 @@
     "omit.js": "^1.0.0",
     "path-to-regexp": "^2.2.0",
     "prop-types": "^15.6.1",
-    "qs": "^6.5.1",
+    "qs": "^6.5.2",
     "rc-drawer-menu": "^0.5.7",
     "react-container-query": "^0.9.1",
     "react-document-title": "^2.0.3",
@@ -47,8 +47,8 @@
     "react-hot-loader": "^4.0.1",
     "react-reflex": "^2.2.3",
     "styled-components": "^3.2.2",
-    "umi": "^1.2.2",
-    "umi-plugin-dva": "^0.6.1",
+    "umi": "^1.2.6",
+    "umi-plugin-dva": "^0.6.4",
     "url-polyfill": "^1.0.12"
   },
   "devDependencies": {
