@@ -5,6 +5,7 @@ export default {
 
   state: {
     collapsed: false,
+    showMenu:true,
     notices: [],
   },
 

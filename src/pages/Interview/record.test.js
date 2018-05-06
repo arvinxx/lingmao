@@ -25,8 +25,7 @@ const setup = () => {
     selectedLabels: ['1', '5', '7'],
     dispatch: jest.fn(),
   };
-  // const wrapper = shallow(<App { ...props }
-  // />);
+  // const wrapper = shallow(<App {...props} />);
   return {
     props,
     wrapper,
@@ -37,15 +36,12 @@ describe('页面正常渲染', () => {
   // case1
 
   it('TagInput Component should be render', () => {
-    expect(wrapper.find('.dimension-container').exists());
+    // expect(wrapper.find('.dimension-container').exists());
   });
 });
 
 describe('保存', () => {
-  describe('每隔 3 秒进行一次自动保存', () => {
-  });
-  describe('在某个不起眼的地方进行显示', () => {
-  });
-  describe('保存时图标进入保存样式', () => {
-  });
+  describe('每隔 3 秒进行一次自动保存', () => {});
+  describe('在某个不起眼的地方进行显示', () => {});
+  describe('保存时图标进入保存样式', () => {});
 });

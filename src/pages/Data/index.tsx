@@ -1,15 +1,13 @@
 import React, { PureComponent } from 'react';
 import { Card, Form, Tabs, Collapse } from 'antd';
-
 import { connect } from 'dva';
-
 import { Header } from '../../components';
 import { data as header } from '../../common/header';
 
 import TableForm from './component.TableForm';
 import styles from './style.less';
-const TabPane = Tabs.TabPane;
 
+const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
 
 const tableData = [

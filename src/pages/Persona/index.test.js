@@ -1,9 +1,20 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import Index from './index';
+import { shallow, mount } from 'enzyme';
+import App from './index';
+import styles from './index.less';
 
-it('renders with Result', () => {
-  const wrapper = shallow(<Index />);
-  expect(wrapper.find('Result').length).toBe(1);
-  expect(wrapper.find('Result').prop('type')).toBe('success');
+const props = {
+  persona: {
+    dimVisible: true,
+  },
+};
+const wrapper = shallow(<App.WrappedComponent {...props} />);
+const wrapperM = mount(<App.WrappedComponent {...props} />);
+describe('DimList Component', () => {
+  it('should receive props correctly', () => {
+    expect(wrapperM.props().persona).toEqual({ dimVisible: true });
+  });
+  it('should show DimList when dimVisable is true', () => {
+    expect(wrapper.hasClass(styles.right)).toBe(true);
+  });
 });

@@ -15,9 +15,17 @@
   align-items: center;
   .icon {
     height: 24px;
+    font-size: 18px;
     margin: 0 8px;
     display: table;
     cursor: pointer;
+    animation: @animation-duration-base;
+    &:hover {
+      color: @primary-5;
+    }
+    &:active {
+      color: @primary-7;
+    }
     &::before {
       display: table-cell;
       vertical-align: middle;

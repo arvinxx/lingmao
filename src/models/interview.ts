@@ -1,5 +1,5 @@
 import { queryDocument, saveDocument } from '../services/interview';
-import { isNull, findIndex } from 'lodash';
+import { isNull } from 'lodash';
 import { findIndexById, generateId } from '../utils/utils';
 
 export default {
@@ -30,6 +30,8 @@ export default {
       },
     ],
     selectedLabels: [],
+    uploadVisable: true,
+    dimVisable: true,
   },
   effects: {
     *fetchDocument(_, { call, put }) {
@@ -44,12 +46,24 @@ export default {
     },
   },
   reducers: {
+    changeUploadVisable(state, action) {
+      return {
+        ...state,
+        uploadVisable: !state.uploadVisable,
+      };
+    },
+    changeTagVisable(state, action) {
+      return {
+        ...state,
+        dimVisable: !state.dimVisable,
+      };
+    },
     changeTitle(state, { payload: title }) {
       return { ...state, title };
     },
 
-    querryDocument(state, action) {
-      let { title, records, id, dimensions, selectedLabels } = action.payload[0];
+    querryDocument(state, { payload: documents }) {
+      let { title, records, id, dimensions, selectedLabels } = documents[0];
       if (isNull(dimensions)) {
         dimensions = [
           {
