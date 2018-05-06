@@ -5,7 +5,7 @@ export default {
 
   state: {
     collapsed: false,
-    showMenu:true,
+    showMenu: true,
     notices: [],
   },
 
@@ -26,7 +26,7 @@ export default {
         type: 'saveClearedNotices',
         payload,
       });
-      const count = yield select(state => state.global.notices.length);
+      const count = yield select((state) => state.global.notices.length);
       yield put({
         type: 'user/changeNotifyCount',
         payload: count,
@@ -50,7 +50,7 @@ export default {
     saveClearedNotices(state, { payload }) {
       return {
         ...state,
-        notices: state.notices.filter(item => item.type !== payload),
+        notices: state.notices.filter((item) => item.type !== payload),
       };
     },
   },

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Tabs, Icon } from 'antd';
 import { connect } from 'dva';
+import styles from './index.less';
 
 // import withRouter from 'umi/withouter';
 
 const TabPane = Tabs.TabPane;
-import styles from './index.less';
 
 @connect(({ interview }) => ({
   interview,
