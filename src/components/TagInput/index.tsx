@@ -20,12 +20,14 @@ interface ILabelSelectProps {
 interface ILabelSelectStates {
   newKey: string;
   newValue: string;
+  newKeyPlaceHolder: string;
 }
 
 export default class Index extends Component<ILabelSelectProps, ILabelSelectStates> {
   state = {
     newKey: '',
     newValue: '',
+    newKeyPlaceHolder: '添加条目',
   };
 
   oldKeyChange = (e, id) => {
@@ -41,16 +43,33 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
     });
   };
 
-
   newKeyOnInput = (e) => {
     this.setState({ newKey: e.target.value });
   };
-  newKeyOnBlur = (e) => {
+  newKeyOnFocus = (e) => {
+    this.setState({
+      newKeyPlaceHolder: '',
+    });
+  };
+  newKeyOnBlur = () => {
     this.props.dispatch({
       type: 'interview/addDimensionKey',
       payload: this.state.newKey,
     });
-    this.state.newKey = '';
+    this.setState({
+      newKeyPlaceHolder: '添加条目',
+      newKey: '',
+    });
+  };
+  newKeyOnPressEnter = () => {
+    this.props.dispatch({
+      type: 'interview/addDimensionKey',
+      payload: this.state.newKey,
+    });
+    this.setState({
+      newKeyPlaceHolder: '',
+      newKey: '',
+    });
   };
 
   oldValueChange = (e, id, vid) => {
@@ -245,10 +264,11 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
           <Input
             className={styles['add-key']}
             value={this.state.newKey}
-            placeholder="添加条目"
+            placeholder={this.state.newKeyPlaceHolder}
             onChange={this.newKeyOnInput}
+            onFocus={this.newKeyOnFocus}
             onBlur={this.newKeyOnBlur}
-            onPressEnter={this.newKeyOnBlur}
+            onPressEnter={this.newKeyOnPressEnter}
           />
         </div>
       </div>
