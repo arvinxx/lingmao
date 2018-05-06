@@ -478,6 +478,34 @@ describe('Reducers', () => {
       selectedLabels: ['1234', '1235175'],
     });
   });
+  it('changeUploadVisible', () => {
+    const reducer = reducers.changeTagVisible;
+    const state = {
+      tagVisible: true,
+    };
+
+    const action = {
+      type: 'interview/changeTagVisible',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tagVisible: false,
+    });
+  });
+  it('changeUploadVisible', () => {
+    const reducer = reducers.changeUploadVisible;
+    const state = {
+      uploadVisible: true,
+    };
+
+    const action = {
+      type: 'interview/changeUploadVisible',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      uploadVisible: false,
+    });
+  });
 });
 
 describe('Effects', () => {

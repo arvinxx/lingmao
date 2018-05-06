@@ -30,8 +30,8 @@ export default {
       },
     ],
     selectedLabels: [],
-    uploadVisable: true,
-    dimVisable: true,
+    uploadVisible: true,
+    tagVisible: true,
   },
   effects: {
     *fetchDocument(_, { call, put }) {
@@ -46,16 +46,16 @@ export default {
     },
   },
   reducers: {
-    changeUploadVisable(state, action) {
+    changeUploadVisible(state, action) {
       return {
         ...state,
-        uploadVisable: !state.uploadVisable,
+        uploadVisible: !state.uploadVisible,
       };
     },
-    changeTagVisable(state, action) {
+    changeTagVisible(state, action) {
       return {
         ...state,
-        dimVisable: !state.dimVisable,
+        tagVisible: !state.tagVisible,
       };
     },
     changeTitle(state, { payload: title }) {

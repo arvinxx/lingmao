@@ -37,6 +37,9 @@ describe('TagInput 正常渲染样式', () => {
   // it('TagInput Component should be render', () => {
   //   expect(wrapper.find('.dimension-container').exists());
   // });
+  const wrapper = shallow(<App />);
+
+  expect(wrapper.find('.add-key')).exists();
 });
 
 describe('添加内容', () => {
@@ -50,10 +53,13 @@ describe('添加内容', () => {
       // wrapper.find('.add-key').simulate('change', mockNewKeyChange);
       // expect(wrapper.state().newKey).toEqual('Test');
     });
+    it('should remove placeholder when focus Input', () => {
+      // const wrapper = shallow(<App.WrappedComponent />);
+      // expect(wrapper.state().newKeyPlaceHolder).toEqual('添加条目');
+    });
   });
-  describe('点击右侧加号按钮添加新值', () => {});
+  describe('点击加号按钮添加新标签', () => {});
 });
-describe('记录标签值', () => {});
 describe('修改内容', () => {
   describe('编辑关键字', () => {
     describe('修改完毕后按回车保存修改', () => {
@@ -67,10 +73,10 @@ describe('修改内容', () => {
         });
       });
     });
-    describe('编辑值', () => {
-      describe('双击标签值进行编辑', () => {});
-      describe('鼠标悬浮在标签上显示删除 ICON', () => {});
-      describe('点击删除 ICON 可以删除标签', () => {});
-    });
+  });
+  describe('编辑值', () => {
+    describe('双击标签值进行编辑', () => {});
+    describe('鼠标悬浮在标签上显示删除 ICON', () => {});
+    describe('点击删除 ICON 可以删除标签', () => {});
   });
 });

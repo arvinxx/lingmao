@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { Radio, List, Collapse, Menu, Input, Layout, Button, InputNumber, Icon } from 'antd';
-import 'react-reflex/styles.css';
 
 import { TagInput, TreeList, Upload, Ellipsis } from '../../components/index';
-import styles from './styles.less';
-import { relativeTimeRounding } from 'moment';
+
+import 'react-reflex/styles.css';
+import styles from './record.less';
 
 const { Panel } = Collapse;
 const RadioGroup = Radio.Group;
@@ -109,8 +109,8 @@ export default class Interview extends Component<any, any> {
       </RadioGroup>
     );
   };
-  LabelComponent = (tagVisable, labels) => {
-    if (tagVisable) {
+  LabelComponent = (tagVisible, labels) => {
+    if (tagVisible) {
       return (
         <div className={styles.right}>
           <div className={styles.title}>标签</div>
@@ -127,8 +127,8 @@ export default class Interview extends Component<any, any> {
       );
     }
   };
-  UploadComponent = (uploadVisable) => {
-    if (uploadVisable) {
+  UploadComponent = (uploadVisible) => {
+    if (uploadVisible) {
       return (
         <div className={styles.left}>
           <div className={styles.upload}>
@@ -226,13 +226,13 @@ export default class Interview extends Component<any, any> {
   };
 
   render() {
-    const { uploadVisable, tagVisable } = this.props.interview;
+    const { uploadVisible, tagVisible } = this.props.interview;
     return (
       <Content className={styles.content}>
         <div className={styles.container}>
-          {this.UploadComponent(uploadVisable)}
+          {this.UploadComponent(uploadVisible)}
           {this.RecordComponent()}
-          {this.LabelComponent(tagVisable, labels)}
+          {this.LabelComponent(tagVisible, labels)}
         </div>
       </Content>
     );

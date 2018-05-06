@@ -9,7 +9,7 @@ export const interview = {
     {
       text: 'inbox',
       dispatch: {
-        type: 'interview/changeUploadVisable',
+        type: 'interview/changeUploadVisible',
       },
     },
     {
@@ -45,7 +45,7 @@ export const interview = {
     {
       text: 'tags-o',
       dispatch: {
-        type: 'interview/changeTagVisable',
+        type: 'interview/changeTagVisible',
       },
     },
   ],
@@ -61,7 +61,7 @@ export const data = {
     {
       text: 'upload',
       dispatch: {
-        type: 'interview/changeUploadVisable',
+        type: 'interview/changeUploadVisible',
       },
     },
     {
@@ -149,7 +149,7 @@ export const dashboard = {
     {
       text: 'upload',
       dispatch: {
-        type: 'interview/changeUploadVisable',
+        type: 'interview/changeUploadVisible',
       },
     },
     {

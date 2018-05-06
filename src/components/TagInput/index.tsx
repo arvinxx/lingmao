@@ -10,7 +10,10 @@ interface ILabelSelectProps {
   dimensions: Array<{
     id: string;
     key: string;
-    values: [string];
+    values: Array<{
+      id: string;
+      text: string;
+    }>;
     inputVisible: boolean;
     valueEditable: boolean;
   }>;
@@ -166,7 +169,6 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
 
   ValueLabelComponent = (id, vid, editable, text) => {
     const { selectedLabels } = this.props;
-
     if (editable) {
       return (
         <Input
