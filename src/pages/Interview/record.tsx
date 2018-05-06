@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { Radio, List, Collapse, Menu, Input, Layout, Button, InputNumber, Icon } from 'antd';
 
-import { TagInput, TreeList, Upload, Ellipsis } from '../../components/index';
+import { TagInput, RecordList, Upload, Ellipsis } from '../../components';
 
 import 'react-reflex/styles.css';
 import styles from './record.less';
@@ -201,9 +201,9 @@ export default class Interview extends Component<any, any> {
       <div className={styles.center}>
         <ReflexContainer orientation="horizontal">
           <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
-            <div className={styles.warpper}>
+            <div className={styles.wrapper}>
               <Input className={styles.title} onChange={this.titleChange} value={title} />
-              <TreeList records={records} dispatch={this.props.dispatch} />
+              <RecordList records={records} dispatch={this.props.dispatch} />
             </div>
           </ReflexElement>
           <ReflexSplitter>

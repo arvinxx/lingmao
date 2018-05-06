@@ -1,4 +1,4 @@
-export { default as TreeList } from './TreeList';
+export { default as RecordList } from './RecordList';
 export { default as Result } from './Result';
 export { default as Login } from './Login';
 export { default as TagInput } from './TagInput';

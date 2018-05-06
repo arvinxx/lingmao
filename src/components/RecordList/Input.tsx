@@ -4,13 +4,17 @@ import { Input } from 'antd';
 
 import styles from './Input.less';
 const { TextArea } = Input;
-interface InputCellProps {
+
+type textType = 'text' | 'comment' | '';
+
+interface IInputCellProps {
   id: string;
   text: string;
+  type: textType;
   dispatch: any;
 }
 
-export default class InputCell extends Component<InputCellProps> {
+export default class InputCell extends Component<IInputCellProps> {
   state = {
     tempText: '',
     isFocus: false,
@@ -19,13 +23,14 @@ export default class InputCell extends Component<InputCellProps> {
   /**
    * 获取得到 TextChange 函数 并根据 id 修改内容
    */
-  onChange = (e, id) => {
+  onChange = (e, id, contentType: textType) => {
     const text = e.target.value;
-    console.log(text);
-    this.props.dispatch({
-      type: 'interview/changeRecordText',
-      payload: { id, newText: e.target.value },
-    });
+    if (contentType === 'text') {
+      this.props.dispatch({
+        type: 'interview/changeRecordText',
+        payload: { id, newText: text },
+      });
+    }
   };
 
   /**
@@ -72,22 +77,27 @@ export default class InputCell extends Component<InputCellProps> {
     console.log(e);
   };
   onFocus = (e) => {
-    console.log(e);
+    console.log(e.target.value);
   };
   onPressEnter = (e) => {
-    console.log(e);
+    this.props.dispatch({
+      type: 'interview/addRecordText',
+    });
   };
 
   render() {
-    const { text, id } = this.props;
+    const { text, id, type } = this.props;
+
+    let contentType: textType = type;
+
     return (
       <div className={styles.item}>
         <TextArea
-          key={id}
-          ref="input" //eslint-disable-line
+          key={id + '-' + contentType}
+          ref="input"
           className={styles.input}
           value={text}
-          onChange={(e) => this.onChange(e, id)}
+          onChange={(e) => this.onChange(e, id, contentType)}
           //onKeyDown={this.onKeyDown}
           // autoFocus={id === focusId}
           autosize

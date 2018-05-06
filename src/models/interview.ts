@@ -10,8 +10,7 @@ export default {
       {
         id: '',
         text: '',
-        collapsed: false,
-        children: [],
+        description: '',
       },
     ],
     id: '',
@@ -92,10 +91,10 @@ export default {
       };
     },
 
-    addRecordText(state, { payload: newRecord }) {
+    addRecordText(state, action) {
       return {
         ...state,
-        records: state.records.concat({ text: newRecord, id: generateId() }),
+        records: state.records.concat({ text: '', id: generateId(), description: '' }),
       };
     },
     changeRecordText(state, { payload }) {

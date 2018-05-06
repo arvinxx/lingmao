@@ -32,7 +32,7 @@ import App from './index';
 //   };
 // };
 // const { wrapper, props } = setup();
-describe('TreeList 正常渲染样式', () => {
+describe('RecordList 正常渲染样式', () => {
   // case1
 
   it('TagInput Component should be render', () => {
