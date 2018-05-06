@@ -40,7 +40,7 @@
   }
 }
 .value-input {
-  width: 50px;
+  width: 80px;
   height: 24px;
   margin-right: 16px;
   padding-left: 10px;
@@ -113,7 +113,7 @@
 .key-container {
   display: inline-flex;
   justify-content: flex-end;
-  width: 96px;
+  width: 136px;
   text-align: right;
   .delete {
     .icon-delete;
@@ -131,7 +131,7 @@
 
 .exist-key {
   .key-container;
-  max-width: 72px;
+  max-width: 112px;
   height: 28px;
   background: none;
   margin-left: 4px;
@@ -149,17 +149,16 @@
 .add-key {
   .key-container;
   color: @text-color-secondary;
-  padding-right: 0;
+  padding-right: 11px;
   background: none;
 
   &:hover {
     background-color: @base-white;
-    padding-right: 11px;
     .input-border-hover;
   }
   &:focus {
-    padding-right: 11px;
     background-color: @base-white;
     .input-border;
+    color: @text-color;
   }
 }
