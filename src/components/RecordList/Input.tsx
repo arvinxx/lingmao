@@ -5,12 +5,12 @@ import { Input } from 'antd';
 import styles from './Input.less';
 const { TextArea } = Input;
 
-type textType = 'text' | 'comment' | '';
+type TTextType = 'text' | 'comment' | '';
 
 interface IInputCellProps {
   id: string;
   text: string;
-  type: textType;
+  type: TTextType;
   dispatch: any;
 }
 
@@ -23,7 +23,7 @@ export default class InputCell extends Component<IInputCellProps> {
   /**
    * 获取得到 TextChange 函数 并根据 id 修改内容
    */
-  onChange = (e, id, contentType: textType) => {
+  onChange = (e, id, contentType: TTextType) => {
     const text = e.target.value;
     if (contentType === 'text') {
       this.props.dispatch({
@@ -31,35 +31,40 @@ export default class InputCell extends Component<IInputCellProps> {
         payload: { id, newText: text },
       });
     }
+    if (isEmpty(text)) {
+      this.props.dispatch({
+        type: 'interview/deleteRecord',
+        payload: id,
+      });
+    }
   };
 
+  onTabChange = (id, bool) => {
+    console.log('按下了 Tab！');
+  };
+  onDirectionChange = (id, dd) => {
+    console.log(id + '方向变化');
+  };
   /**
    * 按下键后的处理行为
    */
   onKeyDown = (e) => {
-    const { onTabChange, id, onDelete, onDirectionChange } = this.props;
-
+    const { id } = this.props;
+    const { onDirectionChange, onTabChange } = this;
     const { keyCode, shiftKey } = e;
+    console.log(keyCode);
     // console.log(`${id} onKeyDown`,e, target, key, keyCode, shiftKey, ctrlKey, altKey)
     if (keyCode === 9 && shiftKey) {
-      // console.log("shift +  Tab clicked!")
+      // console.log("shift + Tab clicked!")
       if (onTabChange) {
         onTabChange(id, true);
-        e.preventDefault();
       }
     }
     if (keyCode === 9 && !shiftKey) {
       // console.log("Tab clicked!")
       if (onTabChange) {
+        e.preventDefault();
         onTabChange(id, false);
-        e.preventDefault();
-      }
-    }
-    if (keyCode === 8 && isEmpty(this.props.text)) {
-      // console.log("Backspace clicked");
-      if (onDelete) {
-        onDelete(id);
-        e.preventDefault();
       }
     }
     if (keyCode >= 37 && keyCode <= 40 && onDirectionChange) {
@@ -73,34 +78,32 @@ export default class InputCell extends Component<IInputCellProps> {
     }
   };
 
-  onBlur = (e) => {
-    console.log(e);
+  onBlur = (id) => {
+    // console.log(e);
   };
   onFocus = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   onPressEnter = (e) => {
     this.props.dispatch({
-      type: 'interview/addRecordText',
+      type: 'interview/addRecord',
     });
   };
 
   render() {
     const { text, id, type } = this.props;
 
-    let contentType: textType = type;
+    let contentType: TTextType = type;
 
     return (
       <div className={styles.item}>
-        <TextArea
+        <Input
           key={id + '-' + contentType}
-          ref="input"
           className={styles.input}
           value={text}
           onChange={(e) => this.onChange(e, id, contentType)}
-          //onKeyDown={this.onKeyDown}
+          onKeyDown={this.onKeyDown}
           // autoFocus={id === focusId}
-          autosize
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onPressEnter={this.onPressEnter}

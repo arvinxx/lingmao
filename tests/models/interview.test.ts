@@ -17,6 +17,83 @@ describe('Interview Model', () => {
 });
 
 describe('Reducers', () => {
+  it('querryDocument', () => {
+    set('1/1/2000'); // Mock datetime
+    const reducer = reducers.querryDocument;
+    const state = {
+      title: '',
+      records: [
+        {
+          id: '',
+          text: '',
+          comment: '',
+        },
+      ],
+      id: '',
+      dimensions: [
+        {
+          id: '',
+          key: '',
+          values: [
+            {
+              id: '',
+              text: '',
+              editable: false,
+            },
+          ],
+          inputVisible: false,
+        },
+      ],
+      selectedValues: [],
+    };
+    const action = {
+      type: 'interview/querryDocument',
+      payload: [
+        {
+          _id: '5af03ce213e345a0b389babb',
+          id: '',
+          __v: 0,
+          createdAt: '2018-05-07T11:47:46.881Z',
+          title: '',
+          updatedAt: '2018-05-07T11:47:49.701Z',
+          selectedValues: [],
+          dimensions: [
+            {
+              key: '',
+              id: '',
+              _id: '5af03ce5f6999c642e53ce35',
+              values: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce36' }],
+            },
+          ],
+          tags: [],
+          records: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce37' }],
+        },
+      ],
+    };
+    expect(reducer(state, action)).toEqual({
+      dimensions: [
+        {
+          id: generateId(),
+          key: '',
+          values: [
+            {
+              id: generateId(),
+              text: '',
+              editable: false,
+            },
+          ],
+          inputVisible: false,
+        },
+      ],
+      records: [{ text: '', id: generateId() }],
+      title: '',
+      selectedValues: [],
+      id: generateId(),
+    });
+
+    reset(); // reset to realtime
+  });
+
   it('changeTitle', () => {
     const reducer = reducers.changeTitle;
     const state = {
@@ -37,38 +114,89 @@ describe('Reducers', () => {
     set('1/1/2000'); // Mock datetime
     const reducer = reducers.addRecord;
     const state = {
-      records: [],
+      recordFocusId: '4',
+      records: [
+        {
+          text: '1',
+          id: '4',
+          comment: '',
+        },
+      ],
     };
     const action = {
       type: 'interview/addRecord',
+      payload: '4',
     };
     expect(reducer(state, action)).toEqual({
+      recordFocusId: generateId(),
       records: [
+        {
+          text: '1',
+          id: '4',
+          comment: '',
+        },
         {
           text: '',
           id: generateId(),
-          description: '',
+          comment: '',
         },
       ],
     });
 
+    const state2 = {
+      recordFocusId: '1',
+
+      records: [
+        {
+          id: '1',
+          text: 'delete',
+        },
+        {
+          id: '3',
+          text: '',
+        },
+      ],
+    };
+    const action2 = {
+      type: 'interview/addRecord',
+      payload: '1',
+    };
+    expect(reducer(state2, action2)).toEqual({
+      recordFocusId: generateId(),
+      records: [
+        {
+          id: '1',
+          text: 'delete',
+        },
+        {
+          text: '',
+          id: generateId(),
+          comment: '',
+        },
+        {
+          id: '3',
+          text: '',
+        },
+      ],
+    });
     reset(); // reset to realtime
   });
   describe('deleteRecord', () => {
-    it('should delete when text and description is empty', () => {
+    it("delete the record and set the previous item's focus to be true", () => {
       const reducers = model.reducers;
       const reducer = reducers.deleteRecord;
       const state = {
+        recordFocusId: '3',
         records: [
           {
             id: '1',
             text: 'delete',
-            description: '345',
+            comment: '345',
           },
           {
             id: '3',
             text: '',
-            description: '',
+            comment: '',
           },
         ],
       };
@@ -76,114 +204,70 @@ describe('Reducers', () => {
         type: 'interview/deleteRecord',
         payload: '3',
       };
-
       expect(reducer(state, action)).toEqual({
+        recordFocusId: '1',
         records: [
           {
             id: '1',
             text: 'delete',
-            description: '345',
+            comment: '345',
           },
         ],
       });
     });
-    it('should keep state when text and description is not empty', () => {
+    it("should stay original if there's only one record", () => {
       const reducers = model.reducers;
       const reducer = reducers.deleteRecord;
-      const state1 = {
-        records: [
-          {
-            id: '1',
-            text: 'delete',
-            description: '345',
-          },
-          {
-            id: '3',
-            text: '3432654',
-            description: '345dfs',
-          },
-        ],
-      };
-      const state2 = {
-        records: [
-          {
-            id: '1',
-            text: 'delete',
-            description: '345',
-          },
-          {
-            id: '3',
-            text: '',
-            description: '345dfs',
-          },
-        ],
-      };
-      const state3 = {
-        records: [
-          {
-            id: '1',
-            text: 'delete',
-            description: '345',
-          },
-          {
-            id: '3',
-            text: '12345',
-            description: '',
-          },
-        ],
-      };
-
+      const state = { recordFocusId: '1', records: [{ id: '1', text: '', comment: '' }] };
       const action = {
         type: 'interview/deleteRecord',
-        payload: '3',
+        payload: '1',
       };
-
-      expect(reducer(state1, action)).toEqual({
+      expect(reducer(state, action)).toEqual({
+        recordFocusId: '1',
         records: [
           {
             id: '1',
-            text: 'delete',
-            description: '345',
-          },
-          {
-            id: '3',
-            text: '3432654',
-            description: '345dfs',
-          },
-        ],
-      });
-      expect(reducer(state2, action)).toEqual({
-        records: [
-          {
-            id: '1',
-            text: 'delete',
-            description: '345',
-          },
-          {
-            id: '3',
             text: '',
-            description: '345dfs',
+            comment: '',
           },
         ],
       });
-      expect(reducer(state3, action)).toEqual({
+    });
+    it("delete the record and set the next item's focus to be true if it's the first item", () => {
+      const reducers = model.reducers;
+      const reducer = reducers.deleteRecord;
+      const state = {
+        recordFocusId: '1',
         records: [
           {
             id: '1',
-            text: 'delete',
-            description: '345',
+            text: '',
+            comment: '',
           },
           {
             id: '3',
-            text: '12345',
-            description: '',
+            text: 'delete',
+            comment: '345',
+          },
+        ],
+      };
+      const action = {
+        type: 'interview/deleteRecord',
+        payload: '1',
+      };
+      expect(reducer(state, action)).toEqual({
+        recordFocusId: '3',
+        records: [
+          {
+            id: '3',
+            text: 'delete',
+            comment: '345',
           },
         ],
       });
-
     });
   });
-
   it('changeRecordText', () => {
     const reducers = model.reducers;
     const reducer = reducers.changeRecordText;
@@ -192,14 +276,12 @@ describe('Reducers', () => {
         {
           id: '1',
           text: 'delete',
-          collapsed: false,
-          children: [],
+          focus: false,
         },
         {
           id: '3',
           text: '',
-          collapsed: false,
-          children: [],
+          focus: true,
         },
       ],
     };
@@ -213,14 +295,39 @@ describe('Reducers', () => {
         {
           id: '1',
           text: 'delete',
-          collapsed: false,
-          children: [],
+          focus: false,
         },
         {
           id: '3',
           text: 'hello',
-          collapsed: false,
-          children: [],
+          focus: true,
+        },
+      ],
+    });
+  });
+  it('changeRecordFocus', () => {
+    const reducer = reducers.changeRecordFocusId;
+    const state = {
+      recordFocusId: '',
+      records: [
+        {
+          id: '1',
+          text: 'delete',
+          comment: '345',
+        },
+      ],
+    };
+    const action = {
+      type: 'interview/changeRecordFocus',
+      payload: '1',
+    };
+    expect(reducer(state, action)).toEqual({
+      recordFocusId: '1',
+      records: [
+        {
+          id: '1',
+          text: 'delete',
+          comment: '345',
         },
       ],
     });
@@ -268,7 +375,6 @@ describe('Reducers', () => {
       dimensions: [{ key: '1', id: '34', values: [] }, { key: '3', id: '4', values: [] }],
     });
   });
-
   it('changeDimensionKey', () => {
     const reducers = model.reducers;
     const reducer = reducers.changeDimensionKey;

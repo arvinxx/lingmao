@@ -1,7 +1,11 @@
 import { queryDocument, saveDocument } from '../services/interview';
-import { isNull } from 'lodash';
+import { isNull, isEmpty } from 'lodash';
 import { findIndexById, generateId } from '../utils/utils';
-
+type TRecord = {
+  id: '';
+  text: '';
+  comment: '';
+};
 export default {
   namespace: 'interview',
   state: {
@@ -10,7 +14,7 @@ export default {
       {
         id: '',
         text: '',
-        description: '',
+        comment: '',
       },
     ],
     id: '',
@@ -28,7 +32,7 @@ export default {
         inputVisible: false,
       },
     ],
-    tags:[],
+    tags: [],
     selectedValues: [],
     uploadVisible: true,
     tagVisible: true,
@@ -41,9 +45,8 @@ export default {
         payload: Array.isArray(response) ? response : [],
       });
     },
-    *saveDocument(_, { call }) {
-      const { payload, state } = _;
-      console.log(state);
+    *saveDocument({ payload }, { call }) {
+      // console.log(this.state);
       yield call(saveDocument, payload);
     },
   },
@@ -65,24 +68,40 @@ export default {
     },
 
     querryDocument(state, { payload: documents }) {
-      let { title, records, id, dimensions,  selectedValues } = documents[0];
-      if (isNull(dimensions)) {
-        dimensions = [
-          {
-            id: '',
-            key: '',
-            values: [],
-          },
-        ];
-      }
-      if (records.length === 0) {
-        records = [{ text: '', id: '' }];
-      }
+      let { title, records, id, dimensions, selectedValues } = documents[0];
+
+      dimensions.map((dimension) => {
+        let { id, values } = dimension;
+        console.log(dimension);
+        id = id === '' ? generateId() : id;
+        values.map((value) => {
+          let { id } = value;
+          id = id === '' ? generateId() : id;
+          value.editable = false;
+          value.id = id;
+          delete value._id;
+        });
+        delete dimension._id;
+        dimension.values = values;
+        dimension.id = id;
+        dimension.inputVisible = false;
+      });
+
+      records.map((record) => {
+        let id = record.id;
+        id = id === '' ? generateId() : id;
+        record.id = id;
+        delete record._id;
+      });
+
       if (isNull(title)) {
         title = '';
       }
       if (isNull(selectedValues)) {
         selectedValues = [];
+      }
+      if (isEmpty(id)) {
+        id = generateId();
       }
       return {
         ...state,
@@ -94,10 +113,18 @@ export default {
       };
     },
 
-    addRecord(state, action) {
+    addRecord(state, { payload: id }) {
+      const records = state.records;
+      const index = findIndexById(records, id);
+      records.splice(index + 1, 0, {
+        text: '',
+        id: generateId(),
+        comment: '',
+      });
       return {
         ...state,
-        records: state.records.concat({ text: '', id: generateId(), description: '' }),
+        records,
+        recordFocusId: records[index + 1].id,
       };
     },
     changeRecordText(state, { payload }) {
@@ -112,15 +139,25 @@ export default {
     },
     deleteRecord(state, { payload: id }) {
       const records = state.records;
-      const index = findIndexById(records, id);
 
-      const { text, description } = records[index];
-      if (text === '' && description === '') {
+      // 数组中只有一个元素的情况下，直接返回原先状态，不删除
+      if (records.length === 1) {
+        return state;
+      } else {
+        const index = findIndexById(records, id);
+        const focusIndex = index === 0 ? 1 : index - 1; // 判断是否是数组第一个元素
         return {
           ...state,
-          records: records.filter((record) => record.id !== id),
+          records: state.records.filter((record: TRecord) => record.id !== id),
+          recordFocusId: records[focusIndex].id,
         };
-      } else return state;
+      }
+    },
+    changeRecordFocusId(state, { payload: id }) {
+      return {
+        ...state,
+        recordFocusId: id,
+      };
     },
 
     addDimensionKey(state, { payload: newDimension }) {

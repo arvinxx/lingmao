@@ -1,26 +1,40 @@
+@import '../../styles/themes/default';
+
 :global {
-  .ant-tree li .ant-tree-node-content-wrapper {
+  .ant-input {
+    border: none;
+    border-radius: 0;
+    &:focus {
+      border: none;
+      box-shadow: none;
+    }
     width: 100%;
+  }
+  .ant-list {
+    margin-top: 12px;
+    .ant-list-item {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
     .ant-input {
-      width: 100%;
-    }
-    &:hover {
-      background: none;
+      height: auto;
+      padding: 0 11px;
     }
   }
-
-  .ant-tree-node-selected {
-    background: none !important;
-  }
-  .ant-tree li {
-    white-space: normal;
-    position: relative;
+  .ant-list-split .ant-list-item {
+    border-bottom: none;
   }
 
-  span.ant-tree-switcher {
-    position: absolute;
-    top: 8px;
-    left: -15px;
-    z-index: 100;
+  .ant-list-item-meta-title {
+    display: flex;
+
+    &::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: @dark-5;
+      border-radius: 50%;
+      align-self: center;
+    }
   }
 }

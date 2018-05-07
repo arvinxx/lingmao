@@ -27,7 +27,7 @@ interface ILabelSelectStates {
   newKeyPlaceHolder: string;
 }
 
-export default class Index extends Component<ILabelSelectProps, ILabelSelectStates> {
+export default class TagInput extends Component<ILabelSelectProps, ILabelSelectStates> {
   state = {
     newKey: '',
     newValue: '',
@@ -131,7 +131,6 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
   };
 
   showValueEdit = (id, vid) => {
-    console.log('show');
     this.props.dispatch({
       type: 'interview/showValueEdit',
       payload: { id, vid },
@@ -146,14 +145,15 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
 
   keyComponent = (id, key) => {
     return (
-      <div>
+      <div key={id + 'kcc'}>
         <Popconfirm
+          key={id + 'pop'}
           title="确认要删除吗?"
           onConfirm={() => this.oldKeyDelete(id)}
           okText="是"
           cancelText="否"
         >
-          <Icon type="close" className={styles.delete} />
+          <Icon key={id + 'icon'} type="close" className={styles.delete} />
         </Popconfirm>
         <Input
           key={'keyof' + id}
@@ -185,22 +185,24 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
       );
     } else {
       return (
-        <div className={styles['value-container']}>
+        <div key={vid + 'v-cont'} className={styles['value-container']}>
           <CheckableTag
-            key={vid}
+            key={vid + 'checkbleTag'}
             checked={selectedValues.indexOf(vid) > -1}
+            //@ts-ignore Antd 未定义事件 props
             onDoubleClick={() => this.showValueEdit(id, vid)}
             onChange={(checked) => this.handleSelected(vid, checked)}
           >
             {text}
           </CheckableTag>
           <Popconfirm
+            key={vid + 'ppp'}
             title="确认要删除吗?"
             onConfirm={() => this.oldValueDelete(id, vid)}
             okText="是"
             cancelText="否"
           >
-            <Icon type="close" className={styles['value-delete']} />
+            <Icon key={id + 'close'} type="close" className={styles['value-delete']} />
           </Popconfirm>
         </div>
       );
@@ -215,7 +217,6 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
           key={`${id}-add`}
           type="text"
           size="small"
-          ref="input"
           className={styles.input}
           value={newValue}
           onChange={this.newValueOnInput}
@@ -225,8 +226,13 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
       );
     else {
       return (
-        <Tag key={`${id}-addk`} onClick={() => this.showValueInput(id)} className={styles.plus}>
-          <Icon key={`${id}-icon`} type="plus" />
+        <Tag
+          key={`${id}-plus+++++++`}
+          //@ts-ignore Antd 未定义事件 props
+          onClick={() => this.showValueInput(id)}
+          className={styles.plus}
+        >
+          <Icon key={`${id}----icon`} type="plus" />
         </Tag>
       );
     }
@@ -251,9 +257,11 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
         {dimensions.map((dimension) => {
           const { key, values, id, inputVisible } = dimension;
           return (
-            <div key={id} className={styles['dimension-container']}>
-              <div className={styles['key-container']}>{this.keyComponent(id, key)}</div>
-              <div className={styles['tag-container']}>
+            <div key={id + 'd-container'} className={styles['dimension-container']}>
+              <div key={id + 'k-container'} className={styles['key-container']}>
+                {this.keyComponent(id, key)}
+              </div>
+              <div key={id + 'tag-container'} className={styles['tag-container']}>
                 {values.map((value: any) => {
                   const { text, id: vid, editable } = value;
                   return this.ValueLabelComponent(id, vid, editable, text);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { Radio, List, Collapse, Menu, Input, Layout, Button, InputNumber, Icon } from 'antd';
+import { Radio, List, Collapse, Menu, Input, Button, InputNumber, Icon } from 'antd';
 
 import { TagInput, RecordList, Upload, Ellipsis } from '../../components';
 
@@ -10,7 +10,6 @@ import styles from './record.less';
 
 const { Panel } = Collapse;
 const RadioGroup = Radio.Group;
-const { Content } = Layout;
 
 const data = [
   'Racing car sprays burning fuel into crowd.',
@@ -40,13 +39,12 @@ export default class Interview extends Component<any, any> {
       type: 'interview/fetchDocument',
     });
   }
-  componentWillUnmount() {
+  componentDidUnmount() {
     const { title, records, id, dimensions, selectedValues } = this.props.interview;
-
-    this.props.dispatch({
-      type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedValues },
-    });
+    // this.props.dispatch({
+    //   type: 'interview/saveDocument',
+    //   payload: { title, id, records, dimensions, selectedValues },
+    // });
   }
   onChange = (e) => {
     console.log('radio checked', e.target.value);
@@ -84,10 +82,10 @@ export default class Interview extends Component<any, any> {
         value={this.state.value}
       >
         <Radio className={styles['radio-style']} value={1}>
-          基于分号
+          基于换行
         </Radio>
         <Radio className={styles['radio-style']} value={2}>
-          基于换行
+          基于分号
         </Radio>
         <Radio className={styles['radio-style']} value={3}>
           基于逗号
@@ -184,15 +182,20 @@ export default class Interview extends Component<any, any> {
   };
   RecordComponent = () => {
     const minPanelSize = 150;
-    const { title, records, dimensions, selectedValues } = this.props.interview;
-
+    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
+    const loading = this.props.loading;
     return (
       <div className={styles.center}>
         <ReflexContainer orientation="horizontal">
           <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
             <div className={styles.wrapper}>
               <Input className={styles.title} onChange={this.titleChange} value={title} />
-              <RecordList records={records} dispatch={this.props.dispatch} />
+              <RecordList
+                loading={loading}
+                recordFocusId={recordFocusId}
+                records={records}
+                dispatch={this.props.dispatch}
+              />
             </div>
           </ReflexElement>
           <ReflexSplitter>
@@ -203,11 +206,11 @@ export default class Interview extends Component<any, any> {
             </div>
           </ReflexSplitter>
           <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-            <TagInput
-              dimensions={dimensions}
-              selectedValues={selectedValues}
-              dispatch={this.props.dispatch}
-            />
+            {/*<TagInput*/}
+              {/*dimensions={dimensions}*/}
+              {/*selectedValues={selectedValues}*/}
+              {/*dispatch={this.props.dispatch}*/}
+            {/*/>*/}
           </ReflexElement>
         </ReflexContainer>
       </div>
@@ -217,13 +220,11 @@ export default class Interview extends Component<any, any> {
   render() {
     const { uploadVisible, tagVisible } = this.props.interview;
     return (
-      <Content className={styles.content}>
-        <div className={styles.container}>
-          {this.UploadComponent(uploadVisible)}
-          {this.RecordComponent()}
-          {this.LabelComponent(tagVisible, labels)}
-        </div>
-      </Content>
+      <div className={styles.container}>
+        {this.UploadComponent(uploadVisible)}
+        {this.RecordComponent()}
+        {this.LabelComponent(tagVisible, labels)}
+      </div>
     );
   }
 }

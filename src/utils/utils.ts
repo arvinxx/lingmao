@@ -90,7 +90,10 @@ export function digitUppercase(n) {
     s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
   }
 
-  return s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
+  return s
+    .replace(/(零.)*零元/, '元')
+    .replace(/(零.)+/g, '零')
+    .replace(/^整$/, '零元整');
 }
 
 /**
@@ -109,7 +112,7 @@ export const findIndexById = (arr, id) => {
   }
 };
 export const generateId = () => {
-  return new Date().valueOf();
+  return new Date().valueOf().toString();
 };
 
 function getRelation(str1, str2) {
@@ -150,7 +153,7 @@ function getRenderArr(routes) {
  */
 export function getRoutes(path, routerData) {
   let routes = Object.keys(routerData).filter(
-    (routePath) => routePath.indexOf(path) === 0 && routePath !== path,
+    (routePath) => routePath.indexOf(path) === 0 && routePath !== path
   );
   // 删除前置路径
   // eg. path='user' /user/name => /name path='/' /dashboard => dashboard

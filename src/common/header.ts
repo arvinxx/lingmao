@@ -1,12 +1,6 @@
 export const interview = {
   left: [
     {
-      text: 'menu-fold',
-      onClick: (e) => {
-        console.log(e);
-      },
-    },
-    {
       text: 'inbox',
       dispatch: {
         type: 'interview/changeUploadVisible',
@@ -34,7 +28,7 @@ export const interview = {
       },
     },
   ],
-  center: [{ text: '记录', path: 'interview' }, { text: '标签', path: 'tag' }],
+  center: [{ text: '记录', path: 'record' }, { text: '标签', path: 'tag' }],
   right: [
     {
       text: 'search',
@@ -80,16 +74,16 @@ export const data = {
     { text: '聚类结果', path: 'cluster' },
     { text: '分析汇总', path: 'analysis' },
   ],
-  right: ['calendar', 'desktop'],
+  right: [
+    {
+      text: 'tablet',
+      dispatch: {},
+    },
+    'desktop',
+  ],
 };
 export const persona = {
   left: [
-    {
-      text: 'menu-fold',
-      onClick: (e) => {
-        console.log(e);
-      },
-    },
     {
       text: 'left',
       dispatch: {

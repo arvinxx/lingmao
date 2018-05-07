@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import { List } from 'antd';
-import InputCell from './Input';
+import { List, Input } from 'antd';
+import { isEmpty } from 'lodash';
+import { HotKeys } from 'react-hotkeys';
+
 import './index.less';
 
 const { Item } = List;
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
+const map = {
+  deleteRecord: ['del', 'backspace'],
+};
 
 interface IRecord {
   id: string;
@@ -27,31 +18,120 @@ interface IRecord {
 
 interface RecordListProps {
   records: Array<IRecord>;
+  recordFocusId: string;
   dispatch: any;
+  loading: any;
 }
 
 export default class RecordList extends Component<RecordListProps, any> {
-  state = {
-    expandedKeys: [],
-    autoExpandParent: true,
-    selectedKeys: [],
+  state = {};
+
+  changeRecordText = (e, id) => {
+    const text = e.target.value;
+    this.props.dispatch({
+      type: 'interview/changeRecordText',
+      payload: { id, newText: text },
+    });
+  };
+
+  addRecord = (id) => {
+    this.props.dispatch({
+      type: 'interview/addRecord',
+      payload: id,
+    });
+  };
+  deleteRecord = (id, text) => {
+    if (isEmpty(text)) {
+      this.props.dispatch({ type: 'interview/deleteRecord', payload: id });
+    }
+  };
+
+  onTabChange = (id, bool) => {
+    console.log('按下了 Tab！');
+  };
+  onDirectionChange = (id, dd) => {
+    console.log(id + '方向变化');
+  };
+  changeRecordFocusId = (id) => {
+    this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
+  };
+
+  onKeyDown = (e, id, text) => {
+    const { onDirectionChange, onTabChange } = this;
+    const { keyCode, shiftKey } = e;
+    console.log(keyCode);
+    if (keyCode === 9 && shiftKey) {
+      // console.log("shift + Tab clicked!")
+      if (onTabChange) {
+        onTabChange(id, true);
+      }
+    }
+    if (keyCode === 9 && !shiftKey) {
+      // console.log("Tab clicked!")
+      if (onTabChange) {
+        e.preventDefault();
+        onTabChange(id, false);
+      }
+    }
+    if (keyCode >= 37 && keyCode <= 40 && onDirectionChange) {
+      const temp = {
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down',
+      };
+      onDirectionChange(id, temp[keyCode.toString()]);
+    }
   };
 
   render() {
-    const { records, dispatch } = this.props;
+    const { records, recordFocusId, loading } = this.props;
+
     return (
       <List
+        size="small"
         itemLayout="horizontal"
         dataSource={records}
+        loading={loading}
         renderItem={(record: IRecord) => {
           const { comment, id, text } = record;
           return (
             <Item>
               <Item.Meta
-                title={<InputCell id={id} text={text} type="text" dispatch={dispatch} />}
-                description={
-                  <InputCell id={id} text={comment} type="comment" dispatch={dispatch} />
+                key={id + 'meta'}
+                title={
+                  <HotKeys
+                    keyMap={map}
+                    handlers={{
+                      deleteRecord: () => {
+                        this.deleteRecord(id, text);
+                      },
+                    }}
+                  >
+                    <Input
+                      value={text}
+                      id={id + 'text'}
+                      onChange={(e) => {
+                        this.changeRecordText(e, id);
+                      }}
+                      onFocus={() => {
+                        this.changeRecordFocusId(id);
+                      }}
+                      autoFocus={recordFocusId === id}
+                      onPressEnter={() => {
+                        this.addRecord(id);
+                      }}
+                    />
+                  </HotKeys>
                 }
+                // description="就"
+                /*
+                //   () => {
+                //   if (comment !== '') {
+                //     return <InputCell id={id} text={comment} type="comment" dispatch={dispatch} />;
+                //   } else return '';
+                // }
+                */
               />
             </Item>
           );

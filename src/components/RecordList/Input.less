@@ -9,13 +9,14 @@
 .item {
   display: flex;
   align-items: center;
-  //height: 24px;
+  height: 20px;
+  width: 100%;
   &:hover {
     //background: @red-1;
   }
-  textarea {
-    resize: none;
-  }
+  //textarea {
+  //  resize: none;
+  //}
 }
 .circle {
   border: 3px solid @transBlack-2;
@@ -33,6 +34,29 @@
       border: none;
       box-shadow: none;
     }
-    width: 80%;
+    width: 100%;
+  }
+  .ant-list {
+    margin-top: 12px;
+    .ant-list-item {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+  }
+  .ant-list-split .ant-list-item {
+    border-bottom: none;
+  }
+
+  .ant-list-item-meta-title {
+    display: flex;
+
+    &::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: @dark-5;
+      border-radius: 50%;
+      align-self: center;
+    }
   }
 }

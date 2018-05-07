@@ -11,9 +11,7 @@ const { Content } = Layout;
 const RadioGroup = Radio.Group;
 const TreeNode = Tree.TreeNode;
 
-@connect(({ persona }) => ({
-  persona,
-}))
+@connect(({ persona }) => ({ persona }))
 export default class Index extends Component {
   state = {
     inputValue: 1,
@@ -168,11 +166,13 @@ export default class Index extends Component {
       );
     }
   };
+
   render() {
     return (
       <Content>
         <div className={styles.container}>
-          {this.PersonaComponent()} {this.dimensionList()}
+          {this.PersonaComponent()}
+          {this.dimensionList()}
           {this.ExportModalComponent()}
         </div>
       </Content>

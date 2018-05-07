@@ -16,7 +16,7 @@ describe('findIndexById', () => {
     expect(findIndexById(arr, '34')).toEqual(0);
     expect(findIndexById(arr, '1')).toEqual(1);
   });
-  it('should return none when don\'t find id', () => {
+  it("should return none when don't find id", () => {
     const arr = [
       {
         id: '34',
@@ -35,7 +35,8 @@ describe('generateId', () => {
   it('should return id', () => {
     set('2/4/2017');
     const id = generateId();
-    expect(id).toEqual(new Date().valueOf());
+    expect(typeof id).toEqual('string');
+    expect(id).toEqual(new Date().valueOf().toString());
     reset();
   });
 });
