@@ -41,11 +41,11 @@ export default class Interview extends Component<any, any> {
     });
   }
   componentWillUnmount() {
-    const { title, records, id, dimensions, selectedLabels } = this.props.interview;
+    const { title, records, id, dimensions, selectedValues } = this.props.interview;
 
     this.props.dispatch({
       type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedLabels },
+      payload: { title, id, records, dimensions, selectedValues },
     });
   }
   onChange = (e) => {
@@ -75,17 +75,6 @@ export default class Interview extends Component<any, any> {
       payload: text,
     });
   };
-
-  handleSelected(label: string, checked: boolean) {
-    const { selectedLabels } = this.props;
-    const nextSelectedLabels = checked
-      ? [...selectedLabels, label]
-      : selectedLabels.filter((t) => t !== label);
-    this.props.dispatch({
-      type: 'interview/selectLabels',
-      payload: nextSelectedLabels,
-    });
-  }
 
   AdvancedOpts = () => {
     return (
@@ -195,7 +184,7 @@ export default class Interview extends Component<any, any> {
   };
   RecordComponent = () => {
     const minPanelSize = 150;
-    const { title, records, dimensions, selectedLabels } = this.props.interview;
+    const { title, records, dimensions, selectedValues } = this.props.interview;
 
     return (
       <div className={styles.center}>
@@ -216,7 +205,7 @@ export default class Interview extends Component<any, any> {
           <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
             <TagInput
               dimensions={dimensions}
-              selectedLabels={selectedLabels}
+              selectedValues={selectedValues}
               dispatch={this.props.dispatch}
             />
           </ReflexElement>

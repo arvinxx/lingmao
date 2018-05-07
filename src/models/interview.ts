@@ -28,7 +28,8 @@ export default {
         inputVisible: false,
       },
     ],
-    selectedLabels: [],
+    tags:[],
+    selectedValues: [],
     uploadVisible: true,
     tagVisible: true,
   },
@@ -40,7 +41,9 @@ export default {
         payload: Array.isArray(response) ? response : [],
       });
     },
-    *saveDocument({ payload }, { call }) {
+    *saveDocument(_, { call }) {
+      const { payload, state } = _;
+      console.log(state);
       yield call(saveDocument, payload);
     },
   },
@@ -62,7 +65,7 @@ export default {
     },
 
     querryDocument(state, { payload: documents }) {
-      let { title, records, id, dimensions, selectedLabels } = documents[0];
+      let { title, records, id, dimensions,  selectedValues } = documents[0];
       if (isNull(dimensions)) {
         dimensions = [
           {
@@ -78,8 +81,8 @@ export default {
       if (isNull(title)) {
         title = '';
       }
-      if (isNull(selectedLabels)) {
-        selectedLabels = [];
+      if (isNull(selectedValues)) {
+        selectedValues = [];
       }
       return {
         ...state,
@@ -87,11 +90,11 @@ export default {
         title,
         id,
         dimensions,
-        selectedLabels,
+        selectedValues,
       };
     },
 
-    addRecordText(state, action) {
+    addRecord(state, action) {
       return {
         ...state,
         records: state.records.concat({ text: '', id: generateId(), description: '' }),
@@ -107,6 +110,18 @@ export default {
         records,
       };
     },
+    deleteRecord(state, { payload: id }) {
+      const records = state.records;
+      const index = findIndexById(records, id);
+
+      const { text, description } = records[index];
+      if (text === '' && description === '') {
+        return {
+          ...state,
+          records: records.filter((record) => record.id !== id),
+        };
+      } else return state;
+    },
 
     addDimensionKey(state, { payload: newDimension }) {
       if (newDimension === '') {
@@ -120,7 +135,7 @@ export default {
     deleteDimensionKey(state, { payload: id }) {
       return {
         ...state,
-        dimensions: state.dimensions.filter((dim) => dim.id !== id),
+        dimensions: state.dimensions.filter((dimension) => dimension.id !== id),
       };
     },
     changeDimensionKey(state, { payload }) {
@@ -219,8 +234,8 @@ export default {
       };
     },
 
-    selectLabels(state, { payload: selectedLabels }) {
-      return { ...state, selectedLabels };
+    changeSelectedValues(state, { payload: selectedValues }) {
+      return { ...state, selectedValues };
     },
   },
 };

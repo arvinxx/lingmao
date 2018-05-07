@@ -33,26 +33,155 @@ describe('Reducers', () => {
     });
   });
 
-  it('addRecordText', () => {
+  it('addRecord', () => {
     set('1/1/2000'); // Mock datetime
-    const reducer = reducers.addRecordText;
+    const reducer = reducers.addRecord;
     const state = {
       records: [],
     };
     const action = {
-      type: 'interview/addRecordText',
-      payload: 'dsa',
+      type: 'interview/addRecord',
     };
     expect(reducer(state, action)).toEqual({
       records: [
         {
-          text: 'dsa',
+          text: '',
           id: generateId(),
+          description: '',
         },
       ],
     });
 
     reset(); // reset to realtime
+  });
+  describe('deleteRecord', () => {
+    it('should delete when text and description is empty', () => {
+      const reducers = model.reducers;
+      const reducer = reducers.deleteRecord;
+      const state = {
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '',
+            description: '',
+          },
+        ],
+      };
+      const action = {
+        type: 'interview/deleteRecord',
+        payload: '3',
+      };
+
+      expect(reducer(state, action)).toEqual({
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+        ],
+      });
+    });
+    it('should keep state when text and description is not empty', () => {
+      const reducers = model.reducers;
+      const reducer = reducers.deleteRecord;
+      const state1 = {
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '3432654',
+            description: '345dfs',
+          },
+        ],
+      };
+      const state2 = {
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '',
+            description: '345dfs',
+          },
+        ],
+      };
+      const state3 = {
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '12345',
+            description: '',
+          },
+        ],
+      };
+
+      const action = {
+        type: 'interview/deleteRecord',
+        payload: '3',
+      };
+
+      expect(reducer(state1, action)).toEqual({
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '3432654',
+            description: '345dfs',
+          },
+        ],
+      });
+      expect(reducer(state2, action)).toEqual({
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '',
+            description: '345dfs',
+          },
+        ],
+      });
+      expect(reducer(state3, action)).toEqual({
+        records: [
+          {
+            id: '1',
+            text: 'delete',
+            description: '345',
+          },
+          {
+            id: '3',
+            text: '12345',
+            description: '',
+          },
+        ],
+      });
+
+    });
   });
 
   it('changeRecordText', () => {
@@ -463,22 +592,22 @@ describe('Reducers', () => {
     });
   });
 
-  it('selectLabels', () => {
-    const reducer = reducers.selectLabels;
+  it('changeSelectedValues', () => {
+    const reducer = reducers.changeSelectedValues;
     const state = {
-      selectedLabels: [],
+      selectedValues: [],
     };
 
     const action = {
-      type: 'interview/selectLabels',
+      type: 'interview/changeSelectedValues',
       payload: ['1234', '1235175'],
     };
 
     expect(reducer(state, action)).toEqual({
-      selectedLabels: ['1234', '1235175'],
+      selectedValues: ['1234', '1235175'],
     });
   });
-  it('changeUploadVisible', () => {
+  it('changeTagVisible', () => {
     const reducer = reducers.changeTagVisible;
     const state = {
       tagVisible: true,

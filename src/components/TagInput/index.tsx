@@ -6,18 +6,19 @@ import styles from './styles.less';
 
 const CheckableTag = Tag.CheckableTag;
 
+type Value = {
+  id: string;
+  text: string;
+};
 interface ILabelSelectProps {
   dimensions: Array<{
     id: string;
     key: string;
-    values: Array<{
-      id: string;
-      text: string;
-    }>;
+    values: Array<Value>;
     inputVisible: boolean;
     valueEditable: boolean;
   }>;
-  selectedLabels: Array<string>;
+  selectedValues: Array<string>;
   dispatch: any;
 }
 interface ILabelSelectStates {
@@ -168,7 +169,7 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
   };
 
   ValueLabelComponent = (id, vid, editable, text) => {
-    const { selectedLabels } = this.props;
+    const { selectedValues } = this.props;
     if (editable) {
       return (
         <Input
@@ -187,7 +188,7 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
         <div className={styles['value-container']}>
           <CheckableTag
             key={vid}
-            checked={selectedLabels.indexOf(vid) > -1}
+            checked={selectedValues.indexOf(vid) > -1}
             onDoubleClick={() => this.showValueEdit(id, vid)}
             onChange={(checked) => this.handleSelected(vid, checked)}
           >
@@ -232,14 +233,14 @@ export default class Index extends Component<ILabelSelectProps, ILabelSelectStat
   };
 
   handleSelected(id: string, checked: boolean) {
-    const { selectedLabels } = this.props;
-    const nextSelectedLabels = checked
-      ? [...selectedLabels, id]
-      : selectedLabels.filter((t) => t !== id);
+    const { selectedValues } = this.props;
+    const nextSelectedValues = checked
+      ? [...selectedValues, id]
+      : selectedValues.filter((t) => t !== id);
 
     this.props.dispatch({
-      type: 'interview/selectLabels',
-      payload: nextSelectedLabels,
+      type: 'interview/changeSelectedValues',
+      payload: nextSelectedValues,
     });
   }
 

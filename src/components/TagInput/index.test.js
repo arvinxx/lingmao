@@ -22,7 +22,7 @@ import App from './index';
 //         valueEditable: false,
 //       },
 //     ],
-//     selectedLabels: ['1', '5', '7'],
+//     selectedValues: ['1', '5', '7'],
 //     dispatch: jest.fn(),
 //   };
 //   const wrapper = shallow(<App {...props} />);
