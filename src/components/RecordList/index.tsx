@@ -88,55 +88,55 @@ export default class RecordList extends Component<RecordListProps, any> {
     const { records, recordFocusId, loading } = this.props;
 
     return (
-      <List
-        size="small"
-        itemLayout="horizontal"
-        dataSource={records}
-        loading={loading}
-        renderItem={(record: IRecord) => {
-          const { comment, id, text } = record;
-          return (
-            <Item>
-              <Item.Meta
-                key={id + 'meta'}
-                title={
-                  <HotKeys
-                    keyMap={map}
-                    handlers={{
-                      deleteRecord: () => {
-                        this.deleteRecord(id, text);
-                      },
-                    }}
-                  >
-                    <Input
-                      value={text}
-                      id={id + 'text'}
-                      onChange={(e) => {
-                        this.changeRecordText(e, id);
-                      }}
-                      onFocus={() => {
-                        this.changeRecordFocusId(id);
-                      }}
-                      autoFocus={recordFocusId === id}
-                      onPressEnter={() => {
-                        this.addRecord(id);
-                      }}
-                    />
-                  </HotKeys>
-                }
-                // description="就"
-                /*
-                //   () => {
-                //   if (comment !== '') {
-                //     return <InputCell id={id} text={comment} type="comment" dispatch={dispatch} />;
-                //   } else return '';
-                // }
-                */
-              />
-            </Item>
-          );
-        }}
-      />
+      <HotKeys keyMap={map}>
+        <List
+          size="small"
+          itemLayout="horizontal"
+          dataSource={records}
+          loading={loading}
+          renderItem={(record: IRecord) => {
+            const { comment, id, text } = record;
+            return (
+              <HotKeys
+                handlers={{
+                  deleteRecord: () => {
+                    this.deleteRecord(id, text);
+                  },
+                }}
+              >
+                <Item>
+                  <Item.Meta
+                    key={id + 'meta'}
+                    title={
+                      <Input
+                        value={text}
+                        id={id + 'text'}
+                        onChange={(e) => {
+                          this.changeRecordText(e, id);
+                        }}
+                        onFocus={() => {
+                          this.changeRecordFocusId(id);
+                        }}
+                        autoFocus={recordFocusId === id}
+                        onPressEnter={() => {
+                          this.addRecord(id);
+                        }}
+                      />
+                    }
+                    //TODO: 按 Tab 编辑描述
+                    // description=
+                    //   () => {
+                    //   if (comment !== ''||) {
+                    //     return <InputCell id={id} text={comment} type="comment" dispatch={dispatch} />;
+                    //   } else return '';
+                    // }
+                  />
+                </Item>
+              </HotKeys>
+            );
+          }}
+        />
+      </HotKeys>
     );
   }
 }
