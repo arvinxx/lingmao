@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { Tag, Input, Icon, Popconfirm, message } from 'antd';
 
 import styles from './styles.less';
@@ -28,11 +27,7 @@ interface ILabelSelectStates {
 }
 
 export default class TagInput extends Component<ILabelSelectProps, ILabelSelectStates> {
-  state = {
-    newKey: '',
-    newValue: '',
-    newKeyPlaceHolder: '添加条目',
-  };
+  state = { newKey: '', newValue: '', newKeyPlaceHolder: '添加条目' };
 
   oldKeyChange = (e, id) => {
     this.props.dispatch({
@@ -51,29 +46,21 @@ export default class TagInput extends Component<ILabelSelectProps, ILabelSelectS
     this.setState({ newKey: e.target.value });
   };
   newKeyOnFocus = (e) => {
-    this.setState({
-      newKeyPlaceHolder: '',
-    });
+    this.setState({ newKeyPlaceHolder: '' });
   };
   newKeyOnBlur = () => {
     this.props.dispatch({
       type: 'interview/addDimensionKey',
       payload: this.state.newKey,
     });
-    this.setState({
-      newKeyPlaceHolder: '添加条目',
-      newKey: '',
-    });
+    this.setState({ newKeyPlaceHolder: '添加条目', newKey: '' });
   };
   newKeyOnPressEnter = () => {
     this.props.dispatch({
       type: 'interview/addDimensionKey',
       payload: this.state.newKey,
     });
-    this.setState({
-      newKeyPlaceHolder: '',
-      newKey: '',
-    });
+    this.setState({ newKeyPlaceHolder: '', newKey: '' });
   };
 
   oldValueChange = (e, id, vid) => {
@@ -102,9 +89,7 @@ export default class TagInput extends Component<ILabelSelectProps, ILabelSelectS
       type: 'interview/hideValueInput',
       payload: id,
     });
-    this.setState({
-      newValue: '',
-    });
+    this.setState({ newValue: '' });
   };
   newValueOnConfirm = (id) => {
     const { newValue } = this.state;
@@ -112,9 +97,7 @@ export default class TagInput extends Component<ILabelSelectProps, ILabelSelectS
       type: 'interview/addDimensionValue',
       payload: { id, newValue },
     });
-    this.setState({
-      newValue: '',
-    });
+    this.setState({ newValue: '' });
   };
 
   showValueInput = (id) => {

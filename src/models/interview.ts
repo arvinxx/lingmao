@@ -72,7 +72,6 @@ export default {
 
       dimensions.map((dimension) => {
         let { id, values } = dimension;
-        console.log(dimension);
         id = id === '' ? generateId() : id;
         values.map((value) => {
           let { id } = value;
@@ -97,7 +96,7 @@ export default {
       if (isNull(title)) {
         title = '';
       }
-      if (isNull(selectedValues)) {
+      if (!Array.isArray(selectedValues)) {
         selectedValues = [];
       }
       if (isEmpty(id)) {

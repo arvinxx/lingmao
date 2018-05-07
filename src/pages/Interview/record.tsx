@@ -26,11 +26,33 @@ const UploadProps = {
   action: 'http://localhost:8000/api/upload',
 };
 
+type TRecord = {
+  id: string;
+  text: string;
+  comment: string;
+};
+
+type TInterview = {
+  title: string;
+  records: Array<TRecord>;
+  id: string;
+  dimensions;
+  selectedValues: Array<string>;
+  recordFocusId: string;
+  uploadVisible: boolean;
+  tagVisible: boolean;
+};
+
+interface IInterviewProps {
+  dispatch: any;
+  interview: TInterview;
+  loading: boolean;
+}
 @connect(({ interview, loading }) => ({
   interview,
   loading: loading.models.interview,
 }))
-export default class Interview extends Component<any, any> {
+export default class Interview extends Component<IInterviewProps, any> {
   state = {
     value: 0,
   };
@@ -39,13 +61,43 @@ export default class Interview extends Component<any, any> {
       type: 'interview/fetchDocument',
     });
   }
-  componentDidUnmount() {
-    const { title, records, id, dimensions, selectedValues } = this.props.interview;
-    // this.props.dispatch({
-    //   type: 'interview/saveDocument',
-    //   payload: { title, id, records, dimensions, selectedValues },
-    // });
-  }
+
+  RecordComponent = () => {
+    const minPanelSize = 150;
+    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
+    const loading = this.props.loading;
+    return (
+      <div className={styles.center}>
+        <ReflexContainer orientation="horizontal">
+          <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
+            <div className={styles.wrapper}>
+              <Input className={styles.title} onChange={this.titleChange} value={title} />
+              <RecordList
+                loading={loading}
+                recordFocusId={recordFocusId}
+                records={records}
+                dispatch={this.props.dispatch}
+              />
+            </div>
+          </ReflexElement>
+          <ReflexSplitter>
+            <div className={styles.touch}>
+              <div className={styles['splitter-container']}>
+                <div className={styles.splitter} />
+              </div>
+            </div>
+          </ReflexSplitter>
+          <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
+            <TagInput
+              dimensions={dimensions}
+              selectedValues={selectedValues}
+              dispatch={this.props.dispatch}
+            />
+          </ReflexElement>
+        </ReflexContainer>
+      </div>
+    );
+  };
   onChange = (e) => {
     console.log('radio checked', e.target.value);
     this.setState({
@@ -180,42 +232,14 @@ export default class Interview extends Component<any, any> {
       );
     }
   };
-  RecordComponent = () => {
-    const minPanelSize = 150;
-    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
-    const loading = this.props.loading;
-    return (
-      <div className={styles.center}>
-        <ReflexContainer orientation="horizontal">
-          <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
-            <div className={styles.wrapper}>
-              <Input className={styles.title} onChange={this.titleChange} value={title} />
-              <RecordList
-                loading={loading}
-                recordFocusId={recordFocusId}
-                records={records}
-                dispatch={this.props.dispatch}
-              />
-            </div>
-          </ReflexElement>
-          <ReflexSplitter>
-            <div className={styles.touch}>
-              <div className={styles['splitter-container']}>
-                <div className={styles.splitter} />
-              </div>
-            </div>
-          </ReflexSplitter>
-          <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-            {/*<TagInput*/}
-              {/*dimensions={dimensions}*/}
-              {/*selectedValues={selectedValues}*/}
-              {/*dispatch={this.props.dispatch}*/}
-            {/*/>*/}
-          </ReflexElement>
-        </ReflexContainer>
-      </div>
-    );
-  };
+
+  componentWillUnmount() {
+    const { title, records, id, dimensions, selectedValues } = this.props.interview;
+    this.props.dispatch({
+      type: 'interview/saveDocument',
+      payload: { title, id, records, dimensions, selectedValues },
+    });
+  }
 
   render() {
     const { uploadVisible, tagVisible } = this.props.interview;

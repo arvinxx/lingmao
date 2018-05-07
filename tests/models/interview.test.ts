@@ -56,7 +56,6 @@ describe('Reducers', () => {
           createdAt: '2018-05-07T11:47:46.881Z',
           title: '',
           updatedAt: '2018-05-07T11:47:49.701Z',
-          selectedValues: [],
           dimensions: [
             {
               key: '',
