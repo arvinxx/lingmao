@@ -41,6 +41,7 @@
     "qs": "^6.5.2",
     "rc-drawer-menu": "^0.5.7",
     "react-container-query": "^0.9.1",
+    "react-contextmenu": "^2.9.2",
     "react-document-title": "^2.0.3",
     "react-fittext": "^1.0.0",
     "react-hot-loader": "^4.0.1",
