@@ -12,7 +12,7 @@ const RadioGroup = Radio.Group;
 const TreeNode = Tree.TreeNode;
 
 @connect(({ persona }) => ({ persona }))
-export default class Index extends Component {
+export default class Index extends Component<any> {
   state = {
     inputValue: 1,
     value: 1,
@@ -107,7 +107,7 @@ export default class Index extends Component {
     if (exportVisible) {
       return (
         <Modal
-          wrapClassName={styles['modal-wapper']}
+          wrapClassName={styles['modal-wrapper']}
           title="导出画像"
           visible={exportVisible}
           onOk={this.exportConfirm}
