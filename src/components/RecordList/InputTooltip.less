@@ -1,0 +1,144 @@
+@import '../../styles/themes/default';
+
+.editor > * > * + * {
+  margin-top: 1em;
+}
+
+.input {
+  display: flex;
+  &::before {
+    //display: inline-block;
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: @dark-5;
+    border-radius: 50%;
+    margin-right: 11px;
+    margin-top: 8px;
+  }
+}
+
+.menu > * {
+  display: inline-block;
+}
+
+.hover-menu {
+  position: absolute;
+  z-index: 10;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0;
+  background-color: @white-1;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+  transition: opacity 0.75s;
+
+  .button-container {
+    height: 100%;
+    padding: 8px 6px;
+    color: @dark-6;
+    cursor: pointer;
+    &[data-active='true'] {
+      color: @white-5;
+    }
+    &:hover {
+      background: @white-2;
+      .button {
+        color: @dark-2;
+      }
+    }
+  }
+}
+
+.button-text {
+  font-size: @font-size-sm;
+  vertical-align: text-bottom;
+}
+
+.underlines {
+  border-bottom: 2px dotted @primary-5;
+  &:hover {
+    border-bottom-color: @primary-4;
+  }
+}
+
+.icon-delete {
+  color: @white-5;
+  opacity: 0;
+  cursor: pointer;
+  transition: @animation-duration-base;
+  &:active {
+    color: @dark-2;
+    transform: scale(0.9);
+  }
+  &:hover {
+    color: @white-7;
+    transform: scale(1.1);
+  }
+}
+
+.tag-pop {
+  :global {
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner-content {
+      padding: 0;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    .ant-popover-inner {
+      box-shadow: none;
+      background: none;
+    }
+    .ant-popover-placement-top {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.tag-container {
+  display: flex;
+
+  .input-container {
+    display: flex;
+    position: relative;
+    .tag {
+      border-radius: 20px !important;
+      max-width: 80px;
+      opacity: 0.9;
+      background: @primary-1;
+      border: 1px solid @primary-2;
+      margin-top: 10px;
+      padding: 0 11px;
+      height: 24px;
+      &:hover,
+      &:active {
+        border-color: @primary-2;
+      }
+    }
+    &:hover .tag {
+      background-color: @base-white;
+      border-color: @base-white;
+      box-shadow: @shadow-1;
+      transform: scale(1.1);
+    }
+
+    .value-delete {
+      .icon-delete;
+      font-size: @font-size-sm;
+      position: absolute;
+      right: 4px;
+      top: 18px;
+      display: flex;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .tag:hover ~ .value-delete {
+      opacity: 1;
+    }
+  }
+}

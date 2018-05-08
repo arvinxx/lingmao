@@ -3,11 +3,14 @@ import { List, Input } from 'antd';
 import { isEmpty } from 'lodash';
 import { HotKeys } from 'react-hotkeys';
 
-import './index.less';
+import InputTooltip from './InputTooltip';
+
+import styles from './index.less';
 
 const { Item } = List;
 const map = {
   deleteRecord: ['del', 'backspace'],
+  addNewRecord: 'enter',
 };
 
 interface IRecord {
@@ -88,7 +91,7 @@ export default class RecordList extends Component<RecordListProps, any> {
     const { records, recordFocusId, loading } = this.props;
 
     return (
-      <HotKeys keyMap={map}>
+      <HotKeys keyMap={map} className={styles.list}>
         <List
           size="small"
           itemLayout="horizontal"
@@ -102,35 +105,13 @@ export default class RecordList extends Component<RecordListProps, any> {
                   deleteRecord: () => {
                     this.deleteRecord(id, text);
                   },
+                  addRecord: () => {
+                    this.addRecord(id);
+                  },
                 }}
               >
                 <Item>
-                  <Item.Meta
-                    key={id + 'meta'}
-                    title={
-                      <Input
-                        value={text}
-                        id={id + 'text'}
-                        onChange={(e) => {
-                          this.changeRecordText(e, id);
-                        }}
-                        onFocus={() => {
-                          this.changeRecordFocusId(id);
-                        }}
-                        autoFocus={recordFocusId === id}
-                        onPressEnter={() => {
-                          this.addRecord(id);
-                        }}
-                      />
-                    }
-                    //TODO: 按 Tab 编辑描述
-                    // description=
-                    //   () => {
-                    //   if (comment !== ''||) {
-                    //     return <InputCell id={id} text={comment} type="comment" dispatch={dispatch} />;
-                    //   } else return '';
-                    // }
-                  />
+                  <InputTooltip />
                 </Item>
               </HotKeys>
             );
