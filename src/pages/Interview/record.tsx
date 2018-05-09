@@ -61,43 +61,13 @@ export default class Interview extends Component<IInterviewProps, any> {
       type: 'interview/fetchDocument',
     });
   }
-
-  RecordComponent = () => {
-    const minPanelSize = 150;
-    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
-    const loading = this.props.loading;
-    return (
-      <div className={styles.center}>
-        <ReflexContainer orientation="horizontal">
-          <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
-            <div className={styles.wrapper}>
-              <Input className={styles.title} onChange={this.titleChange} value={title} />
-              <RecordList
-                loading={loading}
-                recordFocusId={recordFocusId}
-                records={records}
-                dispatch={this.props.dispatch}
-              />
-            </div>
-          </ReflexElement>
-          <ReflexSplitter>
-            <div className={styles.touch}>
-              <div className={styles['splitter-container']}>
-                <div className={styles.splitter} />
-              </div>
-            </div>
-          </ReflexSplitter>
-          <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-            <TagInput
-              dimensions={dimensions}
-              selectedValues={selectedValues}
-              dispatch={this.props.dispatch}
-            />
-          </ReflexElement>
-        </ReflexContainer>
-      </div>
-    );
-  };
+  componentWillUnmount() {
+    const { title, records, id, dimensions, selectedValues } = this.props.interview;
+    this.props.dispatch({
+      type: 'interview/saveDocument',
+      payload: { title, id, records, dimensions, selectedValues },
+    });
+  }
   onChange = (e) => {
     console.log('radio checked', e.target.value);
     this.setState({
@@ -126,7 +96,7 @@ export default class Interview extends Component<IInterviewProps, any> {
     });
   };
 
-  AdvancedOpts = () => {
+  AdvancedOptsComponent = () => {
     return (
       <RadioGroup
         className={styles['radio-group']}
@@ -211,7 +181,7 @@ export default class Interview extends Component<IInterviewProps, any> {
               <Collapse bordered={false} defaultActiveKey={['1']}>
                 <Panel className={styles['adv-opts']} header="高级选项" key="1">
                   <div className={styles.description}>格式化参数</div>
-                  {this.AdvancedOpts()}
+                  {this.AdvancedOptsComponent()}
                   <div className={styles.delete}>
                     删除前
                     <InputNumber
@@ -232,14 +202,42 @@ export default class Interview extends Component<IInterviewProps, any> {
       );
     }
   };
-
-  componentWillUnmount() {
-    const { title, records, id, dimensions, selectedValues } = this.props.interview;
-    this.props.dispatch({
-      type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedValues },
-    });
-  }
+  RecordComponent = () => {
+    const minPanelSize = 150;
+    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
+    const loading = this.props.loading;
+    return (
+      <div className={styles.center}>
+        <ReflexContainer orientation="horizontal">
+          <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
+            <div className={styles.wrapper}>
+              <Input className={styles.title} onChange={this.titleChange} value={title} />
+              <RecordList
+                loading={loading}
+                recordFocusId={recordFocusId}
+                records={records}
+                dispatch={this.props.dispatch}
+              />
+            </div>
+          </ReflexElement>
+          <ReflexSplitter>
+            <div className={styles.touch}>
+              <div className={styles['splitter-container']}>
+                <div className={styles.splitter} />
+              </div>
+            </div>
+          </ReflexSplitter>
+          <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
+            <TagInput
+              dimensions={dimensions}
+              selectedValues={selectedValues}
+              dispatch={this.props.dispatch}
+            />
+          </ReflexElement>
+        </ReflexContainer>
+      </div>
+    );
+  };
 
   render() {
     const { uploadVisible, tagVisible } = this.props.interview;

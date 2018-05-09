@@ -3,8 +3,8 @@ import { Tabs, Icon } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 import { drop, dropRight, last } from 'lodash';
-
 import pathToRegexp from 'path-to-regexp';
+import HeaderSearch from './HeaderSearch';
 
 import router from 'umi/router';
 
@@ -100,6 +100,16 @@ export default class Header extends Component<IHeaderProps, any> {
           })}
         </Tabs>
         <div className={styles['tool-container']}>
+          <HeaderSearch
+            placeholder="搜索"
+            dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
+            onSearch={(value) => {
+              console.log('input', value);
+            }}
+            onPressEnter={(value) => {
+              console.log('enter', value);
+            }}
+          />
           {right.map((item) => {
             const { text, dispatch } = item;
             return (

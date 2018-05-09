@@ -4,7 +4,7 @@ import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import { Link } from 'dva/router';
 import NoticeIcon from '../NoticeIcon';
-import HeaderSearch from '../HeaderSearch';
+import HeaderSearch from './HeaderSearch';
 import styles from './index.less';
 
 export default class GlobalHeader extends PureComponent {

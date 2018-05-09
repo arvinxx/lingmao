@@ -31,12 +31,6 @@ export const interview = {
   center: [{ text: '记录', path: 'record' }, { text: '标签', path: 'tag' }],
   right: [
     {
-      text: 'search',
-      dispatch: {
-        type: '',
-      },
-    },
-    {
       text: 'tags-o',
       dispatch: {
         type: 'interview/changeTagVisible',
@@ -107,17 +101,11 @@ export const persona = {
     },
   ],
   center: [
-    { text: '小图模式', path: 'table' },
-    { text: '中图模式', path: 'validation' },
-    { text: '右图模式', path: 'redution' },
+    { text: '小图模式', path: 'small' },
+    { text: '中图模式', path: 'middle' },
+    { text: '右图模式', path: 'right' },
   ],
   right: [
-    {
-      text: 'search',
-      dispatch: {
-        type: '',
-      },
-    },
     {
       text: 'to-top',
       dispatch: {

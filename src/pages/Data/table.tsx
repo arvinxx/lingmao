@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, message, Popconfirm, Divider, Card, Form } from 'antd';
 import { connect } from 'dva';
-import styles from './style.less';
+import styles from './table.less';
 
 const tableData = [
   {

@@ -2,9 +2,18 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Icon, AutoComplete } from 'antd';
 import classNames from 'classnames';
-import styles from './index.less';
+import styles from './HeaderSearch.less';
 
-export default class HeaderSearch extends PureComponent {
+interface HeaderSearchProps {
+  placeholder?: string;
+  dataSource?: Array<string>;
+  onSearch?: (value: string) => void;
+  onChange?: (value: string) => void;
+  onPressEnter?: (value: string) => void;
+  style?: React.CSSProperties;
+}
+
+export default class HeaderSearch extends PureComponent<HeaderSearchProps, any> {
   static defaultProps = {
     defaultActiveFirstOption: false,
     onPressEnter: () => {},
@@ -34,36 +43,33 @@ export default class HeaderSearch extends PureComponent {
         this.props.onPressEnter(this.state.value); // Fix duplicate onPressEnter
       }, 0);
     }
-  }
+  };
   onChange = (value) => {
     this.setState({ value });
     if (this.props.onChange) {
       this.props.onChange();
     }
-  }
+  };
   enterSearchMode = () => {
     this.setState({ searchMode: true }, () => {
       if (this.state.searchMode) {
         this.input.focus();
       }
     });
-  }
+  };
   leaveSearchMode = () => {
     this.setState({
       searchMode: false,
       value: '',
     });
-  }
+  };
   render() {
     const { className, placeholder, ...restProps } = this.props;
     const inputClass = classNames(styles.input, {
       [styles.show]: this.state.searchMode,
     });
     return (
-      <span
-        className={classNames(className, styles.headerSearch)}
-        onClick={this.enterSearchMode}
-      >
+      <span className={classNames(className, styles.headerSearch)} onClick={this.enterSearchMode}>
         <Icon type="search" key="Icon" />
         <AutoComplete
           key="AutoComplete"
@@ -74,7 +80,9 @@ export default class HeaderSearch extends PureComponent {
         >
           <Input
             placeholder={placeholder}
-            ref={(node) => { this.input = node; }}
+            ref={(node) => {
+              this.input = node;
+            }}
             onKeyDown={this.onKeyDown}
             onBlur={this.leaveSearchMode}
           />
