@@ -71,6 +71,7 @@
     "lint-staged": "^6.0.0",
     "mockdate": "^2.0.2",
     "mockjs": "^1.0.1-beta3",
+    "prettier": "^1.12.1",
     "pro-download": "^1.0.1",
     "regenerator-runtime": "^0.11.1",
     "roadhog-api-doc": "latest",
