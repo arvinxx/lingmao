@@ -71,7 +71,9 @@ export const data = {
   right: [
     {
       text: 'tablet',
-      dispatch: {},
+      dispatch: {
+        type: 'interview/changeTabletVisible',
+      },
     },
     'desktop',
   ],

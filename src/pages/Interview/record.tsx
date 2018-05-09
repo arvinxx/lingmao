@@ -169,7 +169,7 @@ export default class Interview extends Component<IInterviewProps, any> {
                 size="small"
                 dataSource={data.slice(0, 3)}
                 renderItem={(item) => (
-                  <div className={styles['pre-container']}>
+                  <div className={styles['pre-contatiainer']}>
                     <div className={styles.circle} />
                     <Ellipsis length={20}>{item}</Ellipsis>
                   </div>
