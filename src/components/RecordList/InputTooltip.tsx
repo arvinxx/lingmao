@@ -1,45 +1,34 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
+import Plain from 'slate-plain-serializer';
 import PopupMenu from './PopupMenu';
 
 import styles from './InputTooltip.less';
 
-const data = {
-  document: {
-    nodes: [
-      {
-        object: 'block',
-        type: 'paragraph',
-        nodes: [
-          {
-            object: 'text',
-            leaves: [
-              {
-                text:
-                  'This example shows how you can make a hovering menu appear above your content, which you can use to make text , or anything else you might want to do!',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-};
+interface IHoveringMenuProps {
+  dispatch: any;
+  id: string;
+  text: string;
+  recordFocusId: string;
+}
 
-export default class HoveringMenu extends Component<any> {
+interface IHoveringMenuStates {
+  value: Value;
+  tagValue: string;
+}
+
+export default class HoveringMenu extends Component<IHoveringMenuProps, IHoveringMenuStates> {
   state = {
-    value: Value.fromJSON(data),
+    value: Plain.deserialize(this.props.text ? this.props.text : ''),
     tagValue: '',
   };
   menu?;
-
   menuRef = (menu) => {
+    console.log(menu);
     this.menu = menu;
   };
-
   componentDidMount() {
     this.updateMenu();
   }
@@ -48,6 +37,18 @@ export default class HoveringMenu extends Component<any> {
     this.updateMenu();
   }
 
+  onChange = ({ value }) => {
+    const { dispatch, id } = this.props;
+    if (value.document != this.state.value.document) {
+      const newText = Plain.serialize(value);
+      dispatch({
+        type: 'interview/changeRecordText',
+        payload: { id, newText },
+      });
+      console.log(newText);
+    }
+    this.setState({ value });
+  };
   updateMenu = () => {
     const { value } = this.state;
     const menu = this.menu;
@@ -65,16 +66,23 @@ export default class HoveringMenu extends Component<any> {
     menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
     menu.style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`;
   };
-  onChange = (data) => {
-    console.log(data);
-    this.setState({ value: data.value });
-  };
   onKeyDown = (event, change) => {
-    console.log(event.keyCode);
-    if (event.keyCode === 13) {
+    const { id, dispatch } = this.props;
+    console.log(event.Code);
+
+    // PressEnter
+    if (event.Code === 13) {
+      dispatch({
+        type: 'interview/addRecord',
+        payload: id,
+      });
       return false;
     }
   };
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ value: Plain.deserialize(this.props.text) });
+  }
 
   changeTagValue = (e) => {
     this.setState({ tagValue: e.target.value });

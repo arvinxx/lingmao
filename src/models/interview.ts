@@ -1,5 +1,5 @@
 import { queryDocument, saveDocument } from '../services/interview';
-import { isNull, isEmpty } from 'lodash';
+import { isNull, isEmpty, concat } from 'lodash';
 import { findIndexById, generateId } from '../utils/utils';
 type TRecord = {
   id: '';
@@ -97,12 +97,11 @@ export default {
     },
 
     addRecord(state, { payload: id }) {
-      const records = state.records;
+      const records = concat(state.records);
       const index = findIndexById(records, id);
       records.splice(index + 1, 0, {
         text: '',
         id: generateId(),
-        comment: '',
       });
       return {
         ...state,
@@ -112,7 +111,7 @@ export default {
     },
     changeRecordText(state, { payload }) {
       const { id, newText } = payload;
-      const records = state.records;
+      const records = concat(state.records);
       const index = findIndexById(records, id);
       records[index].text = newText;
       return {

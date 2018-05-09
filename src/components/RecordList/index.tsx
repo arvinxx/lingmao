@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import { List, Input } from 'antd';
+import { List } from 'antd';
 import { isEmpty } from 'lodash';
-import { HotKeys } from 'react-hotkeys';
 
 import InputTooltip from './InputTooltip';
 
 import styles from './index.less';
 
 const { Item } = List;
-const map = {
-  deleteRecord: ['del', 'backspace'],
-  addNewRecord: 'enter',
-};
 
 interface IRecord {
   id: string;
@@ -91,33 +86,27 @@ export default class RecordList extends Component<RecordListProps, any> {
     const { records, recordFocusId, loading } = this.props;
 
     return (
-      <HotKeys keyMap={map} className={styles.list}>
+      <div className={styles.list}>
         <List
           size="small"
           itemLayout="horizontal"
           dataSource={records}
           loading={loading}
           renderItem={(record: IRecord) => {
-            const { comment, id, text } = record;
+            const { id, text } = record;
             return (
-              <HotKeys
-                handlers={{
-                  deleteRecord: () => {
-                    this.deleteRecord(id, text);
-                  },
-                  addRecord: () => {
-                    this.addRecord(id);
-                  },
-                }}
-              >
-                <Item>
-                  <InputTooltip />
-                </Item>
-              </HotKeys>
+              <Item>
+                <InputTooltip
+                  id={id}
+                  text={text}
+                  recordFocusId={recordFocusId}
+                  dispatch={this.props.dispatch}
+                />
+              </Item>
             );
           }}
         />
-      </HotKeys>
+      </div>
     );
   }
 }

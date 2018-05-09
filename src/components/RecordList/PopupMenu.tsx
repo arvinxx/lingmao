@@ -1,8 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, Ref, RefObject } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './PopupMenu.less';
+import { Value } from 'slate';
 
-export default class PopupMenu extends Component<any> {
+interface IPopupMenuProps {
+  menuRef: Ref<string>;
+  onChange: Function;
+  value: Value;
+}
+
+export default class PopupMenu extends Component<IPopupMenuProps> {
   checkState(type) {
     const { value } = this.props;
     return value.activeMarks.some((mark) => mark.type === type);
