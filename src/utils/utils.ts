@@ -53,7 +53,7 @@ export function getTimeDistance(type) {
 }
 
 export function getPlainNode(nodeList, parentPath = '') {
-  const arr = [];
+  const arr: any[] = [];
   nodeList.forEach((node) => {
     const item = node;
     item.path = `${parentPath}/${item.path || ''}`.replace(/\/+/g, '/');
@@ -129,8 +129,8 @@ function getRelation(str1, str2) {
   return 3;
 }
 
-function getRenderArr(routes: Array<any>): Array {
-  let renderArr = [];
+function getRenderArr(routes: Array<any>): Array<any> {
+  let renderArr: any[] = [];
   renderArr.push(routes[0]);
   for (let i = 1; i < routes.length; i += 1) {
     let isAdd = false;
@@ -151,7 +151,7 @@ function getRenderArr(routes: Array<any>): Array {
  * @param {string} path
  * @param {routerData} routerData
  */
-export function getRoutes(path, routerData) {
+export function getRoutes(path: string, routerData): Array<any> {
   let routes = Object.keys(routerData).filter(
     (routePath) => routePath.indexOf(path) === 0 && routePath !== path
   );
@@ -161,7 +161,7 @@ export function getRoutes(path, routerData) {
   // Get the route to be rendered to remove the deep rendering
   const renderArr = getRenderArr(routes);
   // Conversion and stitching parameters
-  const renderRoutes = renderArr.map((item) => {
+  return renderArr.map((item) => {
     const exact = !routes.some((route) => route !== item && getRelation(route, item) === 1);
     return {
       ...routerData[`${path}${item}`],
@@ -170,7 +170,6 @@ export function getRoutes(path, routerData) {
       exact,
     };
   });
-  return renderRoutes;
 }
 
 export function isUrl(path) {

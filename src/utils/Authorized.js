@@ -1,8 +1,7 @@
-import RenderAuthorized from '../components/Authorized';
+import { Authorized as RenderAuthorized } from '../components';
 import { getAuthority } from './authority';
 
-let Authorized = RenderAuthorized(getAuthority()); // eslint-disable-line
-
+let Authorized = RenderAuthorized(getAuthority());
 // Reload the rights component
 const reloadAuthorized = () => {
   Authorized = RenderAuthorized(getAuthority());

@@ -28,16 +28,15 @@ const getRedirect = (item) => {
 getMenuData().forEach(getRedirect);
 
 interface IBasicLayoutProps {
-  collapsed: boolean;
-  location: any;
-  dispatch: any;
+  collapsed?: boolean;
+  location?: any;
+  dispatch?: any;
 }
 
 @withRouter
 @connect(({ user, global }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
-
 }))
 export default class BasicLayout extends Component<IBasicLayoutProps> {
   handleMenuCollapse = (collapsedState) => {
