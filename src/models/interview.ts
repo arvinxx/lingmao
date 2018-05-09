@@ -10,28 +10,9 @@ export default {
   namespace: 'interview',
   state: {
     title: '',
-    records: [
-      {
-        id: '',
-        text: '',
-        comment: '',
-      },
-    ],
+    records: [],
     id: '',
-    dimensions: [
-      {
-        id: '',
-        key: '',
-        values: [
-          {
-            id: '',
-            text: '',
-            editable: false,
-          },
-        ],
-        inputVisible: false,
-      },
-    ],
+    dimensions: [],
     tags: [],
     selectedValues: [],
     uploadVisible: true,
@@ -85,13 +66,16 @@ export default {
         dimension.id = id;
         dimension.inputVisible = false;
       });
-
-      records.map((record) => {
-        let id = record.id;
-        id = id === '' ? generateId() : id;
-        record.id = id;
-        delete record._id;
-      });
+      if (records.length > 0) {
+        records.map((record) => {
+          let id = record.id;
+          id = id === '' ? generateId() : id;
+          record.id = id;
+          delete record._id;
+        });
+      } else {
+        records = [{ id: generateId(), text: '' }];
+      }
 
       if (isNull(title)) {
         title = '';

@@ -1,0 +1,39 @@
+@import '../../styles/themes/default';
+
+.menu > * {
+  display: inline-block;
+}
+
+.hover-menu {
+  position: absolute;
+  z-index: 10;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0;
+  background-color: @white-1;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+  transition: opacity 0.75s;
+
+  .button-container {
+    height: 100%;
+    padding: 8px 6px;
+    color: @dark-6;
+    cursor: pointer;
+    &[data-active='true'] {
+      color: @white-5;
+    }
+    &:hover {
+      background: @white-2;
+      .button {
+        color: @dark-2;
+      }
+    }
+  }
+}
+
+.button-text {
+  font-size: @font-size-sm;
+  vertical-align: text-bottom;
+}

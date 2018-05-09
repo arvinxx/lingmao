@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
+import PopupMenu from './PopupMenu';
 
 import styles from './InputTooltip.less';
 
@@ -34,6 +35,19 @@ export default class HoveringMenu extends Component<any> {
     tagValue: '',
   };
   menu?;
+
+  menuRef = (menu) => {
+    this.menu = menu;
+  };
+
+  componentDidMount() {
+    this.updateMenu();
+  }
+
+  componentDidUpdate() {
+    this.updateMenu();
+  }
+
   updateMenu = () => {
     const { value } = this.state;
     const menu = this.menu;
@@ -51,16 +65,22 @@ export default class HoveringMenu extends Component<any> {
     menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
     menu.style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`;
   };
-  onChange = ({ value }) => {
-    this.setState({ value });
+  onChange = (data) => {
+    console.log(data);
+    this.setState({ value: data.value });
   };
+  onKeyDown = (event, change) => {
+    console.log(event.keyCode);
+    if (event.keyCode === 13) {
+      return false;
+    }
+  };
+
   changeTagValue = (e) => {
     this.setState({ tagValue: e.target.value });
   };
-  menuRef = (menu) => {
-    this.menu = menu;
-  };
-  renderMark = (props) => {
+
+  underLineComponent = (props) => {
     const { children, attributes } = props;
     return (
       <Popover
@@ -89,58 +109,19 @@ export default class HoveringMenu extends Component<any> {
     );
   };
 
-  componentDidMount() {
-    this.updateMenu();
-  }
-
-  componentDidUpdate() {
-    this.updateMenu();
-  }
-
   render() {
     return (
       <div className={styles.input}>
         <div className={styles.editor}>
-          <Editor value={this.state.value} onChange={this.onChange} renderMark={this.renderMark} />
+          <Editor
+            value={this.state.value}
+            onKeyDown={this.onKeyDown}
+            onChange={this.onChange}
+            renderMark={this.underLineComponent}
+          />
         </div>
-        <Menu menuRef={this.menuRef} value={this.state.value} onChange={this.onChange} />
+        <PopupMenu menuRef={this.menuRef} value={this.state.value} onChange={this.onChange} />
       </div>
-    );
-  }
-}
-
-class Menu extends Component<any> {
-  checkState(type) {
-    const { value } = this.props;
-    return value.activeMarks.some((mark) => mark.type === type);
-  }
-
-  onClickMark(event, type) {
-    const { value, onChange } = this.props;
-    event.preventDefault();
-    const change = value.change().toggleMark(type);
-    onChange(change);
-  }
-
-  renderMarkButton(type, text) {
-    const isActive = this.checkState(type);
-    const onMouseDown = (event) => this.onClickMark(event, type);
-    return (
-      <div className={styles['button-container']} onMouseDown={onMouseDown} data-active={isActive}>
-        <span className={styles['button-text']}>{text}</span>
-      </div>
-    );
-  }
-
-  render() {
-    const root = window.document.getElementById('root');
-
-    return ReactDOM.createPortal(
-      <div className={styles.menu + ' ' + styles['hover-menu']} ref={this.props.menuRef}>
-        {this.renderMarkButton('bold', '提取原文')}
-        {this.renderMarkButton('italic', '新增标签')}
-      </div>,
-      root
     );
   }
 }
