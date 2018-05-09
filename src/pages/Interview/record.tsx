@@ -4,6 +4,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { Radio, List, Collapse, Menu, Input, Button, InputNumber, Icon } from 'antd';
 
 import { TagInput, RecordList, Upload, Ellipsis } from '../../components';
+import { TTag } from '../../models/interview';
 
 import 'react-reflex/styles.css';
 import styles from './record.less';
@@ -18,8 +19,6 @@ const data = [
   '考察重点在于分析问题本质，抓住问题本质的能力',
 ];
 
-const labels = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-
 const UploadProps = {
   name: 'file',
   multiple: true,
@@ -32,7 +31,7 @@ type TRecord = {
   comment: string;
 };
 
-type TInterview = {
+export type TInterview = {
   title: string;
   records: Array<TRecord>;
   id: string;
@@ -41,6 +40,7 @@ type TInterview = {
   recordFocusId: string;
   uploadVisible: boolean;
   tagVisible: boolean;
+  tags: Array<TTag>;
 };
 
 interface IInterviewProps {
@@ -79,15 +79,6 @@ export default class Interview extends Component<IInterviewProps, any> {
     console.log('click ', e);
   };
 
-  getLabels = (item) => {
-    return (
-      <Menu.Item className={styles.labels} key={item}>
-        {item}
-        <Icon type="close" className={styles.close} />
-      </Menu.Item>
-    );
-  };
-
   titleChange = (e) => {
     const text = e.target.value;
     this.props.dispatch({
@@ -118,7 +109,7 @@ export default class Interview extends Component<IInterviewProps, any> {
       </RadioGroup>
     );
   };
-  LabelComponent = (tagVisible, labels) => {
+  LabelComponent = (tagVisible, tags) => {
     if (tagVisible) {
       return (
         <div className={styles.right}>
@@ -130,7 +121,15 @@ export default class Interview extends Component<IInterviewProps, any> {
             defaultOpenKeys={['sub1']}
             mode="inline"
           >
-            {labels.map((label) => this.getLabels(label))}
+            {tags.map((tag) => {
+              const { text, id } = tag;
+              return (
+                <Menu.Item className={styles.labels} key={id}>
+                  {text}
+                  <Icon type="close" className={styles.close} />
+                </Menu.Item>
+              );
+            })}
           </Menu>
         </div>
       );
@@ -204,7 +203,14 @@ export default class Interview extends Component<IInterviewProps, any> {
   };
   RecordComponent = () => {
     const minPanelSize = 150;
-    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
+    const {
+      title,
+      records,
+      dimensions,
+      selectedValues,
+      recordFocusId,
+      tags,
+    } = this.props.interview;
     const loading = this.props.loading;
     return (
       <div className={styles.center}>
@@ -217,6 +223,7 @@ export default class Interview extends Component<IInterviewProps, any> {
                 recordFocusId={recordFocusId}
                 records={records}
                 dispatch={this.props.dispatch}
+                tags={tags}
               />
             </div>
           </ReflexElement>
@@ -240,12 +247,12 @@ export default class Interview extends Component<IInterviewProps, any> {
   };
 
   render() {
-    const { uploadVisible, tagVisible } = this.props.interview;
+    const { uploadVisible, tagVisible, tags } = this.props.interview;
     return (
       <div className={styles.container}>
         {this.UploadComponent(uploadVisible)}
         {this.RecordComponent()}
-        {this.LabelComponent(tagVisible, labels)}
+        {this.LabelComponent(tagVisible, tags)}
       </div>
     );
   }

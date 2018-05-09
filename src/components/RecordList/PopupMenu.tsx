@@ -4,7 +4,7 @@ import styles from './PopupMenu.less';
 import { Value } from 'slate';
 
 interface IPopupMenuProps {
-  menuRef: Ref<string>;
+  menuRef: any;
   onChange: Function;
   value: Value;
 }

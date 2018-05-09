@@ -611,7 +611,7 @@ describe('Reducers', () => {
         dimensions: [],
       };
       const action = {
-        type: 'interview/addDimension',
+        type: 'interview/addDimensionKey',
         payload: 'dsa',
       };
       expect(reducer(state, action)).toEqual({
@@ -634,7 +634,7 @@ describe('Reducers', () => {
         dimensions: [],
       };
       const action = {
-        type: 'interview/addDimension',
+        type: 'interview/addDimensionKey',
         payload: '',
       };
       expect(reducer(state, action)).toEqual({
@@ -1058,6 +1058,131 @@ describe('Reducers', () => {
 
     expect(reducer(state, action)).toEqual({
       uploadVisible: false,
+    });
+  });
+
+  describe('addTag', () => {
+    it("should add a Tag key if it's not empty", () => {
+      set('1/1/2000');
+
+      const reducer = reducers.addTag;
+      const state = {
+        tags: [],
+      };
+      const action = {
+        type: 'interview/addTag',
+        payload: 'dsa',
+      };
+      expect(reducer(state, action)).toEqual({
+        tags: [
+          {
+            text: 'dsa',
+            id: generateId(),
+          },
+        ],
+      });
+
+      reset();
+    });
+    it("should remain if it's empty", () => {
+      set('1/1/2000'); // Mock datetime
+
+      const reducer = reducers.addTag;
+      const state = {
+        tags: [],
+      };
+      const action = {
+        type: 'interview/addTag',
+        payload: '',
+      };
+      expect(reducer(state, action)).toEqual({
+        tags: [],
+      });
+
+      reset(); // reset to realtime
+    });
+  });
+  it('deleteTag', () => {
+    const reducers = model.reducers;
+    const reducer = reducers.deleteTag;
+    const state = {
+      tags: [
+        {
+          id: '1',
+          text: '测试1',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+        {
+          id: '2',
+          text: '测试2',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+      ],
+    };
+    const action = {
+      type: 'interview/deleteTag',
+      payload: '2',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tags: [
+        {
+          id: '1',
+          text: '测试1',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+      ],
+    });
+  });
+  it('changeTagText', () => {
+    const reducers = model.reducers;
+    const reducer = reducers.changeTagText;
+    const state = {
+      tags: [
+        {
+          id: '1',
+          text: '测试1',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+        {
+          id: '2',
+          text: '测试2',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+      ],
+    };
+    const action = {
+      type: 'interview/changeTagText',
+      payload: { id: '2', newText: 'hello' },
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tags: [
+        {
+          id: '1',
+          text: '测试1',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+        {
+          id: '2',
+          text: 'hello',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+      ],
     });
   });
 });

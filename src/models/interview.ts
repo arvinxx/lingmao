@@ -6,6 +6,18 @@ export type TRecord = {
   id: string;
   text: string;
 };
+export type TTag = {
+  id: string;
+  text: string;
+  refText: string;
+  refId: string;
+  groupId: string;
+};
+export type TTagGroup = {
+  text: string;
+  id: string;
+  tagId: Array<string>;
+};
 export default {
   namespace: 'interview',
   state: {
@@ -14,7 +26,29 @@ export default {
     recordFocusId: '',
     id: '',
     dimensions: [],
-    tags: [],
+    tags: [
+      {
+        id: '1',
+        text: '测试1',
+        refText: '',
+        refId: '',
+        groupId: '',
+      },
+      {
+        id: '2',
+        text: '测试2',
+        refText: '',
+        refId: '',
+        groupId: '',
+      },
+    ],
+    tagGroups: [
+      {
+        text: '',
+        id: '',
+        tagId: [],
+      },
+    ],
     selectedValues: [],
     uploadVisible: true,
     tagVisible: true,
@@ -278,6 +312,32 @@ export default {
 
     changeSelectedValues(state, { payload: selectedValues }) {
       return { ...state, selectedValues };
+    },
+
+    addTag(state, { payload: text }) {
+      if (text === '') {
+        return state;
+      } else
+        return {
+          ...state,
+          tags: [...state.tags, { text, id: generateId() }],
+        };
+    },
+    changeTagText(state, { payload }) {
+      const { id, newText } = payload;
+      const tags: Array<TTag> = concat(state.tags);
+      const index = findIndexById(tags, id);
+      tags[index].text = newText;
+      return {
+        ...state,
+        tags,
+      };
+    },
+    deleteTag(state, { payload: id }) {
+      return {
+        ...state,
+        tags: state.tags.filter((tag) => tag.id !== id),
+      };
     },
   },
 };

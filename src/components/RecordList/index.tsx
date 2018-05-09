@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { List } from 'antd';
 import { isEmpty } from 'lodash';
-import { TRecord } from '../../models/interview';
+import { TRecord, TTag } from '../../models/interview';
 
 import InputTooltip from './InputTooltip';
 
@@ -14,6 +14,7 @@ interface RecordListProps {
   recordFocusId: string;
   dispatch: any;
   loading: any;
+  tags: Array<TTag>;
 }
 
 export default class RecordList extends Component<RecordListProps, any> {
@@ -78,7 +79,7 @@ export default class RecordList extends Component<RecordListProps, any> {
   };
 
   render() {
-    const { records, recordFocusId, loading, dispatch } = this.props;
+    const { records, recordFocusId, loading, dispatch, tags } = this.props;
 
     return (
       <div className={styles.list}>
@@ -96,6 +97,7 @@ export default class RecordList extends Component<RecordListProps, any> {
                   text={text}
                   recordFocusId={recordFocusId}
                   dispatch={dispatch}
+                  tags={tags}
                 />
               </Item>
             );

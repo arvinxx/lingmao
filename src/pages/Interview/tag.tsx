@@ -1,21 +1,37 @@
 import React, { Component, ReactNode } from 'react';
 import styles from './tag.less';
 import { Collapse, Tag, Modal, Input } from 'antd';
+import { connect } from 'dva';
+
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+import { TTag } from '../../models/interview';
+import { TInterview } from './record';
 
 const Panel = Collapse.Panel;
 const CheckableTag = Tag.CheckableTag;
-const text = (
-  <p style={{ paddingLeft: 24 }}>
-    A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found
-    as a welcome guest in many households across the world.
-  </p>
-);
 
-const tags = ['nian dasd ', 2, 3, 4, 5, 6];
-const tags2 = [9, 32, 1453];
-const tags4 = [3125, 54367];
-export default class Index extends Component {
+const tags2 = [
+  { id: '5345234', text: 'ddsd' },
+  { id: '42366355', text: 'ddsd' },
+  { id: '534673552423', text: 'ddsd' },
+];
+const tags3 = [
+  { id: '6457676556', text: 'sawe' },
+  { id: '43276443', text: 'rwe 而' },
+  { id: '64856893423', text: '儿童体验' },
+];
+
+interface ITagsProps {
+  dispatch: any;
+  interview: TInterview;
+  loading: boolean;
+}
+
+@connect(({ interview, loading }) => ({
+  interview,
+  loading: loading.models.interview,
+}))
+export default class Tags extends Component<ITagsProps> {
   state = {
     visible: false,
     selectedTags: [],
@@ -42,18 +58,21 @@ export default class Index extends Component {
     const { selectedTags } = this.state;
     return (
       <div className={styles['tag-container']}>
-        {tags.map((tag: string) => (
-          <ContextMenuTrigger id="some-unique-identifier" key={tag + 'trigger'}>
-            <CheckableTag
-              key={tag + 'tag'}
-              //@ts-ignore
-              checked={selectedTags.indexOf(tag) > -1}
-              onChange={(checked) => this.handleChange(tag, checked)}
-            >
-              {tag}
-            </CheckableTag>
-          </ContextMenuTrigger>
-        ))}
+        {tags.map((tag: TTag) => {
+          const { id, text } = tag;
+          return (
+            <ContextMenuTrigger id="some-unique-identifier" key={id + 'trigger'}>
+              <CheckableTag
+                key={id + 'tag'}
+                //@ts-ignore
+                checked={selectedTags.indexOf(id) > -1}
+                onChange={(checked) => this.handleChange(id, checked)}
+              >
+                {text}
+              </CheckableTag>
+            </ContextMenuTrigger>
+          );
+        })}
       </div>
     );
   };
@@ -73,6 +92,7 @@ export default class Index extends Component {
   );
   CombineTagsComponent = () => {
     const { selectedTags } = this.state;
+    const { tags } = this.props.interview;
     return (
       <Modal
         mask={false}
@@ -85,16 +105,19 @@ export default class Index extends Component {
         //footer={} //TODO:自定义页脚组件与样式
       >
         <div className={styles['tag-container']}>
-          {tags4.map((tag) => (
-            <CheckableTag
-              //@ts-ignore
-              checked={selectedTags.indexOf(tag) > -1}
-              onChange={(checked) => this.handleChange(tag, checked)}
-              key={tag + 'tag'}
-            >
-              {tag}
-            </CheckableTag>
-          ))}
+          {tags.map((tag: TTag) => {
+            const { id, text } = tag;
+            return (
+              <CheckableTag
+                key={id + 'tag'}
+                //@ts-ignore
+                checked={selectedTags.indexOf(id) > -1}
+                onChange={(checked) => this.handleChange(id, checked)}
+              >
+                {text}
+              </CheckableTag>
+            );
+          })}
           <Input className={styles['tag-new-name']} placeholder="新的名称..." />
         </div>
         <div className={styles.warning}>注意：合并标签后将无法撤回，请确认后再操作！</div>
@@ -112,6 +135,7 @@ export default class Index extends Component {
   }
 
   render() {
+    const { tags } = this.props.interview;
     return (
       <div className={styles.container}>
         <div className={styles.center}>

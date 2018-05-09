@@ -103,13 +103,13 @@ export function digitUppercase(n) {
  * @example
  * const arr = ([{id:'3'},{id:'4'}])
  * findIndexById(arr,'4') => 1
- * findIndexById(arr,'6') => undefined
+ * findIndexById(arr,'6') => Error
  */
-export const findIndexById = (arr: Array<any>, id: string): number | void => {
+export const findIndexById = (arr: Array<any>, id: string): number => {
   const index = arr.findIndex((i) => i.id === id);
   if (index > -1) {
     return index;
-  }
+  } else throw new Error('id 不正确，请重试');
 };
 export const generateId = (): string => {
   return new Date().valueOf().toString();
