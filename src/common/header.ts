@@ -20,11 +20,8 @@ export const interview = {
     },
     {
       text: 'sync',
-      onClick: (e) => {
-        console.log('开始同步');
-        // props.dispatch({
-        //
-        // });
+      dispatch: {
+        type: '',
       },
     },
   ],

@@ -12,7 +12,7 @@ const TabPane = Tabs.TabPane;
 type TIcon = {
   text: string;
   dispatch: {
-    type: string;
+    type?: string;
   };
 };
 type TPanel = {
@@ -27,7 +27,7 @@ interface IHeaderProps {
     right: Array<TIcon>;
   };
   routing?: TLocation;
-  dispatch: any;
+  dispatch?: any;
 }
 
 @connect(({ routing }) => ({
@@ -46,7 +46,7 @@ export default class Header extends Component<IHeaderProps, any> {
     this.urlPanelParse(pathname);
   }
   // 根据路由状态更新
-  urlPanelParse = (pathname) => {
+  urlPanelParse = (pathname: string): void => {
     const re = pathToRegexp('*/:panel');
     this.setState({
       currentPanel: last(re.exec(pathname)),

@@ -105,13 +105,13 @@ export function digitUppercase(n) {
  * findIndexById(arr,'4') => 1
  * findIndexById(arr,'6') => undefined
  */
-export const findIndexById = (arr, id) => {
+export const findIndexById = (arr: Array<any>, id: string): number | void => {
   const index = arr.findIndex((i) => i.id === id);
   if (index > -1) {
     return index;
   }
 };
-export const generateId = () => {
+export const generateId = (): string => {
   return new Date().valueOf().toString();
 };
 
@@ -129,7 +129,7 @@ function getRelation(str1, str2) {
   return 3;
 }
 
-function getRenderArr(routes) {
+function getRenderArr(routes: Array<any>): Array {
   let renderArr = [];
   renderArr.push(routes[0]);
   for (let i = 1; i < routes.length; i += 1) {
