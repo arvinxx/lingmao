@@ -17,80 +17,232 @@ describe('Interview Model', () => {
 });
 
 describe('Reducers', () => {
-  it('querryDocument', () => {
-    set('1/1/2000'); // Mock datetime
-    const reducer = reducers.querryDocument;
-    const state = {
-      title: '',
-      records: [
-        {
-          id: '',
-          text: '',
-          comment: '',
-        },
-      ],
-      id: '',
-      dimensions: [
-        {
-          id: '',
-          key: '',
-          values: [
-            {
-              id: '',
-              text: '',
-              editable: false,
-            },
-          ],
-          inputVisible: false,
-        },
-      ],
-      selectedValues: [],
-    };
-    const action = {
-      type: 'interview/querryDocument',
-      payload: [
-        {
-          _id: '5af03ce213e345a0b389babb',
-          id: '',
-          __v: 0,
-          createdAt: '2018-05-07T11:47:46.881Z',
-          title: '',
-          updatedAt: '2018-05-07T11:47:49.701Z',
-          dimensions: [
-            {
-              key: '',
-              id: '',
-              _id: '5af03ce5f6999c642e53ce35',
-              values: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce36' }],
-            },
-          ],
-          tags: [],
-          records: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce37' }],
-        },
-      ],
-    };
-    expect(reducer(state, action)).toEqual({
-      dimensions: [
-        {
-          id: generateId(),
-          key: '',
-          values: [
-            {
-              id: generateId(),
-              text: '',
-              editable: false,
-            },
-          ],
-          inputVisible: false,
-        },
-      ],
-      records: [{ text: '', id: generateId() }],
-      title: '',
-      selectedValues: [],
-      id: generateId(),
+  describe('querryDocument', () => {
+    it('if id is empty should generate a new id', () => {
+      set('1/1/2000'); // Mock datetime
+      const reducer = reducers.querryDocument;
+      const state = {
+        title: '',
+        records: [
+          {
+            id: '',
+            text: '',
+            comment: '',
+          },
+        ],
+        id: '',
+        dimensions: [
+          {
+            id: '',
+            key: '',
+            values: [
+              {
+                id: '',
+                text: '',
+                editable: false,
+              },
+            ],
+            inputVisible: false,
+          },
+        ],
+        selectedValues: [],
+      };
+      const action = {
+        type: 'interview/querryDocument',
+        payload: [
+          {
+            _id: '5af03ce213e345a0b389babb',
+            id: '',
+            __v: 0,
+            createdAt: '2018-05-07T11:47:46.881Z',
+            title: '',
+            updatedAt: '2018-05-07T11:47:49.701Z',
+            dimensions: [
+              {
+                key: '',
+                id: '',
+                _id: '5af03ce5f6999c642e53ce35',
+                values: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce36' }],
+              },
+            ],
+            tags: [],
+            records: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce37' }],
+          },
+        ],
+      };
+      expect(reducer(state, action)).toEqual({
+        dimensions: [
+          {
+            id: generateId(),
+            key: '',
+            values: [
+              {
+                id: generateId(),
+                text: '',
+                editable: false,
+              },
+            ],
+            inputVisible: false,
+          },
+        ],
+        records: [{ text: '', id: generateId() }],
+        title: '',
+        selectedValues: [],
+        recordFocusId: generateId(),
+        id: generateId(),
+      });
+      reset();
     });
-
-    reset(); // reset to realtime
+    it("if id isn't empty should key it", () => {
+      set('1/1/2000'); // Mock datetime
+      const reducer = reducers.querryDocument;
+      const state = {
+        title: '',
+        records: [
+          {
+            id: '',
+            text: '',
+            comment: '',
+          },
+        ],
+        id: '',
+        dimensions: [
+          {
+            id: '',
+            key: '',
+            values: [
+              {
+                id: '',
+                text: '',
+                editable: false,
+              },
+            ],
+            inputVisible: false,
+          },
+        ],
+        selectedValues: [],
+      };
+      const action = {
+        type: 'interview/querryDocument',
+        payload: [
+          {
+            _id: '5af03ce213e345a0b389babb',
+            id: '1',
+            __v: 0,
+            createdAt: '2018-05-07T11:47:46.881Z',
+            title: '',
+            updatedAt: '2018-05-07T11:47:49.701Z',
+            dimensions: [
+              {
+                key: '',
+                id: '2',
+                _id: '5af03ce5f6999c642e53ce35',
+                values: [{ text: '', id: '3', _id: '5af03ce5f6999c642e53ce36' }],
+              },
+            ],
+            tags: [],
+            records: [{ text: '', id: '4', _id: '5af03ce5f6999c642e53ce37' }],
+          },
+        ],
+      };
+      expect(reducer(state, action)).toEqual({
+        dimensions: [
+          {
+            id: '2',
+            key: '',
+            values: [
+              {
+                id: '3',
+                text: '',
+                editable: false,
+              },
+            ],
+            inputVisible: false,
+          },
+        ],
+        records: [{ text: '', id: '4' }],
+        title: '',
+        selectedValues: [],
+        recordFocusId: '4',
+        id: '1',
+      });
+      reset();
+    });
+    it('should init document if key is not compete', () => {
+      set('1/1/2000'); // Mock datetime
+      const reducer = reducers.querryDocument;
+      const state = {
+        title: '',
+        records: [
+          {
+            id: '',
+            text: '',
+            comment: '',
+          },
+        ],
+        id: '',
+        dimensions: [
+          {
+            id: '',
+            key: '',
+            values: [
+              {
+                id: '',
+                text: '',
+                editable: false,
+              },
+            ],
+            inputVisible: false,
+          },
+        ],
+        selectedValues: [],
+      };
+      const action = {
+        type: 'interview/querryDocument',
+        payload: [
+          {
+            _id: '5af03ce213e345a0b389babb',
+            id: '1',
+            __v: 0,
+            createdAt: '2018-05-07T11:47:46.881Z',
+            updatedAt: '2018-05-07T11:47:49.701Z',
+            dimensions: [
+              {
+                key: '',
+                id: '2',
+                _id: '5af03ce5f6999c642e53ce35',
+                values: [{ text: '', id: '3', _id: '5af03ce5f6999c642e53ce36' }],
+              },
+            ],
+            tags: [],
+            records: [],
+            selectedValues: ['3'],
+          },
+        ],
+      };
+      expect(reducer(state, action)).toEqual({
+        dimensions: [
+          {
+            id: '2',
+            key: '',
+            values: [
+              {
+                id: '3',
+                text: '',
+                editable: false,
+              },
+            ],
+            inputVisible: false,
+          },
+        ],
+        records: [{ id: generateId(), text: '' }],
+        title: '',
+        selectedValues: ['3'],
+        recordFocusId: generateId(),
+        id: '1',
+      });
+      reset();
+    });
   });
 
   it('changeTitle', () => {
@@ -118,7 +270,6 @@ describe('Reducers', () => {
         {
           text: '1',
           id: '4',
-          comment: '',
         },
       ],
     };
@@ -132,12 +283,10 @@ describe('Reducers', () => {
         {
           text: '1',
           id: '4',
-          comment: '',
         },
         {
           text: '',
           id: generateId(),
-          comment: '',
         },
       ],
     });
@@ -170,12 +319,34 @@ describe('Reducers', () => {
         {
           text: '',
           id: generateId(),
-          comment: '',
         },
         {
           id: '3',
           text: '',
         },
+      ],
+    });
+    const state3 = {
+      recordFocusId: '1',
+      records: [
+        { id: '1', text: 'delete' },
+        { id: '2', text: 'delete' },
+        { id: '6', text: 'delete' },
+        { id: '3', text: '' },
+      ],
+    };
+    const action3 = {
+      type: 'interview/addRecord',
+      payload: '6',
+    };
+    expect(reducer(state3, action3)).toEqual({
+      recordFocusId: generateId(),
+      records: [
+        { id: '1', text: 'delete' },
+        { id: '2', text: 'delete' },
+        { id: '6', text: 'delete' },
+        { id: generateId(), text: '' },
+        { id: '3', text: '' },
       ],
     });
     reset(); // reset to realtime
@@ -190,12 +361,10 @@ describe('Reducers', () => {
           {
             id: '1',
             text: 'delete',
-            comment: '345',
           },
           {
             id: '3',
             text: '',
-            comment: '',
           },
         ],
       };
@@ -209,7 +378,6 @@ describe('Reducers', () => {
           {
             id: '1',
             text: 'delete',
-            comment: '345',
           },
         ],
       });
@@ -217,7 +385,7 @@ describe('Reducers', () => {
     it("should stay original if there's only one record", () => {
       const reducers = model.reducers;
       const reducer = reducers.deleteRecord;
-      const state = { recordFocusId: '1', records: [{ id: '1', text: '', comment: '' }] };
+      const state = { recordFocusId: '1', records: [{ id: '1', text: '' }] };
       const action = {
         type: 'interview/deleteRecord',
         payload: '1',
@@ -228,7 +396,6 @@ describe('Reducers', () => {
           {
             id: '1',
             text: '',
-            comment: '',
           },
         ],
       });
@@ -304,7 +471,8 @@ describe('Reducers', () => {
       ],
     });
   });
-  it('changeRecordFocus', () => {
+
+  it('changeRecordFocusId', () => {
     const reducer = reducers.changeRecordFocusId;
     const state = {
       recordFocusId: '',
@@ -331,29 +499,150 @@ describe('Reducers', () => {
       ],
     });
   });
-
-  it('addDimensionKey', () => {
-    set('1/1/2000'); // Mock datetime
-
-    const reducer = reducers.addDimensionKey;
-    const state = {
-      dimensions: [],
-    };
-    const action = {
-      type: 'interview/addDimension',
-      payload: 'dsa',
-    };
-    expect(reducer(state, action)).toEqual({
-      dimensions: [
-        {
-          key: 'dsa',
-          id: generateId(),
-          values: [],
-        },
-      ],
+  describe('moveUpRecordFocusId', () => {
+    it("Focus Id should be preview one's id when id in middle", () => {
+      const reducer = reducers.moveUpRecordFocusId;
+      const state = {
+        recordFocusId: '3',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '5', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      };
+      const action = {
+        type: 'interview/moveUpRecordFocusId',
+        payload: '3',
+      };
+      expect(reducer(state, action)).toEqual({
+        recordFocusId: '1',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '5', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      });
     });
+    it("Focus Id should remain if it's the first one", () => {
+      const reducer = reducers.moveUpRecordFocusId;
+      const state = {
+        recordFocusId: '1',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '7', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      };
+      const action = {
+        type: 'interview/moveUpRecordFocusId',
+        payload: '1',
+      };
+      expect(reducer(state, action)).toEqual({
+        recordFocusId: '1',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '7', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      });
+    });
+  });
+  describe('moveDownRecordFocusId', () => {
+    it("Focus Id should be preview one's id when id in middle", () => {
+      const reducer = reducers.moveDownRecordFocusId;
+      const state = {
+        recordFocusId: '3',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '4', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      };
+      const action = {
+        type: 'interview/moveDownRecordFocusId',
+        payload: '3',
+      };
+      expect(reducer(state, action)).toEqual({
+        recordFocusId: '4',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '4', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      });
+    });
+    it("Focus Id should remain if it's the last one", () => {
+      const reducer = reducers.moveDownRecordFocusId;
+      const state = {
+        recordFocusId: '6',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      };
+      const action = {
+        type: 'interview/moveDownRecordFocusId',
+        payload: '6',
+      };
+      expect(reducer(state, action)).toEqual({
+        recordFocusId: '6',
+        records: [
+          { id: '1', text: 'delete' },
+          { id: '3', text: 'rerqdf' },
+          { id: '6', text: 'rerqdf' },
+        ],
+      });
+    });
+  });
 
-    reset(); // reset to realtime
+  describe('addDimensionKey', () => {
+    it("should add a dimension key if it's not empty", () => {
+      set('1/1/2000'); // Mock datetime
+
+      const reducer = reducers.addDimensionKey;
+      const state = {
+        dimensions: [],
+      };
+      const action = {
+        type: 'interview/addDimension',
+        payload: 'dsa',
+      };
+      expect(reducer(state, action)).toEqual({
+        dimensions: [
+          {
+            key: 'dsa',
+            id: generateId(),
+            values: [],
+          },
+        ],
+      });
+
+      reset(); // reset to realtime
+    });
+    it("should remain if it's empty", () => {
+      set('1/1/2000'); // Mock datetime
+
+      const reducer = reducers.addDimensionKey;
+      const state = {
+        dimensions: [],
+      };
+      const action = {
+        type: 'interview/addDimension',
+        payload: '',
+      };
+      expect(reducer(state, action)).toEqual({
+        dimensions: [],
+      });
+
+      reset(); // reset to realtime
+    });
   });
   it('deleteDimensionKey', () => {
     const reducers = model.reducers;
@@ -412,39 +701,70 @@ describe('Reducers', () => {
     });
   });
 
-  it('addDimensionValue', () => {
-    set('1/1/2000'); // Mock datetime
+  describe('addDimensionValue', () => {
+    it("should add a dimension value if it's not empty", () => {
+      set('1/1/2000'); // Mock datetime
 
-    const reducer = reducers.addDimensionValue;
-    const state = {
-      dimensions: [
-        {
-          id: '3',
-          key: '1',
-          values: [],
-        },
-      ],
-    };
-    const action = {
-      type: 'interview/addDimensionValue',
-      payload: { id: '3', newValue: 'dsa' },
-    };
+      const reducer = reducers.addDimensionValue;
+      const state = {
+        dimensions: [
+          {
+            id: '3',
+            key: '1',
+            values: [],
+          },
+        ],
+      };
+      const action = {
+        type: 'interview/addDimensionValue',
+        payload: { id: '3', newValue: 'dsa' },
+      };
 
-    expect(reducer(state, action)).toEqual({
-      dimensions: [
-        {
-          id: '3',
-          key: '1',
-          values: [
-            {
-              id: generateId(),
-              text: 'dsa',
-            },
-          ],
-        },
-      ],
+      expect(reducer(state, action)).toEqual({
+        dimensions: [
+          {
+            id: '3',
+            key: '1',
+            values: [
+              {
+                id: generateId(),
+                text: 'dsa',
+              },
+            ],
+          },
+        ],
+      });
+      reset();
     });
-    reset();
+    it("should add a dimension value if it's empty", () => {
+      set('1/1/2000'); // Mock datetime
+
+      const reducer = reducers.addDimensionValue;
+      const state = {
+        dimensions: [
+          {
+            id: '3',
+            key: '1',
+            values: [],
+          },
+        ],
+      };
+      const action = {
+        type: 'interview/addDimensionValue',
+        payload: { id: '3', newValue: '' },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        dimensions: [
+          {
+            id: '3',
+            key: '1',
+            values: [],
+          },
+        ],
+      });
+      reset();
+    });
   });
   it('changeDimensionValue', () => {
     const reducer = reducers.changeDimensionValue;

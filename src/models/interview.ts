@@ -1,16 +1,17 @@
 import { queryDocument, saveDocument } from '../services/interview';
-import { isNull, isEmpty, concat } from 'lodash';
-import { findIndexById, generateId } from '../utils/utils';
-type TRecord = {
-  id: '';
-  text: '';
-  comment: '';
+import { concat } from 'lodash';
+import { findIndexById, generateId } from '../utils';
+
+export type TRecord = {
+  id: string;
+  text: string;
 };
 export default {
   namespace: 'interview',
   state: {
     title: '',
     records: [],
+    recordFocusId: '',
     id: '',
     dimensions: [],
     tags: [],
@@ -19,7 +20,7 @@ export default {
     tagVisible: true,
   },
   effects: {
-    *fetchDocument(_, { call, put }) {
+    * fetchDocument(action, { call, put }) {
       const response = yield call(queryDocument);
       yield put({
         type: 'querryDocument',
@@ -77,13 +78,13 @@ export default {
         records = [{ id: generateId(), text: '' }];
       }
 
-      if (isNull(title)) {
+      if (title === undefined) {
         title = '';
       }
       if (!Array.isArray(selectedValues)) {
         selectedValues = [];
       }
-      if (isEmpty(id)) {
+      if (id === '') {
         id = generateId();
       }
       return {
@@ -93,11 +94,12 @@ export default {
         id,
         dimensions,
         selectedValues,
+        recordFocusId: records[0].id,
       };
     },
 
     addRecord(state, { payload: id }) {
-      const records = concat(state.records);
+      const records: Array<TRecord> = concat(state.records);
       const index = findIndexById(records, id);
       records.splice(index + 1, 0, {
         text: '',
@@ -111,7 +113,7 @@ export default {
     },
     changeRecordText(state, { payload }) {
       const { id, newText } = payload;
-      const records = concat(state.records);
+      const records: Array<TRecord> = concat(state.records);
       const index = findIndexById(records, id);
       records[index].text = newText;
       return {
@@ -120,25 +122,46 @@ export default {
       };
     },
     deleteRecord(state, { payload: id }) {
-      const records = state.records;
+      const oldRecords: Array<TRecord> = state.records;
 
       // 数组中只有一个元素的情况下，直接返回原先状态，不删除
-      if (records.length === 1) {
+      if (oldRecords.length === 1) {
         return state;
       } else {
-        const index = findIndexById(records, id);
-        const focusIndex = index === 0 ? 1 : index - 1; // 判断是否是数组第一个元素
+        const index = findIndexById(oldRecords, id);
+        const focusIndex = index === 0 ? 0 : index - 1; // 判断是否是数组第一个元素
+        const records = oldRecords.filter((record: TRecord) => record.id !== id);
+        const recordFocusId = records[focusIndex].id;
         return {
           ...state,
-          records: state.records.filter((record: TRecord) => record.id !== id),
-          recordFocusId: records[focusIndex].id,
+          records,
+          recordFocusId,
         };
       }
     },
+
     changeRecordFocusId(state, { payload: id }) {
       return {
         ...state,
         recordFocusId: id,
+      };
+    },
+    moveUpRecordFocusId(state, { payload: id }) {
+      const records = state.records;
+      let index = findIndexById(records, id);
+      index = index === 0 ? 0 : index - 1;
+      return {
+        ...state,
+        recordFocusId: records[index].id,
+      };
+    },
+    moveDownRecordFocusId(state, { payload: id }) {
+      const records = state.records;
+      let index = findIndexById(records, id);
+      index = index + 1 === records.length ? index : index + 1;
+      return {
+        ...state,
+        recordFocusId: records[index].id,
       };
     },
 
