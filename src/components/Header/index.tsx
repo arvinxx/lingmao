@@ -26,7 +26,7 @@ interface IHeaderProps {
     center: Array<TPanel>;
     right: Array<TIcon>;
   };
-  routing: TLocation;
+  routing?: TLocation;
   dispatch: any;
 }
 
