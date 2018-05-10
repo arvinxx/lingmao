@@ -7,6 +7,7 @@ interface IPopupMenuProps {
   menuRef: any;
   onChange: Function;
   value: Value;
+  dispatch: any;
 }
 
 export default class PopupMenu extends Component<IPopupMenuProps> {
@@ -16,10 +17,26 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
   }
 
   onClickMark(event, type) {
-    const { value, onChange } = this.props;
+    const { value, onChange, dispatch } = this.props;
     event.preventDefault();
     const change = value.change().toggleMark(type);
     onChange(change);
+    switch (type) {
+      case 'extract':
+        console.log('提取原文');
+        // dispatch({
+        //   type: 'interview/addTag',
+        //   payload: '',
+        // });
+        return;
+      case 'add':
+        console.log('新增标签');
+        dispatch({
+          type: 'interview/addTag',
+          payload: '',
+        });
+        return;
+    }
   }
 
   renderMarkButton(type, text) {
@@ -37,8 +54,8 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
 
     return ReactDOM.createPortal(
       <div className={styles.menu + ' ' + styles['hover-menu']} ref={this.props.menuRef}>
-        {this.renderMarkButton('bold', '提取原文')}
-        {this.renderMarkButton('italic', '新增标签')}
+        {this.renderMarkButton('extract', '提取原文')}
+        {this.renderMarkButton('add', '新增标签')}
       </div>,
       root
     );

@@ -89,7 +89,7 @@ export default class RecordList extends Component<RecordListProps, any> {
           dataSource={records}
           loading={loading}
           renderItem={(record: TRecord) => {
-            const { id, text } = record;
+            const { id, text, rawData } = record;
             return (
               <Item>
                 <InputTooltip
@@ -98,6 +98,7 @@ export default class RecordList extends Component<RecordListProps, any> {
                   recordFocusId={recordFocusId}
                   dispatch={dispatch}
                   tags={tags}
+                  rawData={rawData}
                 />
               </Item>
             );

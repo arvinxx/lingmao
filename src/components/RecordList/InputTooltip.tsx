@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
-import { TTag } from '../../models/interview';
-
 import Plain from 'slate-plain-serializer';
+
+import { TTag } from '../../models/interview';
 import PopupMenu from './PopupMenu';
 
 import styles from './InputTooltip.less';
@@ -13,6 +13,7 @@ interface IHoveringMenuProps {
   dispatch: any;
   id: string;
   text: string;
+  rawData: Value;
   recordFocusId: string;
   tags: Array<TTag>;
 }
@@ -31,6 +32,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
   menuRef = (menu) => {
     this.menu = menu;
   };
+
   updateMenu = () => {
     const { menu } = this;
     const { value } = this.state;
@@ -41,8 +43,8 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
       return;
     }
 
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
+    const selection: Selection = window.getSelection();
+    const range: Range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
     menu.style.opacity = '1';
     menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
@@ -51,8 +53,10 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
   onChange = ({ value }) => {
     const { dispatch, id } = this.props;
     if (value.document !== this.state.value.document) {
+      console.log(value.toJSON().document.nodes[0].nodes[0]);
       const newText: string = Plain.serialize(value);
       dispatch({ type: 'interview/changeRecordText', payload: { id, newText } });
+      dispatch({ type: 'interview/changeRecordRawData', payload: { id, rawData: value } });
     }
     this.setState({ value });
   };
@@ -66,9 +70,9 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
       });
       return false; // 阻止原生事件
     }
-    console.log(event.key);
+    // console.log(event.key);
     const text = Plain.serialize(this.state.value);
-    console.log(text);
+    // console.log(text);
     if (text === '') {
       if (event.key === 'Backspace') {
         console.log('delete!');
@@ -96,24 +100,20 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
       });
     }
   };
-  onClick = () => {
-    console.log('按钮点击');
-  };
-  deleteTag = (id) => {
-    console.log('删除!');
-    this.props.dispatch({
-      type: 'interview/deleteTag',
-      payload: id,
-    });
-  };
   tagKeyDown = (e) => {
-    console.log(e.key);
+    // e.preventDefault();
+    // console.log(e.key);
   };
   changeTagText = (e, id) => {
+    console.log(e.target.value);
     this.props.dispatch({
-      type: 'interview/deleteTag',
+      type: 'interview/changeTagText',
       payload: { id, newText: e.target.value },
     });
+  };
+  changeFocus = (id) => {
+    console.log(id);
+    this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
   };
   underLineComponent = (props) => {
     const { children, attributes } = props;
@@ -121,6 +121,9 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     return (
       <Popover
         overlayClassName={styles['tag-pop']}
+        // trigger="click"
+        getPopupContainer={() => document.getElementById('tooltip') || document.body}
+        // visible={true}
         content={tags.map((tag: TTag) => {
           const { id, text } = tag;
           return (
@@ -152,16 +155,22 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
       </Popover>
     );
   };
-  changeFocus = (id) => {
-    console.log(id);
-    this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
-  };
   private menu?: HTMLElement;
   private editorRef: HTMLElement;
+  onClick = () => {
+    console.log('按钮点击');
+  };
+  deleteTag = (id) => {
+    console.log('删除!');
+    this.props.dispatch({
+      type: 'interview/deleteTag',
+      payload: id,
+    });
+  };
 
   constructor(props: IHoveringMenuProps) {
     super(props);
-    this.state.value = Value.fromJSON(Plain.deserialize(props.text));
+    this.state.value = Value.fromJSON(props.rawData);
   }
 
   componentDidMount() {
@@ -169,7 +178,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
   }
 
   componentWillReceiveProps(nextProps: IHoveringMenuProps) {
-    this.state.value = Value.fromJSON(Plain.deserialize(nextProps.text));
+    this.state.value = Value.fromJSON(nextProps.rawData);
   }
 
   componentDidUpdate() {
@@ -182,7 +191,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
 
   render() {
     const value: Value = this.state.value;
-    const { recordFocusId, id } = this.props;
+    const { recordFocusId, id, dispatch } = this.props;
     return (
       <div className={styles.input}>
         <div className={styles.editor}>
@@ -191,14 +200,14 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
             value={value}
             autoFocus={(() => {
               return recordFocusId === id;
-            })()}
-            // onFocus={() => this.changeFocus(id)}
+            })()} // onFocus={() => this.changeFocus(id)}
             onKeyDown={this.onKeyDown}
             onChange={this.onChange}
             renderMark={this.underLineComponent}
           />
         </div>
-        <PopupMenu menuRef={this.menuRef} value={value} onChange={this.onChange} />
+        <div id="tooltip" />
+        <PopupMenu menuRef={this.menuRef} value={value} onChange={this.onChange} dispatch={dispatch} />
       </div>
     );
   }

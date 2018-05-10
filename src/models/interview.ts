@@ -1,10 +1,13 @@
 import { queryDocument, saveDocument } from '../services/interview';
 import { concat } from 'lodash';
 import { findIndexById, generateId } from '../utils';
+import { Value } from 'slate';
+import Plain from 'slate-plain-serializer';
 
 export type TRecord = {
   id: string;
   text: string;
+  rawData: Value;
 };
 export type TTag = {
   id: string;
@@ -84,7 +87,7 @@ export default {
     },
 
     querryDocument(state, { payload: documents }) {
-      let { title, records, id, dimensions, selectedValues } = documents[0];
+      let { title, records, id, dimensions, selectedValues, tags } = documents[0];
 
       dimensions.map((dimension) => {
         let { id, values } = dimension;
@@ -109,7 +112,21 @@ export default {
           delete record._id;
         });
       } else {
-        records = [{ id: generateId(), text: '' }];
+        records = [
+          {
+            id: generateId(),
+            text: '',
+            rawData: Value.fromJSON(Plain.deserialize('')),
+          },
+        ];
+      }
+      if (tags.length > 0) {
+        tags.map((tag) => {
+          let id = tag.id;
+          id = id === '' ? generateId() : id;
+          tag.id = id;
+          delete tag._id;
+        });
       }
 
       if (title === undefined) {
@@ -126,6 +143,7 @@ export default {
         records,
         title,
         id,
+        tags,
         dimensions,
         selectedValues,
         recordFocusId: records[0].id,
@@ -138,6 +156,7 @@ export default {
       records.splice(index + 1, 0, {
         text: '',
         id: generateId(),
+        rawData: Value.fromJSON(Plain.deserialize('')),
       });
       return {
         ...state,
@@ -173,7 +192,15 @@ export default {
         };
       }
     },
-
+    changeRecordRawData(state, { payload }) {
+      const { id, rawData } = payload;
+      const records: Array<TRecord> = concat(state.records);
+      const index = findIndexById(records, id);
+      records[index].rawData = rawData;
+      return {
+        ...state,
+      };
+    },
     changeRecordFocusId(state, { payload: id }) {
       return {
         ...state,
@@ -315,13 +342,10 @@ export default {
     },
 
     addTag(state, { payload: text }) {
-      if (text === '') {
-        return state;
-      } else
-        return {
-          ...state,
-          tags: [...state.tags, { text, id: generateId() }],
-        };
+      return {
+        ...state,
+        tags: [...state.tags, { text, id: generateId() }],
+      };
     },
     changeTagText(state, { payload }) {
       const { id, newText } = payload;

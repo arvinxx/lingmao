@@ -4,7 +4,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { Radio, List, Collapse, Menu, Input, Button, InputNumber, Icon } from 'antd';
 
 import { TagInput, RecordList, Upload, Ellipsis } from '../../components';
-import { TTag } from '../../models/interview';
+import { TTag, TRecord } from '../../models/interview';
 
 import 'react-reflex/styles.css';
 import styles from './record.less';
@@ -23,12 +23,6 @@ const UploadProps = {
   name: 'file',
   multiple: true,
   action: 'http://localhost:8000/api/upload',
-};
-
-type TRecord = {
-  id: string;
-  text: string;
-  comment: string;
 };
 
 export type TInterview = {
@@ -61,22 +55,45 @@ export default class Interview extends Component<IInterviewProps, any> {
       type: 'interview/fetchDocument',
     });
   }
-  componentWillUnmount() {
-    const { title, records, id, dimensions, selectedValues } = this.props.interview;
+
+  deleteTag = (e) => {
+    // console.log(e.key);
     this.props.dispatch({
-      type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedValues },
+      type: 'interview/deleteTag',
+      payload: e.key,
     });
-  }
+  };
   onChange = (e) => {
     console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
     });
   };
-
-  handleClick = (e) => {
-    console.log('click ', e);
+  LabelComponent = (tagVisible, tags) => {
+    if (tagVisible) {
+      return (
+        <div className={styles.right}>
+          <div className={styles.title}>标签</div>
+          <Menu
+            onClick={this.deleteTag}
+            style={{ width: 200 }}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+          >
+            {tags.map((tag) => {
+              const { text, id } = tag;
+              return (
+                <Menu.Item className={styles.labels} key={id}>
+                  {text}
+                  <Icon type="close" className={styles.close} />
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </div>
+      );
+    }
   };
 
   titleChange = (e) => {
@@ -109,32 +126,14 @@ export default class Interview extends Component<IInterviewProps, any> {
       </RadioGroup>
     );
   };
-  LabelComponent = (tagVisible, tags) => {
-    if (tagVisible) {
-      return (
-        <div className={styles.right}>
-          <div className={styles.title}>标签</div>
-          <Menu
-            onClick={this.handleClick}
-            style={{ width: 200 }}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-          >
-            {tags.map((tag) => {
-              const { text, id } = tag;
-              return (
-                <Menu.Item className={styles.labels} key={id}>
-                  {text}
-                  <Icon type="close" className={styles.close} />
-                </Menu.Item>
-              );
-            })}
-          </Menu>
-        </div>
-      );
-    }
-  };
+
+  componentWillUnmount() {
+    const { title, records, id, dimensions, selectedValues, tags } = this.props.interview;
+    this.props.dispatch({
+      type: 'interview/saveDocument',
+      payload: { title, id, records, dimensions, selectedValues, tags },
+    });
+  }
   UploadComponent = (uploadVisible) => {
     if (uploadVisible) {
       return (
