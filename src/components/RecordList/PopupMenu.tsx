@@ -16,32 +16,34 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
     return value.activeMarks.some((mark) => mark.type === type);
   }
 
-  onClickMark(event, type) {
+  onClickMark(event, type, isActive) {
     const { value, onChange, dispatch } = this.props;
     event.preventDefault();
     const change = value.change().toggleMark(type);
-    onChange(change);
-    switch (type) {
-      case 'extract':
-        console.log('提取原文');
-        // dispatch({
-        //   type: 'interview/addTag',
-        //   payload: '',
-        // });
-        return;
-      case 'add':
-        console.log('新增标签');
+    if (type === 'extract') {
+      console.log('isActive' + isActive);
+      if (!isActive) {
+        const text: string = window.getSelection().toString();
         dispatch({
           type: 'interview/addTag',
-          payload: '',
+          payload: text,
         });
-        return;
+        window.getSelection().removeAllRanges();
+        console.log('新增标签');
+      }
+    } else if (type === 'add') {
+      console.log('新增标签');
+      dispatch({
+        type: 'interview/addTag',
+        payload: '',
+      });
     }
+    onChange(change);
   }
 
   renderMarkButton(type, text) {
     const isActive = this.checkState(type);
-    const onMouseDown = (event) => this.onClickMark(event, type);
+    const onMouseDown = (event) => this.onClickMark(event, type, isActive);
     return (
       <div className={styles['button-container']} onMouseDown={onMouseDown} data-active={isActive}>
         <span className={styles['button-text']}>{text}</span>

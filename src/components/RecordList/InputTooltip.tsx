@@ -123,31 +123,38 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
         overlayClassName={styles['tag-pop']}
         // trigger="click"
         getPopupContainer={() => document.getElementById('tooltip') || document.body}
-        // visible={true}
-        content={tags.map((tag: TTag) => {
-          const { id, text } = tag;
-          return (
-            <div key={id + 'tag-container'} className={styles['tag-container']}>
-              <div key={id + 'input-container'} className={styles['input-container']}>
-                <Input
-                  className={styles.tag}
-                  onChange={(e) => this.changeTagText(e, id)}
-                  onKeyDown={this.tagKeyDown}
-                  value={text}
-                />
-                <Popconfirm
-                  key={'ppp'}
-                  title="确认要删除吗?"
-                  onConfirm={() => this.deleteTag(id)}
-                  okText="是"
-                  cancelText="否"
-                >
-                  <Icon key={'close'} type="close" className={styles['value-delete']} />
-                </Popconfirm>
-              </div>
-            </div>
-          );
-        })}
+        visible={true}
+        content={(() => {
+          if (tags.length > 0) {
+            return tags.map((tag: TTag) => {
+              const { id, text } = tag;
+              return (
+                <div key={id + 'tag-container'} className={styles['tag-container']}>
+                  <div key={id + 'input-container'} className={styles['input-container']}>
+                    <Input
+                      className={styles.tag}
+                      onChange={(e) => this.changeTagText(e, id)}
+                      onKeyDown={this.tagKeyDown}
+                      value={text}
+                    />
+                    <Popconfirm
+                      key={'ppp'}
+                      title="确认要删除吗?"
+                      onConfirm={() => this.deleteTag(id)}
+                      okText="是"
+                      cancelText="否"
+                    >
+                      <Icon key={'close'} type="close" className={styles['value-delete']} />
+                    </Popconfirm>
+                  </div>
+                </div>
+              );
+            });
+          } else {
+            console.log('no tags');
+            return;
+          }
+        })()}
       >
         <span className={styles.underlines} {...attributes}>
           {children}
@@ -207,7 +214,12 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
           />
         </div>
         <div id="tooltip" />
-        <PopupMenu menuRef={this.menuRef} value={value} onChange={this.onChange} dispatch={dispatch} />
+        <PopupMenu
+          menuRef={this.menuRef}
+          value={value}
+          onChange={this.onChange}
+          dispatch={dispatch}
+        />
       </div>
     );
   }
