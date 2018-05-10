@@ -56,6 +56,13 @@ export default class Interview extends Component<IInterviewProps, any> {
     });
   }
 
+  componentWillUnmount() {
+    const { title, records, id, dimensions, selectedValues, tags } = this.props.interview;
+    this.props.dispatch({
+      type: 'interview/saveDocument',
+      payload: { title, id, records, dimensions, selectedValues, tags },
+    });
+  }
   deleteTag = (e) => {
     // console.log(e.key);
     this.props.dispatch({
@@ -127,13 +134,6 @@ export default class Interview extends Component<IInterviewProps, any> {
     );
   };
 
-  componentWillUnmount() {
-    const { title, records, id, dimensions, selectedValues, tags } = this.props.interview;
-    this.props.dispatch({
-      type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedValues, tags },
-    });
-  }
   UploadComponent = (uploadVisible) => {
     if (uploadVisible) {
       return (

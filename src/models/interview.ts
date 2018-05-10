@@ -29,22 +29,7 @@ export default {
     recordFocusId: '',
     id: '',
     dimensions: [],
-    tags: [
-      {
-        id: '1',
-        text: '测试1',
-        refText: '',
-        refId: '',
-        groupId: '',
-      },
-      {
-        id: '2',
-        text: '测试2',
-        refText: '',
-        refId: '',
-        groupId: '',
-      },
-    ],
+    tags: [],
     tagGroups: [
       {
         text: '',
@@ -57,7 +42,7 @@ export default {
     tagVisible: true,
   },
   effects: {
-    * fetchDocument(action, { call, put }) {
+    *fetchDocument(action, { call, put }) {
       const response = yield call(queryDocument);
       yield put({
         type: 'querryDocument',

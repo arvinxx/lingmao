@@ -27,11 +27,31 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
   state = {
     value: Value.fromJSON(Plain.deserialize('')),
     tagValue: '',
-    tagList: [{ id: '3', text: '' }],
   };
   menuRef = (menu) => {
     this.menu = menu;
   };
+  private menu?: HTMLElement;
+  private editorRef: HTMLElement;
+
+  constructor(props: IHoveringMenuProps) {
+    super(props);
+    this.state.value = Value.fromJSON(props.rawData);
+  }
+
+  componentDidMount() {
+    this.updateMenu();
+  }
+  componentWillReceiveProps(nextProps: IHoveringMenuProps) {
+    this.state.value = Value.fromJSON(nextProps.rawData);
+  }
+  componentDidUpdate() {
+    this.updateMenu();
+    // const { id, recordFocusId } = this.props;
+    // if (id === recordFocusId) {
+    //   this.editorRef.focus();
+    // }
+  }
 
   updateMenu = () => {
     const { menu } = this;
@@ -50,14 +70,15 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
     menu.style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`;
   };
+
   onChange = ({ value }) => {
     const { dispatch, id } = this.props;
     if (value.document !== this.state.value.document) {
-      console.log(value.toJSON().document.nodes[0].nodes[0]);
       const newText: string = Plain.serialize(value);
       dispatch({ type: 'interview/changeRecordText', payload: { id, newText } });
       dispatch({ type: 'interview/changeRecordRawData', payload: { id, rawData: value } });
     }
+    console.log('触发更新');
     this.setState({ value });
   };
   onKeyDown = (event: KeyboardEvent, change) => {
@@ -72,7 +93,6 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     }
     // console.log(event.key);
     const text = Plain.serialize(this.state.value);
-    // console.log(text);
     if (text === '') {
       if (event.key === 'Backspace') {
         console.log('delete!');
@@ -85,7 +105,6 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     }
     // 向上时移动光标
     if (event.key === 'ArrowUp') {
-      console.log('Up!');
       this.props.dispatch({
         type: 'interview/moveUpRecordFocusId',
         payload: id,
@@ -93,30 +112,38 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     }
     // 向下时移动光标
     if (event.key === 'ArrowDown') {
-      console.log('Down!');
       this.props.dispatch({
         type: 'interview/moveDownRecordFocusId',
         payload: id,
       });
     }
   };
-  tagKeyDown = (e) => {
-    // e.preventDefault();
-    // console.log(e.key);
-  };
-  changeTagText = (e, id) => {
+
+  changeTagText = (e, id, editor) => {
     console.log(e.target.value);
     this.props.dispatch({
       type: 'interview/changeTagText',
       payload: { id, newText: e.target.value },
     });
   };
+  deleteTag = (id, editor) => {
+    const { dispatch, tags } = this.props;
+    dispatch({
+      type: 'interview/deleteTag',
+      payload: id,
+    });
+    if (tags.length <= 1) {
+      editor.change((change) => change.removeMark(''));
+      console.log('取消下划线');
+    }
+  };
+
   changeFocus = (id) => {
     console.log(id);
     this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
   };
   underLineComponent = (props) => {
-    const { children, attributes } = props;
+    const { children, attributes, editor } = props;
     const { tags } = this.props;
     return (
       <Popover
@@ -124,37 +151,29 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
         // trigger="click"
         getPopupContainer={() => document.getElementById('tooltip') || document.body}
         visible={true}
-        content={(() => {
-          if (tags.length > 0) {
-            return tags.map((tag: TTag) => {
-              const { id, text } = tag;
-              return (
-                <div key={id + 'tag-container'} className={styles['tag-container']}>
-                  <div key={id + 'input-container'} className={styles['input-container']}>
-                    <Input
-                      className={styles.tag}
-                      onChange={(e) => this.changeTagText(e, id)}
-                      onKeyDown={this.tagKeyDown}
-                      value={text}
-                    />
-                    <Popconfirm
-                      key={'ppp'}
-                      title="确认要删除吗?"
-                      onConfirm={() => this.deleteTag(id)}
-                      okText="是"
-                      cancelText="否"
-                    >
-                      <Icon key={'close'} type="close" className={styles['value-delete']} />
-                    </Popconfirm>
-                  </div>
-                </div>
-              );
-            });
-          } else {
-            console.log('no tags');
-            return;
-          }
-        })()}
+        content={tags.map((tag: TTag) => {
+          const { id, text } = tag;
+          return (
+            <div key={id + 'tag-container'} className={styles['tag-container']}>
+              <div key={id + 'input-container'} className={styles['input-container']}>
+                <Input
+                  className={styles.tag}
+                  onChange={(e) => this.changeTagText(e, id, editor)}
+                  value={text}
+                />
+                <Popconfirm
+                  key={'ppp'}
+                  title="确认要删除吗?"
+                  onConfirm={() => this.deleteTag(id, editor)}
+                  okText="是"
+                  cancelText="否"
+                >
+                  <Icon key={'close'} type="close" className={styles['value-delete']} />
+                </Popconfirm>
+              </div>
+            </div>
+          );
+        })}
       >
         <span className={styles.underlines} {...attributes}>
           {children}
@@ -162,39 +181,6 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
       </Popover>
     );
   };
-  private menu?: HTMLElement;
-  private editorRef: HTMLElement;
-  onClick = () => {
-    console.log('按钮点击');
-  };
-  deleteTag = (id) => {
-    console.log('删除!');
-    this.props.dispatch({
-      type: 'interview/deleteTag',
-      payload: id,
-    });
-  };
-
-  constructor(props: IHoveringMenuProps) {
-    super(props);
-    this.state.value = Value.fromJSON(props.rawData);
-  }
-
-  componentDidMount() {
-    this.updateMenu();
-  }
-
-  componentWillReceiveProps(nextProps: IHoveringMenuProps) {
-    this.state.value = Value.fromJSON(nextProps.rawData);
-  }
-
-  componentDidUpdate() {
-    this.updateMenu();
-    // const { id, recordFocusId } = this.props;
-    // if (id === recordFocusId) {
-    //   this.editorRef.focus();
-    // }
-  }
 
   render() {
     const value: Value = this.state.value;

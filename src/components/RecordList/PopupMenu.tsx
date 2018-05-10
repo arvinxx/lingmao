@@ -16,36 +16,29 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
     return value.activeMarks.some((mark) => mark.type === type);
   }
 
-  onClickMark(event, type, isActive) {
+  onClickMark = (event, type) => {
     const { value, onChange, dispatch } = this.props;
     event.preventDefault();
-    const change = value.change().toggleMark(type);
-    if (type === 'extract') {
-      console.log('isActive' + isActive);
-      if (!isActive) {
-        const text: string = window.getSelection().toString();
-        dispatch({
-          type: 'interview/addTag',
-          payload: text,
-        });
-        window.getSelection().removeAllRanges();
-        console.log('新增标签');
-      }
-    } else if (type === 'add') {
-      console.log('新增标签');
+    if (type === 'add') {
+      // 可用状态时
+      const text: string = window.getSelection().toString();
       dispatch({
         type: 'interview/addTag',
-        payload: '',
+        payload: text,
       });
+      onChange(value.change().addMark(''));
+      console.log('新增标签');
     }
-    onChange(change);
-  }
+  };
 
   renderMarkButton(type, text) {
     const isActive = this.checkState(type);
-    const onMouseDown = (event) => this.onClickMark(event, type, isActive);
     return (
-      <div className={styles['button-container']} onMouseDown={onMouseDown} data-active={isActive}>
+      <div
+        className={styles['button-container']}
+        onMouseDown={(e) => this.onClickMark(e, type)}
+        data-active={isActive}
+      >
         <span className={styles['button-text']}>{text}</span>
       </div>
     );
@@ -56,7 +49,6 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
 
     return ReactDOM.createPortal(
       <div className={styles.menu + ' ' + styles['hover-menu']} ref={this.props.menuRef}>
-        {this.renderMarkButton('extract', '提取原文')}
         {this.renderMarkButton('add', '新增标签')}
       </div>,
       root
