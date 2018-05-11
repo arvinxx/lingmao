@@ -26,11 +26,12 @@ const props: IEditorProps = {
   rawData,
   dispatch: jest.fn(),
   id: '1',
-  tags:[],
-  text:'5',
+  tagGroups: [],
+  text: '5',
   recordFocusId: '4',
 };
 it('Render correct when receive props', () => {
   const wrapper = shallow(<App {...props} />);
   expect(wrapper.find('.input').length).toEqual(1);
 });
+

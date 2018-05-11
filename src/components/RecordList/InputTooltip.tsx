@@ -4,7 +4,8 @@ import { Editor as SlateEditor } from 'slate-react';
 import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 
-import { TTag } from '../../models/interview';
+import { extractTags } from 'utils';
+import { TTag, TTagGroup } from 'models/interview';
 import PopupMenu from './PopupMenu';
 
 import styles from './InputTooltip.less';
@@ -15,18 +16,28 @@ export interface IEditorProps {
   text: string;
   rawData: Value;
   recordFocusId: string;
-  tags: Array<TTag>;
+  tagGroups: Array<TTagGroup>;
 }
 
 interface IEditorStates {
   tagValue: string;
   value: Value;
+  tags: Array<TTag>;
 }
 
 export default class Editor extends Component<IEditorProps, IEditorStates> {
   state = {
     value: Value.fromJSON(Plain.deserialize('')),
     tagValue: '',
+    tags: [
+      {
+        id: '',
+        text: '',
+        refText: '',
+        refId: '',
+        groupId: '',
+      },
+    ],
   };
   menuRef = (menu) => {
     this.menu = menu;
@@ -37,6 +48,7 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
   constructor(props: IEditorProps) {
     super(props);
     this.state.value = Value.fromJSON(props.rawData);
+    this.state.tags = extractTags(props.tagGroups);
   }
 
   componentDidMount() {
@@ -44,6 +56,8 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
   }
   componentWillReceiveProps(nextProps: IEditorProps) {
     this.state.value = Value.fromJSON(nextProps.rawData);
+    this.setState({ tags: extractTags(nextProps.tagGroups) });
+    // this.state.tags = ;
   }
   componentDidUpdate() {
     this.updateMenu();
@@ -127,7 +141,8 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
     });
   };
   deleteTag = (id, editor) => {
-    const { dispatch, tags } = this.props;
+    const { dispatch } = this.props;
+    const { tags } = this.state;
     dispatch({
       type: 'interview/deleteTag',
       payload: id,
@@ -144,7 +159,9 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
   };
   underLineComponent = (props) => {
     const { children, attributes, editor, node } = props;
-    const { tags, id } = this.props;
+    const { id } = this.props;
+    const { tags } = this.state;
+    console.log(tags);
     console.log(node);
     return (
       <Popover

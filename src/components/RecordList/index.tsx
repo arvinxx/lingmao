@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { List } from 'antd';
 import { isEmpty } from 'lodash';
-import { TRecord, TTag } from '../../models/interview';
+import { TRecord, TTag, TTagGroup } from '../../models/interview';
 
 import InputTooltip from './InputTooltip';
 
@@ -14,7 +14,7 @@ interface RecordListProps {
   recordFocusId?: string;
   dispatch: any;
   loading: any;
-  tags: Array<TTag>;
+  tagGroups: Array<TTagGroup>;
 }
 
 export default class RecordList extends PureComponent<RecordListProps> {
@@ -42,7 +42,7 @@ export default class RecordList extends PureComponent<RecordListProps> {
   };
 
   render() {
-    const { records, recordFocusId, loading, dispatch, tags } = this.props;
+    const { records, recordFocusId, loading, dispatch, tagGroups } = this.props;
 
     return (
       <div className={styles.list}>
@@ -60,7 +60,7 @@ export default class RecordList extends PureComponent<RecordListProps> {
                   text={text}
                   recordFocusId={recordFocusId}
                   dispatch={dispatch}
-                  tags={tags}
+                  tagGroups={tagGroups}
                   rawData={rawData}
                 />
               </Item>

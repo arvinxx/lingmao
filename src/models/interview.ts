@@ -20,7 +20,18 @@ export type TTagGroup = {
   text: string;
   id: string;
   tags: Array<TTag>;
-  groupEditable: boolean;
+};
+
+export type TInterview = {
+  title: string;
+  records: Array<TRecord>;
+  id: string;
+  dimensions;
+  selectedValues: Array<string>;
+  recordFocusId: string;
+  uploadVisible: boolean;
+  tagVisible: boolean;
+  tagGroups: Array<TTagGroup>;
 };
 
 export const initRawData = () => {
@@ -72,7 +83,7 @@ export default {
     },
 
     querryDocument(state, { payload: documents }) {
-      let { title, records, id, dimensions, selectedValues, tags } = documents[0];
+      let { title, records, id, dimensions, selectedValues, tagGroups } = documents[0];
 
       dimensions.map((dimension) => {
         let { id, values } = dimension;
@@ -105,13 +116,18 @@ export default {
           },
         ];
       }
-      if (tags.length > 0) {
-        tags.map((tag) => {
-          let id = tag.id;
+      if (tagGroups !== undefined && tagGroups !== null && tagGroups.length > 0) {
+        tagGroups.map((tagGroup, index) => {
+          let id = tagGroup.id;
           id = id === '' ? generateId() : id;
-          tag.id = id;
-          delete tag._id;
+          if (index === 0) {
+            tagGroup.text = 'ungroup';
+          }
+          tagGroup.id = id;
+          delete tagGroup._id;
         });
+      } else {
+        tagGroups = [{ id: generateId(), tags: [], text: 'ungroup' }];
       }
 
       if (title === undefined) {
@@ -128,7 +144,7 @@ export default {
         records,
         title,
         id,
-        tags,
+        tagGroups,
         dimensions,
         selectedValues,
         recordFocusId: records[0].id,
@@ -329,25 +345,29 @@ export default {
 
     addTag(state, { payload }) {
       const { text, refId } = payload;
-      return {
-        ...state,
-        tags: [...state.tags, { text: text, id: generateId(), refId }],
-      };
+      const tagGroups: Array<TTagGroup> = concat(state.tagGroups);
+      tagGroups[0].tags = [...state.tagGroups[0].tags, { text: text, id: generateId(), refId }];
+      return { ...state, tagGroups };
     },
+
     changeTagText(state, { payload }) {
       const { id, newText } = payload;
-      const tags: Array<TTag> = concat(state.tags);
-      const index = findIndexById(tags, id);
-      tags[index].text = newText;
       return {
         ...state,
-        tags,
+        tagGroups: state.tagGroups.map((tagGroup: TTagGroup) => ({
+          ...tagGroup,
+          tags: tagGroup.tags.map((tag) => ({ ...tag, text: tag.id === id ? newText : tag.text })),
+        })),
       };
     },
+
     deleteTag(state, { payload: id }) {
       return {
         ...state,
-        tags: state.tags.filter((tag) => tag.id !== id),
+        tagGroups: state.tagGroups.map((tagGroup: TTagGroup) => ({
+          ...tagGroup,
+          tags: tagGroup.tags.filter((tag) => tag.id !== id),
+        })),
       };
     },
 
@@ -359,35 +379,23 @@ export default {
     },
     changeTagGroupText(state, { payload }) {
       const { id, newText } = payload;
-      const tagGroups = state.tagGroups;
-      const index = findIndexById(tagGroups, id);
-      tagGroups[index].text = newText;
-      return { ...state, tagGroups };
+      if (findIndexById(state.tagGroups, id) !== 0) {
+        return {
+          ...state,
+          tagGroups: state.tagGroups.map((tagGroup) => ({
+            ...tagGroup,
+            text: tagGroup.id === id ? newText : tagGroup.text,
+          })),
+        };
+      } else return state;
     },
     deleteTagGroup(state, { payload: id }) {
-      return {
-        ...state,
-        tagGroups: state.tagGroups.filter((tagGroup) => tagGroup.id !== id),
-      };
-    },
-
-    showGroupEdit(state, { payload: id }) {
-      const tagGroups = state.tagGroups;
-      const index = findIndexById(tagGroups, id);
-      tagGroups[index].groupEditable = true;
-      return {
-        ...state,
-        tagGroups,
-      };
-    },
-    hideGroupEdit(state, { payload: id }) {
-      const tagGroups = state.tagGroups;
-      const index = findIndexById(tagGroups, id);
-      tagGroups[index].groupEditable = false;
-      return {
-        ...state,
-        tagGroups,
-      };
+      if (findIndexById(state.tagGroups, id) !== 0) {
+        return {
+          ...state,
+          tagGroups: state.tagGroups.filter((tagGroup) => tagGroup.id !== id),
+        };
+      } else return state;
     },
   },
 };

@@ -2,9 +2,9 @@ import React, { Component, ReactNode, Fragment } from 'react';
 import { Collapse, Tag, Modal, Input } from 'antd';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { connect } from 'dva';
+import { TTag, TTagGroup, TInterview } from 'models/interview';
+import { extractTags } from 'utils';
 
-import { TTag, TTagGroup } from '../../models/interview';
-import { TInterview } from './record';
 import styles from './tag.less';
 
 const Panel = Collapse.Panel;
@@ -19,12 +19,6 @@ const tags3 = [
   { id: '5345234', text: 'd5362dsd' },
   { id: '42366355', text: 'ddsd' },
   { id: '534673552423', text: '3654323' },
-];
-
-const tagGroups: Array<TTagGroup> = [
-  { id: '6457676556', text: 'sawe', tags: tags2, groupEditable: false },
-  { id: '43276443', text: 'rwe 而', tags: tags3, groupEditable: true },
-  { id: '64856893423', text: '儿童体验', tags: tags2, groupEditable: false },
 ];
 
 interface ITagsProps {
@@ -129,32 +123,31 @@ export default class Tags extends Component<ITagsProps> {
       </div>
     );
   };
-  TagsGroupComponent = (tagGroups:Array<TTagGroup>) => (
+  TagsGroupComponent = (tagGroups: Array<TTagGroup>) => (
     <Fragment>
-      {tagGroups.map((tagGroup) => {
-        const { text, id, tags, groupEditable } = tagGroup;
-        return (
-          <Collapse bordered={false}>
-            <Panel
-              key={id + 'Group'}
-              //@ts-ignore
-              onDoubleClick={() => this.showGroupEdit(id)}
-              header={
-                groupEditable ? (
+      {tagGroups.map((tagGroup, index) => {
+        const { text, id, tags } = tagGroup;
+        if (index !== 0) {
+          return (
+            <Collapse key={id + 'colap'} bordered={false}>
+              <Panel
+                key={id + 'Groups'}
+                //@ts-ignore
+                onDoubleClick={() => this.showGroupEdit(id)}
+                header={
                   <Input
+                    key={id + 'groups+input'}
                     value={text}
                     onChange={(e) => this.changeTagGroupText(e, id)}
                     onBlur={() => this.hideGroupEdit(id)}
                   />
-                ) : (
-                  text
-                )
-              }
-            >
-              {this.TagsComponent(tags)}
-            </Panel>
-          </Collapse>
-        );
+                }
+              >
+                {this.TagsComponent(tags)}
+              </Panel>
+            </Collapse>
+          );
+        }
       })}
       <Input
         className={styles['add-group']}
@@ -177,7 +170,8 @@ export default class Tags extends Component<ITagsProps> {
   );
   CombineTagsComponent = () => {
     const { selectedTags } = this.state;
-    const { tags } = this.props.interview;
+    const { tagGroups } = this.props.interview;
+    const tags = extractTags(tagGroups);
     return (
       <Modal
         mask={false}
@@ -220,7 +214,7 @@ export default class Tags extends Component<ITagsProps> {
   }
 
   render() {
-    const { tags, tagGroups } = this.props.interview;
+    const { tagGroups } = this.props.interview;
     return (
       <div className={styles.container}>
         <div className={styles.center}>
@@ -228,7 +222,7 @@ export default class Tags extends Component<ITagsProps> {
             <div className={styles.tips}>
               点击需要选中操作的一个或多个标签,鼠标右键使用菜单工具进行操作,点击空白处取消选中
             </div>
-            <div className={styles.ungroup}> {this.TagsComponent(tags)}</div>
+            <div className={styles.ungroup}> {this.TagsComponent(tagGroups[0].tags)}</div>
             <div className={styles.group}>{this.TagsGroupComponent(tagGroups)}</div>
             <div>{this.ContextMenuComponent()}</div>
             <div>{this.CombineTagsComponent()}</div>
