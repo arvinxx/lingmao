@@ -46,7 +46,7 @@ describe('Reducers', () => {
           },
         ],
         selectedValues: [],
-        tags: [],
+        tagGroups: [],
       };
       const action = {
         type: 'interview/querryDocument',
@@ -66,7 +66,7 @@ describe('Reducers', () => {
                 values: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce36' }],
               },
             ],
-            tags: [],
+            tagGroups: [],
             records: [{ text: '', id: '', _id: '5af03ce5f6999c642e53ce37' }],
           },
         ],
@@ -91,7 +91,7 @@ describe('Reducers', () => {
         selectedValues: [],
         recordFocusId: generateId(),
         id: generateId(),
-        tags: [],
+        tagGroups: [{ id: generateId(), text: 'ungroup', tags: [] }],
       });
       reset();
     });
@@ -142,7 +142,48 @@ describe('Reducers', () => {
                 values: [{ text: '', id: '3', _id: '5af03ce5f6999c642e53ce36' }],
               },
             ],
-            tags: [],
+            tagGroups: [
+              {
+                text: 'ungroup',
+                id: '222',
+                tags: [
+                  {
+                    id: '1',
+                    text: '测试1',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                  {
+                    id: '2',
+                    text: '测试2',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                ],
+              },
+              {
+                text: 'eed',
+                id: '111',
+                tags: [
+                  {
+                    id: '1',
+                    text: '测试1',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                  {
+                    id: '2',
+                    text: '测试2',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                ],
+              },
+            ],
             records: [{ text: '', id: '4', _id: '5af03ce5f6999c642e53ce37' }],
           },
         ],
@@ -167,7 +208,48 @@ describe('Reducers', () => {
         selectedValues: [],
         recordFocusId: '4',
         id: '1',
-        tags: [],
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: '222',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: 'eed',
+            id: '111',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
       });
       reset();
     });
@@ -217,7 +299,48 @@ describe('Reducers', () => {
                 values: [{ text: '', id: '3', _id: '5af03ce5f6999c642e53ce36' }],
               },
             ],
-            tags: [],
+            tagGroups: [
+              {
+                text: 'ungroup',
+                id: '',
+                tags: [
+                  {
+                    id: '1',
+                    text: '测试1',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                  {
+                    id: '2',
+                    text: '测试2',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                ],
+              },
+              {
+                text: 'eed',
+                id: '',
+                tags: [
+                  {
+                    id: '1',
+                    text: '测试1',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                  {
+                    id: '2',
+                    text: '测试2',
+                    refText: '',
+                    refId: '',
+                    groupId: '',
+                  },
+                ],
+              },
+            ],
             records: [],
             selectedValues: ['3'],
           },
@@ -240,7 +363,48 @@ describe('Reducers', () => {
         ],
         records: [{ id: generateId(), text: '', rawData: initRawData() }],
         title: '',
-        tags: [],
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: generateId(),
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: 'eed',
+            id: generateId(),
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
         selectedValues: ['3'],
         recordFocusId: generateId(),
         id: '1',
@@ -1012,42 +1176,53 @@ describe('Reducers', () => {
 
     const reducer = reducers.addTag;
     const state = {
-      tags: [],
+      tagGroups: [
+        {
+          text: 'ungroup',
+          id: '542424',
+          tags: [],
+        },
+      ],
     };
     const action = {
       type: 'interview/addTag',
       payload: { text: 'dsa', refId: '1' },
     };
     expect(reducer(state, action)).toEqual({
-      tags: [
+      tagGroups: [
         {
-          text: 'dsa',
-          id: generateId(),
-          refId: '1',
+          text: 'ungroup',
+          id: '542424',
+          tags: [{ text: 'dsa', id: generateId(), refId: '1' }],
         },
       ],
     });
-
     reset();
   });
   it('deleteTag', () => {
     const reducers = model.reducers;
     const reducer = reducers.deleteTag;
     const state = {
-      tags: [
+      tagGroups: [
         {
-          id: '1',
-          text: '测试1',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-        {
-          id: '2',
-          text: '测试2',
-          refText: '',
-          refId: '',
-          groupId: '',
+          text: 'ungroup',
+          id: '4234',
+          tags: [
+            {
+              id: '1',
+              text: '测试1',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+            {
+              id: '2',
+              text: '测试2',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
         },
       ],
     };
@@ -1057,13 +1232,19 @@ describe('Reducers', () => {
     };
 
     expect(reducer(state, action)).toEqual({
-      tags: [
+      tagGroups: [
         {
-          id: '1',
-          text: '测试1',
-          refText: '',
-          refId: '',
-          groupId: '',
+          text: 'ungroup',
+          id: '4234',
+          tags: [
+            {
+              id: '1',
+              text: '测试1',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
         },
       ],
     });
@@ -1072,20 +1253,26 @@ describe('Reducers', () => {
     const reducers = model.reducers;
     const reducer = reducers.changeTagText;
     const state = {
-      tags: [
+      tagGroups: [
         {
-          id: '1',
-          text: '测试1',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-        {
-          id: '2',
-          text: '测试2',
-          refText: '',
-          refId: '',
-          groupId: '',
+          text: 'ungroup',
+          id: '434',
+          tags: [
+            {
+              id: '1',
+              text: '测试1',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+            {
+              id: '2',
+              text: '测试2',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
         },
       ],
     };
@@ -1095,20 +1282,26 @@ describe('Reducers', () => {
     };
 
     expect(reducer(state, action)).toEqual({
-      tags: [
+      tagGroups: [
         {
-          id: '1',
-          text: '测试1',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-        {
-          id: '2',
-          text: 'hello',
-          refText: '',
-          refId: '',
-          groupId: '',
+          text: 'ungroup',
+          id: '434',
+          tags: [
+            {
+              id: '1',
+              text: '测试1',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+            {
+              id: '2',
+              text: 'hello',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
         },
       ],
     });
@@ -1156,127 +1349,244 @@ describe('Reducers', () => {
       reset(); // reset to realtime
     });
   });
-  it('deleteTagGroup', () => {
-    const reducers = model.reducers;
-    const reducer = reducers.deleteTagGroup;
-    const state = {
-      tagGroups: [
-        { key: '1', id: '34', tags: [] },
-        { key: '2', id: '21', tags: [] },
-        { key: '3', id: '4', tags: [] },
-      ],
-    };
-    const action = {
-      type: 'interview/deleteTagGroup',
-      payload: '21',
-    };
+  describe('deleteTagGroup', () => {
+    it("should delete the tagGroup if it is n't ungroup ", () => {
+      const reducers = model.reducers;
+      const reducer = reducers.deleteTagGroup;
+      const state = {
+        tagGroups: [
+          { text: 'ungroup', id: '341411', tags: [] },
+          { text: '2', id: '21', tags: [] },
+          { text: '3', id: '4', tags: [] },
+        ],
+      };
+      const action = {
+        type: 'interview/deleteTagGroup',
+        payload: '21',
+      };
 
-    expect(reducer(state, action)).toEqual({
-      tagGroups: [{ key: '1', id: '34', tags: [] }, { key: '3', id: '4', tags: [] }],
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [{ text: 'ungroup', id: '341411', tags: [] }, { text: '3', id: '4', tags: [] }],
+      });
+    });
+    it("shouldn't delete the tagGroup if it is ungroup ", () => {
+      const reducers = model.reducers;
+      const reducer = reducers.deleteTagGroup;
+      const state = {
+        tagGroups: [
+          { text: 'ungroup', id: '341411', tags: [] },
+          { text: '2', id: '21', tags: [] },
+          { text: '3', id: '4', tags: [] },
+        ],
+      };
+      const action = {
+        type: 'interview/deleteTagGroup',
+        payload: '341411',
+      };
+
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [
+          { text: 'ungroup', id: '341411', tags: [] },
+          { text: '2', id: '21', tags: [] },
+          { text: '3', id: '4', tags: [] },
+        ],
+      });
     });
   });
-  it('changeTagGroupText', () => {
-    const reducers = model.reducers;
-    const reducer = reducers.changeTagGroupText;
-    const state = {
-      tagGroups: [
-        {
-          text: '34',
-          id: '222',
-          tags: [],
-        },
-        {
-          text: '31',
-          id: '111',
-          tags: [],
-        },
-      ],
-    };
-    const action = {
-      type: 'interview/changeTagGroupText',
-      payload: { id: '222', newText: 'eed' },
-    };
+  describe('changeTagGroupText', () => {
+    it("should changeTagGroupText if it is n't ungroup", () => {
+      const reducers = model.reducers;
+      const reducer = reducers.changeTagGroupText;
+      const state = {
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: '222',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: '31',
+            id: '111',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
+      };
+      const action = {
+        type: 'interview/changeTagGroupText',
+        payload: { id: '111', newText: 'eed' },
+      };
 
-    expect(reducer(state, action)).toEqual({
-      tagGroups: [
-        {
-          text: 'eed',
-          id: '222',
-          tags: [],
-        },
-        {
-          text: '31',
-          id: '111',
-          tags: [],
-        },
-      ],
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: '222',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: 'eed',
+            id: '111',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
+      });
     });
-  });
+    it("shouldn't changeTagGroupText if it is ungroup", () => {
+      const reducers = model.reducers;
+      const reducer = reducers.changeTagGroupText;
+      const state = {
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: '222',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: '31',
+            id: '111',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
+      };
+      const action = {
+        type: 'interview/changeTagGroupText',
+        payload: { id: '222', newText: 'eed' },
+      };
 
-  it('showGroupEdit', () => {
-    const reducer = reducers.showGroupEdit;
-    const state = {
-      tagGroups: [
-        {
-          id: '3',
-          groupEditable: false,
-        },
-        {
-          id: '4',
-          groupEditable: false,
-        },
-      ],
-    };
-
-    const action = {
-      type: 'interview/showGroupEdit',
-      payload: '3',
-    };
-
-    expect(reducer(state, action)).toEqual({
-      tagGroups: [
-        {
-          id: '3',
-          groupEditable: true,
-        },
-        {
-          id: '4',
-          groupEditable: false,
-        },
-      ],
-    });
-  });
-  it('hideGroupEdit', () => {
-    const reducer = reducers.hideGroupEdit;
-    const state = {
-      tagGroups: [
-        {
-          id: '3',
-          groupEditable: true,
-        },
-        {
-          id: '4',
-          groupEditable: false,
-        },
-      ],
-    };
-
-    const action = {
-      type: 'interview/hideGroupEdit',
-      payload: '3',
-    };
-
-    expect(reducer(state, action)).toEqual({
-      tagGroups: [
-        {
-          id: '3',
-          groupEditable: false,
-        },
-        {
-          id: '4',
-          groupEditable: false,
-        },
-      ],
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: '222',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: '31',
+            id: '111',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
+      });
     });
   });
 });
