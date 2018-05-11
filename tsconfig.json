@@ -12,10 +12,10 @@
     "noImplicitAny": false,
     "allowJs": true,
     "target": "es6",
-    "lib": ["dom", "es7"]
+    "lib": ["dom", "es7"],
+    "baseUrl": "./src/",
+    "path": { "*": ["*/*"] }
   },
-  "includes": [
-    "./typings/**.d.ts"
-  ],
+  "includes": ["./typings/**.d.ts"],
   "exclude": ["node_modules", "lib", "es"]
 }
