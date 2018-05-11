@@ -7,7 +7,7 @@ import Plain from 'slate-plain-serializer';
 export type TRecord = {
   id: string;
   text: string;
-  rawData: Value;
+  rawData: JSON;
 };
 export type TTag = {
   id: string;
@@ -19,8 +19,14 @@ export type TTag = {
 export type TTagGroup = {
   text: string;
   id: string;
-  tagId: Array<string>;
+  tags: Array<TTag>;
+  groupEditable: boolean;
 };
+
+export const initRawData = () => {
+  return Plain.deserialize('').toJSON();
+};
+
 export default {
   namespace: 'interview',
   state: {
@@ -30,13 +36,7 @@ export default {
     id: '',
     dimensions: [],
     tags: [],
-    tagGroups: [
-      {
-        text: '',
-        id: '',
-        tagId: [],
-      },
-    ],
+    tagGroups: [],
     selectedValues: [],
     uploadVisible: true,
     tagVisible: true,
@@ -101,7 +101,7 @@ export default {
           {
             id: generateId(),
             text: '',
-            rawData: Value.fromJSON(Plain.deserialize('')),
+            rawData: initRawData(),
           },
         ];
       }
@@ -141,7 +141,7 @@ export default {
       records.splice(index + 1, 0, {
         text: '',
         id: generateId(),
-        rawData: Value.fromJSON(Plain.deserialize('')),
+        rawData: initRawData(),
       });
       return {
         ...state,
@@ -186,6 +186,7 @@ export default {
         ...state,
       };
     },
+
     changeRecordFocusId(state, { payload: id }) {
       return {
         ...state,
@@ -326,10 +327,11 @@ export default {
       return { ...state, selectedValues };
     },
 
-    addTag(state, { payload: text }) {
+    addTag(state, { payload }) {
+      const { text, refId } = payload;
       return {
         ...state,
-        tags: [...state.tags, { text, id: generateId() }],
+        tags: [...state.tags, { text: text, id: generateId(), refId }],
       };
     },
     changeTagText(state, { payload }) {
@@ -346,6 +348,45 @@ export default {
       return {
         ...state,
         tags: state.tags.filter((tag) => tag.id !== id),
+      };
+    },
+
+    addTagGroup(state, { payload: text }) {
+      if (text === '') {
+        return state;
+      } else
+        return { ...state, tagGroups: [...state.tagGroups, { text, tags: [], id: generateId() }] };
+    },
+    changeTagGroupText(state, { payload }) {
+      const { id, newText } = payload;
+      const tagGroups = state.tagGroups;
+      const index = findIndexById(tagGroups, id);
+      tagGroups[index].text = newText;
+      return { ...state, tagGroups };
+    },
+    deleteTagGroup(state, { payload: id }) {
+      return {
+        ...state,
+        tagGroups: state.tagGroups.filter((tagGroup) => tagGroup.id !== id),
+      };
+    },
+
+    showGroupEdit(state, { payload: id }) {
+      const tagGroups = state.tagGroups;
+      const index = findIndexById(tagGroups, id);
+      tagGroups[index].groupEditable = true;
+      return {
+        ...state,
+        tagGroups,
+      };
+    },
+    hideGroupEdit(state, { payload: id }) {
+      const tagGroups = state.tagGroups;
+      const index = findIndexById(tagGroups, id);
+      tagGroups[index].groupEditable = false;
+      return {
+        ...state,
+        tagGroups,
       };
     },
   },

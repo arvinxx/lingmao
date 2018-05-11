@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { Radio, List, Collapse, Menu, Input, Button, InputNumber, Icon } from 'antd';
+import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
+import 'react-reflex/styles.css';
 
 import { TagInput, RecordList, Upload, Ellipsis } from '../../components';
-import { TTag, TRecord } from '../../models/interview';
+import { TTag, TRecord, TTagGroup } from '../../models/interview';
 
-import 'react-reflex/styles.css';
 import styles from './record.less';
 
 const { Panel } = Collapse;
@@ -35,6 +35,7 @@ export type TInterview = {
   uploadVisible: boolean;
   tagVisible: boolean;
   tags: Array<TTag>;
+  tagGroups: Array<TTagGroup>;
 };
 
 interface IInterviewProps {

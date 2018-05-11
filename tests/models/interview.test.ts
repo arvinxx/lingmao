@@ -1,7 +1,7 @@
 import { effects } from 'dva/saga';
-import model from '../../src/models/interview';
+import model, { initRawData } from '../../src/models/interview';
 import { queryDocument, saveDocument } from '../../src/services/interview';
-import { generateId } from '../../src/utils/utils';
+import { generateId } from '../../src/utils';
 
 import { set, reset } from 'mockdate';
 
@@ -46,6 +46,7 @@ describe('Reducers', () => {
           },
         ],
         selectedValues: [],
+        tags: [],
       };
       const action = {
         type: 'interview/querryDocument',
@@ -90,10 +91,11 @@ describe('Reducers', () => {
         selectedValues: [],
         recordFocusId: generateId(),
         id: generateId(),
+        tags: [],
       });
       reset();
     });
-    it("if id isn't empty should key it", () => {
+    it("if id isn't empty should keep it", () => {
       set('1/1/2000'); // Mock datetime
       const reducer = reducers.querryDocument;
       const state = {
@@ -165,6 +167,7 @@ describe('Reducers', () => {
         selectedValues: [],
         recordFocusId: '4',
         id: '1',
+        tags: [],
       });
       reset();
     });
@@ -235,8 +238,9 @@ describe('Reducers', () => {
             inputVisible: false,
           },
         ],
-        records: [{ id: generateId(), text: '' }],
+        records: [{ id: generateId(), text: '', rawData: initRawData() }],
         title: '',
+        tags: [],
         selectedValues: ['3'],
         recordFocusId: generateId(),
         id: '1',
@@ -287,66 +291,8 @@ describe('Reducers', () => {
         {
           text: '',
           id: generateId(),
+          rawData: initRawData(),
         },
-      ],
-    });
-
-    const state2 = {
-      recordFocusId: '1',
-
-      records: [
-        {
-          id: '1',
-          text: 'delete',
-        },
-        {
-          id: '3',
-          text: '',
-        },
-      ],
-    };
-    const action2 = {
-      type: 'interview/addRecord',
-      payload: '1',
-    };
-    expect(reducer(state2, action2)).toEqual({
-      recordFocusId: generateId(),
-      records: [
-        {
-          id: '1',
-          text: 'delete',
-        },
-        {
-          text: '',
-          id: generateId(),
-        },
-        {
-          id: '3',
-          text: '',
-        },
-      ],
-    });
-    const state3 = {
-      recordFocusId: '1',
-      records: [
-        { id: '1', text: 'delete' },
-        { id: '2', text: 'delete' },
-        { id: '6', text: 'delete' },
-        { id: '3', text: '' },
-      ],
-    };
-    const action3 = {
-      type: 'interview/addRecord',
-      payload: '6',
-    };
-    expect(reducer(state3, action3)).toEqual({
-      recordFocusId: generateId(),
-      records: [
-        { id: '1', text: 'delete' },
-        { id: '2', text: 'delete' },
-        { id: '6', text: 'delete' },
-        { id: generateId(), text: '' },
-        { id: '3', text: '' },
       ],
     });
     reset(); // reset to realtime
@@ -933,7 +879,7 @@ describe('Reducers', () => {
     };
 
     const action = {
-      type: 'interview/showValueInput',
+      type: 'interview/showValueEdit',
       payload: { id: '3', vid: '1' },
     };
 
@@ -1061,46 +1007,28 @@ describe('Reducers', () => {
     });
   });
 
-  describe('addTag', () => {
-    it("should add a Tag key if it's not empty", () => {
-      set('1/1/2000');
+  it('addTag', () => {
+    set('1/1/2000');
 
-      const reducer = reducers.addTag;
-      const state = {
-        tags: [],
-      };
-      const action = {
-        type: 'interview/addTag',
-        payload: 'dsa',
-      };
-      expect(reducer(state, action)).toEqual({
-        tags: [
-          {
-            text: 'dsa',
-            id: generateId(),
-          },
-        ],
-      });
-
-      reset();
+    const reducer = reducers.addTag;
+    const state = {
+      tags: [],
+    };
+    const action = {
+      type: 'interview/addTag',
+      payload: { text: 'dsa', refId: '1' },
+    };
+    expect(reducer(state, action)).toEqual({
+      tags: [
+        {
+          text: 'dsa',
+          id: generateId(),
+          refId: '1',
+        },
+      ],
     });
-    it("should remain if it's empty", () => {
-      set('1/1/2000'); // Mock datetime
 
-      const reducer = reducers.addTag;
-      const state = {
-        tags: [],
-      };
-      const action = {
-        type: 'interview/addTag',
-        payload: '',
-      };
-      expect(reducer(state, action)).toEqual({
-        tags: [],
-      });
-
-      reset(); // reset to realtime
-    });
+    reset();
   });
   it('deleteTag', () => {
     const reducers = model.reducers;
@@ -1181,6 +1109,172 @@ describe('Reducers', () => {
           refText: '',
           refId: '',
           groupId: '',
+        },
+      ],
+    });
+  });
+
+  describe('addTagGroup', () => {
+    it("should add a new tagGroup if it's not empty", () => {
+      set('1/1/2000'); // Mock datetime
+
+      const reducer = reducers.addTagGroup;
+      const state = {
+        tagGroups: [],
+      };
+      const action = {
+        type: 'interview/addTagGroup',
+        payload: 'dsa',
+      };
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [
+          {
+            text: 'dsa',
+            id: generateId(),
+            tags: [],
+          },
+        ],
+      });
+
+      reset(); // reset to realtime
+    });
+    it("should remain if it's empty", () => {
+      set('1/1/2000'); // Mock datetime
+
+      const reducer = reducers.addDimensionKey;
+      const state = {
+        dimensions: [],
+      };
+      const action = {
+        type: 'interview/addDimensionKey',
+        payload: '',
+      };
+      expect(reducer(state, action)).toEqual({
+        dimensions: [],
+      });
+
+      reset(); // reset to realtime
+    });
+  });
+  it('deleteTagGroup', () => {
+    const reducers = model.reducers;
+    const reducer = reducers.deleteTagGroup;
+    const state = {
+      tagGroups: [
+        { key: '1', id: '34', tags: [] },
+        { key: '2', id: '21', tags: [] },
+        { key: '3', id: '4', tags: [] },
+      ],
+    };
+    const action = {
+      type: 'interview/deleteTagGroup',
+      payload: '21',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tagGroups: [{ key: '1', id: '34', tags: [] }, { key: '3', id: '4', tags: [] }],
+    });
+  });
+  it('changeTagGroupText', () => {
+    const reducers = model.reducers;
+    const reducer = reducers.changeTagGroupText;
+    const state = {
+      tagGroups: [
+        {
+          text: '34',
+          id: '222',
+          tags: [],
+        },
+        {
+          text: '31',
+          id: '111',
+          tags: [],
+        },
+      ],
+    };
+    const action = {
+      type: 'interview/changeTagGroupText',
+      payload: { id: '222', newText: 'eed' },
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tagGroups: [
+        {
+          text: 'eed',
+          id: '222',
+          tags: [],
+        },
+        {
+          text: '31',
+          id: '111',
+          tags: [],
+        },
+      ],
+    });
+  });
+
+  it('showGroupEdit', () => {
+    const reducer = reducers.showGroupEdit;
+    const state = {
+      tagGroups: [
+        {
+          id: '3',
+          groupEditable: false,
+        },
+        {
+          id: '4',
+          groupEditable: false,
+        },
+      ],
+    };
+
+    const action = {
+      type: 'interview/showGroupEdit',
+      payload: '3',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tagGroups: [
+        {
+          id: '3',
+          groupEditable: true,
+        },
+        {
+          id: '4',
+          groupEditable: false,
+        },
+      ],
+    });
+  });
+  it('hideGroupEdit', () => {
+    const reducer = reducers.hideGroupEdit;
+    const state = {
+      tagGroups: [
+        {
+          id: '3',
+          groupEditable: true,
+        },
+        {
+          id: '4',
+          groupEditable: false,
+        },
+      ],
+    };
+
+    const action = {
+      type: 'interview/hideGroupEdit',
+      payload: '3',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tagGroups: [
+        {
+          id: '3',
+          groupEditable: false,
+        },
+        {
+          id: '4',
+          groupEditable: false,
         },
       ],
     });

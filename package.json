@@ -17,8 +17,8 @@
     "precommit": "npm run lint-staged",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "test": "umi test",
+    "test:watch": "umi test --watch",
     "cov": "umi test --coverage",
-    "test:component": "umi test ./src/components",
     "test:all": "node ./tests/run-tests.js"
   },
   "dependencies": {
@@ -81,15 +81,8 @@
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": [
-      "prettier --trailing-comma all --single-quote --write",
-      "lint-staged:js"
-    ],
+    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write", "lint-staged:js"],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
 }

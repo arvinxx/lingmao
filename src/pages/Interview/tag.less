@@ -21,10 +21,13 @@
 
 .tag-container {
   display: flex;
+  flex-wrap: wrap;
+
   margin-top: 24px;
   :global {
     .ant-tag {
       margin-right: 16px;
+      margin-bottom: 8px;
       padding: 5px 18px;
       border-radius: 20px;
       height: 32px;
@@ -49,7 +52,7 @@
 
   .ungroup {
     margin-top: 32px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 
   .group {
@@ -131,4 +134,9 @@
     text-align: center;
     color: @text-color-secondary;
   }
+}
+
+.add-group {
+  //background: red;
+  padding-left: 40px;
 }
