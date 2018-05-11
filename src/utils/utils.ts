@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { TTag, TTagGroup } from "../models/interview";
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -114,6 +115,17 @@ export const findIndexById = (arr: Array<any>, id: string): number => {
 export const generateId = (): string => {
   return new Date().valueOf().toString();
 };
+
+export const extractTags = (tagGroups: Array<TTagGroup>): Array<TTag> => {
+  let tags: Array<TTag> = [];
+  if (tagGroups !== undefined) {
+    tagGroups.map((tagGroup: TTagGroup) => {
+      tags.push(...tagGroup.tags);
+    });
+    return tags;
+  } else return [];
+};
+
 
 function getRelation(str1, str2) {
   if (str1 === str2) {

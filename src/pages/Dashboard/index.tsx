@@ -1,12 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Tooltip, Layout } from 'antd';
-import numeral from 'numeral';
-import Authorized from '../../utils/Authorized';
-import { dashboard as header } from '../../common/header';
-
-import { Pie, WaterWave, Gauge, TagCloud } from '../../components/Charts';
-import { ActiveChart, Header, NumberInfo } from '../../components';
+import Authorized from 'utils/Authorized';
+import { dashboard as header } from 'common/header';
+import { Pie, WaterWave, Gauge, TagCloud } from 'components';
+import { Header } from 'components';
 import styles from './index.less';
 
 const { Secured } = Authorized;
@@ -43,24 +41,10 @@ export default class Index extends PureComponent<any, any> {
               <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
                 <Card title="用户画像" bordered={false}>
                   <Row>
-                    <Col md={6} sm={12} xs={24}>
-                      <NumberInfo
-                        subTitle="今日交易总额"
-                        suffix="元"
-                        total={numeral(124543233).format('0,0')}
-                      />
-                    </Col>
-                    <Col md={6} sm={12} xs={24}>
-                      <NumberInfo subTitle="销售目标完成率" total="92%" />
-                    </Col>
                     <Col md={6} sm={12} xs={24} />
-                    <Col md={6} sm={12} xs={24}>
-                      <NumberInfo
-                        subTitle="每秒交易总额"
-                        suffix="元"
-                        total={numeral(234).format('0,0')}
-                      />
-                    </Col>
+                    <Col md={6} sm={12} xs={24} />
+                    <Col md={6} sm={12} xs={24} />
+                    <Col md={6} sm={12} xs={24} />
                   </Row>
                   <div className={styles.mapChart}>
                     <Tooltip title="等待后期实现">
@@ -73,9 +57,7 @@ export default class Index extends PureComponent<any, any> {
                 </Card>
               </Col>
               <Col xl={6} lg={24} md={24} sm={24} xs={24}>
-                <Card title="用户地图" style={{ marginBottom: 24 }} bordered={false}>
-                  <ActiveChart />
-                </Card>
+                <Card title="用户地图" style={{ marginBottom: 24 }} bordered={false} />
                 <Card
                   title="移情图"
                   style={{ marginBottom: 24 }}
@@ -108,24 +90,10 @@ export default class Index extends PureComponent<any, any> {
               <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
                 <Card title="用户画像" bordered={false}>
                   <Row>
-                    <Col md={6} sm={12} xs={24}>
-                      <NumberInfo
-                        subTitle="今日交易总额"
-                        suffix="元"
-                        total={numeral(124543233).format('0,0')}
-                      />
-                    </Col>
-                    <Col md={6} sm={12} xs={24}>
-                      <NumberInfo subTitle="销售目标完成率" total="92%" />
-                    </Col>
                     <Col md={6} sm={12} xs={24} />
-                    <Col md={6} sm={12} xs={24}>
-                      <NumberInfo
-                        subTitle="每秒交易总额"
-                        suffix="元"
-                        total={numeral(234).format('0,0')}
-                      />
-                    </Col>
+                    <Col md={6} sm={12} xs={24} />
+                    <Col md={6} sm={12} xs={24} />
+                    <Col md={6} sm={12} xs={24} />
                   </Row>
                   <div className={styles.mapChart}>
                     <Tooltip title="等待后期实现">
@@ -138,9 +106,7 @@ export default class Index extends PureComponent<any, any> {
                 </Card>
               </Col>
               <Col xl={6} lg={24} md={24} sm={24} xs={24}>
-                <Card title="用户地图" style={{ marginBottom: 24 }} bordered={false}>
-                  <ActiveChart />
-                </Card>
+                <Card title="用户地图" style={{ marginBottom: 24 }} bordered={false} />
                 <Card
                   title="移情图"
                   style={{ marginBottom: 24 }}

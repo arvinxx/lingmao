@@ -4,10 +4,11 @@ import { Radio, List, Collapse, Menu, Input, Button, InputNumber, Icon } from 'a
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 
-import { TagInput, RecordList, Upload, Ellipsis } from '../../components';
-import { TTag, TRecord, TTagGroup } from '../../models/interview';
+import { TagInput, RecordList, Upload, Ellipsis } from 'components';
+import { TInterview } from 'models/interview';
 
 import styles from './record.less';
+import { extractTags } from '../../utils';
 
 const { Panel } = Collapse;
 const RadioGroup = Radio.Group;
@@ -23,19 +24,6 @@ const UploadProps = {
   name: 'file',
   multiple: true,
   action: 'http://localhost:8000/api/upload',
-};
-
-export type TInterview = {
-  title: string;
-  records: Array<TRecord>;
-  id: string;
-  dimensions;
-  selectedValues: Array<string>;
-  recordFocusId: string;
-  uploadVisible: boolean;
-  tagVisible: boolean;
-  tags: Array<TTag>;
-  tagGroups: Array<TTagGroup>;
 };
 
 interface IInterviewProps {
@@ -58,10 +46,10 @@ export default class Interview extends Component<IInterviewProps, any> {
   }
 
   componentWillUnmount() {
-    const { title, records, id, dimensions, selectedValues, tags } = this.props.interview;
+    const { title, records, id, dimensions, selectedValues, tagGroups } = this.props.interview;
     this.props.dispatch({
       type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedValues, tags },
+      payload: { title, id, records, dimensions, selectedValues, tagGroups },
     });
   }
   deleteTag = (e) => {
@@ -209,7 +197,7 @@ export default class Interview extends Component<IInterviewProps, any> {
       dimensions,
       selectedValues,
       recordFocusId,
-      tags,
+      tagGroups,
     } = this.props.interview;
     const loading = this.props.loading;
     return (
@@ -223,7 +211,7 @@ export default class Interview extends Component<IInterviewProps, any> {
                 recordFocusId={recordFocusId}
                 records={records}
                 dispatch={this.props.dispatch}
-                tags={tags}
+                tagGroups={tagGroups}
               />
             </div>
           </ReflexElement>
@@ -247,12 +235,12 @@ export default class Interview extends Component<IInterviewProps, any> {
   };
 
   render() {
-    const { uploadVisible, tagVisible, tags } = this.props.interview;
+    const { uploadVisible, tagVisible, tagGroups } = this.props.interview;
     return (
       <div className={styles.container}>
         {this.UploadComponent(uploadVisible)}
         {this.RecordComponent()}
-        {this.LabelComponent(tagVisible, tags)}
+        {this.LabelComponent(tagVisible, extractTags(tagGroups))}
       </div>
     );
   }
