@@ -16,7 +16,7 @@ describe('findIndexById', () => {
     expect(findIndexById(arr, '34')).toEqual(0);
     expect(findIndexById(arr, '1')).toEqual(1);
   });
-  it("should return none when don't find id", () => {
+  it("should return Error when don't find id", () => {
     const arr = [
       {
         id: '34',
@@ -27,7 +27,7 @@ describe('findIndexById', () => {
         value: '111',
       },
     ];
-    expect(findIndexById(arr, '3')).toEqual(undefined);
+    expect(findIndexById(arr, '3')).toThrowError('id 不正确，请重试');
   });
 });
 

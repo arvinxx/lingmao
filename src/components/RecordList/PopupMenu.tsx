@@ -8,6 +8,7 @@ interface IPopupMenuProps {
   onChange: Function;
   value: Value;
   dispatch: any;
+  refId: string;
 }
 
 export default class PopupMenu extends Component<IPopupMenuProps> {
@@ -17,14 +18,14 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
   }
 
   onClickMark = (event, type) => {
-    const { value, onChange, dispatch } = this.props;
+    const { value, onChange, dispatch, refId } = this.props;
     event.preventDefault();
     if (type === 'add') {
       // 可用状态时
       const text: string = window.getSelection().toString();
       dispatch({
         type: 'interview/addTag',
-        payload: text,
+        payload: { text, refId },
       });
       onChange(value.change().addMark(''));
       console.log('新增标签');

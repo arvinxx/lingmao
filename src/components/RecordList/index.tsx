@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { List } from 'antd';
 import { isEmpty } from 'lodash';
 import { TRecord, TTag } from '../../models/interview';
@@ -11,23 +11,13 @@ const { Item } = List;
 
 interface RecordListProps {
   records: Array<TRecord>;
-  recordFocusId: string;
+  recordFocusId?: string;
   dispatch: any;
   loading: any;
   tags: Array<TTag>;
 }
 
-export default class RecordList extends Component<RecordListProps, any> {
-  state = {};
-
-  changeRecordText = (e, id) => {
-    const text = e.target.value;
-    this.props.dispatch({
-      type: 'interview/changeRecordText',
-      payload: { id, newText: text },
-    });
-  };
-
+export default class RecordList extends PureComponent<RecordListProps> {
   addRecord = (id) => {
     this.props.dispatch({
       type: 'interview/addRecord',
@@ -39,43 +29,16 @@ export default class RecordList extends Component<RecordListProps, any> {
       this.props.dispatch({ type: 'interview/deleteRecord', payload: id });
     }
   };
+  changeRecordText = (e, id) => {
+    const text = e.target.value;
+    this.props.dispatch({
+      type: 'interview/changeRecordText',
+      payload: { id, newText: text },
+    });
+  };
 
-  onTabChange = (id, bool) => {
-    console.log('按下了 Tab！');
-  };
-  onDirectionChange = (id, dd) => {
-    console.log(id + '方向变化');
-  };
   changeRecordFocusId = (id) => {
     this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
-  };
-
-  onKeyDown = (e, id, text) => {
-    const { onDirectionChange, onTabChange } = this;
-    const { keyCode, shiftKey } = e;
-    console.log(keyCode);
-    if (keyCode === 9 && shiftKey) {
-      // console.log("shift + Tab clicked!")
-      if (onTabChange) {
-        onTabChange(id, true);
-      }
-    }
-    if (keyCode === 9 && !shiftKey) {
-      // console.log("Tab clicked!")
-      if (onTabChange) {
-        e.preventDefault();
-        onTabChange(id, false);
-      }
-    }
-    if (keyCode >= 37 && keyCode <= 40 && onDirectionChange) {
-      const temp = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down',
-      };
-      onDirectionChange(id, temp[keyCode.toString()]);
-    }
   };
 
   render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
-import { Editor } from 'slate-react';
+import { Editor as SlateEditor } from 'slate-react';
 import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 
@@ -9,7 +9,7 @@ import PopupMenu from './PopupMenu';
 
 import styles from './InputTooltip.less';
 
-interface IHoveringMenuProps {
+export interface IEditorProps {
   dispatch: any;
   id: string;
   text: string;
@@ -18,12 +18,12 @@ interface IHoveringMenuProps {
   tags: Array<TTag>;
 }
 
-interface IHoveringMenuStates {
+interface IEditorStates {
   tagValue: string;
   value: Value;
 }
 
-export default class HoveringMenu extends Component<IHoveringMenuProps, IHoveringMenuStates> {
+export default class Editor extends Component<IEditorProps, IEditorStates> {
   state = {
     value: Value.fromJSON(Plain.deserialize('')),
     tagValue: '',
@@ -34,7 +34,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
   private menu?: HTMLElement;
   private editorRef: HTMLElement;
 
-  constructor(props: IHoveringMenuProps) {
+  constructor(props: IEditorProps) {
     super(props);
     this.state.value = Value.fromJSON(props.rawData);
   }
@@ -42,7 +42,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
   componentDidMount() {
     this.updateMenu();
   }
-  componentWillReceiveProps(nextProps: IHoveringMenuProps) {
+  componentWillReceiveProps(nextProps: IEditorProps) {
     this.state.value = Value.fromJSON(nextProps.rawData);
   }
   componentDidUpdate() {
@@ -78,7 +78,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
       dispatch({ type: 'interview/changeRecordText', payload: { id, newText } });
       dispatch({ type: 'interview/changeRecordRawData', payload: { id, rawData: value } });
     }
-    console.log('触发更新');
+    // console.log('触发更新');
     this.setState({ value });
   };
   onKeyDown = (event: KeyboardEvent, change) => {
@@ -119,7 +119,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     }
   };
 
-  changeTagText = (e, id, editor) => {
+  changeTagText = (e, id) => {
     console.log(e.target.value);
     this.props.dispatch({
       type: 'interview/changeTagText',
@@ -143,36 +143,40 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
   };
   underLineComponent = (props) => {
-    const { children, attributes, editor } = props;
-    const { tags } = this.props;
+    const { children, attributes, editor, node } = props;
+    const { tags, id } = this.props;
+    console.log(node);
     return (
       <Popover
         overlayClassName={styles['tag-pop']}
         // trigger="click"
         getPopupContainer={() => document.getElementById('tooltip') || document.body}
-        visible={true}
+        // visible={true}
         content={tags.map((tag: TTag) => {
-          const { id, text } = tag;
-          return (
-            <div key={id + 'tag-container'} className={styles['tag-container']}>
-              <div key={id + 'input-container'} className={styles['input-container']}>
-                <Input
-                  className={styles.tag}
-                  onChange={(e) => this.changeTagText(e, id, editor)}
-                  value={text}
-                />
-                <Popconfirm
-                  key={'ppp'}
-                  title="确认要删除吗?"
-                  onConfirm={() => this.deleteTag(id, editor)}
-                  okText="是"
-                  cancelText="否"
-                >
-                  <Icon key={'close'} type="close" className={styles['value-delete']} />
-                </Popconfirm>
+          const { id: tid, refId, text } = tag;
+          if (refId === id) {
+            // 如果标签组属于该行
+            return (
+              <div key={tid + 'tag-container'} className={styles['tag-container']}>
+                <div key={tid + 'input-container'} className={styles['input-container']}>
+                  <Input
+                    className={styles.tag}
+                    onChange={(e) => this.changeTagText(e, tid)}
+                    value={text}
+                  />
+                  <Popconfirm
+                    key={'ppp'}
+                    title="确认要删除吗?"
+                    onConfirm={() => this.deleteTag(tid, editor)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Icon key={'close'} type="close" className={styles['value-delete']} />
+                  </Popconfirm>
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
         })}
       >
         <span className={styles.underlines} {...attributes}>
@@ -188,12 +192,13 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
     return (
       <div className={styles.input}>
         <div className={styles.editor}>
-          <Editor
+          <SlateEditor
             ref={(editor) => (this.editorRef = editor)}
             value={value}
-            autoFocus={(() => {
-              return recordFocusId === id;
-            })()} // onFocus={() => this.changeFocus(id)}
+            // autoFocus={(() => {
+            //   return recordFocusId === id;
+            // })()}
+            // onFocus={() => this.changeFocus(id)}
             onKeyDown={this.onKeyDown}
             onChange={this.onChange}
             renderMark={this.underLineComponent}
@@ -205,6 +210,7 @@ export default class HoveringMenu extends Component<IHoveringMenuProps, IHoverin
           value={value}
           onChange={this.onChange}
           dispatch={dispatch}
+          refId={id}
         />
       </div>
     );
