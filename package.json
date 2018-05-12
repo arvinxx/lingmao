@@ -40,6 +40,7 @@
     "prop-types": "^15.6.1",
     "qs": "^6.5.2",
     "rc-drawer-menu": "^0.5.7",
+    "react-broadcast": "^0.7.0",
     "react-container-query": "^0.9.1",
     "react-contextmenu": "^2.9.2",
     "react-document-title": "^2.0.3",
@@ -82,8 +83,15 @@
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write", "lint-staged:js"],
+    "**/*.{js,jsx}": [
+      "prettier --trailing-comma all --single-quote --write",
+      "lint-staged:js"
+    ],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
 }

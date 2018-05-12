@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { List } from 'antd';
 import { isEmpty } from 'lodash';
-import { TRecord, TTag, TTagGroup } from 'models/interview';
+import { TRecord, TTag, TTagGroup } from '../../models/interview';
 
 import Editor from './Editor';
 import styles from './index.less';

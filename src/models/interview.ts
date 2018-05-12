@@ -1,6 +1,6 @@
-import { queryDocument, saveDocument } from 'services/interview';
+import { queryDocument, saveDocument } from '../services/interview';
 import { concat } from 'lodash';
-import { findIndexById, generateId } from 'utils';
+import { findIndexById, generateId } from '../utils';
 import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 
@@ -396,6 +396,25 @@ export default {
           tagGroups: state.tagGroups.filter((tagGroup) => tagGroup.id !== id),
         };
       } else return state;
+    },
+
+    addTagtoNewGroup(state, { payload: selectedTags }) {
+      const { tagGroups } = state;
+
+      const tags = tagGroups[0].tags.filter((tag) => {
+        selectedTags.map((id) => {
+          return tag.id === id;
+        });
+      });
+      tagGroups[0].tags = tagGroups[0].tags.filter((tag) => {
+        selectedTags.map((id) => {
+          return tag.id === id;
+        });
+      });
+      return {
+        ...state,
+        tagGroups: [...tagGroups, { text: '', id: generateId(), tags }],
+      };
     },
   },
 };

@@ -1,0 +1,32 @@
+//noinspection CssUnknownTarget
+@import '~styles/themes/default';
+
+.context-menu {
+  background: @base-white;
+  box-shadow: @shadow-1;
+  :global {
+    .react-contextmenu-item {
+      padding: 8px 16px;
+      cursor: pointer;
+      display: flex;
+      transition: all @animation-duration-base;
+      &:hover {
+        background: @white-1;
+        color: @heading-color;
+        &::before {
+          background: @dark-5;
+        }
+      }
+
+      &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: @white-5;
+        border-radius: 50%;
+        margin-right: 11px;
+        margin-top: 9px;
+      }
+    }
+  }
+}

@@ -6,4 +6,6 @@ export { default as Ellipsis } from './Ellipsis';
 export { default as SiderMenu } from './SiderMenu';
 export { default as Header } from './Header';
 export { default as Authorized } from './Authorized';
+export { default as TagGroup } from './TagGroup';
+export { default as ContextRightMenu } from './ContextRightMenu';
 export * from './Charts';

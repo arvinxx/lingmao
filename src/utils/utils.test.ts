@@ -1,4 +1,4 @@
-import { findIndexById, generateId, extractTags } from 'utils';
+import { findIndexById, generateId, extractTags } from './utils';
 import { set, reset } from 'mockdate';
 
 describe('findIndexById', () => {

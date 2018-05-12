@@ -1589,6 +1589,83 @@ describe('Reducers', () => {
       });
     });
   });
+  it('addTagtoNewGroup', () => {
+    set('1/1/2000');
+    const reducer = reducers.addTagtoNewGroup;
+    const state = {
+      tagGroups: [
+        {
+          text: 'ungroup',
+          id: '78979',
+          tags: [
+            {
+              id: '1',
+              text: '测试1',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+            {
+              id: '2',
+              text: '测试2',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+            {
+              id: '3',
+              text: '测试5',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
+        },
+      ],
+    };
+    const action = {
+      type: 'interview/addTagtoNewGroup',
+      payload: ['1', '2'],
+    };
+    expect(reducer(state, action)).toEqual({
+      tagGroups: [
+        {
+          text: 'ungroup',
+          id: '78979',
+          tags: [
+            {
+              id: '3',
+              text: '测试5',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
+        },
+        {
+          id: generateId(),
+          text: '',
+          tags: [
+            {
+              id: '1',
+              text: '测试1',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+            {
+              id: '2',
+              text: '测试2',
+              refText: '',
+              refId: '',
+              groupId: '',
+            },
+          ],
+        },
+      ],
+    });
+    reset();
+  });
 });
 
 describe('Effects', () => {

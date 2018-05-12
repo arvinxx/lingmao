@@ -3,7 +3,11 @@ import { Popover, Input, Popconfirm, Icon } from 'antd';
 import { TTag } from 'models/interview';
 import styles from './InputTooltip.less';
 
-export default class InputTooltip extends Component {
+export default class InputTooltip extends Component<any> {
+  componentWillUpdate() {
+    console.log('count');
+    return false;
+  }
   changeTagText = (e, id) => {
     console.log(e.target.value);
     this.props.dispatch({
@@ -11,6 +15,7 @@ export default class InputTooltip extends Component {
       payload: { id, newText: e.target.value },
     });
   };
+
   deleteTag = (id, editor) => {
     const { dispatch, tags } = this.props;
     dispatch({
@@ -23,10 +28,8 @@ export default class InputTooltip extends Component {
     }
   };
   render() {
-    const { children, attributes, editor, node, id, tags } = this.props;
-    const { id } = this.props;
-    const { tags } = this.state;
-    console.log(node);
+    const { props, id, tags } = this.props;
+    const { children, attributes, editor, node } = props;
     return (
       <Popover
         overlayClassName={styles['tag-pop']}

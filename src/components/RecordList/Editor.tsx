@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
 import { Editor as SlateEditor } from 'slate-react';
 import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
-import { extractTags } from 'utils';
-import { TTag, TTagGroup } from 'models/interview';
+// import { createContext } from 'react-broadcast';
+import { extractTags } from '../../utils';
+import { TTag, TTagGroup } from '../../models/interview';
 import PopupMenu from './PopupMenu';
+import InputTooltip from './InputTooltip';
 import styles from './Editor.less';
 
 export interface IEditorProps {
@@ -20,22 +22,12 @@ export interface IEditorProps {
 interface IEditorStates {
   tagValue: string;
   value: Value;
-  tags: Array<TTag>;
 }
 
 export default class Editor extends Component<IEditorProps, IEditorStates> {
   state = {
     value: Value.fromJSON(Plain.deserialize('')),
     tagValue: '',
-    tags: [
-      {
-        id: '',
-        text: '',
-        refText: '',
-        refId: '',
-        groupId: '',
-      },
-    ],
   };
   menuRef = (menu) => {
     this.menu = menu;
@@ -46,7 +38,6 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
   constructor(props: IEditorProps) {
     super(props);
     this.state.value = Value.fromJSON(props.rawData);
-    this.state.tags = extractTags(props.tagGroups);
   }
 
   componentDidMount() {
@@ -54,8 +45,10 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
   }
   componentWillReceiveProps(nextProps: IEditorProps) {
     this.state.value = Value.fromJSON(nextProps.rawData);
-    this.setState({ tags: extractTags(nextProps.tagGroups) });
     // this.state.tags = ;
+  }
+  componentWillUpdate() {
+    return false;
   }
   componentDidUpdate() {
     this.updateMenu();
@@ -131,78 +124,16 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
     }
   };
 
-  changeTagText = (e, id) => {
-    console.log(e.target.value);
-    this.props.dispatch({
-      type: 'interview/changeTagText',
-      payload: { id, newText: e.target.value },
-    });
-  };
-  deleteTag = (id, editor) => {
-    const { dispatch } = this.props;
-    const { tags } = this.state;
-    dispatch({
-      type: 'interview/deleteTag',
-      payload: id,
-    });
-    if (tags.length <= 1) {
-      editor.change((change) => change.removeMark(''));
-      console.log('取消下划线');
-    }
-  };
-
   changeFocus = (id) => {
     console.log(id);
     this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
   };
-  underLineComponent = (props) => {
-    const { children, attributes, editor, node } = props;
-    const { id } = this.props;
-    const { tags } = this.state;
-    console.log(node);
-    return (
-      <Popover
-        overlayClassName={styles['tag-pop']}
-        // trigger="click"
-        getPopupContainer={() => document.getElementById('tooltip') || document.body}
-        // visible={true}
-        content={tags.map((tag: TTag) => {
-          const { id: tid, refId, text } = tag;
-          if (refId === id) {
-            // 如果标签组属于该行
-            return (
-              <div key={tid + 'tag-container'} className={styles['tag-container']}>
-                <div key={tid + 'input-container'} className={styles['input-container']}>
-                  <Input
-                    className={styles.tag}
-                    onChange={(e) => this.changeTagText(e, tid)}
-                    value={text}
-                  />
-                  <Popconfirm
-                    key={'ppp'}
-                    title="确认要删除吗?"
-                    onConfirm={() => this.deleteTag(tid, editor)}
-                    okText="是"
-                    cancelText="否"
-                  >
-                    <Icon key={'close'} type="close" className={styles['value-delete']} />
-                  </Popconfirm>
-                </div>
-              </div>
-            );
-          }
-        })}
-      >
-        <span className={styles.underlines} {...attributes}>
-          {children}
-        </span>
-      </Popover>
-    );
-  };
 
   render() {
     const value: Value = this.state.value;
-    const { recordFocusId, id, dispatch } = this.props;
+    const { recordFocusId, id, dispatch, tagGroups } = this.props;
+    const { Provider, Consumer } = createContext({});
+    const tags = extractTags(tagGroups);
     return (
       <div className={styles.input}>
         <div className={styles.editor}>
@@ -215,7 +146,9 @@ export default class Editor extends Component<IEditorProps, IEditorStates> {
             // onFocus={() => this.changeFocus(id)}
             onKeyDown={this.onKeyDown}
             onChange={this.onChange}
-            renderMark={this.underLineComponent}
+            renderMark={(props) => (
+              <InputTooltip props={props} id={id} tags={tags} dispatch={dispatch} />
+            )}
           />
         </div>
         <div id="tooltip" />

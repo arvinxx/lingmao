@@ -2,8 +2,10 @@ import React, { Component, ReactNode, Fragment } from 'react';
 import { Collapse, Tag, Modal, Input } from 'antd';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { connect } from 'dva';
+import { TagGroup, ContextRightMenu } from 'components';
+
 import { TTag, TTagGroup, TInterview } from 'models/interview';
-import { extractTags } from 'utils';
+import { extractTags, generateId } from 'utils';
 
 import styles from './tag.less';
 
@@ -149,14 +151,6 @@ export default class Tags extends Component<ITagsProps> {
       />
     </Fragment>
   );
-  ContextMenuComponent = () => (
-    <ContextMenu className={styles['context-menu']} id="some-unique-identifier">
-      <MenuItem onClick={this.showModal}>组合</MenuItem>
-      <MenuItem onClick={this.showModal}>合并标签</MenuItem>
-      <MenuItem onClick={this.showModal}>重命名</MenuItem>
-      {/*<MenuItem onClick={this.showModal}>成为子级</MenuItem>*/}
-    </ContextMenu>
-  );
   CombineTagsComponent = () => {
     const { selectedTags } = this.state;
     const { tagGroups } = this.props.interview;
@@ -204,6 +198,28 @@ export default class Tags extends Component<ITagsProps> {
 
   render() {
     const { tagGroups } = this.props.interview;
+    const menus = [
+      {
+        text: '组合',
+        click: (e) => {
+          console.log('eeeee');
+        },
+      },
+      {
+        text: '合并标签',
+        click: (e) => {
+          console.log(e);
+        },
+      },
+      {
+        text: '重命名',
+        click: (e) => {
+          console.log(e);
+        },
+      },
+    ];
+
+    if (tagGroups[0] === undefined) tagGroups[0] = { text: 'ungroup', id: generateId(), tags: [] };
     return (
       <div className={styles.container}>
         <div className={styles.center}>
@@ -213,7 +229,7 @@ export default class Tags extends Component<ITagsProps> {
             </div>
             <div className={styles.ungroup}> {this.TagsComponent(tagGroups[0].tags)}</div>
             <div className={styles.group}>{this.TagsGroupComponent(tagGroups)}</div>
-            <div>{this.ContextMenuComponent()}</div>
+            <ContextRightMenu menus={menus} />
             <div>{this.CombineTagsComponent()}</div>
           </div>
         </div>
