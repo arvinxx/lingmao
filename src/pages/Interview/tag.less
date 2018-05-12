@@ -19,27 +19,6 @@
   margin: 12px 8px;
 }
 
-.tag-container {
-  display: flex;
-  flex-wrap: wrap;
-
-  margin-top: 24px;
-  :global {
-    .ant-tag {
-      margin-right: 16px;
-      margin-bottom: 8px;
-      padding: 5px 18px;
-      border-radius: 20px;
-      height: 32px;
-      font-size: @font-size-base;
-      border: 1px solid @white-4;
-    }
-    .ant-tag-checkable-checked {
-      border-color: transparent;
-    }
-  }
-}
-
 .content {
   padding: 60px;
 
@@ -48,49 +27,6 @@
     padding-left: 20px;
     font-size: @font-size-sm;
     color: @text-color-secondary;
-  }
-
-  .ungroup {
-    margin-top: 32px;
-    margin-bottom: 20px;
-  }
-
-  .group {
-    :global {
-      .ant-collapse-item {
-        border-bottom: none;
-      }
-    }
-  }
-
-  .context-menu {
-    background: @base-white;
-    box-shadow: @shadow-1;
-    :global {
-      .react-contextmenu-item {
-        padding: 8px 16px;
-        cursor: pointer;
-        display: flex;
-        transition: all @animation-duration-base;
-        &:hover {
-          background: @white-1;
-          color: @heading-color;
-          &::before {
-            background: @dark-5;
-          }
-        }
-
-        &::before {
-          content: '';
-          width: 6px;
-          height: 6px;
-          background: @white-5;
-          border-radius: 50%;
-          margin-right: 11px;
-          margin-top: 9px;
-        }
-      }
-    }
   }
 }
 
@@ -134,9 +70,4 @@
     text-align: center;
     color: @text-color-secondary;
   }
-}
-
-.add-group {
-  //background: red;
-  padding-left: 40px;
 }

@@ -7,14 +7,27 @@ export default class ContextRightMenu extends Component<any> {
     const menus = this.props.menus;
     return (
       <ContextMenu className={styles['context-menu']} id="some-unique-identifier">
-        {menus.map((menu) => {
-          const { text, click } = menu;
-          return (
-            <MenuItem key={text} onClick={click}>
-              {text}
-            </MenuItem>
-          );
-        })}
+        <MenuItem
+          onClick={(e) => {
+            console.log('1');
+          }}
+        >
+          组合
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            console.log('2');
+          }}
+        >
+          合并标签
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            console.log('3');
+          }}
+        >
+          重命名
+        </MenuItem>
       </ContextMenu>
     );
   }

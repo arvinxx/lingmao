@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
-import { TTag } from 'models/interview';
+import { TTag } from 'models/tag';
 import styles from './InputTooltip.less';
 
 export default class InputTooltip extends Component<any> {
@@ -11,7 +11,7 @@ export default class InputTooltip extends Component<any> {
   changeTagText = (e, id) => {
     console.log(e.target.value);
     this.props.dispatch({
-      type: 'interview/changeTagText',
+      type: 'tag/changeTagText',
       payload: { id, newText: e.target.value },
     });
   };
@@ -19,7 +19,7 @@ export default class InputTooltip extends Component<any> {
   deleteTag = (id, editor) => {
     const { dispatch, tags } = this.props;
     dispatch({
-      type: 'interview/deleteTag',
+      type: 'tag/deleteTag',
       payload: id,
     });
     if (tags.length <= 1) {

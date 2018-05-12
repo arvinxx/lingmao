@@ -24,7 +24,7 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
       // 可用状态时
       const text: string = window.getSelection().toString();
       dispatch({
-        type: 'interview/addTag',
+        type: 'tag/addTag',
         payload: { text, refId },
       });
       onChange(value.change().addMark(''));

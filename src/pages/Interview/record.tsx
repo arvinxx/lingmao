@@ -1,95 +1,49 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Radio, List, Collapse, Menu, Input, Button, InputNumber, Icon } from 'antd';
+import { Menu, Input, Icon, Popconfirm } from 'antd';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 
 import { TagInput, RecordList, Upload, Ellipsis } from 'components';
 import { TInterview } from 'models/interview';
+import { TTagModel } from '../../models/tag';
+import { saveDocument } from 'services/api';
 
 import styles from './record.less';
 import { extractTags } from '../../utils';
-
-const { Panel } = Collapse;
-const RadioGroup = Radio.Group;
-
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  '考察重点在你分析问题的全面性，以及说服能力',
-  '考察重点在于分析问题本质，抓住问本质的能力',
-  '考察重点在于分析问题本质，抓住问题本质的能力',
-];
-
-const UploadProps = {
-  name: 'file',
-  multiple: true,
-  action: 'http://localhost:8000/api/upload',
-};
 
 interface IInterviewProps {
   dispatch: any;
   interview: TInterview;
   loading: boolean;
+  tag: TTagModel;
 }
-@connect(({ interview, loading }) => ({
+@connect(({ interview, tag, loading }) => ({
   interview,
+  tag,
   loading: loading.models.interview,
 }))
 export default class Interview extends Component<IInterviewProps, any> {
-  state = {
-    value: 0,
-  };
   componentDidMount() {
     this.props.dispatch({
       type: 'interview/fetchDocument',
     });
+    this.props.dispatch({
+      type: 'tag/fetchTagGroups',
+    });
   }
 
   componentWillUnmount() {
-    const { title, records, id, dimensions, selectedValues, tagGroups } = this.props.interview;
-    this.props.dispatch({
-      type: 'interview/saveDocument',
-      payload: { title, id, records, dimensions, selectedValues, tagGroups },
-    });
+    const { title, records, id, dimensions, selectedValues } = this.props.interview;
+    const { tagGroups } = this.props.tag;
+    saveDocument({ title, id, records, dimensions, selectedValues, tagGroups });
   }
-  deleteTag = (e) => {
-    // console.log(e.key);
+
+  deleteTag = (id) => {
     this.props.dispatch({
-      type: 'interview/deleteTag',
-      payload: e.key,
+      type: 'tag/deleteTag',
+      payload: id,
     });
-  };
-  onChange = (e) => {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
-    });
-  };
-  LabelComponent = (tagVisible, tags) => {
-    if (tagVisible) {
-      return (
-        <div className={styles.right}>
-          <div className={styles.title}>标签</div>
-          <Menu
-            onClick={this.deleteTag}
-            style={{ width: 200 }}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-          >
-            {tags.map((tag) => {
-              const { text, id } = tag;
-              return (
-                <Menu.Item className={styles.labels} key={id}>
-                  {text}
-                  <Icon type="close" className={styles.close} />
-                </Menu.Item>
-              );
-            })}
-          </Menu>
-        </div>
-      );
-    }
   };
 
   titleChange = (e) => {
@@ -100,105 +54,10 @@ export default class Interview extends Component<IInterviewProps, any> {
     });
   };
 
-  AdvancedOptsComponent = () => {
-    return (
-      <RadioGroup
-        className={styles['radio-group']}
-        onChange={this.onChange}
-        value={this.state.value}
-      >
-        <Radio className={styles['radio-style']} value={1}>
-          基于换行
-        </Radio>
-        <Radio className={styles['radio-style']} value={2}>
-          基于分号
-        </Radio>
-        <Radio className={styles['radio-style']} value={3}>
-          基于逗号
-        </Radio>
-        <Radio className={styles['radio-style']} value={4}>
-          基于句号
-        </Radio>
-      </RadioGroup>
-    );
-  };
-
-  UploadComponent = (uploadVisible) => {
-    if (uploadVisible) {
-      return (
-        <div className={styles.left}>
-          <div className={styles.upload}>
-            <Upload params={UploadProps} />
-            <div className={styles['button-container']}>
-              <Button
-                type="primary"
-                ghost
-                disabled
-                size={'small'}
-                className={styles['button-style']}
-              >
-                上传提纲
-              </Button>
-              <Button
-                type="primary"
-                ghost
-                disabled
-                size={'small'}
-                className={styles['button-style']}
-              >
-                上传记录
-              </Button>
-            </div>
-            <div className={styles.preview}>
-              <List
-                header={<div style={{ textAlign: 'center' }}>前三行预览</div>}
-                footer={<div />}
-                size="small"
-                dataSource={data.slice(0, 3)}
-                renderItem={(item) => (
-                  <div className={styles['pre-contatiainer']}>
-                    <div className={styles.circle} />
-                    <Ellipsis length={20}>{item}</Ellipsis>
-                  </div>
-                )}
-                split={false}
-              />
-            </div>
-            <div className={styles.advanced}>
-              <Collapse bordered={false} defaultActiveKey={['1']}>
-                <Panel className={styles['adv-opts']} header="高级选项" key="1">
-                  <div className={styles.description}>格式化参数</div>
-                  {this.AdvancedOptsComponent()}
-                  <div className={styles.delete}>
-                    删除前
-                    <InputNumber
-                      className={styles['delete-number']}
-                      min={1}
-                      size="small"
-                      max={10}
-                      defaultValue={3}
-                      onChange={(e) => console.log('changed', e)}
-                    />
-                    条内容
-                  </div>
-                </Panel>
-              </Collapse>
-            </div>
-          </div>
-        </div>
-      );
-    }
-  };
   RecordComponent = () => {
     const minPanelSize = 150;
-    const {
-      title,
-      records,
-      dimensions,
-      selectedValues,
-      recordFocusId,
-      tagGroups,
-    } = this.props.interview;
+    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
+    const { tagGroups } = this.props.tag;
     const loading = this.props.loading;
     return (
       <div className={styles.center}>
@@ -233,12 +92,47 @@ export default class Interview extends Component<IInterviewProps, any> {
       </div>
     );
   };
-
+  LabelComponent = (tagVisible, tags) => {
+    if (tagVisible) {
+      return (
+        <div className={styles.right}>
+          <div className={styles.title}>标签</div>
+          <Menu
+            // onClick={this.deleteTag}
+            style={{ width: 200 }}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+          >
+            {tags.map((tag) => {
+              const { text, id } = tag;
+              return (
+                <Menu.Item className={styles.labels} key={id}>
+                  {text}
+                  <Popconfirm
+                    key={'ppp'}
+                    title="确认要删除吗?"
+                    onConfirm={() => this.deleteTag(id)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Icon type="close" className={styles.close} />
+                  </Popconfirm>
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </div>
+      );
+    } else return <div />;
+  };
   render() {
-    const { uploadVisible, tagVisible, tagGroups } = this.props.interview;
+    const { uploadVisible, tagVisible } = this.props.interview;
+    const { tagGroups } = this.props.tag;
+
     return (
       <div className={styles.container}>
-        {this.UploadComponent(uploadVisible)}
+        <Upload uploadVisible={uploadVisible} />
         {this.RecordComponent()}
         {this.LabelComponent(tagVisible, extractTags(tagGroups))}
       </div>

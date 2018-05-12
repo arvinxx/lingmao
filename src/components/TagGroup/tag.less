@@ -1,0 +1,22 @@
+@import '../../styles/themes/default';
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+
+  margin-top: 24px;
+  :global {
+    .ant-tag {
+      margin-right: 16px;
+      margin-bottom: 8px;
+      padding: 5px 18px;
+      border-radius: 20px;
+      height: 32px;
+      font-size: @font-size-base;
+      border: 1px solid @white-4;
+    }
+    .ant-tag-checkable-checked {
+      border-color: transparent;
+    }
+  }
+}
