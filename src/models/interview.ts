@@ -1,6 +1,6 @@
-import { queryDocument, saveDocument } from '../services/interview';
+import { queryDocument, saveDocument } from 'services/interview';
 import { concat } from 'lodash';
-import { findIndexById, generateId } from '../utils';
+import { findIndexById, generateId } from 'utils';
 import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 

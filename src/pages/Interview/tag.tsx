@@ -10,17 +10,6 @@ import styles from './tag.less';
 const Panel = Collapse.Panel;
 const CheckableTag = Tag.CheckableTag;
 
-const tags2 = [
-  { id: '5345234', text: 'ddsd' },
-  { id: '42366355', text: 'ddsd' },
-  { id: '534673552423', text: 'ddsd' },
-];
-const tags3 = [
-  { id: '5345234', text: 'd5362dsd' },
-  { id: '42366355', text: 'ddsd' },
-  { id: '534673552423', text: '3654323' },
-];
-
 interface ITagsProps {
   dispatch: any;
   interview: TInterview;

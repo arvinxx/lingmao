@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IEditorProps } from './InputTooltip';
+import App, { IEditorProps } from './Editor';
 
 const rawData = {
   document: {

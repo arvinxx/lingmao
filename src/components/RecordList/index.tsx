@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import { List } from 'antd';
 import { isEmpty } from 'lodash';
-import { TRecord, TTag, TTagGroup } from '../../models/interview';
+import { TRecord, TTag, TTagGroup } from 'models/interview';
 
-import InputTooltip from './InputTooltip';
-
+import Editor from './Editor';
 import styles from './index.less';
 
 const { Item } = List;
@@ -55,7 +54,7 @@ export default class RecordList extends PureComponent<RecordListProps> {
             const { id, text, rawData } = record;
             return (
               <Item>
-                <InputTooltip
+                <Editor
                   id={id}
                   text={text}
                   recordFocusId={recordFocusId}

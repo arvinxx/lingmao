@@ -1,0 +1,110 @@
+//noinspection CssUnknownTarget
+@import '~styles/themes/default';
+
+//.editor > * > * + * {
+//  margin-top: 1em;
+//}
+.editor {
+  width: 100%;
+}
+.input {
+  display: flex;
+  width: 100%;
+  &::before {
+    //display: inline-block;
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: @dark-5;
+    border-radius: 50%;
+    margin-right: 11px;
+    margin-top: 8px;
+  }
+}
+
+.underlines {
+  border-bottom: 2px dotted @primary-5;
+  &:hover {
+    border-bottom-color: @primary-4;
+  }
+}
+
+.icon-delete {
+  color: @white-5;
+  opacity: 0;
+  cursor: pointer;
+  transition: @animation-duration-base;
+  &:active {
+    color: @dark-2;
+    transform: scale(0.9);
+  }
+  &:hover {
+    color: @white-7;
+    transform: scale(1.1);
+  }
+}
+
+.tag-pop {
+  :global {
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner-content {
+      padding: 0;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    .ant-popover-inner {
+      box-shadow: none;
+      background: none;
+    }
+    .ant-popover-placement-top {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.tag-container {
+  display: flex;
+
+  .input-container {
+    display: flex;
+    position: relative;
+    .tag {
+      border-radius: 20px !important;
+      max-width: 80px;
+      opacity: 0.9;
+      background: @primary-1;
+      border: 1px solid @primary-2;
+      margin-top: 10px;
+      padding: 0 11px;
+      height: 24px;
+      &:hover,
+      &:active {
+        border-color: @primary-2;
+      }
+    }
+    &:hover .tag {
+      background-color: @base-white;
+      border-color: @base-white;
+      box-shadow: @shadow-1;
+      transform: scale(1.1);
+    }
+
+    .value-delete {
+      .icon-delete;
+      font-size: @font-size-sm;
+      position: absolute;
+      right: 4px;
+      top: 18px;
+      display: flex;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .tag:hover ~ .value-delete {
+      opacity: 1;
+    }
+  }
+}

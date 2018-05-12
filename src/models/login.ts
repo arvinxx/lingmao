@@ -9,7 +9,6 @@ export default {
   state: {
     status: undefined,
   },
-
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);

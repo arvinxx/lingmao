@@ -13,8 +13,7 @@
     "allowJs": true,
     "target": "es6",
     "lib": ["dom", "es7"],
-    "baseUrl": "src",
-    "paths": { "*/*": ["*/*"] }
+    "baseUrl": "./src"
   },
   "includes": ["./typings/**.d.ts"],
   "exclude": ["node_modules", "lib", "es"]
