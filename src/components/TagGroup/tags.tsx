@@ -1,27 +1,27 @@
 import React, { PureComponent } from 'react';
 import { Tag } from 'antd';
+import { connect } from 'dva';
+
 import { ContextMenuTrigger } from 'react-contextmenu';
 import { TTag } from '../../models/tag';
 import styles from './tag.less';
 
 const CheckableTag = Tag.CheckableTag;
 
+@connect()
 export default class TagComponent extends PureComponent<any> {
   state = {
     visible: false,
-    selectedTags: [''],
   };
-  handleChange(tag, checked) {
-    const { selectedTags } = this.state;
-    const nextSelectedTags = checked
-      ? [...selectedTags, tag]
-      : selectedTags.filter((t) => t !== tag);
-    this.setState({ selectedTags: nextSelectedTags });
+  handleChange(id, checked) {
+    this.props.dispatch({
+      type: 'tag/changeSelectedTags',
+      payload: { checked, id },
+    });
   }
 
   render() {
-    const { tags } = this.props;
-    const { selectedTags } = this.state;
+    const { tags, selectedTags } = this.props;
     return (
       <div className={styles['tag-container']}>
         {tags.map((tag: TTag) => {

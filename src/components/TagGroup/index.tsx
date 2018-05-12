@@ -1,18 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { Collapse, Input } from 'antd';
-import Tags from './tags';
+import { connect } from 'dva';
 
+import Tags from './tags';
 import { generateId } from '../../utils';
 import styles from './index.less';
 
 const Panel = Collapse.Panel;
-
+@connect()
 export default class Index extends Component<any> {
   state = {
     visible: false,
     tagGroupText: '',
     tagGroupPlaceHolder: '新的标签组',
   };
+
   newGroupOnInput = (e) => {
     this.setState({ tagGroupText: e.target.value });
   };
@@ -41,13 +43,13 @@ export default class Index extends Component<any> {
   };
 
   render() {
-    const { tagGroups } = this.props;
+    const { tagGroups, selectedTags } = this.props;
     if (tagGroups[0] === undefined) tagGroups[0] = { text: 'ungroup', id: generateId(), tags: [] };
     const ungroupTags = tagGroups[0].tags;
     return (
       <Fragment>
         <div className={styles.ungroup}>
-          <Tags tags={ungroupTags} />
+          <Tags tags={ungroupTags} selectedTags={selectedTags} />
         </div>
         <div className={styles.group}>
           {tagGroups.map((tagGroup, index) => {
@@ -66,7 +68,7 @@ export default class Index extends Component<any> {
                       />
                     }
                   >
-                    <Tags tags={tags} />
+                    <Tags tags={tags}  selectedTags={selectedTags}/>
                   </Panel>
                 </Collapse>
               );

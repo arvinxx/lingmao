@@ -19,7 +19,7 @@ describe('Reducers', () => {
       ],
     };
     const action = {
-      type: 'interview/addTag',
+      type: 'tag/addTag',
       payload: { text: 'dsa', refId: '1' },
     };
     expect(reducer(state, action)).toEqual({
@@ -61,7 +61,7 @@ describe('Reducers', () => {
       ],
     };
     const action = {
-      type: 'interview/deleteTag',
+      type: 'tag/deleteTag',
       payload: '2',
     };
 
@@ -111,7 +111,7 @@ describe('Reducers', () => {
       ],
     };
     const action = {
-      type: 'interview/changeTagText',
+      type: 'tag/changeTagText',
       payload: { id: '2', newText: 'hello' },
     };
 
@@ -150,7 +150,7 @@ describe('Reducers', () => {
         tagGroups: [],
       };
       const action = {
-        type: 'interview/addTagGroup',
+        type: 'tag/addTagGroup',
         payload: 'dsa',
       };
       expect(reducer(state, action)).toEqual({
@@ -173,7 +173,7 @@ describe('Reducers', () => {
         dimensions: [],
       };
       const action = {
-        type: 'interview/addDimensionKey',
+        type: 'tag/addDimensionKey',
         payload: '',
       };
       expect(reducer(state, action)).toEqual({
@@ -195,7 +195,7 @@ describe('Reducers', () => {
         ],
       };
       const action = {
-        type: 'interview/deleteTagGroup',
+        type: 'tag/deleteTagGroup',
         payload: '21',
       };
 
@@ -214,7 +214,7 @@ describe('Reducers', () => {
         ],
       };
       const action = {
-        type: 'interview/deleteTagGroup',
+        type: 'tag/deleteTagGroup',
         payload: '341411',
       };
 
@@ -276,7 +276,7 @@ describe('Reducers', () => {
         ],
       };
       const action = {
-        type: 'interview/changeTagGroupText',
+        type: 'tag/changeTagGroupText',
         payload: { id: '111', newText: 'eed' },
       };
 
@@ -373,7 +373,7 @@ describe('Reducers', () => {
         ],
       };
       const action = {
-        type: 'interview/changeTagGroupText',
+        type: 'tag/changeTagGroupText',
         payload: { id: '222', newText: 'eed' },
       };
 
@@ -457,10 +457,10 @@ describe('Reducers', () => {
           ],
         },
       ],
+      selectedTags: ['1', '2'],
     };
     const action = {
-      type: 'interview/addTagToNewGroup',
-      payload: ['1', '2'],
+      type: 'tag/addTagToNewGroup',
     };
     expect(reducer(state, action)).toEqual({
       tagGroups: [
@@ -479,7 +479,7 @@ describe('Reducers', () => {
         },
         {
           id: generateId(),
-          text: '',
+          text: '未命名',
           tags: [
             {
               id: '1',
@@ -498,7 +498,19 @@ describe('Reducers', () => {
           ],
         },
       ],
+      selectedTags: [],
     });
     reset();
+  });
+
+  it('changeSelectedTags', () => {
+    const reducer = reducers.changeSelectedTags;
+    const state = { selectedTags: ['1', '5', '745', '6'] };
+
+    const action = { type: 'tag/changeSelectedTags', payload: { checked: false, id: '5' } };
+    expect(reducer(state, action)).toEqual({ selectedTags: ['1', '745', '6'] });
+
+    const action2 = { type: 'tag/changeSelectedTags', payload: { checked: true, id: '55' } };
+    expect(reducer(state, action2)).toEqual({ selectedTags: ['1', '5', '745', '6', '55'] });
   });
 });

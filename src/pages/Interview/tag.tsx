@@ -28,7 +28,6 @@ interface ITagsProps {
 export default class Tags extends Component<ITagsProps> {
   state = {
     visible: false,
-    selectedTags: [],
     tagGroupText: '',
     tagGroupPlaceHolder: '新的标签组',
   };
@@ -63,44 +62,9 @@ export default class Tags extends Component<ITagsProps> {
     console.log('成为子级');
   };
 
-  CombineTagsComponent = () => {
-    const { selectedTags } = this.state;
-    const { tagGroups } = this.props.interview;
-    const tags = extractTags(tagGroups);
-    return (
-      <Modal
-        mask={false}
-        closable={false}
-        title="请选择合并后的标签名称"
-        wrapClassName={styles['combine-modal']}
-        onCancel={this.handleCancel}
-        visible={this.state.visible}
-
-        //footer={} //TODO:自定义页脚组件与样式
-      >
-        <div className={styles['tag-container']}>
-          {tags.map((tag: TTag) => {
-            const { id, text } = tag;
-            return (
-              <CheckableTag
-                key={id + 'tag'}
-                //@ts-ignore
-                checked={selectedTags.indexOf(id) > -1}
-                // onChange={(checked) => this.handleChange(id, checked)}
-              >
-                {text}
-              </CheckableTag>
-            );
-          })}
-          <Input className={styles['tag-new-name']} placeholder="新的名称..." />
-        </div>
-        <div className={styles.warning}>注意：合并标签后将无法撤回，请确认后再操作！</div>
-      </Modal>
-    );
-  };
-
   render() {
-    const { tagGroups } = this.props.tag;
+    const { tagGroups, selectedTags } = this.props.tag;
+    const tags = extractTags(tagGroups);
     return (
       <div className={styles.container}>
         <div className={styles.center}>
@@ -108,9 +72,35 @@ export default class Tags extends Component<ITagsProps> {
             <div className={styles.tips}>
               点击需要选中操作的一个或多个标签,鼠标右键使用菜单工具进行操作,点击空白处取消选中
             </div>
-            <TagGroup tagGroups={tagGroups} dispatch={this.props.dispatch} />
+            <TagGroup tagGroups={tagGroups} selectedTags={selectedTags} />
             <ContextRightMenu />
-            <div>{this.CombineTagsComponent()}</div>
+            <Modal
+              mask={false}
+              closable={false}
+              title="请选择合并后的标签名称"
+              wrapClassName={styles['combine-modal']}
+              onCancel={this.handleCancel}
+              visible={this.state.visible}
+              //footer={} //TODO:自定义页脚组件与样式
+            >
+              <div className={styles['tag-container']}>
+                {tags.map((tag: TTag) => {
+                  const { id, text } = tag;
+                  return (
+                    <CheckableTag
+                      key={id + 'tag'}
+                      //@ts-ignore
+                      checked={selectedTags.indexOf(id) > -1}
+                      // onChange={(checked) => this.handleChange(id, checked)}
+                    >
+                      {text}
+                    </CheckableTag>
+                  );
+                })}
+                <Input className={styles['tag-new-name']} placeholder="新的名称..." />
+              </div>
+              <div className={styles.warning}>注意：合并标签后将无法撤回，请确认后再操作！</div>
+            </Modal>
           </div>
         </div>
       </div>

@@ -110,8 +110,8 @@ export default {
       } else return state;
     },
 
-    addTagToNewGroup(state, { payload: selectedTags }) {
-      const { tagGroups } = state;
+    addTagToNewGroup(state, action) {
+      const { tagGroups, selectedTags } = state;
       let tags: Array<TTag> = [];
       selectedTags.map((id) => {
         tags = tags.concat(tagGroups[0].tags.filter((tag) => tag.id === id));
@@ -121,8 +121,17 @@ export default {
       });
       return {
         ...state,
-        tagGroups: [...tagGroups, { text: '', id: generateId(), tags }],
+        tagGroups: [...tagGroups, { text: '未命名', id: generateId(), tags }],
+        selectedTags: [],
       };
+    },
+
+    changeSelectedTags(state, { payload }) {
+      const { id, checked } = payload;
+      const selectedTags = checked
+        ? [...state.selectedTags, id]
+        : state.selectedTags.filter((t) => t !== id);
+      return { ...state, selectedTags };
     },
   },
 };
