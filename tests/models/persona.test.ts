@@ -39,4 +39,34 @@ describe('Reducers', () => {
       exportVisible: false,
     });
   });
+  it('changeExpandedDims', () => {
+    const reducer = reducers.changeExpandedDims;
+    const state = {
+      expandedDims: [],
+    };
+
+    const action = {
+      type: 'persona/changeExpandedDims',
+      payload: ['1', '3'],
+    };
+
+    expect(reducer(state, action)).toEqual({
+      expandedDims: ['1', '3'],
+    });
+  });
+  it('changeCheckedDims', () => {
+    const reducer = reducers.changeCheckedDims;
+    const state = {
+      checkedDims: [],
+    };
+
+    const action = {
+      type: 'persona/changeCheckedDims',
+      payload: ['1', '3'],
+    };
+
+    expect(reducer(state, action)).toEqual({
+      checkedDims: ['1', '3'],
+    });
+  });
 });

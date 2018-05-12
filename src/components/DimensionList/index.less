@@ -1,0 +1,64 @@
+@import '../../styles/themes/default';
+
+.base-card {
+  background: @base-white;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+}
+
+.right {
+  width: 200px;
+  display: block;
+  user-select: none;
+  .base-card;
+  .title {
+    margin: 24px;
+    text-align: center;
+    font-size: @font-size-lg;
+  }
+}
+
+.tree {
+  li {
+    background: @transBlack-8;
+    //background: @blue-3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0;
+    &:last-child {
+      padding-bottom: 0;
+    }
+    :global {
+      .ant-tree-node-selected {
+        background: none !important;
+      }
+      .ant-tree-child-tree {
+        background: @base-white;
+        li {
+          background: @base-white;
+        }
+        .ant-tree-node-content-wrapper {
+          margin: 4px 0;
+        }
+      }
+      .ant-tree-node-content-wrapper {
+        margin: 8px 0;
+        &:hover {
+          background: none;
+        }
+      }
+      .ant-tree-checkbox-inner {
+        border-radius: 4px;
+        //&::after {
+        //  left: 3.5px;
+        //  width: 5px;
+        //  height: 8px;
+        //}
+      }
+    }
+  }
+  ul {
+    flex: auto;
+  }
+}
