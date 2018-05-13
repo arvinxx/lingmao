@@ -28,10 +28,12 @@ interface IHeaderProps {
   };
   routing?: TLocation;
   dispatch?: any;
+  showMenu: boolean;
 }
 
-@connect(({ routing }) => ({
+@connect(({ routing, global }) => ({
   routing,
+  showMenu: global.showMenu,
 }))
 export default class Header extends Component<IHeaderProps, any> {
   state = {
@@ -53,9 +55,12 @@ export default class Header extends Component<IHeaderProps, any> {
     });
   };
 
-  hideMenu = () => {
-    console.log('hideMenu');
+  changeMenuState = () => {
+    this.props.dispatch({
+      type: 'global/changeMenuState',
+    });
   };
+
   goToRoute = (path: string) => {
     const { pathname } = this.props.routing.location;
     const re = pathToRegexp('*/:panel');
@@ -71,10 +76,16 @@ export default class Header extends Component<IHeaderProps, any> {
 
   render() {
     const { left, center, right } = this.props.header;
+    const showMenu = this.props.showMenu;
     return (
       <div className={styles.header}>
         <div className={styles['tool-container']}>
-          <Icon key="menu-hide" onClick={this.hideMenu} type="menu-fold" className={styles.icon} />
+          <Icon
+            key="menu-hide"
+            onClick={this.changeMenuState}
+            type={showMenu ? 'menu-fold' : 'menu-unfold'}
+            className={styles.icon}
+          />
           {left.map((item) => {
             const { text, dispatch } = item;
             return (

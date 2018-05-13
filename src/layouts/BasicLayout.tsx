@@ -31,12 +31,14 @@ interface IBasicLayoutProps {
   collapsed?: boolean;
   location?: any;
   dispatch?: any;
+  showMenu: boolean;
 }
 
 @withRouter
 @connect(({ user, global }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
+  showMenu: global.showMenu,
 }))
 export default class BasicLayout extends Component<IBasicLayoutProps> {
   handleMenuCollapse = (collapsedState) => {
@@ -45,14 +47,20 @@ export default class BasicLayout extends Component<IBasicLayoutProps> {
       payload: collapsedState,
     });
   };
+  handleMenuState = () => {
+    this.props.dispatch({
+      type: 'global/changeMenuState',
+    });
+  };
 
   render() {
-    const { collapsed, location, children } = this.props;
+    const { collapsed, location, children, showMenu } = this.props;
     const defaultSideWith = 140;
     return (
       <Layout>
         <SiderMenu
           logo={logo}
+          showMenu={showMenu}
           Authorized={Authorized}
           menuData={getMenuData()}
           collapsed={collapsed}
@@ -60,7 +68,10 @@ export default class BasicLayout extends Component<IBasicLayoutProps> {
           onCollapse={this.handleMenuCollapse}
           width={defaultSideWith}
         />
-        <Layout className={styles.layout} style={{ paddingLeft: collapsed ? 80 : defaultSideWith }}>
+        <Layout
+          className={styles.layout}
+          style={showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith } : {}}
+        >
           <Fragment>{children}</Fragment>
         </Layout>
       </Layout>

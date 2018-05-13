@@ -167,43 +167,50 @@ export default class SiderMenu extends PureComponent<any> {
   }
 
   render() {
-    const { logo, collapsed, location: { pathname }, onCollapse, width } = this.props;
+    const { logo, collapsed, location: { pathname }, onCollapse, width, showMenu } = this.props;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed ? {} : {};
     // if pathname can't match, use the nearest parent's key
     const selectedKeys = this.getSelectedMenuKeys(pathname);
     return (
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        breakpoint="lg"
-        onCollapse={onCollapse}
-        width={width}
-        className={styles.sider}
+      <div
+        className={styles.display}
+        style={
+          showMenu ? { visibility: 'visible', opacity: 1 } : { visibility: 'hidden', opacity: 0 }
+        }
       >
-        <div className={styles.container}>
-          <div className={styles.logo} key="logo">
-            <Link to="/">
-              <img src={logo} alt="logo" />
-            </Link>
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          breakpoint="lg"
+          onCollapse={onCollapse}
+          width={width}
+          className={styles.sider}
+        >
+          <div className={styles.container}>
+            <div className={styles.logo} key="logo">
+              <Link to="/">
+                <img src={logo} alt="logo" />
+              </Link>
+            </div>
+            <Menu
+              key="Menu"
+              mode="inline"
+              {...menuProps}
+              selectedKeys={selectedKeys}
+              className={styles.menu}
+            >
+              {this.getNavMenuItems(this.menus)}
+            </Menu>
+            <Icon
+              className={styles.trigger}
+              type={collapsed ? 'menu-unfold' : 'menu-fold'}
+              onClick={this.toggle}
+            />
           </div>
-          <Menu
-            key="Menu"
-            mode="inline"
-            {...menuProps}
-            selectedKeys={selectedKeys}
-            className={styles.menu}
-          >
-            {this.getNavMenuItems(this.menus)}
-          </Menu>
-          <Icon
-            className={styles.trigger}
-            type={collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={this.toggle}
-          />
-        </div>
-      </Sider>
+        </Sider>
+      </div>
     );
   }
 }

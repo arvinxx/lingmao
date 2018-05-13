@@ -1,6 +1,6 @@
-@import "../../styles/index";
+@import '../../styles/index';
 
-@menu-prefix-cls: ~"@{ant-prefix}-menu";
+@menu-prefix-cls: ~'@{ant-prefix}-menu';
 @icon-size: 32px;
 
 .logo {
@@ -18,7 +18,9 @@
     height: @icon-size;
   }
 }
-
+.display {
+  transition: visibility @ease-in @animation-duration-base;
+}
 .sider {
   min-height: 100vh;
   box-shadow: none;
