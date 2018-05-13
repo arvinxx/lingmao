@@ -15,6 +15,7 @@ const RadioGroup = Radio.Group;
 interface IPersonaLayoutProps {
   persona: TPersona;
   dispatch: Function;
+  tag:any
 }
 
 @connect(({ persona, tag }) => ({ persona, tag }))

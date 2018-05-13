@@ -97,9 +97,8 @@ export const persona = {
     },
   ],
   center: [
-    { text: '小图模式', path: 'small' },
-    { text: '中图模式', path: 'middle' },
-    { text: '右图模式', path: 'right' },
+    { text: '编辑', path: 'edit' },
+    { text: '导出', path: 'export' },
   ],
   right: [
     {

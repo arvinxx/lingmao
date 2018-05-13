@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { TTag, TTagGroup } from "../models/interview";
+import { TTag, TTagGroup } from '../models/interview';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -112,6 +112,7 @@ export const findIndexById = (arr: Array<any>, id: string): number => {
     return index;
   } else throw new Error('id 不正确，请重试');
 };
+
 export const generateId = (): string => {
   return new Date().valueOf().toString();
 };
@@ -126,6 +127,10 @@ export const extractTags = (tagGroups: Array<TTagGroup>): Array<TTag> => {
   } else return [];
 };
 
+export const getTagsArrById = (tagGroups: Array<TTagGroup>, Ids: Array<string>): Array<TTag> => {
+
+  return [];
+};
 
 function getRelation(str1, str2) {
   if (str1 === str2) {
