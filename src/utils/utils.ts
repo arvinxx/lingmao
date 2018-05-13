@@ -117,21 +117,6 @@ export const generateId = (): string => {
   return new Date().valueOf().toString();
 };
 
-export const extractTags = (tagGroups: Array<TTagGroup>): Array<TTag> => {
-  let tags: Array<TTag> = [];
-  if (tagGroups !== undefined) {
-    tagGroups.map((tagGroup: TTagGroup) => {
-      tags.push(...tagGroup.tags);
-    });
-    return tags;
-  } else return [];
-};
-
-export const getTagsArrById = (tagGroups: Array<TTagGroup>, Ids: Array<string>): Array<TTag> => {
-
-  return [];
-};
-
 function getRelation(str1, str2) {
   if (str1 === str2) {
     console.warn('Two path are equal!'); // eslint-disable-line

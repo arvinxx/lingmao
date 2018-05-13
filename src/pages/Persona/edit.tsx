@@ -27,7 +27,7 @@ export default class Edit extends Component<IEditProps> {
     return (
       <Fragment>
         <div className={styles.left}>
-          <div>desigen</div>
+          <div>{checkedDims.map((checkedDim) => <div>{checkedDim}</div>)}</div>
         </div>
         {dimVisible ? (
           <div className={styles.right}>
