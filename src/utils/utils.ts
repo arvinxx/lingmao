@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { TTag, TTagGroup } from '../models/interview';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;

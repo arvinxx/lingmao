@@ -69,4 +69,84 @@ describe('Reducers', () => {
       checkedDims: ['1', '3'],
     });
   });
+
+  it('getDisplayDims', () => {
+    const reducer = reducers.getDisplayDims;
+    const state = { checkedDims: ['1', '2', '5'], disPlayDims: [] };
+
+    const action = {
+      type: 'persona/getDisplayDims',
+      payload: {
+        tagGroups: [
+          {
+            text: 'ungroup',
+            id: '222',
+            tags: [
+              {
+                id: '1',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '2',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+          {
+            text: '31',
+            id: '111',
+            tags: [
+              {
+                id: '5',
+                text: '测试1',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+              {
+                id: '7',
+                text: '测试2',
+                refText: '',
+                refId: '',
+                groupId: '',
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    expect(reducer(state, action)).toEqual({
+      checkedDims: ['1', '2', '5'],
+      disPlayDims: [
+        {
+          id: '1',
+          text: '测试1',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+        {
+          id: '2',
+          text: '测试2',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+        {
+          id: '5',
+          text: '测试1',
+          refText: '',
+          refId: '',
+          groupId: '',
+        },
+      ],
+    });
+  });
 });

@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { DimensionList } from '../../components';
+import { DimensionList, PersonaEditor } from '../../components';
 
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
-import { TTagModel } from '../../models/tag';
+import { TTag, TTagModel } from '../../models/tag';
+import { getTagsArrById } from '../../utils';
 
 interface IEditProps {
   persona: TPersona;
@@ -23,11 +24,11 @@ export default class Edit extends Component<IEditProps> {
     const { persona, tag, dispatch } = this.props;
     const { tagGroups } = tag;
     const { checkedDims, dimVisible, expandedDims } = persona;
-
+    const tagArr = getTagsArrById(tagGroups, checkedDims);
     return (
       <Fragment>
         <div className={styles.left}>
-          <div>{checkedDims.map((checkedDim) => <div>{checkedDim}</div>)}</div>
+          <PersonaEditor tagArr={tagArr} />
         </div>
         {dimVisible ? (
           <div className={styles.right}>

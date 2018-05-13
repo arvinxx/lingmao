@@ -96,17 +96,8 @@ export const persona = {
       },
     },
   ],
-  center: [
-    { text: '编辑', path: 'edit' },
-    { text: '导出', path: 'export' },
-  ],
+  center: [{ text: '编辑', path: 'edit' }, { text: '导出', path: 'export' }],
   right: [
-    {
-      text: 'to-top',
-      dispatch: {
-        type: 'persona/changeExportVisible',
-      },
-    },
     {
       text: 'bars',
       dispatch: {

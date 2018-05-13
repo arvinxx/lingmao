@@ -9,4 +9,5 @@ export { default as Authorized } from './Authorized';
 export { default as TagGroup } from './TagGroup';
 export { default as ContextRightMenu } from './ContextRightMenu';
 export { default as DimensionList } from './DimensionList';
+export { default as PersonaEditor } from './PersonaEditor';
 export * from './Charts';

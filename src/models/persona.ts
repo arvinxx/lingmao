@@ -1,8 +1,12 @@
+import { TTag } from './tag';
+import { getTagsArrById } from '../utils';
+
 export type TPersona = {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
+  disPlayDims: Array<TTag>;
 };
 export default {
   namespace: 'persona',
@@ -11,6 +15,7 @@ export default {
     exportVisible: false,
     expandedDims: [],
     checkedDims: [],
+    disPlayDims: [],
   },
   effects: {},
   reducers: {
@@ -36,6 +41,13 @@ export default {
       return {
         ...state,
         checkedDims,
+      };
+    },
+    getDisplayDims(state, { payload }) {
+      const { tagGroups } = payload;
+      return {
+        ...state,
+        disPlayDims: getTagsArrById(tagGroups, state.checkedDims),
       };
     },
   },
