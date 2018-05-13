@@ -1,0 +1,55 @@
+@import '../../styles/themes/default';
+.base-card {
+  background: @base-white;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+}
+
+.container {
+  display: flex;
+  flex-grow: 1;
+  width: 736px;
+  margin: 12px 16px;
+  min-height: 600px;
+  .base-card;
+  .preview-img {
+    max-width: 100%;
+    height: auto;
+  }
+  .option-container {
+    margin-top: 16px;
+  }
+  .radio {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+  }
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    width: 0;
+  }
+  :global {
+    .ant-modal {
+      display: inline-block;
+      vertical-align: middle;
+      top: 0;
+      text-align: left;
+    }
+    .ant-modal-title {
+      text-align: center;
+    }
+    .ant-modal-header {
+      border-bottom: 0;
+    }
+    .ant-modal-body {
+      padding: 0 16px;
+    }
+    .ant-modal-footer {
+      border-top: 0;
+      padding: 16px;
+    }
+  }
+}

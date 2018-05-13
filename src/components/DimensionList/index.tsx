@@ -45,7 +45,7 @@ export default class DimensionList extends Component<IDimensionListProps> {
   render() {
     const { tagGroups, expandedDims, checkedDims } = this.props;
     return (
-      <div className={styles.right}>
+      <div className={styles.container}>
         <div className={styles.title}>选择维度</div>
         <Tree
           className={styles.tree}

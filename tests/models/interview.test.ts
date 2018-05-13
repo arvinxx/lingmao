@@ -1,7 +1,7 @@
 import { effects } from 'dva/saga';
 import model, { initRawData } from '../../src/models/interview';
-import { queryDocument, saveDocument } from '../../src/services/interview';
-import { generateId } from '../../src/utils';
+import { queryDocument } from '../../src/services/api';
+import { generateId } from 'utils';
 
 import { set, reset } from 'mockdate';
 
