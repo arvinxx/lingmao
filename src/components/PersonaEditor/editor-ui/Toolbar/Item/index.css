@@ -17,31 +17,6 @@
   /*fill: var(--lightBlack) !important;*/
 }
 
-/*.ory-toolbar-item:hover .ory-toolbar-item-drag-handle:hover {*/
-/*background: var(--lightBlack);*/
-/*color: var(--darkWhite) !important;*/
-/*fill: var(--darkWhite) !important;*/
-/*}*/
-
-/*.ory-toolbar-item:hover .ory-toolbar-item-drag-handle:active {*/
-/*background: var(--minBlack);*/
-/*color: var(--darkWhite) !important;*/
-/*fill: var(--darkWhite) !important;*/
-/*}*/
-
-.rc-tooltip {
-  position: absolute;
-  z-index: 1301;
-  display: block;
-  visibility: visible;
-  font-size: 12px;
-  line-height: 1.5;
-  opacity: 0.9;
-}
-
-.rc-tooltip-hidden {
-  display: none;
-}
 
 .rc-tooltip-placement-top,
 .rc-tooltip-placement-topLeft,
