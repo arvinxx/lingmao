@@ -16,6 +16,17 @@ export type TDataModel = {
   selectedQuestions: Array<TQuestion>;
 };
 
+export type TSavedData = Array<{
+  key: string;
+  tagId: string;
+  tagText: string;
+  question: string;
+  answer: {
+    text: string;
+    order: number;
+  };
+}>;
+
 export type TQuestion = {
   key: string;
   name: string;

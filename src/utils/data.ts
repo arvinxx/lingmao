@@ -1,15 +1,8 @@
 import XLSX from 'xlsx';
 import { uniqBy } from 'lodash';
-import { TColumn, TQuestion } from '../models/data';
+import { TColumn, TQuestion, TSavedData } from '../models/data';
 
 export const xlsxToJson = (file: ArrayBuffer): Array<JSON> => {
-  const workbook = XLSX.read(file, { type: 'buffer' });
-  const sheetNames = workbook.SheetNames;
-  const worksheet = workbook.Sheets[sheetNames[0]];
-  return XLSX.utils.sheet_to_json<JSON>(worksheet);
-};
-
-export const getSheetHeader = (file: ArrayBuffer): Array<JSON> => {
   const workbook = XLSX.read(file, { type: 'buffer' });
   const sheetNames = workbook.SheetNames;
   const worksheet = workbook.Sheets[sheetNames[0]];
@@ -28,6 +21,11 @@ export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> =>
     };
     temporaryFileReader.readAsArrayBuffer(inputFile);
   });
+};
+
+export const rawToSaved = (rawData: Array<object>): Array<TSavedData> => {
+
+  return []
 };
 
 export const getQuestions = (rawData: object[]): Array<TQuestion> => {
