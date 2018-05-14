@@ -9,6 +9,7 @@ export type TDataModel = {
   indexState: number;
   analysisStage: number;
   tabStage: string;
+  activePanelList: Array<string>;
 };
 
 interface model extends DvaModel {
@@ -20,6 +21,7 @@ const model: model = {
     indexState: 0,
     analysisStage: 0,
     tabStage: '1',
+    activePanelList: ['0'],
   },
   reducers: {
     indexStateNext(state) {
@@ -45,6 +47,25 @@ const model: model = {
       return {
         ...state,
         analysisStage: state.analysisStage - 1,
+      };
+    },
+
+    addActivePanelList(state, { payload: key }) {
+      if (state.activePanelList.some((item) => item === key)) {
+        return state;
+      } else
+        return {
+          ...state,
+          activePanelList: [...state.activePanelList, key],
+        };
+    },
+    handlePanelClick(state, { payload: activePanelList }) {
+      return { ...state, activePanelList };
+    },
+    removeActivePanelList(state, { payload: key }) {
+      return {
+        ...state,
+        activePanelList: state.activePanelList.filter((item) => item !== key),
       };
     },
 

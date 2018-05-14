@@ -2,7 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { Card, Tabs, Collapse } from 'antd';
 import { connect } from 'dva';
 
-import UploadComponent from './upload';
+import UploadComponent from './Upload';
 import DataIndexComponent from './DataIndex';
 import ClusterMethodComponent from './ClusterMethod';
 import ClusterDimComponent from './ClusterDim';
@@ -34,6 +34,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       indexState: 0,
       analysisStage: 0,
       tabStage: '1',
+      activePanelList: ['0'],
     },
     location: { pathname: '' },
     dispatch: () => {},
@@ -41,11 +42,13 @@ export default class DataPanel extends Component<IDataPanelProps> {
   changeTabStage = (key) => {
     this.props.dispatch({ type: 'data/changeTabStage', payload: key });
   };
-
+  handlePanelClick = (key) => {
+    this.props.dispatch({ type: 'data/handlePanelClick', payload: key });
+  };
   render() {
     const { data, dispatch, location } = this.props;
 
-    const { analysisStage, indexState, tabStage } = data;
+    const { analysisStage, indexState, tabStage, activePanelList } = data;
     const CollapseArray = [
       {
         text: '数据文件',
@@ -64,7 +67,12 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '维度匹配',
         component: (
-          <DimMatchComponent dispatch={dispatch} dims={dims} analysisStage={analysisStage} />
+          <DimMatchComponent
+            dispatch={dispatch}
+            pathname={location.pathname}
+            dims={dims}
+            analysisStage={analysisStage}
+          />
         ),
       },
       {
@@ -106,11 +114,16 @@ export default class DataPanel extends Component<IDataPanelProps> {
           <ClusterDimComponent dims={dims} analysisStage={analysisStage} dispatch={dispatch} />
         ),
       },
-      { text: '聚类方法', component: <ClusterMethodComponent
-          analysisStage={analysisStage}
-          pathname={location.pathname}
-          dispatch={dispatch}
-          /> },
+      {
+        text: '聚类方法',
+        component: (
+          <ClusterMethodComponent
+            analysisStage={analysisStage}
+            pathname={location.pathname}
+            dispatch={dispatch}
+          />
+        ),
+      },
     ];
 
     const PanelComponent = (from: number, end: number): ReactNode => {
@@ -137,18 +150,22 @@ export default class DataPanel extends Component<IDataPanelProps> {
         <Tabs activeKey={tabStage} onChange={this.changeTabStage} size="large">
           <TabPane tab="预处理" key="1">
             <div className={styles.advanced}>
-              <Collapse bordered={false} defaultActiveKey={['0']}>
+              <Collapse
+                bordered={false}
+                onChange={this.handlePanelClick}
+                activeKey={activePanelList}
+              >
                 {PanelComponent(0, 4)}
               </Collapse>
             </div>
           </TabPane>
           <TabPane tab="降维" key="2">
-            <Collapse bordered={false} defaultActiveKey={['4']}>
+            <Collapse bordered={false} activeKey={activePanelList}>
               {PanelComponent(4, 6)}
             </Collapse>
           </TabPane>
           <TabPane tab="聚类" key="3">
-            <Collapse bordered={false} defaultActiveKey={['6']}>
+            <Collapse bordered={false} activeKey={activePanelList}>
               {PanelComponent(6, 9)}
             </Collapse>
           </TabPane>

@@ -15,6 +15,7 @@ describe('Reducers', () => {
     const action = { type: 'data/indexStateBack' };
     expect(reducer(state, action)).toEqual({ indexState: 0 });
   });
+
   it('addAnalysisStageCount', () => {
     const reducer = reducers.addAnalysisStageCount;
     const state = { analysisStage: 0 };
@@ -27,10 +28,27 @@ describe('Reducers', () => {
     const action = { type: 'data/reduceAnalysisStageCount' };
     expect(reducer(state, action)).toEqual({ analysisStage: 0 });
   });
+
   it('changeTabStage', () => {
     const reducer = reducers.changeTabStage;
     const state = { tabStage: '1' };
     const action = { type: 'data/changeTabStage', payload: '2' };
     expect(reducer(state, action)).toEqual({ tabStage: '2' });
+  });
+
+  it('addActivePanelList', () => {
+    const reducer = reducers.addActivePanelList;
+    const state = { activePanelList: ['0'] };
+    const action = { type: 'data/addActivePanelList', payload: '1' };
+    expect(reducer(state, action)).toEqual({ activePanelList: ['0', '1'] });
+
+    const action2 = { type: 'data/addActivePanelList', payload: '0' };
+    expect(reducer(state, action2)).toEqual({ activePanelList: ['0'] });
+  });
+  it('removeActivePanelList', () => {
+    const reducer = reducers.removeActivePanelList;
+    const state = { activePanelList: ['0', '3'] };
+    const action = { type: 'data/removeActivePanelList', payload: '3' };
+    expect(reducer(state, action)).toEqual({ activePanelList: ['0'] });
   });
 });

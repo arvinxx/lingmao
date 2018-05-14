@@ -21,6 +21,9 @@ export default class Validation extends Component<IValidationProps> {
     // 解锁下一条面板
     if (this.props.analysisStage === 3) {
       this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'data/addActivePanelList', payload: '4' });
+      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '3' });
+
     }
     // 完成Tab切换
     this.props.dispatch({ type: 'data/changeTabStage', payload: '2' });

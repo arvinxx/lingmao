@@ -27,6 +27,8 @@ export default class RecuceDims extends Component<IRecuceDimsProps> {
     console.log('确认维度');
     if (this.props.analysisStage === 4) {
       this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'data/addActivePanelList', payload: '5' });
+      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '4' });
     }
   };
   render() {

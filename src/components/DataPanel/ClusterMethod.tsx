@@ -43,7 +43,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps> {
   };
 
   finish = () => {
-    router.push(`${baseUrl(this.props.pathname)}/cluster`);
+    router.push(`${baseUrl(this.props.pathname)}/analysis`);
   };
 
   render() {
@@ -64,8 +64,9 @@ export default class ClusterMethod extends Component<IClusterMethodProps> {
           <CheckboxGroup options={plainOptions} onChange={onChange_2} />
         </div>
         <div>
+          <Button type="primary">生成图表</Button>
           <Button type="primary" onClick={this.finish}>
-            生成图表
+            汇总结果
           </Button>
         </div>
       </div>

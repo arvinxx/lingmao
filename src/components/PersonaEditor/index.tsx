@@ -19,8 +19,6 @@ const plugins = {
   content: [slate(), image, spacer],
 };
 
-require('react-tap-event-plugin')();
-
 // Creates an empty editable
 const content = createEmptyState();
 // Instantiate the editor

@@ -49,6 +49,9 @@ export default class ReductionOpts extends Component<IReductionOptsProps> {
   finish = () => {
     if (this.props.analysisStage === 5) {
       this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'data/addActivePanelList', payload: '6' });
+      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '5' });
+
     }
 
     // Tab 切换

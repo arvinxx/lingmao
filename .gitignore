@@ -95,3 +95,4 @@ package-lock.json
 yarn.lock
 .jest-result-for-storybook.json
 coverage/
+__snapshots__

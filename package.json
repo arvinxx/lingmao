@@ -56,7 +56,8 @@
     "styled-components": "^3.2.2",
     "umi": "^1.2.6",
     "umi-plugin-dva": "^0.6.4",
-    "url-polyfill": "^1.0.12"
+    "url-polyfill": "^1.0.12",
+    "xlsx": "^0.12.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^6.1.0",
@@ -85,8 +86,15 @@
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write", "lint-staged:js"],
+    "**/*.{js,jsx}": [
+      "prettier --trailing-comma all --single-quote --write",
+      "lint-staged:js"
+    ],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
 }

@@ -58,6 +58,8 @@ export default class DataIndex extends Component<IDataIndexProps> {
   finish = () => {
     if (this.props.analysisStage === 1) {
       this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'data/addActivePanelList', payload: '2' });
+      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '1' });
     }
   };
   render() {
