@@ -37,6 +37,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       activePanelList: ['0'],
       rawData: [],
       questions: [],
+      questionState: 0,
       selectedQuestions: [],
     },
     location: { pathname: '' },
@@ -58,7 +59,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       tabStage,
       selectedQuestions,
       activePanelList,
-      questionState
+      questionState,
     } = data;
     const CollapseArray = [
       {

@@ -11,7 +11,7 @@ export type TDataModel = {
   analysisStage: number;
   tabStage: string;
   activePanelList: Array<string>;
-  rawData: Array<JSON>;
+  rawData: Array<object>;
   questions: Array<TQuestion>;
   selectedQuestions: Array<TQuestion>;
 };
@@ -21,6 +21,11 @@ export type TQuestion = {
   name: string;
 };
 
+export type TColumn = {
+  key: string;
+  title: string;
+  dataIndex: string;
+};
 interface model extends DvaModel {
   state: TDataModel;
 }

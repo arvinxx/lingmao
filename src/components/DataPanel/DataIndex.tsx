@@ -50,7 +50,8 @@ export default class DataIndex extends Component<IDataIndexProps> {
   indexStateBack = () => {
     this.props.dispatch({ type: 'data/indexStateBack' });
   };
-  finish = () => {
+  finish = (answers) => {
+    console.log(answers);
     if (this.props.analysisStage === 1) {
       this.props.dispatch({ type: 'data/addAnalysisStageCount' });
       this.props.dispatch({ type: 'data/addActivePanelList', payload: '2' });
@@ -69,7 +70,6 @@ export default class DataIndex extends Component<IDataIndexProps> {
 
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRow) => {
-        console.log(selectedRow);
         this.props.dispatch({
           type: 'data/handleSelectedQuestions',
           payload: selectedRow,
@@ -90,7 +90,6 @@ export default class DataIndex extends Component<IDataIndexProps> {
               {selectedQuestions.map((question, index) => {
                 const { key, name } = question;
                 const answers = getAnswers(rawData, name);
-                console.log(answers);
                 if (index === questionState) {
                   return (
                     <div key={key}>
@@ -119,7 +118,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
                               <Button style={{ marginRight: 16 }} onClick={this.indexStateBack}>
                                 返回
                               </Button>
-                              <Button onClick={this.finish}>确认</Button>
+                              <Button onClick={(e) => this.finish(answers)}>确认</Button>
                             </div>
                           </div>
                         )}
@@ -149,7 +148,12 @@ export default class DataIndex extends Component<IDataIndexProps> {
                   <Button style={{ marginRight: 16 }} onClick={this.resetSelection}>
                     重置
                   </Button>
-                  <Button type="primary" ghost onClick={this.indexStateNext}>
+                  <Button
+                    type="primary"
+                    ghost
+                    disabled={selectedQuestions.length === 0}
+                    onClick={this.indexStateNext}
+                  >
                     确认
                   </Button>
                 </div>

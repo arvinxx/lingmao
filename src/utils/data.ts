@@ -1,8 +1,15 @@
 import XLSX from 'xlsx';
 import { uniqBy } from 'lodash';
-import { TQuestion } from '../models/data';
+import { TColumn, TQuestion } from '../models/data';
 
 export const xlsxToJson = (file: ArrayBuffer): Array<JSON> => {
+  const workbook = XLSX.read(file, { type: 'buffer' });
+  const sheetNames = workbook.SheetNames;
+  const worksheet = workbook.Sheets[sheetNames[0]];
+  return XLSX.utils.sheet_to_json<JSON>(worksheet);
+};
+
+export const getSheetHeader = (file: ArrayBuffer): Array<JSON> => {
   const workbook = XLSX.read(file, { type: 'buffer' });
   const sheetNames = workbook.SheetNames;
   const worksheet = workbook.Sheets[sheetNames[0]];
@@ -31,6 +38,16 @@ export const getQuestions = (rawData: object[]): Array<TQuestion> => {
   return questions;
 };
 
+export const getRawColumns = (rawData: object[]): Array<TColumn> => {
+  let columns: TColumn[] = [];
+  if (rawData.length > 0) {
+    Object.keys(rawData[0]).map((title) => {
+      columns.push({ key: title, dataIndex: title, title });
+    });
+    return columns;
+  } else return [];
+};
+
 export const getAnswers = (rawData: object[], question: string): Array<TQuestion> => {
   let answers: Array<TQuestion> = [];
   rawData.map((item) => {
@@ -47,3 +64,5 @@ export const getKeyArrays = (selectedQuestions: Array<TQuestion>): Array<string>
   });
   return selectedRowKeys;
 };
+
+export const generateIndexData = (savedData) => {};

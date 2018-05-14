@@ -1,4 +1,4 @@
-import { getQuestions, getAnswers } from './data';
+import { getQuestions, getAnswers, generateIndexData } from './data';
 
 it('translate rawData to header', () => {
   const rawData = [{ aaa: 'das', bbb: 'dsadf', ccc: 'dadfre' }];
@@ -21,4 +21,26 @@ it('translate rawData to values', () => {
     { key: 'da6', name: 'da6' },
     { key: 'das', name: 'das' },
   ]);
+});
+
+it('generateIndexData ', () => {
+  const savedData = [
+    {
+      name: {
+        id: '1312345',
+        alias: 'name',
+        question: '你的名字是？',
+        answer: { text: 'xxxx', order: 3 },
+      },
+      gender: {
+        id: '456234',
+        alias: 'gender',
+        question: '你的性别是？',
+        answer: { text: '男', order: 4 },
+      },
+    },
+  ];
+  expect(generateIndexData(savedData)).toEqual([
+    {key:'1312345'}
+  ])
 });
