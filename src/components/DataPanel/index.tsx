@@ -35,6 +35,9 @@ export default class DataPanel extends Component<IDataPanelProps> {
       analysisStage: 0,
       tabStage: '1',
       activePanelList: ['0'],
+      rawData: [],
+      questions: [],
+      selectedQuestions: [],
     },
     location: { pathname: '' },
     dispatch: () => {},
@@ -48,7 +51,15 @@ export default class DataPanel extends Component<IDataPanelProps> {
   render() {
     const { data, dispatch, location } = this.props;
 
-    const { analysisStage, indexState, tabStage, activePanelList } = data;
+    const {
+      analysisStage,
+      indexState,
+      rawData,
+      tabStage,
+      selectedQuestions,
+      activePanelList,
+      questionState
+    } = data;
     const CollapseArray = [
       {
         text: '数据文件',
@@ -58,7 +69,10 @@ export default class DataPanel extends Component<IDataPanelProps> {
         text: '数据编码',
         component: (
           <DataIndexComponent
+            selectedQuestions={selectedQuestions}
+            rawData={rawData}
             indexState={indexState}
+            questionState={questionState}
             dispatch={dispatch}
             analysisStage={analysisStage}
           />

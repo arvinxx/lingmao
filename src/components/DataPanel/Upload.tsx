@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Icon, Upload } from 'antd';
-import { xlsxToJson } from '../../utils';
+import { readAsArrayBufferAsync, xlsxToJson } from '../../utils';
 
 import styles from './Upload.less';
 
@@ -11,40 +11,46 @@ interface IUploadDataProps {
 interface IUploadDataStates {
   fileList: Array<object>;
   uploading: boolean;
+  rawData: Array<JSON>;
 }
 
 export default class UploadData extends Component<IUploadDataProps, IUploadDataStates> {
   state = {
     fileList: [],
     uploading: false,
+    rawData: [],
   };
   static defaultProps = {
     analysisStage: 0,
   };
-  readFile = (file: File) => {
-    // console.log(file);
-    const data = xlsxToJson(file);
-    console.log(data);
+  readFile = async (file: File) => {
+    const fileBuffer = await readAsArrayBufferAsync(file);
+    const data = xlsxToJson(fileBuffer);
     this.setState(({ fileList }) => ({
       fileList: [...fileList, file],
+      rawData: data,
     }));
     return false;
   };
-  handleUpload = () => {
-    const { fileList } = this.state;
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append('files[]', file);
-    });
-
+  uploadFile = () => {
+    const { rawData } = this.state;
     this.setState({
       uploading: true,
     });
-    // if (this.props.analysisStage === 0) {
-    //   this.props.dispatch({ type: 'data/addAnalysisStageCount' });
-    //   this.props.dispatch({ type: 'data/addActivePanelList', payload: '1' });
-    //   this.props.dispatch({ type: 'data/removeActivePanelList', payload: '0' });
-    // }
+    this.props.dispatch({
+      type: 'data/handleRawData',
+      payload: rawData,
+    });
+
+    if (this.props.analysisStage === 0) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'data/addActivePanelList', payload: '1' });
+      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '0' });
+    }
+  };
+  //TODO: 处理上传数据后的显示状态
+  handleUpload = (status) => {
+    console.log(status);
   };
   removeFiles = (file) => {
     this.setState(({ fileList }) => {
@@ -56,14 +62,16 @@ export default class UploadData extends Component<IUploadDataProps, IUploadDataS
       };
     });
   };
+
   render() {
     const { uploading, fileList } = this.state;
 
     return (
       <div className={styles.button}>
         <Upload
-          action="//jsonplaceholder.typicode.com/posts/"
+          action="/api/raw-table-data/"
           onRemove={this.removeFiles}
+          onChange={this.handleUpload}
           fileList={fileList}
           beforeUpload={this.readFile}
         >
@@ -74,7 +82,7 @@ export default class UploadData extends Component<IUploadDataProps, IUploadDataS
         <Button
           className="upload-demo-start"
           type="primary"
-          onClick={this.handleUpload}
+          onClick={this.uploadFile}
           disabled={fileList.length === 0}
           loading={uploading}
         >

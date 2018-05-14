@@ -7,9 +7,18 @@ export type TDim = {
 };
 export type TDataModel = {
   indexState: number;
+  questionState: number;
   analysisStage: number;
   tabStage: string;
   activePanelList: Array<string>;
+  rawData: Array<JSON>;
+  questions: Array<TQuestion>;
+  selectedQuestions: Array<TQuestion>;
+};
+
+export type TQuestion = {
+  key: string;
+  name: string;
 };
 
 interface model extends DvaModel {
@@ -22,6 +31,10 @@ const model: model = {
     analysisStage: 0,
     tabStage: '1',
     activePanelList: ['0'],
+    rawData: [],
+    questions: [],
+    selectedQuestions: [],
+    questionState: 0,
   },
   reducers: {
     indexStateNext(state) {
@@ -34,6 +47,19 @@ const model: model = {
       return {
         ...state,
         indexState: 0,
+      };
+    },
+
+    questionStateNext(state) {
+      return {
+        ...state,
+        questionState: state.questionState + 1,
+      };
+    },
+    questionStateBack(state) {
+      return {
+        ...state,
+        questionState: state.questionState - 1,
       };
     },
 
@@ -74,6 +100,14 @@ const model: model = {
         ...state,
         tabStage: key,
       };
+    },
+
+    handleRawData(state, { payload: rawData }) {
+      return { ...state, rawData };
+    },
+
+    handleSelectedQuestions(state, { payload: selectedQuestions }) {
+      return { ...state, selectedQuestions };
     },
   },
 };

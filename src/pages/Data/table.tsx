@@ -1,8 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
-import { Table, Button, Input, message, Popconfirm, Divider, Card, Form } from 'antd';
+import { Table, Button, Input, message, Card, Form } from 'antd';
 import { connect } from 'dva';
 import styles from './table.less';
-
+const { Column } = Table;
 const tableData = [
   {
     key: '1',
@@ -59,12 +59,10 @@ export default class AdvancedForm extends PureComponent<any, any> {
     }
   };
 
-  onChange = (e) => {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
-    });
+  onChange = (pagination, filters, sorter) => {
+    console.log('params', pagination, filters, sorter);
   };
+
   remove = (key) => {
     const newData = this.state.data.filter((item) => item.key !== key);
     this.setState({ data: newData });
@@ -96,57 +94,16 @@ export default class AdvancedForm extends PureComponent<any, any> {
       title: '编号',
       dataIndex: 'index',
       key: 'form-index',
-      // width: '20%',
-      render: (text, record) => {
-        if (record.editable) {
-          return (
-            <Input
-              value={text}
-              autoFocus
-              onChange={(e) => this.handleFieldChange(e, 'form-index', record.key)}
-              onPressEnter={(e) => this.handleKeyPress(e)}
-              placeholder="编号"
-            />
-          );
-        }
-        return text;
-      },
     },
     {
       title: '年龄',
       dataIndex: 'age',
       key: 'form-age',
-      render: (text, record) => {
-        if (record.editable) {
-          return (
-            <Input
-              value={text}
-              onChange={(e) => this.handleFieldChange(e, 'workId', record.key)}
-              onPressEnter={(e) => this.handleKeyPress(e)}
-              placeholder="年龄"
-            />
-          );
-        }
-        return text;
-      },
     },
     {
       title: '性别',
       dataIndex: 'gender',
       key: 'form-gender',
-      render: (text, record) => {
-        if (record.editable) {
-          return (
-            <Input
-              value={text}
-              onChange={(e) => this.handleFieldChange(e, 'form-gender', record.key)}
-              onPressEnter={(e) => this.handleKeyPress(e)}
-              placeholder="性别"
-            />
-          );
-        }
-        return text;
-      },
     },
   ];
   saveRow = (e, key) => {
@@ -221,10 +178,37 @@ export default class AdvancedForm extends PureComponent<any, any> {
               columns={this.columns}
               dataSource={this.state.data}
               pagination={false}
+              onChange={this.onChange}
               rowClassName={(record) => {
                 return record.editable ? styles.editable : '';
               }}
-            />
+            >
+              {this.columns.map((column) => {
+                const { key, title, dataIndex } = column;
+                return (
+                  <Column
+                    title={title}
+                    key={key}
+                    dataIndex={dataIndex}
+                    onFilter={(value, record) => record.name.indexOf(value) === 0}
+                    render={(text, record) => {
+                      if (record.editable) {
+                        return (
+                          <Input
+                            value={text}
+                            autoFocus
+                            onChange={(e) => this.handleFieldChange(e, dataIndex, record.key)}
+                            onPressEnter={(e) => this.handleKeyPress(e)}
+                            placeholder="编号"
+                          />
+                        );
+                      }
+                      return text;
+                    }}
+                  />
+                );
+              })}
+            </Table>
           </Fragment>
         )}
         <Button
