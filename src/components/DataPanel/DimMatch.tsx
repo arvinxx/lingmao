@@ -1,30 +1,50 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
+const { CheckableTag } = Tag;
 
-export default class DimMatch extends Component {
-  defaultProps = {};
+import { TDim } from '../../models/data';
 
+interface IDimMatchProps {
+  dispatch: Function;
+  analysisStage: number;
+  dims: Array<TDim>;
+}
+export default class DimMatch extends Component<IDimMatchProps> {
+  static defaultProps: IDimMatchProps = {
+    analysisStage: 0,
+    dispatch: () => {},
+    dims: [],
+  };
+
+  handleChange = (checked) => {
+    this.setState({ checked });
+  };
+
+  finish = () => {
+    if (this.props.analysisStage === 2) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
+  };
   render() {
+    const { dims } = this.props;
+
     return (
       <div>
         <p>点击维度，匹配维度</p>
         <div style={{ padding: '26px 16px 16px' }}>
-          <Button>年龄</Button>
-          <Button>性别</Button>
-          <Button>月收入</Button>
-          <Button>烟费</Button>
-          <Button>烟龄</Button>
-          <Button>口味</Button>
-          <Button>忠诚度</Button>
-          <Button>健康</Button>
-          <Button>公共场合</Button>
-          <Button>新鲜事物</Button>
-          <Button>性价比</Button>
+          {dims.map((dim: TDim) => {
+            const { id, selected, text } = dim;
+            return (
+              <CheckableTag key={id} checked={selected} onChange={this.handleChange}>
+                {text}
+              </CheckableTag>
+            );
+          })}
         </div>
         <div />
         <div style={{ padding: '26px 16px 16px' }}>
           <Button>重置</Button>
-          <Button type="primary" ghost>
+          <Button type="primary" ghost onClick={this.finish}>
             确认
           </Button>
         </div>

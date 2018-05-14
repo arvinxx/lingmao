@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { Card, Tabs, Collapse } from 'antd';
+import { connect } from 'dva';
 
 import UploadComponent from './upload';
 import DataIndexComponent from './DataIndex';
@@ -13,31 +14,105 @@ import DimMatchComponent from './DimMatch';
 import styles from './index.less';
 
 import { dims } from '../../../mock/dims';
+import { TDataModel } from '../../models/data';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
 
-export default class DataPanel extends Component {
-  state = {
-    analysisStage: 9,
-    indexState: 0,
+interface IDataPanelProps {
+  dispatch: Function;
+  data: TDataModel;
+  location: { pathname: string };
+}
+@connect(({ data, routing }) => ({
+  data,
+  location: routing.location,
+}))
+export default class DataPanel extends Component<IDataPanelProps> {
+  static defaultProps: IDataPanelProps = {
+    data: {
+      indexState: 0,
+      analysisStage: 0,
+      tabStage: '1',
+    },
+    location: { pathname: '' },
+    dispatch: () => {},
   };
-  callback = (key) => {
-    console.log(key);
+  changeTabStage = (key) => {
+    this.props.dispatch({ type: 'data/changeTabStage', payload: key });
   };
 
   render() {
-    const { analysisStage, indexState } = this.state;
+    const { data, dispatch, location } = this.props;
+
+    const { analysisStage, indexState, tabStage } = data;
     const CollapseArray = [
-      { text: '数据文件', component: <UploadComponent /> },
-      { text: '数据编码', component: <DataIndexComponent indexState={indexState} /> },
-      { text: '维度匹配', component: <DimMatchComponent /> },
-      { text: '有效性检验', component: <ValidationComponent /> },
-      { text: '选择维度', component: <RecuceDimsComponent dims={dims} percent={70} /> },
-      { text: '维度选项', component: <ReductionOptsComponent /> },
-      { text: '选择维度', component: <ClusterDimComponent /> },
-      { text: '聚类方法', component: <ClusterMethodComponent /> },
+      {
+        text: '数据文件',
+        component: <UploadComponent dispatch={dispatch} analysisStage={analysisStage} />,
+      },
+      {
+        text: '数据编码',
+        component: (
+          <DataIndexComponent
+            indexState={indexState}
+            dispatch={dispatch}
+            analysisStage={analysisStage}
+          />
+        ),
+      },
+      {
+        text: '维度匹配',
+        component: (
+          <DimMatchComponent dispatch={dispatch} dims={dims} analysisStage={analysisStage} />
+        ),
+      },
+      {
+        text: '有效性检验',
+        component: (
+          <ValidationComponent
+            analysisStage={analysisStage}
+            pathname={location.pathname}
+            dispatch={dispatch}
+            tabStage={tabStage}
+          />
+        ),
+      },
+      {
+        text: '选择维度',
+        component: (
+          <RecuceDimsComponent
+            dims={dims}
+            percent={70}
+            dispatch={dispatch}
+            analysisStage={analysisStage}
+          />
+        ),
+      },
+      {
+        text: '维度选项',
+        component: (
+          <ReductionOptsComponent
+            pathname={location.pathname}
+            analysisStage={analysisStage}
+            dispatch={dispatch}
+            tabStage={tabStage}
+          />
+        ),
+      },
+      {
+        text: '选择维度',
+        component: (
+          <ClusterDimComponent dims={dims} analysisStage={analysisStage} dispatch={dispatch} />
+        ),
+      },
+      { text: '聚类方法', component: <ClusterMethodComponent
+          analysisStage={analysisStage}
+          pathname={location.pathname}
+          dispatch={dispatch}
+          /> },
     ];
+
     const PanelComponent = (from: number, end: number): ReactNode => {
       {
         return CollapseArray.map((panel, index) => {
@@ -56,12 +131,13 @@ export default class DataPanel extends Component {
         });
       }
     };
+
     return (
       <Card bordered={false} className={styles.right}>
-        <Tabs defaultActiveKey="1" onChange={this.callback} size="large">
+        <Tabs activeKey={tabStage} onChange={this.changeTabStage} size="large">
           <TabPane tab="预处理" key="1">
             <div className={styles.advanced}>
-              <Collapse bordered={false} defaultActiveKey={['1']}>
+              <Collapse bordered={false} defaultActiveKey={['0']}>
                 {PanelComponent(0, 4)}
               </Collapse>
             </div>

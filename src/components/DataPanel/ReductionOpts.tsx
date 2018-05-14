@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Dropdown, Button, InputNumber, Collapse, Icon, message, Menu, Checkbox } from 'antd';
 import styles from './ReductionOpts.less';
+import { TDim } from '../../models/data';
+import { baseUrl } from '../../utils';
+import router from 'umi/router';
 
 function handleMenuClick(e) {
   message.info('Click on menu item.');
@@ -30,9 +33,30 @@ const menu = (
 );
 const plainOptions = ['相关系数表', '碎石图', '总方差解释', '成分矩阵'];
 
-export default class ReductionOpts extends Component {
-  defaultProps = {};
+interface IReductionOptsProps {
+  dispatch: Function;
+  analysisStage: number;
+  pathname: string;
+  tabStage: string;
+}
+export default class ReductionOpts extends Component<IReductionOptsProps> {
+  static defaultProps: IReductionOptsProps = {
+    dispatch: () => {},
+    analysisStage: 0,
+    pathname: '',
+    tabStage: '',
+  };
+  finish = () => {
+    if (this.props.analysisStage === 5) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
 
+    // Tab 切换
+    this.props.dispatch({ type: 'data/changeTabStage', payload: '3' });
+
+    // 路由跳转
+    router.push(`${baseUrl(this.props.pathname)}/cluster`);
+  };
   render() {
     return (
       <div>
@@ -64,12 +88,13 @@ export default class ReductionOpts extends Component {
                   请选择方法
                 </Dropdown.Button>
               </div>
-              <div>
-                <Button type="primary" ghost>
-                  生成图表
-                </Button>
-                <Button type="primary">确认并跳转</Button>
-              </div>
+              <div />
+              <Button type="primary" ghost>
+                生成图表
+              </Button>
+              <Button type="primary" onClick={this.finish}>
+                确认并跳转
+              </Button>
             </Panel>
           </Collapse>
         </div>

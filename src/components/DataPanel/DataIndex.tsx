@@ -40,12 +40,26 @@ const rowSelection = {
 
 interface IDataIndexProps {
   indexState: number;
+  dispatch: Function;
+  analysisStage: number;
 }
 export default class DataIndex extends Component<IDataIndexProps> {
   static defaultProps = {
     indexState: 0,
+    analysisStage: 0,
   };
 
+  next = () => {
+    this.props.dispatch({ type: 'data/indexStateNext' });
+  };
+  back = () => {
+    this.props.dispatch({ type: 'data/indexStateBack' });
+  };
+  finish = () => {
+    if (this.props.analysisStage === 1) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
+  };
   render() {
     const { indexState } = this.props;
     return (
@@ -64,13 +78,8 @@ export default class DataIndex extends Component<IDataIndexProps> {
                     Content of tab 2
                   </TabPane>
                 </Tabs>
-                <Button
-                  onClick={() => {
-                    this.setState({ indexState: 0 });
-                  }}
-                >
-                  返回
-                </Button>
+                <Button onClick={this.back}>返回</Button>
+                <Button onClick={this.finish}>确认</Button>
               </div>
             ) : (
               <Table
@@ -83,14 +92,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
                 footer={() => (
                   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Button style={{ marginRight: 16 }}>重置</Button>
-                    <Button
-                      type="primary"
-                      ghost
-                      onClick={() => {
-                        console.log('选择完毕');
-                        this.setState({ indexState: 1 });
-                      }}
-                    >
+                    <Button type="primary" ghost onClick={this.next}>
                       确认
                     </Button>
                   </div>

@@ -1,33 +1,46 @@
 import React, { Component } from 'react';
-import { Button, Divider, Icon } from 'antd';
+import { Button, Divider, Icon, Tag } from 'antd';
+import { TDim } from '../../models/data';
+import { baseUrl } from '../../utils';
+import router from 'umi/router';
 
-export default class ClusterDim extends Component {
-  static defaultProps = {};
+const { CheckableTag } = Tag;
 
+interface IClusterDimProps {
+  dispatch: Function;
+  dims: Array<TDim>;
+  analysisStage: number;
+}
+export default class ClusterDim extends Component<IClusterDimProps> {
+  static defaultProps: IClusterDimProps = {
+    dims: [],
+    dispatch: () => {},
+    analysisStage: 0,
+  };
+
+  finish = () => {
+    // 解锁下一条面板
+    if (this.props.analysisStage === 6) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
+  };
   render() {
+    const { dims } = this.props;
     return (
       <div>
         <p>点击选择参与降维的维度</p>
-        <div>
-          <Button>降维成份一</Button>
-          <Button>降维成份二</Button>
-          <Button>降维成份三</Button>
-          <Button>年龄</Button>
-          <Button>性别</Button>
-          <Button>月收入</Button>
-          <Button>烟费</Button>
-          <Button>烟龄</Button>
-          <Button>口味</Button>
-          <Button>忠诚度</Button>
-          <Button>健康</Button>
-          <Button>公共场合</Button>
-          <Button>新鲜事物</Button>
-          <Button>性价比</Button>
-        </div>
+        {dims.map((dim: TDim) => {
+          const { id, selected, text } = dim;
+          return (
+            <CheckableTag key={id} checked={selected} onChange={this.handleChange}>
+              {text}
+            </CheckableTag>
+          );
+        })}
         <div>
           <Divider />
           <Button>重置</Button>
-          <Button type="primary" ghost>
+          <Button type="primary" ghost onClick={this.finish}>
             确认
           </Button>
         </div>

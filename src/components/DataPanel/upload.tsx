@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import { Button, Icon, Upload } from 'antd';
 
-export default class upload extends Component {
+interface IUploadDataProps {
+  dispatch: Function;
+  analysisStage: number;
+}
+
+export default class UploadData extends Component<IUploadDataProps> {
   state = {
     fileList: [],
     uploading: false,
   };
+  static defaultProps = {
+    analysisStage: 0,
+  };
   handleUpload = () => {
-    const { fileList } = this.state;
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append('files[]', file);
-    });
-
-    this.setState({
-      uploading: true,
-    });
+    // const { fileList } = this.state;
+    // const formData = new FormData();
+    // fileList.forEach((file) => {
+    //   formData.append('files[]', file);
+    // });
+    //
+    // this.setState({
+    //   uploading: true,
+    // });
+    if (this.props.analysisStage === 0) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
   };
 
   render() {

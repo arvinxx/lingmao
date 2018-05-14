@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Dropdown, Button, Icon, InputNumber, Checkbox, Menu, message } from 'antd';
+import { TDim } from '../../models/data';
+import { baseUrl } from '../../utils';
+import router from 'umi/router';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -27,8 +30,21 @@ function onChange_2(checkedValues_2) {
 }
 const plainOptions = ['ANOVA表', '以实际个案为中心'];
 
-export default class ClusterMethod extends Component {
-  static defaultProps = {};
+interface IClusterMethodProps {
+  dispatch: Function;
+  analysisStage: number;
+  pathname: string;
+}
+export default class ClusterMethod extends Component<IClusterMethodProps> {
+  static defaultProps: IClusterMethodProps = {
+    analysisStage: 0,
+    dispatch: () => {},
+    pathname: '',
+  };
+
+  finish = () => {
+    router.push(`${baseUrl(this.props.pathname)}/cluster`);
+  };
 
   render() {
     return (
@@ -45,10 +61,12 @@ export default class ClusterMethod extends Component {
           <InputNumber min={1} max={10} defaultValue={3} onChange={onChange} />
         </div>
         <div>
-          <CheckboxGroup options={plainOptions} defaultValue={[]} onChange={onChange_2} />
+          <CheckboxGroup options={plainOptions} onChange={onChange_2} />
         </div>
         <div>
-          <Button type="primary">生成图表</Button>
+          <Button type="primary" onClick={this.finish}>
+            生成图表
+          </Button>
         </div>
       </div>
     );

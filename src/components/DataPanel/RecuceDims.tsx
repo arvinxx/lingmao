@@ -6,11 +6,15 @@ const { CheckableTag } = Tag;
 interface IRecuceDimsProps {
   dims: Array<TDim>;
   percent: number;
+  dispatch: Function;
+  analysisStage: number;
 }
 export default class RecuceDims extends Component<IRecuceDimsProps> {
-  static defaultProps = {
+  static defaultProps: IRecuceDimsProps = {
     dims: [],
     percent: 0,
+    dispatch: () => {},
+    analysisStage: 0,
   };
   state = { checked: false };
   handleChange = (checked) => {
@@ -21,6 +25,9 @@ export default class RecuceDims extends Component<IRecuceDimsProps> {
   };
   confirmSelection = () => {
     console.log('确认维度');
+    if (this.props.analysisStage === 4) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
   };
   render() {
     const { percent, dims } = this.props;

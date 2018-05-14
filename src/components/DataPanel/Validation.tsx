@@ -1,9 +1,33 @@
 import React, { Component } from 'react';
 import { Icon, Button } from 'antd';
+import router from 'umi/router';
+import { baseUrl } from '../../utils';
 
-export default class Validation extends Component {
-  static defaultProps = {};
+interface IValidationProps {
+  dispatch: Function;
+  analysisStage: number;
+  tabStage: string;
+  pathname: string;
+}
+export default class Validation extends Component<IValidationProps> {
+  static defaultProps: IValidationProps = {
+    analysisStage: 0,
+    dispatch: () => {},
+    pathname: '',
+    tabStage: '1',
+  };
 
+  finish = () => {
+    // 解锁下一条面板
+    if (this.props.analysisStage === 3) {
+      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
+    }
+    // 完成Tab切换
+    this.props.dispatch({ type: 'data/changeTabStage', payload: '2' });
+
+    // 完成路由跳转
+    router.push(`${baseUrl(this.props.pathname)}/reduction`);
+  };
   render() {
     return (
       <div>
@@ -13,7 +37,9 @@ export default class Validation extends Component {
         </div>
         <div>
           <Button>生成图表</Button>
-          <Button type="primary">确认并跳转</Button>
+          <Button type="primary" onClick={this.finish}>
+            确认并跳转
+          </Button>
         </div>
       </div>
     );

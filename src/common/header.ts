@@ -61,7 +61,7 @@ export const data = {
   center: [
     { text: '数据表格', path: 'table' },
     { text: '检验图表', path: 'validation' },
-    { text: '降维图表', path: 'redution' },
+    { text: '降维图表', path: 'reduction' },
     { text: '聚类结果', path: 'cluster' },
     { text: '分析汇总', path: 'analysis' },
   ],
