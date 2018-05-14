@@ -1,0 +1,23 @@
+@import '../../styles/themes/default';
+
+.right {
+  flex: none;
+  box-shadow: @shadow-0;
+
+  width: 400px;
+  .panel {
+    border-bottom: 0;
+    :global {
+      .ant-collapse-item > .ant-collapse-header {
+        line-height: 20px;
+        font-size: @font-size-base;
+        color: @dark-5;
+      }
+    }
+  }
+  :global {
+    .ant-card-body {
+      padding-top: 0;
+    }
+  }
+}

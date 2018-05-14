@@ -1,4 +1,4 @@
-const dimensions = [
+export const dimensions = [
   {
     key: '年龄',
     values: ['小于18', '18 - 25', '26 -30'],

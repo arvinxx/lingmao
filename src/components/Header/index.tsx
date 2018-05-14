@@ -28,7 +28,7 @@ interface IHeaderProps {
   };
   routing?: TLocation;
   dispatch?: any;
-  showMenu: boolean;
+  showMenu?: boolean;
 }
 
 @connect(({ routing, global }) => ({
