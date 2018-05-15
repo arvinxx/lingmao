@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Tag, Input, Icon, Popconfirm, message } from 'antd';
+import { Tag, Input, Icon, Popconfirm } from 'antd';
 
 import styles from './styles.less';
 
-const CheckableTag = Tag.CheckableTag;
+const { CheckableTag } = Tag;
 
 type Value = {
   id: string;
@@ -27,6 +27,11 @@ interface ILabelSelectStates {
 }
 
 export default class TagInput extends Component<ILabelSelectProps, ILabelSelectStates> {
+  static defaultProps: ILabelSelectProps = {
+    dimensions: [],
+    dispatch: () => {},
+    selectedValues: [],
+  };
   state = { newKey: '', newValue: '', newKeyPlaceHolder: '添加条目' };
 
   oldKeyChange = (e, id) => {
