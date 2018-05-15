@@ -34,7 +34,7 @@ export default class Index extends PureComponent<any, any> {
 
     return (
       <Fragment>
-        <Header header={header} />,
+        {/*<Header header={header} />*/}
         <Content className={styles.content}>
           <div className={styles.container}>
             <Row gutter={24}>

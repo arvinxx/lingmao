@@ -1,111 +1,243 @@
-export const interview = {
-  left: [
-    {
-      text: 'inbox',
-      dispatch: {
-        type: 'interview/changeUploadVisible',
+export const interview = [
+  {
+    text: '记录',
+    path: 'record',
+    left: [
+      {
+        text: 'left',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    {
-      text: 'left',
-      dispatch: {
-        type: '',
+      {
+        text: 'right',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    {
-      text: 'right',
-      dispatch: {
-        type: '',
+      {
+        text: 'sync',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    {
-      text: 'sync',
-      dispatch: {
-        type: '',
+      {
+        text: 'inbox',
+        dispatch: {
+          type: 'interview/changeUploadVisible',
+        },
       },
-    },
-  ],
-  center: [{ text: '记录', path: 'record' }, { text: '标签', path: 'tag' }],
-  right: [
-    {
-      text: 'tags-o',
-      dispatch: {
-        type: 'interview/changeTagVisible',
+    ],
+    right: [
+      {
+        text: 'tags-o',
+        dispatch: {
+          type: 'interview/changeTagVisible',
+        },
       },
-    },
-  ],
-};
-export const data = {
-  left: [
-    {
-      text: 'left',
-      onClick: (e) => {
-        console.log(e);
+    ],
+  },
+  {
+    text: '标签',
+    path: 'tag',
+    left: [
+      {
+        text: 'left',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    {
-      text: 'upload',
-      dispatch: {
-        type: 'interview/changeUploadVisible',
+      {
+        text: 'right',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    {
-      text: 'sync',
-      onClick: (e) => {
-        // props.dispatch({
-        //
-        // });
+      {
+        text: 'sync',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-  ],
-  center: [
-    { text: '数据表格', path: 'table' },
-    { text: '检验图表', path: 'validation' },
-    { text: '降维图表', path: 'reduction' },
-    { text: '聚类结果', path: 'cluster' },
-    { text: '分析汇总', path: 'analysis' },
-  ],
-  right: [
-    {
-      text: 'tablet',
-      dispatch: {
-        type: 'interview/changeTabletVisible',
+    ],
+    right: [
+      {
+        text: 'exception',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    'desktop',
-  ],
-};
-export const persona = {
-  left: [
-    {
-      text: 'left',
-      dispatch: {
-        type: '',
+      {
+        text: 'bulb',
+        dispatch: {
+          type: '',
+        },
       },
-    },
-    {
-      text: 'right',
-      dispatch: {
-        type: '',
+    ],
+  },
+];
+export const data = [
+  {
+    text: '数据表格',
+    path: 'table',
+    left: [
+      {
+        text: 'left',
+        onClick: (e) => {
+          console.log(e);
+        },
       },
-    },
-    {
-      text: 'sync',
-      dispatch: {
-        type: '',
+    ],
+    right: [
+      {
+        text: 'tablet',
+        dispatch: {
+          type: 'interview/changeTabletVisible',
+        },
       },
-    },
-  ],
-  center: [{ text: '编辑', path: 'edit' }, { text: '导出', path: 'export' }],
-  right: [
-    {
-      text: 'bars',
-      dispatch: {
-        type: 'persona/changeDimVisible',
+    ],
+  },
+  {
+    text: '检验图表',
+    path: 'validation',
+    left: [
+      {
+        text: 'left',
+        onClick: (e) => {
+          console.log(e);
+        },
       },
-    },
-  ],
-};
+    ],
+    right: [
+      {
+        text: 'tablet',
+        dispatch: {
+          type: 'interview/changeTabletVisible',
+        },
+      },
+    ],
+  },
+  {
+    text: '降维图表',
+    path: 'reduction',
+    left: [
+      {
+        text: 'left',
+        onClick: (e) => {
+          console.log(e);
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'tablet',
+        dispatch: {
+          type: 'interview/changeTabletVisible',
+        },
+      },
+    ],
+  },
+  {
+    text: '聚类结果',
+    path: 'cluster',
+    left: [
+      {
+        text: 'left',
+        onClick: (e) => {
+          console.log(e);
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'tablet',
+        dispatch: {
+          type: 'interview/changeTabletVisible',
+        },
+      },
+    ],
+  },
+  {
+    text: '分析汇总',
+    path: 'analysis',
+    left: [
+      {
+        text: 'left',
+        onClick: (e) => {
+          console.log(e);
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'tablet',
+        dispatch: {
+          type: 'interview/changeTabletVisible',
+        },
+      },
+    ],
+  },
+];
+export const persona = [
+  {
+    text: '编辑',
+    path: 'edit',
+    left: [
+      {
+        text: 'left',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'right',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'sync',
+        dispatch: {
+          type: '',
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'bars',
+        dispatch: {
+          type: 'persona/changeDimVisible',
+        },
+      },
+    ],
+  },
+  {
+    text: '导出',
+    path: 'export',
+    left: [
+      {
+        text: 'left',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'right',
+        dispatch: {
+          type: '',
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'to-top',
+        dispatch: {
+          type: 'per',
+        },
+      },
+    ],
+  },
+];
 export const dashboard = {
   left: [
     {

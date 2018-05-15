@@ -7,6 +7,7 @@ import pathToRegexp from 'path-to-regexp';
 import HeaderSearch from './HeaderSearch';
 
 import router from 'umi/router';
+import { generateId } from '../../utils';
 
 const TabPane = Tabs.TabPane;
 type TIcon = {
@@ -18,13 +19,11 @@ type TIcon = {
 type TPanel = {
   text: string;
   path: string;
+  right: Array<TIcon>;
+  left: Array<TIcon>;
 };
 interface IHeaderProps {
-  header: {
-    left: Array<TIcon>;
-    center: Array<TPanel>;
-    right: Array<TIcon>;
-  };
+  header: Array<TPanel>;
   pathname: string;
   dispatch?: any;
   showMenu?: boolean;
@@ -41,11 +40,7 @@ interface IHeaderStates {
 export default class Header extends Component<IHeaderProps, IHeaderStates> {
   static defaultProps: IHeaderProps = {
     dispatch: () => {},
-    header: {
-      center: [],
-      left: [],
-      right: [],
-    },
+    header: [],
     pathname: '',
     showMenu: true,
   };
@@ -87,67 +82,74 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
   };
 
   render() {
-    const { left, center, right } = this.props.header;
-    const showMenu = this.props.showMenu;
-    return (
-      <div className={styles.header}>
-        <div className={styles['tool-container']}>
-          <Icon
-            key="menu-hide"
-            onClick={this.changeMenuState}
-            type={showMenu ? 'menu-fold' : 'menu-unfold'}
-            className={styles.icon}
-          />
-          {left.map((item) => {
-            const { text, dispatch } = item;
-            return (
+    const { header, showMenu } = this.props;
+    const { currentPanel } = this.state;
+    const center = header.map((header) => ({ text: header.text, path: header.path }));
+    return header.map((header, index) => {
+      const { right, left } = header;
+      if (header.path === currentPanel) {
+        return (
+          <div key={header + index.toString()} className={styles.header}>
+            <div className={styles['tool-container']}>
               <Icon
-                key={'icon' + text}
-                onClick={() => {
-                  this.onClick(dispatch);
-                }}
-                type={text}
+                key="menu-hide"
+                onClick={this.changeMenuState}
+                type={showMenu ? 'menu-fold' : 'menu-unfold'}
                 className={styles.icon}
               />
-            );
-          })}
-        </div>
-        <Tabs
-          activeKey={this.state.currentPanel}
-          onChange={this.goToRoute}
-          className={styles['tool-container']}
-        >
-          {center.map((item) => {
-            const { text, path } = item;
-            return <TabPane tab={text} key={path} />;
-          })}
-        </Tabs>
-        <div className={styles['tool-container']}>
-          <HeaderSearch
-            placeholder="搜索"
-            dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
-            onSearch={(value) => {
-              console.log('input', value);
-            }}
-            onPressEnter={(value) => {
-              console.log('enter', value);
-            }}
-          />
-          {right.map((item) => {
-            const { text, dispatch } = item;
-            return (
-              <Icon
-                key={'icon' + text}
-                onClick={() => {
-                  this.onClick(dispatch);
+              {left.map((item) => {
+                const { text, dispatch } = item;
+                return (
+                  <Icon
+                    key={'icon' + text}
+                    onClick={() => {
+                      this.onClick(dispatch);
+                    }}
+                    type={text}
+                    className={styles.icon}
+                  />
+                );
+              })}
+            </div>
+            <Tabs
+              key={header + index.toString()}
+              activeKey={this.state.currentPanel}
+              onChange={this.goToRoute}
+              className={styles['tool-container']}
+            >
+              {center.map((item) => {
+                const { text, path } = item;
+                return <TabPane tab={text} key={path} />;
+              })}
+            </Tabs>
+            <div className={styles['tool-container']}>
+              <HeaderSearch
+                placeholder="搜索"
+                dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
+                onSearch={(value) => {
+                  console.log('input', value);
                 }}
-                type={text}
-                className={styles.icon}
+                onPressEnter={(value) => {
+                  console.log('enter', value);
+                }}
               />
-            );
-          })}
-        </div>
-      </div>
-    );
+              {right.map((item) => {
+                const { text, dispatch } = item;
+                return (
+                  <Icon
+                    key={'icon' + text}
+                    onClick={() => {
+                      this.onClick(dispatch);
+                    }}
+                    type={text}
+                    className={styles.icon}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
+    });
   }
 }
