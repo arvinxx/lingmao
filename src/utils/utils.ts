@@ -1,4 +1,5 @@
 import moment from 'moment';
+import shortid from 'shortid';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -87,7 +88,8 @@ export const findIndexById = (arr: Array<any>, id: string): number => {
 };
 
 export const generateId = (): string => {
-  return new Date().valueOf().toString();
+  shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ%@');
+  return shortid.generate();
 };
 
 export function isUrl(path) {

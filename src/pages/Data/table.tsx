@@ -4,19 +4,19 @@ import { connect } from 'dva';
 import styles from './table.less';
 import { Ellipsis } from '../../components';
 
-import { generateId, getRawColumns } from '../../utils';
-import { TColumn } from '../../models/data';
+import { generateId, getColumns, getTableData } from '../../utils';
+import { TColumn, TQuesData } from '../../models/data';
 const { Column } = Table;
 
 interface ITableDataProps {
-  rawData: Array<object>;
+  quesData: Array<TQuesData>;
   dispatch: Function;
 }
 
-@connect(({ data }) => ({ rawData: data.rawData }))
+@connect(({ data }) => ({ quesData: data.quesData }))
 export default class TableData extends PureComponent<ITableDataProps> {
   static defaultProps: ITableDataProps = {
-    rawData: [],
+    quesData: [],
     dispatch: () => {},
   };
   state = {
@@ -30,19 +30,20 @@ export default class TableData extends PureComponent<ITableDataProps> {
   };
 
   render() {
-    const { rawData } = this.props;
+    const { quesData } = this.props;
     //
-    // rawData.map((item) => {
+    // quesData.map((item) => {
     //   item.key = generateId();
     // });
-    const columns = getRawColumns(rawData);
+    const columns = getColumns(quesData);
+    const tableData = getTableData(quesData);
     const width = 2000;
 
     return (
       <Card bordered={false} className={styles.left}>
         <Table
           loading={this.state.loading}
-          dataSource={rawData}
+          dataSource={tableData}
           pagination={false}
           onChange={this.onChange}
           scroll={{ x: width, y: 720 }}

@@ -1,9 +1,9 @@
 import { effects } from 'dva/saga';
 import model, { initRawData } from '../../src/models/interview';
 import { queryDocument } from '../../src/services/api';
-import { generateId } from 'utils';
+import { generateId } from '../../src/utils';
 
-import { set, reset } from 'mockdate';
+jest.mock('shortid');
 
 const reducers = model.reducers;
 
@@ -40,7 +40,6 @@ describe('Effects', () => {
 describe('Reducers', () => {
   describe('querryDocument', () => {
     it('if id is empty should generate a new id', () => {
-      set('1/1/2000'); // Mock datetime
       const reducer = reducers.querryDocument;
       const state = {
         title: '',
@@ -67,7 +66,6 @@ describe('Reducers', () => {
           },
         ],
         selectedValues: [],
-        tagGroups: [],
       };
       const action = {
         type: 'interview/querryDocument',
@@ -112,12 +110,9 @@ describe('Reducers', () => {
         selectedValues: [],
         recordFocusId: generateId(),
         id: generateId(),
-        tagGroups: [{ id: generateId(), text: 'ungroup', tags: [] }],
       });
-      reset();
     });
     it("if id isn't empty should keep it", () => {
-      set('1/1/2000'); // Mock datetime
       const reducer = reducers.querryDocument;
       const state = {
         title: '',
@@ -229,53 +224,9 @@ describe('Reducers', () => {
         selectedValues: [],
         recordFocusId: '4',
         id: '1',
-        tagGroups: [
-          {
-            text: 'ungroup',
-            id: '222',
-            tags: [
-              {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-          {
-            text: 'eed',
-            id: '111',
-            tags: [
-              {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-        ],
       });
-      reset();
     });
     it('should init document if key is not compete', () => {
-      set('1/1/2000'); // Mock datetime
       const reducer = reducers.querryDocument;
       const state = {
         title: '',
@@ -384,53 +335,10 @@ describe('Reducers', () => {
         ],
         records: [{ id: generateId(), text: '', rawData: initRawData() }],
         title: '',
-        tagGroups: [
-          {
-            text: 'ungroup',
-            id: generateId(),
-            tags: [
-              {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-          {
-            text: 'eed',
-            id: generateId(),
-            tags: [
-              {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-        ],
         selectedValues: ['3'],
         recordFocusId: generateId(),
         id: '1',
       });
-      reset();
     });
   });
 
@@ -451,7 +359,6 @@ describe('Reducers', () => {
   });
 
   it('addRecord', () => {
-    set('1/1/2000'); // Mock datetime
     const reducer = reducers.addRecord;
     const state = {
       recordFocusId: '4',
@@ -480,7 +387,6 @@ describe('Reducers', () => {
         },
       ],
     });
-    reset(); // reset to realtime
   });
   describe('deleteRecord', () => {
     it("delete the record and set the previous item's focus to be true", () => {
@@ -735,8 +641,6 @@ describe('Reducers', () => {
 
   describe('addDimensionKey', () => {
     it("should add a dimension key if it's not empty", () => {
-      set('1/1/2000'); // Mock datetime
-
       const reducer = reducers.addDimensionKey;
       const state = {
         dimensions: [],
@@ -754,12 +658,8 @@ describe('Reducers', () => {
           },
         ],
       });
-
-      reset(); // reset to realtime
     });
     it("should remain if it's empty", () => {
-      set('1/1/2000'); // Mock datetime
-
       const reducer = reducers.addDimensionKey;
       const state = {
         dimensions: [],
@@ -771,8 +671,6 @@ describe('Reducers', () => {
       expect(reducer(state, action)).toEqual({
         dimensions: [],
       });
-
-      reset(); // reset to realtime
     });
   });
   it('deleteDimensionKey', () => {
@@ -834,8 +732,6 @@ describe('Reducers', () => {
 
   describe('addDimensionValue', () => {
     it("should add a dimension value if it's not empty", () => {
-      set('1/1/2000'); // Mock datetime
-
       const reducer = reducers.addDimensionValue;
       const state = {
         dimensions: [
@@ -865,11 +761,8 @@ describe('Reducers', () => {
           },
         ],
       });
-      reset();
     });
     it("should add a dimension value if it's empty", () => {
-      set('1/1/2000'); // Mock datetime
-
       const reducer = reducers.addDimensionValue;
       const state = {
         dimensions: [
@@ -894,7 +787,6 @@ describe('Reducers', () => {
           },
         ],
       });
-      reset();
     });
   });
   it('changeDimensionValue', () => {

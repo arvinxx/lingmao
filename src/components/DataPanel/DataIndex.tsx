@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { Steps, Tabs, Button, Table, Icon } from 'antd';
+import { Steps, Button, Table } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { getAnswers, getKeyArrays, getQuestions } from '../../utils';
 import styles from './DataIndex.less';
-import { TQuestion } from '../../models/data';
-import { push } from 'react-router-redux';
-import { render } from 'enzyme';
+import { TQuesData, TSelectQue } from '../../models/data';
 
 const Step = Steps.Step;
 const ButtonGroup = Button.Group;
-const TabPane = Tabs.TabPane;
 const { Column } = Table;
 
 interface IDataIndexProps {
@@ -19,30 +16,32 @@ interface IDataIndexProps {
   questionState: number;
   dispatch: Function;
   analysisStage: number;
-  rawData: Array<object>;
-  selectedQuestions: Array<TQuestion>;
+  selectedQues: Array<TSelectQue>;
+  quesData: Array<TQuesData>;
 }
 export default class DataIndex extends Component<IDataIndexProps> {
   static defaultProps: IDataIndexProps = {
     indexState: 0,
     analysisStage: 0,
-    rawData: [],
+    selectedQues: [],
+    quesData: [],
     dispatch: () => {},
-    selectedQuestions: [],
     questionState: 0,
   };
 
-  questionStateNext = () => {
-    const { selectedQuestions, questionState } = this.props;
-    if (questionState < selectedQuestions.length) {
+  questionStateNext = (answers) => {
+    const { selectedQues, questionState } = this.props;
+    if (questionState < selectedQues.length) {
       this.props.dispatch({ type: 'data/questionStateNext' });
     }
+    this.props.dispatch({ type: 'data/handleSelectedAnswers', payload: answers });
   };
-  questionStateBack = () => {
+  questionStateBack = (answers) => {
     const { questionState } = this.props;
     if (questionState > 0) {
       this.props.dispatch({ type: 'data/questionStateBack' });
     }
+    this.props.dispatch({ type: 'data/handleSelectedAnswers', payload: answers });
   };
   indexStateNext = () => {
     this.props.dispatch({ type: 'data/indexStateNext' });
@@ -66,8 +65,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
     });
   };
   render() {
-    const { indexState, rawData, selectedQuestions, questionState } = this.props;
-
+    const { indexState, quesData, selectedQues, questionState } = this.props;
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRow) => {
         this.props.dispatch({
@@ -75,9 +73,9 @@ export default class DataIndex extends Component<IDataIndexProps> {
           payload: selectedRow,
         });
       },
-      selectedRowKeys: getKeyArrays(selectedQuestions),
+      selectedRowKeys: getKeyArrays(selectedQues.map((selectedQue) => selectedQue.question)),
     };
-    const dataSource = getQuestions(rawData);
+    const dataSource = getQuestions(quesData);
     return (
       <div>
         <Steps size="small" current={indexState}>
@@ -87,9 +85,9 @@ export default class DataIndex extends Component<IDataIndexProps> {
         <div className={styles.content}>
           {indexState ? (
             <div>
-              {selectedQuestions.map((question, index) => {
+              {selectedQues.map((selectedQue, index) => {
+                const { answers, question } = selectedQue;
                 const { key, name } = question;
-                const answers = getAnswers(rawData, name);
                 if (index === questionState) {
                   return (
                     <div key={key}>
@@ -105,13 +103,13 @@ export default class DataIndex extends Component<IDataIndexProps> {
                                 type="ghost"
                                 icon="left"
                                 disabled={questionState === 0}
-                                onClick={this.questionStateBack}
+                                onClick={() => this.questionStateBack(answers)}
                               />
                               <Button
                                 type="ghost"
                                 icon="right"
-                                disabled={questionState === selectedQuestions.length - 1}
-                                onClick={this.questionStateNext}
+                                disabled={questionState === selectedQues.length - 1}
+                                onClick={() => this.questionStateNext(answers)}
                               />
                             </ButtonGroup>
                             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -151,7 +149,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
                   <Button
                     type="primary"
                     ghost
-                    disabled={selectedQuestions.length === 0}
+                    disabled={selectedQues.length === 0}
                     onClick={this.indexStateNext}
                   >
                     确认

@@ -1,12 +1,14 @@
 import XLSX from 'xlsx';
 import { uniqBy } from 'lodash';
-import { TColumn, TQuestion, TSavedData } from '../models/data';
+import { TColumn, TTableData, TQuesData } from '../models/data';
+import { generateId } from './utils';
 
-export const xlsxToJson = (file: ArrayBuffer): Array<JSON> => {
+export const xlsxToJson = (file: ArrayBuffer): Array<TQuesData> => {
   const workbook = XLSX.read(file, { type: 'buffer' });
   const sheetNames = workbook.SheetNames;
   const worksheet = workbook.Sheets[sheetNames[0]];
-  return XLSX.utils.sheet_to_json<JSON>(worksheet);
+  const rawData = XLSX.utils.sheet_to_json<JSON>(worksheet);
+  return rawToSaved(rawData);
 };
 
 export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> => {
@@ -23,41 +25,77 @@ export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> =>
   });
 };
 
-export const rawToSaved = (rawData: Array<object>): Array<TSavedData> => {
-
-  return []
+export const rawToSaved = (rawData: Array<object>): Array<TQuesData> => {
+  let saveData: TQuesData[] = [];
+  rawData.map((item) => {
+    const entries = Object.entries(item);
+    let record: TQuesData = [];
+    entries.map((entry) => {
+      const question = entry[0];
+      const answer = entry[1];
+      record.push({
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question,
+        answer: { text: answer, order: 0 },
+      });
+    });
+    saveData.push(record);
+  });
+  return saveData;
 };
 
-export const getQuestions = (rawData: object[]): Array<TQuestion> => {
-  let questions: TQuestion[] = [];
-  Object.keys(rawData[0]).map((name) => {
-    questions.push({ name, key: name });
+export const getQuestions = (quesData: TQuesData[]): Array<TTableData> => {
+  let questions: TTableData[] = [];
+  quesData[0].map((ques) => {
+    questions.push({ name: ques.question, key: ques.question });
   });
   return questions;
 };
 
-export const getRawColumns = (rawData: object[]): Array<TColumn> => {
+export const getColumns = (quesData: TQuesData[]): Array<TColumn> => {
   let columns: TColumn[] = [];
-  if (rawData.length > 0) {
-    Object.keys(rawData[0]).map((title) => {
-      columns.push({ key: title, dataIndex: title, title });
+  if (quesData.length > 0 && quesData[0].length > 0) {
+    quesData[0].map((record) => {
+      const { tagId, tagText, key, question } = record;
+      columns.push({ key: key, dataIndex: tagText !== '' ? tagId : question, title: question });
     });
     return columns;
   } else return [];
 };
 
-export const getAnswers = (rawData: object[], question: string): Array<TQuestion> => {
-  let answers: Array<TQuestion> = [];
-  rawData.map((item) => {
-    const answer = item[question];
-    answers.push({ name: answer, key: answer });
+export const getTableData = (quesData: TQuesData[]): Array<object> => {
+  let tableData: object[] = [];
+  quesData.map((ques) => {
+    let record: object = {};
+    ques.map((entries) => {
+      const { question, answer, tagText, tagId, key } = entries;
+      record['key'] = key;
+      if (tagText !== '') {
+        record[tagId] = answer.text;
+      } else record[question] = answer.text;
+    });
+    tableData.push(record);
+  });
+  return tableData;
+};
+
+export const getAnswers = (quesData: TQuesData[], question: string): Array<TTableData> => {
+  let answers: Array<TTableData> = [];
+  quesData.map((ques) => {
+    ques.map((item) => {
+      if (item.question === question) {
+        answers.push({ name: item.answer.text, key: generateId() });
+      }
+    });
   });
   return uniqBy(answers, 'name');
 };
 
-export const getKeyArrays = (selectedQuestions: Array<TQuestion>): Array<string> => {
+export const getKeyArrays = (selectedQuestions: Array<TTableData>): Array<string> => {
   let selectedRowKeys: Array<string> = [];
-  selectedQuestions.map((selectedQuestion: TQuestion) => {
+  selectedQuestions.map((selectedQuestion: TTableData) => {
     selectedRowKeys.push(selectedQuestion.key);
   });
   return selectedRowKeys;

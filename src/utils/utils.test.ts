@@ -1,5 +1,6 @@
-import { findIndexById, generateId, extractTags } from './utils';
-import { set, reset } from 'mockdate';
+import { findIndexById, generateId } from './utils';
+
+jest.mock('shortid');
 
 describe('findIndexById', () => {
   it('should return index when find id', () => {
@@ -33,10 +34,8 @@ describe('findIndexById', () => {
 
 describe('generateId', () => {
   it('should return id', () => {
-    set('2/4/2017');
     const id = generateId();
     expect(typeof id).toEqual('string');
-    expect(id).toEqual(new Date().valueOf().toString());
-    reset();
+    expect(id).toEqual('testKey');
   });
 });

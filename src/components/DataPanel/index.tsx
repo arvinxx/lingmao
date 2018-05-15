@@ -35,7 +35,8 @@ export default class DataPanel extends Component<IDataPanelProps> {
       analysisStage: 0,
       tabStage: '1',
       activePanelList: ['0'],
-      rawData: [],
+      answerGroups:[],
+      quesData: [],
       questions: [],
       questionState: 0,
       selectedQuestions: [],
@@ -55,9 +56,9 @@ export default class DataPanel extends Component<IDataPanelProps> {
     const {
       analysisStage,
       indexState,
-      rawData,
+      selectedQues,
+      quesData,
       tabStage,
-      selectedQuestions,
       activePanelList,
       questionState,
     } = data;
@@ -70,8 +71,8 @@ export default class DataPanel extends Component<IDataPanelProps> {
         text: '数据编码',
         component: (
           <DataIndexComponent
-            selectedQuestions={selectedQuestions}
-            rawData={rawData}
+            selectedQues={selectedQues}
+            quesData={quesData}
             indexState={indexState}
             questionState={questionState}
             dispatch={dispatch}

@@ -19,39 +19,52 @@ type TPanel = {
   text: string;
   path: string;
 };
-type TLocation = { location: { pathname: string } };
 interface IHeaderProps {
   header: {
     left: Array<TIcon>;
     center: Array<TPanel>;
     right: Array<TIcon>;
   };
-  routing?: TLocation;
+  pathname: string;
   dispatch?: any;
   showMenu?: boolean;
 }
 
+interface IHeaderStates {
+  currentPanel: string;
+}
+
 @connect(({ routing, global }) => ({
-  routing,
+  pathname: routing.location.pathname,
   showMenu: global.showMenu,
 }))
-export default class Header extends Component<IHeaderProps, any> {
+export default class Header extends Component<IHeaderProps, IHeaderStates> {
+  static defaultProps: IHeaderProps = {
+    dispatch: () => {},
+    header: {
+      center: [],
+      left: [],
+      right: [],
+    },
+    pathname: '',
+    showMenu: true,
+  };
   state = {
     currentPanel: '',
   };
   componentDidMount() {
-    const { pathname } = this.props.routing.location;
+    const { pathname } = this.props;
     this.urlPanelParse(pathname);
   }
   componentWillReceiveProps(nextProps) {
-    const { pathname } = nextProps.routing.location;
+    const { pathname } = nextProps.location;
     this.urlPanelParse(pathname);
   }
   // 根据路由状态更新
   urlPanelParse = (pathname: string): void => {
     const re = pathToRegexp('*/:panel');
     this.setState({
-      currentPanel: last(re.exec(pathname)),
+      currentPanel: last(re.exec(pathname)) || '',
     });
   };
 
@@ -62,7 +75,7 @@ export default class Header extends Component<IHeaderProps, any> {
   };
 
   goToRoute = (path: string) => {
-    const { pathname } = this.props.routing.location;
+    const { pathname } = this.props;
     const re = pathToRegexp('*/:panel');
     let baseUrl = dropRight(drop(re.exec(pathname))).toString(); // 删掉第一个，删掉最后一个
     this.setState({

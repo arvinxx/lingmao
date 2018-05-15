@@ -1,53 +1,9 @@
-import { getQuestions, getAnswers, generateIndexData, rawToSaved } from './data';
-import { set, reset } from 'mockdate';
+import { getQuestions, getAnswers, rawToSaved, getTableData, getColumns } from './data';
 import { generateId } from './utils';
 
-it('translate rawData to header', () => {
-  const rawData = [{ aaa: 'das', bbb: 'dsadf', ccc: 'dadfre' }];
-  expect(getQuestions(rawData)).toEqual([
-    { key: 'aaa', name: 'aaa' },
-    { key: 'bbb', name: 'bbb' },
-    { key: 'ccc', name: 'ccc' },
-  ]);
-});
-
-it('translate rawData to values', () => {
-  const rawData = [
-    { aaa: '3as', bbb: 'ds63df', ccc: 'dad64fre' },
-    { aaa: 'da6', bbb: 'dsadf', ccc: 'dasfdfre' },
-    { aaa: 'das', bbb: 'ds3ad4f', ccc: 'dadfre' },
-    { aaa: 'das', bbb: 'dsad4f', ccc: 'dadfre' },
-  ];
-  expect(getAnswers(rawData, 'aaa')).toEqual([
-    { key: '3as', name: '3as' },
-    { key: 'da6', name: 'da6' },
-    { key: 'das', name: 'das' },
-  ]);
-});
-
-// it('generateIndexData ', () => {
-//   const savedData = [
-//     {
-//       name: {
-//         id: '1312345',
-//         alias: 'name',
-//         question: '你的名字是？',
-//         answer: { text: 'xxxx', order: 3 },
-//       },
-//       gender: {
-//         id: '456234',
-//         alias: 'gender',
-//         question: '你的性别是？',
-//         answer: { text: '男', order: 4 },
-//       },
-//     },
-//   ];
-//   expect(generateIndexData(savedData)).toEqual([{ key: '1312345' }]);
-// });
+jest.mock('shortid');
 
 it('rawToSaved ', () => {
-  set('1/1/2000');
-  const id = generateId();
   const rawData = [
     {
       '你的名字是？': '小A',
@@ -63,14 +19,14 @@ it('rawToSaved ', () => {
       {
         tagId: '',
         tagText: '',
-        key: id,
+        key: generateId(),
         question: '你的名字是？',
         answer: { text: '小A', order: 0 },
       },
       {
         tagId: '',
         tagText: '',
-        key: id,
+        key: generateId(),
         question: '你的性别是？',
         answer: { text: '男', order: 0 },
       },
@@ -79,19 +35,407 @@ it('rawToSaved ', () => {
       {
         tagId: '',
         tagText: '',
-        key: id,
+        key: generateId(),
         question: '你的名字是？',
         answer: { text: '小B', order: 0 },
       },
       {
         tagId: '',
         tagText: '',
-        key: id,
+        key: generateId(),
         question: '你的性别是？',
         answer: { text: '女', order: 0 },
       },
     ],
   ];
   expect(rawToSaved(rawData)).toEqual(saveData);
-  reset();
+});
+it('getQuestions', () => {
+  const quesData = [
+    [
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 0 },
+      },
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '男', order: 0 },
+      },
+    ],
+    [
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 0 },
+      },
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '女', order: 0 },
+      },
+    ],
+  ];
+  expect(getQuestions(quesData)).toEqual([
+    { key: '你的名字是？', name: '你的名字是？' },
+    { key: '你的性别是？', name: '你的性别是？' },
+  ]);
+});
+it('getAnswers', () => {
+  const quesData = [
+    [
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 0 },
+      },
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '男', order: 0 },
+      },
+    ],
+    [
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 0 },
+      },
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '女', order: 0 },
+      },
+    ],
+    [
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 0 },
+      },
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '不男不女', order: 0 },
+      },
+    ],
+    [
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 0 },
+      },
+      {
+        tagId: '',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '女', order: 0 },
+      },
+    ],
+  ];
+
+  expect(getAnswers(quesData, '你的性别是？')).toEqual([
+    { key: generateId(), name: '男' },
+    { key: generateId(), name: '女' },
+    { key: generateId(), name: '不男不女' },
+  ]);
+});
+
+describe('getColumns', () => {
+  it('should return question as dataIndex', () => {
+    const quesData = [
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+    ];
+    const column = [
+      { key: generateId(), title: '你的名字是？', dataIndex: '你的名字是？' },
+      { key: generateId(), title: '你的性别是？', dataIndex: '你的性别是？' },
+    ];
+    expect(getColumns(quesData)).toEqual(column);
+  });
+  it('should return tagId as dataIndex', () => {
+    const quesData = [
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+    ];
+    const column = [
+      { key: generateId(), title: '你的名字是？', dataIndex: '11111' },
+      { key: generateId(), title: '你的性别是？', dataIndex: '22222' },
+    ];
+    expect(getColumns(quesData)).toEqual(column);
+  });
+});
+describe('getTableData', () => {
+  it('should return question as key', () => {
+    const quesData = [
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '不男不女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+    ];
+    const tableData = [
+      {
+        key: generateId(),
+        '你的名字是？': '小A',
+        '你的性别是？': '男',
+      },
+      {
+        key: generateId(),
+
+        '你的名字是？': '小B',
+        '你的性别是？': '女',
+      },
+      {
+        key: generateId(),
+
+        '你的名字是？': '小A',
+        '你的性别是？': '不男不女',
+      },
+      {
+        key: generateId(),
+
+        '你的名字是？': '小B',
+        '你的性别是？': '女',
+      },
+    ];
+    expect(getTableData(quesData)).toEqual(tableData);
+  });
+  it('should return tagId as key', () => {
+    const quesData = [
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '不男不女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+    ];
+    const tableData = [
+      {
+        key: generateId(),
+        '11111': '小A',
+        '22222': '男',
+      },
+      {
+        key: generateId(),
+
+        '11111': '小B',
+        '22222': '女',
+      },
+      {
+        key: generateId(),
+
+        '11111': '小A',
+        '22222': '不男不女',
+      },
+      {
+        key: generateId(),
+
+        '11111': '小B',
+        '22222': '女',
+      },
+    ];
+    expect(getTableData(quesData)).toEqual(tableData);
+  });
 });

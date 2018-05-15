@@ -38,7 +38,7 @@ export default class UploadData extends Component<IUploadDataProps, IUploadDataS
       uploading: true,
     });
     this.props.dispatch({
-      type: 'data/handleRawData',
+      type: 'data/handleQuesData',
       payload: rawData,
     });
 

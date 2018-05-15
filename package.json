@@ -10,10 +10,7 @@
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true umi build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
-    "lint": "eslint --ext .js src mock tests && npm run lint:style",
-    "lint:fix": "eslint --fix --ext .js src mock tests && npm run lint:style",
     "lint-staged": "lint-staged",
-    "lint-staged:js": "eslint --ext .js --fix",
     "precommit": "npm run lint-staged",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "test": "umi test",
@@ -22,10 +19,10 @@
     "test:all": "node ./tests/run-tests.js"
   },
   "dependencies": {
-    "@antv/data-set": "^0.8.5",
-    "@babel/polyfill": "^7.0.0-beta.40",
+    "@antv/data-set": "^0.8.8",
+    "@babel/polyfill": "^7.0.0-beta.47",
     "axios": "^0.18.0",
-    "bizcharts": "^3.1.5",
+    "bizcharts": "^3.1.7",
     "bizcharts-plugin-slider": "^2.0.3",
     "classnames": "^2.2.5",
     "enquire-js": "^0.1.2",
@@ -50,27 +47,28 @@
     "react-dnd-html5-backend": "^2.6.0",
     "react-document-title": "^2.0.3",
     "react-fittext": "^1.0.0",
-    "react-hot-loader": "^4.0.1",
+    "react-hot-loader": "^4.1.3",
     "react-hotkeys": "^1.1.4",
     "react-reflex": "^2.2.3",
-    "slate": "^0.33.5",
-    "slate-plain-serializer": "^0.5.11",
-    "slate-react": "^0.12.5",
+    "shortid": "^2.2.8",
+    "slate": "^0.33.6",
+    "slate-plain-serializer": "^0.5.12",
+    "slate-react": "^0.12.6",
     "styled-components": "^3.2.2",
-    "umi": "^1.2.6",
+    "umi": "1.2.6",
     "umi-plugin-dva": "^0.6.4",
     "url-polyfill": "^1.0.12",
     "xlsx": "^0.12.12"
   },
   "devDependencies": {
-    "@commitlint/cli": "^6.1.0",
+    "@commitlint/cli": "^6.2.0",
     "@types/enzyme": "^3.1.10",
     "@types/jest": "^22.2.3",
     "@types/lodash": "^4.14.108",
     "@types/mockdate": "^2.0.0",
-    "@types/react": "^16.3.13",
+    "@types/react": "^16.3.14",
     "commitlint-config-gitmoji": "^1.0.1",
-    "cross-env": "^5.1.1",
+    "cross-env": "^5.1.5",
     "cross-port-killer": "^1.0.1",
     "gh-pages": "^1.0.0",
     "husky": "^0.14.3",
@@ -79,25 +77,17 @@
     "mockdate": "^2.0.2",
     "mockjs": "^1.0.1-beta3",
     "prettier": "^1.12.1",
-    "pro-download": "^1.0.1",
     "regenerator-runtime": "^0.11.1",
     "roadhog-api-doc": "latest",
     "rollbar": "^2.3.4",
-    "slate-prop-types": "^0.4.28",
+    "slate-prop-types": "^0.4.29",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": [
-      "prettier --trailing-comma all --single-quote --write",
-      "lint-staged:js"
-    ],
+    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write"],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
 }

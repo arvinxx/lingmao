@@ -1,4 +1,6 @@
 import { DvaModel } from '../../typings/dva';
+import { generateId, getAnswers } from '../utils';
+import { isEqual, sortBy } from 'lodash';
 
 export type TDim = {
   text: string;
@@ -11,12 +13,17 @@ export type TDataModel = {
   analysisStage: number;
   tabStage: string;
   activePanelList: Array<string>;
-  rawData: Array<object>;
-  questions: Array<TQuestion>;
-  selectedQuestions: Array<TQuestion>;
+  quesData: Array<TQuesData>;
+  questions: Array<TTableData>;
+  selectedQues: Array<TSelectQue>;
 };
 
-export type TSavedData = Array<{
+export type TSelectQue = {
+  question: TTableData;
+  answers: Array<TTableData>;
+};
+
+export type TQuesData = Array<{
   key: string;
   tagId: string;
   tagText: string;
@@ -27,9 +34,14 @@ export type TSavedData = Array<{
   };
 }>;
 
-export type TQuestion = {
+export type TTableData = {
   key: string;
   name: string;
+};
+
+export type TAnswer = {
+  text: string;
+  id: string;
 };
 
 export type TColumn = {
@@ -47,9 +59,9 @@ const model: model = {
     analysisStage: 0,
     tabStage: '1',
     activePanelList: ['0'],
-    rawData: [],
+    quesData: [],
     questions: [],
-    selectedQuestions: [],
+    selectedQues: [],
     questionState: 0,
   },
   reducers: {
@@ -118,12 +130,32 @@ const model: model = {
       };
     },
 
-    handleRawData(state, { payload: rawData }) {
-      return { ...state, rawData };
+    handleQuesData(state, { payload: quesData }) {
+      return { ...state, quesData };
     },
 
-    handleSelectedQuestions(state, { payload: selectedQuestions }) {
-      return { ...state, selectedQuestions };
+    handleSelectedQuestions(state, { payload: selectedQuestions }: { payload: TTableData[] }) {
+      return {
+        ...state,
+        selectedQues: selectedQuestions.map((selectedQuestion) => ({
+          question: selectedQuestion,
+          answers: getAnswers(state.quesData, selectedQuestion.name),
+        })),
+      };
+    },
+    handleSelectedAnswers(state, { payload: newAnswers }: { payload: Array<TTableData> }) {
+      const selectedQues: Array<TSelectQue> = state.selectedQues;
+      let replaceIndex = -1;
+      if (
+        selectedQues.some((selectedQue) => {
+          replaceIndex++;
+          return isEqual(sortBy(selectedQue.answers, ['id']), sortBy(newAnswers, ['id']));
+        })
+      ) {
+        console.log(replaceIndex);
+        selectedQues[replaceIndex].answers = newAnswers;
+        return { ...state, selectedQues };
+      } else return state;
     },
   },
 };
