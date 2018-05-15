@@ -67,13 +67,32 @@ export const interview = [
           type: '',
         },
       },
+    ],
+  },
+  {
+    text: '导出',
+    path: 'export',
+    left: [
       {
-        text: 'bulb',
+        text: 'left',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'right',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'sync',
         dispatch: {
           type: '',
         },
       },
     ],
+    right: [],
   },
 ];
 export const data = [
