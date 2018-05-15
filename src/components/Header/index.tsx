@@ -57,8 +57,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
     this.urlPanelParse(pathname);
   }
   componentWillReceiveProps(nextProps) {
-    const { pathname } = nextProps.location;
-    this.urlPanelParse(pathname);
+    this.urlPanelParse(nextProps.pathname);
   }
   // 根据路由状态更新
   urlPanelParse = (pathname: string): void => {

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Steps, Button, Table } from 'antd';
-import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import update from 'immutability-helper';
 import { getAnswers, getKeyArrays, getQuestions } from '../../utils';
 import styles from './DataIndex.less';
 import { TQuesData, TSelectQue } from '../../models/data';
+
+import DraggableTable from './DraggableTable';
 
 const Step = Steps.Step;
 const ButtonGroup = Button.Group;
@@ -65,7 +64,14 @@ export default class DataIndex extends Component<IDataIndexProps> {
     });
   };
   render() {
-    const { indexState, quesData, selectedQues, questionState } = this.props;
+    const {
+      indexState,
+      quesData,
+      selectedQues,
+      questionState,
+      dispatch,
+      analysisStage,
+    } = this.props;
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRow) => {
         this.props.dispatch({
@@ -91,43 +97,14 @@ export default class DataIndex extends Component<IDataIndexProps> {
                 if (index === questionState) {
                   return (
                     <div key={key}>
-                      <Table
-                        className={styles['index-table']}
-                        size="middle"
+                      <DraggableTable
+                        name={name}
                         dataSource={answers}
-                        pagination={false}
-                        footer={() => (
-                          <div className={styles['button-group']}>
-                            <ButtonGroup>
-                              <Button
-                                type="ghost"
-                                icon="left"
-                                disabled={questionState === 0}
-                                onClick={() => this.questionStateBack(answers)}
-                              />
-                              <Button
-                                type="ghost"
-                                icon="right"
-                                disabled={questionState === selectedQues.length - 1}
-                                onClick={() => this.questionStateNext(answers)}
-                              />
-                            </ButtonGroup>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                              <Button style={{ marginRight: 16 }} onClick={this.indexStateBack}>
-                                返回
-                              </Button>
-                              <Button onClick={(e) => this.finish(answers)}>确认</Button>
-                            </div>
-                          </div>
-                        )}
-                      >
-                        <Column
-                          title={name}
-                          key={name}
-                          dataIndex="name"
-                          render={(text, record) => <div>{text}</div>}
-                        />
-                      </Table>
+                        selectedQues={selectedQues}
+                        analysisStage={analysisStage}
+                        questionState={questionState}
+                        dispatch={dispatch}
+                      />
                     </div>
                   );
                 }

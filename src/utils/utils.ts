@@ -98,13 +98,13 @@ export function isUrl(path) {
   return reg.test(path);
 }
 
-export function dragDirection(
+export const dragDirection = (
   dragIndex,
   hoverIndex,
   initialClientOffset,
   clientOffset,
   sourceClientOffset
-) {
+) => {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
   const hoverClientY = clientOffset.y - sourceClientOffset.y;
   if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
@@ -113,4 +113,4 @@ export function dragDirection(
   if (dragIndex > hoverIndex && hoverClientY < hoverMiddleY) {
     return 'upward';
   }
-}
+};

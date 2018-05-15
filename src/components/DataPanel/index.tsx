@@ -35,11 +35,10 @@ export default class DataPanel extends Component<IDataPanelProps> {
       analysisStage: 0,
       tabStage: '1',
       activePanelList: ['0'],
-      answerGroups:[],
       quesData: [],
       questions: [],
       questionState: 0,
-      selectedQuestions: [],
+      selectedQues: [],
     },
     location: { pathname: '' },
     dispatch: () => {},
@@ -186,6 +185,8 @@ export default class DataPanel extends Component<IDataPanelProps> {
             </Collapse>
           </TabPane>
         </Tabs>
+
+
       </Card>
     );
   }

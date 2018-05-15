@@ -145,11 +145,13 @@ const model: model = {
     },
     handleSelectedAnswers(state, { payload: newAnswers }: { payload: Array<TTableData> }) {
       const selectedQues: Array<TSelectQue> = state.selectedQues;
+      console.log(newAnswers);
       let replaceIndex = -1;
       if (
         selectedQues.some((selectedQue) => {
           replaceIndex++;
-          return isEqual(sortBy(selectedQue.answers, ['id']), sortBy(newAnswers, ['id']));
+          console.log(selectedQue);
+          return isEqual(sortBy(selectedQue.answers, ['key']), sortBy(newAnswers, ['key']));
         })
       ) {
         console.log(replaceIndex);

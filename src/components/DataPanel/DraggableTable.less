@@ -1,0 +1,27 @@
+@import '../../styles/themes/default';
+
+.drop-over-downward {
+  & td {
+    border-bottom: 2px dashed #1890ff !important;
+  }
+}
+
+.drop-over-upward {
+  & td {
+    border-top: 2px dashed #1890ff;
+  }
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.index-table {
+  border: 1px solid @white-3;
+  :global {
+    .ant-table-body {
+      min-height: 300px;
+    }
+  }
+}

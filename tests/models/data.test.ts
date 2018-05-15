@@ -141,40 +141,113 @@ describe('Reducers', () => {
     });
   });
   describe('handleSelectedAnswers', () => {
-    it('should change answers order', () => {
+    fit('should change answers order', () => {
       const reducer = reducers.handleSelectedAnswers;
       const state = {
         selectedQues: [
           {
-            question: '2',
-            answers: [{ id: '13', text: '1' }, { id: '43', text: '41' }, { id: '435', text: '51' }],
+            question: {
+              name: '2.您的性别',
+              key: '2.您的性别',
+            },
+            answers: [
+              {
+                name: 'A.男',
+                key: 'SyttOw%Cf',
+              },
+              {
+                name: 'B.女',
+                key: 'HkZYtOP%CM',
+              },
+            ],
           },
           {
-            question: '3',
+            question: {
+              name: '3.您的年龄',
+              key: '3.您的年龄',
+            },
             answers: [
-              { id: '315', text: '653' },
-              { id: '758', text: 'ghdf' },
-              { id: '546', text: 'dsf' },
+              {
+                name: 'E.49-60',
+                key: 'rJErYtOvuAz',
+              },
+              {
+                name: 'D.36-48',
+                key: 'SkSHFtODdAM',
+              },
+              {
+                name: 'B.18-26',
+                key: 'Bk8rKFdvu0f',
+              },
+              {
+                name: 'C.27-35',
+                key: 'ry7DYK%wuCM',
+              },
+              {
+                name: 'A.18岁以下',
+                key: 'SkY%Yt%wd0M',
+              },
             ],
           },
         ],
       };
       const action = {
         type: 'data/handleSelectedAnswers',
-        payload: [{ id: '43', text: '41' }, { id: '13', text: '1' }, { id: '435', text: '51' }],
+        payload: [
+          {
+            name: 'B.女',
+            key: 'HkZYtOP%CM',
+          },
+          {
+            name: 'A.男',
+            key: 'SyttOw%Cf',
+          },
+        ],
       };
       expect(reducer(state, action)).toEqual({
         selectedQues: [
           {
-            question: '2',
-            answers: [{ id: '43', text: '41' }, { id: '13', text: '1' }, { id: '435', text: '51' }],
+            question: {
+              name: '2.您的性别',
+              key: '2.您的性别',
+            },
+            answers: [
+              {
+                name: 'B.女',
+                key: 'HkZYtOP%CM',
+              },
+              {
+                name: 'A.男',
+                key: 'SyttOw%Cf',
+              },
+            ],
           },
           {
-            question: '3',
+            question: {
+              name: '3.您的年龄',
+              key: '3.您的年龄',
+            },
             answers: [
-              { id: '315', text: '653' },
-              { id: '758', text: 'ghdf' },
-              { id: '546', text: 'dsf' },
+              {
+                name: 'E.49-60',
+                key: 'rJErYtOvuAz',
+              },
+              {
+                name: 'D.36-48',
+                key: 'SkSHFtODdAM',
+              },
+              {
+                name: 'B.18-26',
+                key: 'Bk8rKFdvu0f',
+              },
+              {
+                name: 'C.27-35',
+                key: 'ry7DYK%wuCM',
+              },
+              {
+                name: 'A.18岁以下',
+                key: 'SkY%Yt%wd0M',
+              },
             ],
           },
         ],
@@ -186,34 +259,42 @@ describe('Reducers', () => {
         selectedQues: [
           {
             question: '2',
-            answers: [{ id: '13', text: '1' }, { id: '43', text: '41' }, { id: '435', text: '51' }],
+            answers: [
+              { key: '13', name: '1' },
+              { key: '43', name: '41' },
+              { key: '435', name: '51' },
+            ],
           },
           {
             question: '3',
             answers: [
-              { id: '315', text: '653' },
-              { id: '758', text: 'ghdf' },
-              { id: '546', text: 'dsf' },
+              { key: '315', name: '653' },
+              { key: '758', name: 'ghdf' },
+              { key: '546', name: 'dsf' },
             ],
           },
         ],
       };
       const action = {
         type: 'data/handleSelectedAnswers',
-        payload: [{ id: '13', text: '1' }, { id: '43', text: '41' }, { id: '435', text: '51' }],
+        payload: [{ key: '13', name: '1' }, { key: '43', name: '41' }, { key: '435', name: '51' }],
       };
       expect(reducer(state, action)).toEqual({
         selectedQues: [
           {
             question: '2',
-            answers: [{ id: '13', text: '1' }, { id: '43', text: '41' }, { id: '435', text: '51' }],
+            answers: [
+              { key: '13', name: '1' },
+              { key: '43', name: '41' },
+              { key: '435', name: '51' },
+            ],
           },
           {
             question: '3',
             answers: [
-              { id: '315', text: '653' },
-              { id: '758', text: 'ghdf' },
-              { id: '546', text: 'dsf' },
+              { key: '315', name: '653' },
+              { key: '758', name: 'ghdf' },
+              { key: '546', name: 'dsf' },
             ],
           },
         ],
