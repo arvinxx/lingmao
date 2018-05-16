@@ -18,6 +18,28 @@
       margin-top: 6px;
     }
   }
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    .close {
+      color: @white-5;
+      opacity: 0;
+      cursor: pointer;
+      transition: @animation-duration-base;
+      &:active {
+        color: @dark-2;
+        transform: scale(0.4);
+      }
+      &:hover {
+        color: @white-7;
+        transform: scale(1.1);
+      }
+    }
+    &:hover .close {
+      opacity: 1;
+    }
+  }
 }
 .add-group {
   //background: red;

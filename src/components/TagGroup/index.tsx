@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Collapse, Input } from 'antd';
+import { Collapse, Input, Popconfirm, Icon } from 'antd';
 import { connect } from 'dva';
 
 import Tags from './tags';
@@ -42,6 +42,12 @@ export default class Index extends Component<any> {
     });
   };
 
+  deleteTagGroup = (id) => {
+    this.props.dispatch({
+      type: 'tag/deleteTagGroup',
+      payload: id,
+    });
+  };
   render() {
     const { tagGroups, selectedTags } = this.props;
     if (tagGroups[0] === undefined) tagGroups[0] = { text: 'ungroup', id: generateId(), tags: [] };
@@ -61,14 +67,25 @@ export default class Index extends Component<any> {
                     key={id + 'Groups'}
                     //@ts-ignore
                     header={
-                      <Input
-                        key={id + 'groups+input'}
-                        value={text}
-                        onChange={(e) => this.changeTagGroupText(e, id)}
-                      />
+                      <div className={styles.header} >
+                        <Input
+                          key={id + 'groups+input'}
+                          value={text}
+                          onChange={(e) => this.changeTagGroupText(e, id)}
+                        />
+                        <Popconfirm
+                          key={'ppp'}
+                          title="确认要删除吗?"
+                          onConfirm={() => this.deleteTagGroup(id)}
+                          okText="是"
+                          cancelText="否"
+                        >
+                          <Icon type="close" className={styles.close} />
+                        </Popconfirm>
+                      </div>
                     }
                   >
-                    <Tags tags={tags}  selectedTags={selectedTags}/>
+                    <Tags tags={tags} selectedTags={selectedTags} />
                   </Panel>
                 </Collapse>
               );
