@@ -87,6 +87,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
             pathname={location.pathname}
             dims={dims}
             analysisStage={analysisStage}
+            selectedQues={selectedQues}
           />
         ),
       },
