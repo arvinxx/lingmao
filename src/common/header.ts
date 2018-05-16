@@ -92,7 +92,12 @@ export const interview = [
         },
       },
     ],
-    right: [],
+    right: [
+      {
+        text: 'to-top',
+        dispatch: {},
+      },
+    ],
   },
 ];
 export const data = [

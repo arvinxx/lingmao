@@ -12,7 +12,7 @@ describe('Reducers', () => {
     const state = {
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '542424',
           tags: [],
         },
@@ -25,7 +25,7 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '542424',
           tags: [{ text: 'dsa', id: generateId(), refId: '1' }],
         },
@@ -39,7 +39,7 @@ describe('Reducers', () => {
     const state = {
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '4234',
           tags: [
             {
@@ -68,7 +68,7 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '4234',
           tags: [
             {
@@ -89,7 +89,7 @@ describe('Reducers', () => {
     const state = {
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '434',
           tags: [
             {
@@ -118,7 +118,7 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '434',
           tags: [
             {
@@ -184,12 +184,12 @@ describe('Reducers', () => {
     });
   });
   describe('deleteTagGroup', () => {
-    it("should delete the tagGroup if it is n't ungroup ", () => {
+    it("should delete the tagGroup if it is n't 未分组 ", () => {
       const reducers = model.reducers;
       const reducer = reducers.deleteTagGroup;
       const state = {
         tagGroups: [
-          { text: 'ungroup', id: '341411', tags: [] },
+          { text: '未分组', id: '341411', tags: [] },
           { text: '2', id: '21', tags: [] },
           { text: '3', id: '4', tags: [] },
         ],
@@ -200,15 +200,15 @@ describe('Reducers', () => {
       };
 
       expect(reducer(state, action)).toEqual({
-        tagGroups: [{ text: 'ungroup', id: '341411', tags: [] }, { text: '3', id: '4', tags: [] }],
+        tagGroups: [{ text: '未分组', id: '341411', tags: [] }, { text: '3', id: '4', tags: [] }],
       });
     });
-    it("shouldn't delete the tagGroup if it is ungroup ", () => {
+    it("shouldn't delete the tagGroup if it is 未分组 ", () => {
       const reducers = model.reducers;
       const reducer = reducers.deleteTagGroup;
       const state = {
         tagGroups: [
-          { text: 'ungroup', id: '341411', tags: [] },
+          { text: '未分组', id: '341411', tags: [] },
           { text: '2', id: '21', tags: [] },
           { text: '3', id: '4', tags: [] },
         ],
@@ -220,7 +220,7 @@ describe('Reducers', () => {
 
       expect(reducer(state, action)).toEqual({
         tagGroups: [
-          { text: 'ungroup', id: '341411', tags: [] },
+          { text: '未分组', id: '341411', tags: [] },
           { text: '2', id: '21', tags: [] },
           { text: '3', id: '4', tags: [] },
         ],
@@ -228,13 +228,13 @@ describe('Reducers', () => {
     });
   });
   describe('changeTagGroupText', () => {
-    it("should changeTagGroupText if it is n't ungroup", () => {
+    it("should changeTagGroupText if it is n't 未分组", () => {
       const reducers = model.reducers;
       const reducer = reducers.changeTagGroupText;
       const state = {
         tagGroups: [
           {
-            text: 'ungroup',
+            text: '未分组',
             id: '222',
             tags: [
               {
@@ -283,7 +283,7 @@ describe('Reducers', () => {
       expect(reducer(state, action)).toEqual({
         tagGroups: [
           {
-            text: 'ungroup',
+            text: '未分组',
             id: '222',
             tags: [
               {
@@ -325,13 +325,13 @@ describe('Reducers', () => {
         ],
       });
     });
-    it("shouldn't changeTagGroupText if it is ungroup", () => {
+    it("shouldn't changeTagGroupText if it is 未分组", () => {
       const reducers = model.reducers;
       const reducer = reducers.changeTagGroupText;
       const state = {
         tagGroups: [
           {
-            text: 'ungroup',
+            text: '未分组',
             id: '222',
             tags: [
               {
@@ -380,7 +380,7 @@ describe('Reducers', () => {
       expect(reducer(state, action)).toEqual({
         tagGroups: [
           {
-            text: 'ungroup',
+            text: '未分组',
             id: '222',
             tags: [
               {
@@ -430,7 +430,7 @@ describe('Reducers', () => {
     const state = {
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '78979',
           tags: [
             {
@@ -465,7 +465,7 @@ describe('Reducers', () => {
     expect(reducer(state, action)).toEqual({
       tagGroups: [
         {
-          text: 'ungroup',
+          text: '未分组',
           id: '78979',
           tags: [
             {

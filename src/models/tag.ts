@@ -1,6 +1,7 @@
 import { findIndexById, generateId } from '../utils';
 import { concat } from 'lodash';
 import { queryDocument } from '../services/api';
+import { DvaModel } from '../../typings/dva';
 
 export type TTag = {
   id: string;
@@ -16,15 +17,21 @@ export type TTagGroup = {
   tags: Array<TTag>;
 };
 export type TTagModel = {
+  tagVisible: boolean;
   selectedTags: Array<string>;
   tagGroups: Array<TTagGroup>;
+  exportDisplay: string;
 };
-export default {
+export interface ITagModel extends DvaModel {
+  state: TTagModel;
+}
+const tag: ITagModel = {
   namespace: 'tag',
   state: {
     tagVisible: true,
-    tagGroups: [{ text: 'ungroup', id: generateId(), tags: [] }],
+    tagGroups: [{ text: '未分组', id: generateId(), tags: [] }],
     selectedTags: [],
+    exportDisplay: '1',
   },
   effects: {
     *fetchTagGroups(action, { call, put }) {
@@ -44,13 +51,13 @@ export default {
           let id = tagGroup.id;
           id = id === '' ? generateId() : id;
           if (index === 0) {
-            tagGroup.text = 'ungroup';
+            tagGroup.text = '未分组';
           }
           tagGroup.id = id;
           delete tagGroup._id;
         });
       } else {
-        tagGroups = [{ id: generateId(), tags: [], text: 'ungroup' }];
+        tagGroups = [{ id: generateId(), tags: [], text: '未分组' }];
       }
       return {
         ...state,
@@ -133,5 +140,10 @@ export default {
         : state.selectedTags.filter((t) => t !== id);
       return { ...state, selectedTags };
     },
+
+    handleExportDisplay(state, { payload: exportDisplay }) {
+      return { ...state, exportDisplay };
+    },
   },
 };
+export default tag;
