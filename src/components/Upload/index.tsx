@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Radio, List, Collapse, Upload, message, Button, InputNumber, Icon } from 'antd';
 import { Ellipsis } from 'components';
 

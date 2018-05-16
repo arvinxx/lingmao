@@ -43,12 +43,12 @@ export default class Export extends Component<IExportProps> {
     const { categories, links, data } = getStarData(tagGroups);
     return (
       <div className={styles.container}>
-        <Tabs type="card" onChange={this.changeDisplay}>
+        <Tabs type="card" className={styles.tabs} onChange={this.changeDisplay}>
           <TabPane tab="需求层级列表" key="1" />
           <TabPane tab="星球图" key="2" />
         </Tabs>
         <div className={styles.content}>
-          {exportDisplay === '2' ? (
+          {exportDisplay === '1' ? (
             <List
               dataSource={tagGroups}
               grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 6, xxl: 6 }}

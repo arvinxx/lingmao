@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Layout } from 'antd';
 import { connect } from 'dva';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from "react-dnd";
 //@ts-ignore umi 未定义
 import withRouter from 'umi/withRouter';
 
@@ -40,6 +42,7 @@ interface IBasicLayoutProps {
   collapsed: global.collapsed,
   showMenu: global.showMenu,
 }))
+@(DragDropContext(HTML5Backend) as any)
 export default class BasicLayout extends Component<IBasicLayoutProps> {
   handleMenuCollapse = (collapsedState) => {
     this.props.dispatch({
