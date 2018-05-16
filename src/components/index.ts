@@ -11,4 +11,5 @@ export { default as ContextRightMenu } from './ContextRightMenu';
 export { default as DimensionList } from './DimensionList';
 export { default as PersonaEditor } from './PersonaEditor';
 export { default as DataPanel } from './DataPanel';
+export { default as StarPic } from './StarPic';
 export * from './Charts';

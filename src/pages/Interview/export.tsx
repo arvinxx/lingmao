@@ -3,10 +3,13 @@ import { List, Card, Button, Tabs } from 'antd';
 import { connect } from 'dva';
 
 import styles from './export.less';
+import { StarPic } from '../../components';
+
 import { TTag, TTagGroup, TTagModel } from '../../models/tag';
+import { getStarData } from '../../utils';
 const { Item } = List;
 const { TabPane } = Tabs;
-const ButtonGroup = Button.Group;
+
 interface IExportProps {
   tag: TTagModel;
   dispatch: Function;
@@ -37,6 +40,7 @@ export default class Export extends Component<IExportProps> {
   render() {
     const { tag } = this.props;
     const { tagGroups, exportDisplay } = tag;
+    const { categories, links, data } = getStarData(tagGroups);
     return (
       <div className={styles.container}>
         <Tabs type="card" onChange={this.changeDisplay}>
@@ -44,7 +48,7 @@ export default class Export extends Component<IExportProps> {
           <TabPane tab="星球图" key="2" />
         </Tabs>
         <div className={styles.content}>
-          {exportDisplay === '1' ? (
+          {exportDisplay === '2' ? (
             <List
               dataSource={tagGroups}
               grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 6, xxl: 6 }}
@@ -60,7 +64,9 @@ export default class Export extends Component<IExportProps> {
               )}
             />
           ) : (
-            <div>星光囚徒</div>
+            <div className={styles.star}>
+              <StarPic categories={categories} data={data} links={links} />
+            </div>
           )}
         </div>
       </div>

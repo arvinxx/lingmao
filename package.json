@@ -25,6 +25,8 @@
     "bizcharts": "^3.1.7",
     "bizcharts-plugin-slider": "^2.0.3",
     "classnames": "^2.2.5",
+    "echarts": "^4.1.0",
+    "echarts-for-react": "^2.0.8",
     "enquire-js": "^0.1.2",
     "fastclick": "^1.0.6",
     "highlightable": "^1.0.7",
