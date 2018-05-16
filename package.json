@@ -42,6 +42,7 @@
     "prop-types": "^15.6.1",
     "qs": "^6.5.2",
     "rc-drawer-menu": "^0.5.7",
+    "react-beautiful-dnd": "^7.1.2",
     "react-broadcast": "^0.7.0",
     "react-container-query": "^0.9.1",
     "react-contextmenu": "^2.9.2",
@@ -70,6 +71,7 @@
     "@types/mockdate": "^2.0.0",
     "@types/react": "^16.3.14",
     "@types/react-dnd": "^2.0.36",
+    "babel-plugin-module-resolver": "^3.1.1",
     "commitlint-config-gitmoji": "^1.0.1",
     "cross-env": "^5.1.5",
     "cross-port-killer": "^1.0.1",
@@ -82,21 +84,14 @@
     "prettier": "^1.12.1",
     "regenerator-runtime": "^0.11.1",
     "roadhog-api-doc": "latest",
-    "rollbar": "^2.3.4",
     "slate-prop-types": "^0.4.29",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": [
-      "prettier --trailing-comma all --single-quote --write"
-    ],
+    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write"],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
 }

@@ -1,12 +1,12 @@
 export default {
-  loading: './src/components/loading',
+  loading: "./src/components/loading",
   plugins: [
-    'umi-plugin-dva',
+    "umi-plugin-dva",
     [
-      'umi-plugin-routes',
+      "umi-plugin-routes",
       {
-        exclude: [/component.*/, /models/, /services/, /\.test\.(js|ts)$/],
-      },
-    ],
-  ],
+        exclude: [/models/, /services/, /\.test\.(js|ts)$/]
+      }
+    ]
+  ]
 };
