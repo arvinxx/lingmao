@@ -182,6 +182,8 @@ const tag: ITagModel = {
           const { tags } = tagGroup;
           if (isInTagsGroup(dragId, tags)) {
             [removed] = tags.splice(dragIndex, 1);
+            tagGroup.tags = concat(tags);
+            return { ...state, tagGroups };
           }
         });
         tagGroups.forEach((tagGroup: TTagGroup) => {

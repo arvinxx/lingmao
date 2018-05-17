@@ -19,34 +19,21 @@ const tagSource = {
 };
 
 const tagTarget = {
-  hover(props: IDraggableTagProps, monitor, component: ReactInstance) {
+  drop(props, monitor) {
     const { index: dragIndex, id: dragId } = monitor.getItem();
-    const { index: dropIndex, id: dropId } = props;
-    // Don't replace items with themselves
+    const { index: dropIndex, id: dropId, dispatch } = props;
     if (dragId === dropId) {
       return;
     }
 
-    // 判断是否越界
-    //@ts-ignore
-    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
-    const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-    const clientOffset = monitor.getClientOffset();
-    const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-    if (dragIndex < dropIndex && hoverClientX < hoverMiddleX) {
-      return;
-    }
-    if (dragIndex > dropIndex && hoverClientX > hoverMiddleX) {
-      return;
-    }
-  },
-  drop(props, monitor) {
-    const { index: dragIndex, id: dragId } = monitor.getItem();
-    const { index: dropIndex, id: dropId } = props;
-    if (dragId === dropId) {
-      return;
-    }
-    props.moveTags({ dragIndex, dragId }, { dropIndex, dropId });
+    dispatch({
+      type: 'tag/handleTagIndexDrag',
+      payload: {
+        start: { dragIndex, dragId },
+        end: { dropIndex, dropId },
+      },
+    });
+
     monitor.getItem().dragId = dropId;
   },
 };
@@ -57,7 +44,6 @@ interface IDraggableTagProps {
   index: number;
   selectedTags: TSelectedTags;
   tags: TTag[];
-  moveTags: Function;
   dispatch: Function;
   connectDragSource?: Function;
   connectDropTarget?: Function;
@@ -87,7 +73,6 @@ export default class DraggableTag extends Component<IDraggableTagProps> {
     id: '',
     text: '',
     tags: [],
-    moveTags: () => {},
     index: 0,
     isDragging: false,
     selectedTags: [],
@@ -118,10 +103,7 @@ export default class DraggableTag extends Component<IDraggableTagProps> {
     //@ts-ignore
     const style = { ...restProps.style, cursor: isDragging ? 'move' : 'pointer' };
 
-    //@ts-ignore
-    let className = restProps.className;
-
-    className += isDragging ? styles.dragging : null;
+    let className = isDragging ? styles.dragging : null;
 
     if (isOver && initialClientOffset) {
       const direction = dragHDirection(
@@ -143,7 +125,6 @@ export default class DraggableTag extends Component<IDraggableTagProps> {
       connectDropTarget(
         <div className={className}>
           <CheckableTag
-            {...restProps}
             //@ts-ignore
             style={style}
             key={id + 'tag'}

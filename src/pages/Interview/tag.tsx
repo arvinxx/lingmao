@@ -65,7 +65,6 @@ export default class Tags extends Component<ITagsProps> {
   render() {
     const { dispatch, tag } = this.props;
     const { tagGroups, selectedTags } = tag;
-    console.log('renderdsd');
     const tags = extractTags(tagGroups);
     return (
       <div className={styles.container}>

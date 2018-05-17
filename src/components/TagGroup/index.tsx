@@ -60,7 +60,6 @@ export default class TagGroup extends Component<ITagGroupProps> {
   render() {
     const { tagGroups, selectedTags, dispatch } = this.props;
     const ungroupTags = tagGroups[0].tags;
-    console.log('rend');
     return (
       <Fragment>
         <div className={styles.ungroup}>

@@ -20,15 +20,6 @@ export default class TagComponent extends PureComponent<ITagComponentProps> {
     tags: [],
   };
 
-  moveTags = (dragSource, dropSource) => {
-    this.props.dispatch({
-      type: 'tag/handleTagIndexDrag',
-      payload: {
-        start: dragSource,
-        end: dropSource,
-      },
-    });
-  };
   render() {
     const { tags, selectedTags, dispatch } = this.props;
     return (
@@ -36,20 +27,20 @@ export default class TagComponent extends PureComponent<ITagComponentProps> {
         {tags.map((tag: TTag, index) => {
           const { id, text } = tag;
           return (
-            <DraggableTag
-              key={id}
-              dispatch={dispatch}
-              tags={tags}
-              text={text}
-              id={id}
-              moveTags={this.moveTags}
-              selectedTags={selectedTags}
-              index={index}
-            />
+            <ContextMenuTrigger id="some-unique-identifier" key={id + 'trigger'}>
+              <DraggableTag
+                key={id}
+                dispatch={dispatch}
+                tags={tags}
+                text={text}
+                id={id}
+                selectedTags={selectedTags}
+                index={index}
+              />
+            </ContextMenuTrigger>
           );
         })}
       </div>
     );
   }
 }
-//            <ContextMenuTrigger id="some-unique-identifier" key={id + 'trigger'}/>
