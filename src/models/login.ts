@@ -2,10 +2,16 @@ import { routerRedux } from 'dva/router';
 import { fakeAccountLogin } from '../services/api';
 import { setAuthority } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
+import { DvaModel } from '../../typings/dva';
 
-export default {
+export type TLoginModel = {
+  status: string;
+};
+interface model extends DvaModel {
+  state: TLoginModel;
+}
+const login: model = {
   namespace: 'login',
-
   state: {
     status: undefined,
   },
@@ -26,7 +32,7 @@ export default {
       try {
         // get location pathname
         const urlParams = new URL(window.location.href);
-        const pathname = yield select(state => state.routing.location.pathname);
+        const pathname = yield select((state) => state.routing.location.pathname);
         // add the parameters in the url
         urlParams.searchParams.set('redirect', pathname);
         window.history.replaceState(null, 'login', urlParams.href);
@@ -55,3 +61,5 @@ export default {
     },
   },
 };
+
+export default login;

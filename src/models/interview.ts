@@ -8,7 +8,7 @@ import { TTagGroup } from './tag';
 export type TRecord = {
   id: string;
   text: string;
-  rawData: JSON;
+  rawData: object;
 };
 
 export type TInterview = {

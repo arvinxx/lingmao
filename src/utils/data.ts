@@ -1,9 +1,9 @@
 import XLSX from 'xlsx';
 import { uniqBy } from 'lodash';
-import { TColumn, TTableData, TQuesData, TDim } from '../models/data';
+import { TColumn, TTableData, TQuesData, TDim, TQuesDataItem, TQuesRecord } from '../models/data';
 import { generateId } from './utils';
 
-export const xlsxToJson = (file: ArrayBuffer): Array<TQuesData> => {
+export const xlsxToJson = (file: ArrayBuffer): TQuesData => {
   const workbook = XLSX.read(file, { type: 'buffer' });
   const sheetNames = workbook.SheetNames;
   const worksheet = workbook.Sheets[sheetNames[0]];
@@ -25,11 +25,11 @@ export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> =>
   });
 };
 
-export const rawToSaved = (rawData: Array<object>): Array<TQuesData> => {
-  let saveData: TQuesData[] = [];
+export const rawToSaved = (rawData: Array<object>): TQuesData => {
+  let saveData: TQuesData = [];
   rawData.map((item) => {
     const entries = Object.entries(item);
-    let record: TQuesData = [];
+    let record: TQuesRecord = [];
     entries.map((entry) => {
       const question = entry[0];
       const answer = entry[1];
@@ -46,7 +46,7 @@ export const rawToSaved = (rawData: Array<object>): Array<TQuesData> => {
   return saveData;
 };
 
-export const getQuestions = (quesData: TQuesData[]): Array<TTableData> => {
+export const getQuestions = (quesData: TQuesData): Array<TTableData> => {
   let questions: TTableData[] = [];
   quesData[0].map((ques) => {
     questions.push({ name: ques.question, key: ques.question });
@@ -54,7 +54,7 @@ export const getQuestions = (quesData: TQuesData[]): Array<TTableData> => {
   return questions;
 };
 
-export const getAnswers = (quesData: TQuesData[], question: string): Array<TTableData> => {
+export const getAnswers = (quesData: TQuesData, question: string): Array<TTableData> => {
   let answers: Array<TTableData> = [];
   quesData.map((ques) => {
     ques.map((item) => {
@@ -74,7 +74,7 @@ export const getKeyArrays = (selectedQuestions: Array<TTableData>): Array<string
   return selectedRowKeys;
 };
 
-export const getColumns = (quesData: TQuesData[]): Array<TColumn> => {
+export const getColumns = (quesData: TQuesData): Array<TColumn> => {
   let columns: TColumn[] = [];
   if (quesData.length > 0 && quesData[0].length > 0) {
     quesData[0].map((record) => {
@@ -85,7 +85,7 @@ export const getColumns = (quesData: TQuesData[]): Array<TColumn> => {
   } else return [];
 };
 // for table page
-export const getTableData = (quesData: TQuesData[], displayOrder: boolean): Array<object> => {
+export const getTableData = (quesData: TQuesData, displayOrder: boolean): Array<object> => {
   let tableData: object[] = [];
   quesData.map((ques) => {
     let record: object = {};
@@ -93,9 +93,9 @@ export const getTableData = (quesData: TQuesData[], displayOrder: boolean): Arra
       const { question, answer, tagText, tagId, key } = entries;
       record['key'] = key;
       if (tagText !== '') {
-        record[tagId] = displayOrder ? answer.order.toString() : answer.text;
+        record[tagId] = displayOrder ? (answer.order + 1).toString() : answer.text;
       } else {
-        record[question] = displayOrder ? answer.order.toString() : answer.text;
+        record[question] = displayOrder ? (answer.order + 1).toString() : answer.text;
       }
     });
     tableData.push(record);

@@ -515,26 +515,26 @@ describe('getTableData', () => {
     const tableData = [
       {
         key: generateId(),
-        '11111': '0',
-        '22222': '0',
+        '11111': '1',
+        '22222': '1',
       },
       {
         key: generateId(),
 
-        '11111': '0',
-        '22222': '0',
+        '11111': '1',
+        '22222': '1',
       },
       {
         key: generateId(),
 
-        '11111': '0',
-        '22222': '0',
+        '11111': '1',
+        '22222': '1',
       },
       {
         key: generateId(),
 
-        '11111': '0',
-        '22222': '0',
+        '11111': '1',
+        '22222': '1',
       },
     ];
     expect(getTableData(quesData, true)).toEqual(tableData);

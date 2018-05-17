@@ -1,6 +1,5 @@
 import model from '../../src/models/data';
-import { generateId } from '../../src/utils/utils';
-import { getAnswers } from '../../src/utils';
+import { generateId, getAnswers } from '../../src/utils/';
 
 const reducers = model.reducers;
 
@@ -253,16 +252,243 @@ describe('handleSelectedAnswers', () => {
   });
 });
 
-it('changeMatchSelectedDims', () => {
-  const reducer = reducers.changeMatchSelectedDims;
+it('handleSelectedQuestions', () => {
+  const reducer = reducers.handleSelectedQuestions;
   const state = {
-    selectedDims: ['rJecwftRf', 'Byb9PfYRG', 'HkJtwMFRM'],
+    quesData: [
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: '12433241231',
+          question: 'aaaaa',
+          answer: { text: '1345', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: '12453241231',
+          question: 'gdfycvh',
+          answer: { text: '3464', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: '124324871231',
+          question: 'aaaaa',
+          answer: { text: '5463121', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: '12432411231',
+          question: 'gdfycvh',
+          answer: { text: '357323bvf', order: 0 },
+        },
+      ],
+    ],
+    selectedQues: [],
   };
   const action = {
-    type: 'data/changeMatchSelectedDims',
-    payload: { oldId: 'rJecwftRf', newId: 'SJQcwMYAz' },
+    type: 'data/handleSelectedQuestions',
+    payload: [{ key: 'aaaaa', name: 'aaaaa' }, { key: 'gdfycvh', name: 'gdfycvh' }],
   };
   expect(reducer(state, action)).toEqual({
-    selectedDims: ['Byb9PfYRG', 'HkJtwMFRM', 'SJQcwMYAz'],
+    quesData: [
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: '12433241231',
+          question: 'aaaaa',
+          answer: { text: '1345', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: '12453241231',
+          question: 'gdfycvh',
+          answer: { text: '3464', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: '124324871231',
+          question: 'aaaaa',
+          answer: { text: '5463121', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: '12432411231',
+          question: 'gdfycvh',
+          answer: { text: '357323bvf', order: 0 },
+        },
+      ],
+    ],
+    selectedQues: [
+      { question: { key: 'aaaaa', name: 'aaaaa' }, answers: getAnswers(state.quesData, 'aaaaa') },
+      {
+        question: { key: 'gdfycvh', name: 'gdfycvh' },
+        answers: getAnswers(state.quesData, 'gdfycvh'),
+      },
+    ],
+  });
+});
+
+it('addOrderToquesData', () => {
+  const reducer = reducers.addOrderToquesData;
+  const state = {
+    quesData: [
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '不男不女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+    ],
+  };
+  const action = {
+    type: 'data/addOrderToquesData',
+    payload: [
+      {
+        question: { key: '你的性别是？', name: '你的性别是？' },
+        answers: [
+          { name: '男', key: 'dsad' },
+          { name: '不男不女', key: '34141' },
+          { name: '女', key: '34141' },
+        ],
+      },
+    ],
+  };
+  expect(reducer(state, action)).toEqual({
+    quesData: [
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 2 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '不男不女', order: 1 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 2 },
+        },
+      ],
+    ],
   });
 });

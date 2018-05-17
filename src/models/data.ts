@@ -15,8 +15,7 @@ export type TSelectQue = {
   tagId: string;
   tagText: string;
 };
-
-export type TQuesData = Array<{
+export type TQuesDataItem = {
   key: string;
   tagId: string;
   tagText: string;
@@ -25,7 +24,10 @@ export type TQuesData = Array<{
     text: string;
     order: number;
   };
-}>;
+};
+
+export type TQuesData = TQuesRecord[];
+export type TQuesRecord = TQuesDataItem[];
 export type TAnswer = {
   text: string;
   id: string;
@@ -80,7 +82,7 @@ const model: model = {
       return { ...state, selectedQues };
     },
     handleSelectedAnswers(state, { payload: newAnswers }: { payload: Array<TTableData> }) {
-      const selectedQues: Array<TSelectQue> = state.selectedQues;
+      const selectedQues: Array<TSelectQue> = concat(state.selectedQues);
       let replaceIndex = -1;
       if (
         selectedQues.some((selectedQue) => {
@@ -89,6 +91,7 @@ const model: model = {
         })
       ) {
         selectedQues[replaceIndex].answers = newAnswers;
+
         return { ...state, selectedQues };
       } else return state;
     },
@@ -123,6 +126,24 @@ const model: model = {
         ...state,
         clusterSelectedDims: state.clusterSelectedDims.filter((id) => id !== removeId),
       };
+    },
+
+    addOrderToquesData(state, { payload: selectedQues }) {
+      const quesData: TQuesData = concat(state.quesData);
+      selectedQues.forEach((selectedQue: TSelectQue) => {
+        const { question: selectedQuestion, answers: selectedAnswers } = selectedQue;
+        selectedAnswers.forEach((selectedAnswer, index) => {
+          quesData.forEach((TQuesDataRecord) => {
+            TQuesDataRecord.forEach((TQuesDataItem) => {
+              const { answer, question } = TQuesDataItem;
+              if (question === selectedQuestion.name && selectedAnswer.name === answer.text) {
+                answer.order = index;
+              }
+            });
+          });
+        });
+      });
+      return { ...state, quesData };
     },
   },
 };

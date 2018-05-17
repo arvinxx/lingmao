@@ -16,7 +16,7 @@ interface IDataIndexProps {
   dispatch: Function;
   analysisStage: number;
   selectedQues: Array<TSelectQue>;
-  quesData: Array<TQuesData>;
+  quesData: TQuesData;
 }
 export default class DataIndex extends Component<IDataIndexProps> {
   static defaultProps: IDataIndexProps = {
@@ -33,14 +33,6 @@ export default class DataIndex extends Component<IDataIndexProps> {
   };
   indexStateBack = () => {
     this.props.dispatch({ type: 'stage/indexStateBack' });
-  };
-  finish = (answers) => {
-    console.log(answers);
-    if (this.props.analysisStage === 1) {
-      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '2' });
-      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '1' });
-    }
   };
 
   resetSelection = () => {

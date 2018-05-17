@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 import BodyRow from './DraggableRow';
 import styles from './DraggableTable.less';
 import { TSelectQue, TTableData } from '../../models/data';
-import { DragDropContext } from "react-dnd";
+import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 const { Column } = Table;
@@ -18,7 +18,6 @@ interface IDragSortingTableProps {
   analysisStage: number;
   name: string;
 }
-
 
 @(DragDropContext(HTML5Backend) as any)
 export default class DragSortingTable extends PureComponent<IDragSortingTableProps> {
@@ -55,9 +54,8 @@ export default class DragSortingTable extends PureComponent<IDragSortingTablePro
   indexStateBack = () => {
     this.props.dispatch({ type: 'stage/indexStateBack' });
   };
-  finish = (answers) => {
-    console.log(answers);
-    //TODO: ADD Order
+  finish = (selectedQues) => {
+    this.props.dispatch({ type: 'data/addOrderToquesData', payload: selectedQues });
     if (this.props.analysisStage === 1) {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '2' });
@@ -100,7 +98,7 @@ export default class DragSortingTable extends PureComponent<IDragSortingTablePro
               <Button style={{ marginRight: 16 }} onClick={this.indexStateBack}>
                 返回
               </Button>
-              <Button onClick={(e) => this.finish(dataSource)}>确认</Button>
+              <Button onClick={() => this.finish(selectedQues)}>确认</Button>
             </div>
           </div>
         )}
