@@ -83,12 +83,15 @@ const tag: ITagModel = {
       };
     },
     deleteTag(state, { payload: id }) {
-      return {
-        ...state,
-        tagGroups: state.tagGroups.map((tagGroup: TTagGroup) => ({
+      const newTagGroups = concat(
+        state.tagGroups.map((tagGroup: TTagGroup) => ({
           ...tagGroup,
           tags: tagGroup.tags.filter((tag) => tag.id !== id),
-        })),
+        }))
+      );
+      return {
+        ...state,
+        tagGroups: newTagGroups,
       };
     },
 

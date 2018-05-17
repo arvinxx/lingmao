@@ -5,8 +5,11 @@ import {
   getTableData,
   getColumns,
   getFilterDims,
+  getFilterTableData,
+  getFilterColumns,
 } from './data';
 import { generateId } from './utils';
+import { TSelectQue } from '../models/data';
 
 jest.mock('shortid');
 
@@ -541,7 +544,7 @@ describe('getTableData', () => {
   });
 });
 
-it('should ', () => {
+it('getFilterDims ', () => {
   const dims = [
     {
       _id: '5afb98a5aec4ec586cd4bd86',
@@ -720,5 +723,86 @@ it('should ', () => {
       id: 'Bk3twMKAf',
       refId: 'HkavwGKRz',
     },
+  ]);
+});
+
+it('getFilterTableData ', () => {
+  const tableData = [
+    {
+      key: generateId(),
+      '你的名字是？': '小A',
+      '你的性别是？': '男',
+    },
+    {
+      key: generateId(),
+
+      '你的名字是？': '小B',
+      '你的性别是？': '女',
+    },
+    {
+      key: generateId(),
+
+      '你的名字是？': '小A',
+      '你的性别是？': '不男不女',
+    },
+    {
+      key: generateId(),
+
+      '你的名字是？': '小B',
+      '你的性别是？': '女',
+    },
+  ];
+  const selectedQues: TSelectQue[] = [
+    {
+      question: { name: '你的名字是？', key: '你的名字是？' },
+      tagText: '',
+      tagId: '',
+      answers: [],
+    },
+  ];
+  expect(getFilterTableData(tableData, selectedQues, true)).toEqual([
+    {
+      key: generateId(),
+      '你的名字是？': '小A',
+    },
+    {
+      key: generateId(),
+
+      '你的名字是？': '小B',
+    },
+    {
+      key: generateId(),
+
+      '你的名字是？': '小A',
+    },
+    {
+      key: generateId(),
+      '你的名字是？': '小B',
+    },
+  ]);
+});
+it('getFilterColumns ', () => {
+  const columns = [
+    { key: generateId(), title: '你的名字是？', dataIndex: '你的名字是？' },
+    { key: generateId(), title: '你的性别是？', dataIndex: '你的性别是？' },
+    { key: generateId(), title: 'dasfdsd', dataIndex: 'dasfdsd' },
+  ];
+  const selectedQues: TSelectQue[] = [
+    {
+      question: { name: '你的名字是？', key: '你的名字是？' },
+      tagText: '',
+      tagId: '',
+      answers: [],
+    },
+    {
+      question: { name: 'dasfdsd', key: 'dasfdsd' },
+      tagText: '',
+      tagId: '',
+      answers: [],
+    },
+  ];
+  expect(getFilterColumns(columns, selectedQues, true)).toEqual([
+    { key: generateId(), title: '你的名字是？', dataIndex: '你的名字是？' },
+    { key: generateId(), title: 'dasfdsd', dataIndex: 'dasfdsd' },
   ]);
 });

@@ -2,7 +2,7 @@ import { DvaModel } from '../../typings/dva';
 
 export type TTableModel = {
   displayOrder: boolean;
-  isSelect: boolean;
+  displayFilter: boolean;
 };
 export interface ITableModel extends DvaModel {
   state: TTableModel;
@@ -11,11 +11,14 @@ const table: ITableModel = {
   namespace: 'table',
   state: {
     displayOrder: false,
-    isSelect: false,
+    displayFilter: false,
   },
   reducers: {
     changeOrderDisplay(state, action) {
       return { ...state, displayOrder: !state.displayOrder };
+    },
+    changeFilterDisplay(state, action) {
+      return { ...state, displayFilter: !state.displayFilter };
     },
   },
 };

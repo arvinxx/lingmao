@@ -46,7 +46,7 @@ export type TColumn = {
 
 export type TDimsSelect = string[];
 export type TDataModel = {
-  quesData: Array<TQuesData>;
+  quesData: TQuesData;
   selectedQues: Array<TSelectQue>;
   matchSelectedDims: TDimsSelect;
   reductionSelectedDims: TDimsSelect;

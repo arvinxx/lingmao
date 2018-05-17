@@ -1,6 +1,14 @@
 import XLSX from 'xlsx';
-import { uniqBy } from 'lodash';
-import { TColumn, TTableData, TQuesData, TDim, TQuesDataItem, TQuesRecord } from '../models/data';
+import { uniqBy, has } from 'lodash';
+import {
+  TColumn,
+  TTableData,
+  TQuesData,
+  TDim,
+  TQuesDataItem,
+  TQuesRecord,
+  TSelectQue,
+} from '../models/data';
 import { generateId } from './utils';
 
 export const xlsxToJson = (file: ArrayBuffer): TQuesData => {
@@ -103,13 +111,42 @@ export const getTableData = (quesData: TQuesData, displayOrder: boolean): Array<
   return tableData;
 };
 
-export const getFilterTableData = <T>(tableData: Array<T>, isSelect: boolean): T[] => {
-  console.log('filter');
+export const getFilterTableData = (
+  tableData: Array<object>,
+  selectedQues: TSelectQue[],
+  displayFilter: boolean
+): object[] => {
+  if (displayFilter) {
+    return tableData.map((item: object) => {
+      let tempTableData = { key: item.key };
+      selectedQues.map((selectedQue) => {
+        const selectedQuestion = selectedQue.question.name;
+        if (item[selectedQuestion] !== undefined) {
+          tempTableData[selectedQuestion] = item[selectedQuestion];
+        }
+      });
+      return tempTableData;
+    });
+  }
+
   return tableData;
 };
 
-export const getFilterColumns = (columns: Array<TColumn>, isSelect: boolean): TColumn[] => {
-  console.log('columns');
+export const getFilterColumns = (
+  columns: Array<TColumn>,
+  selectedQues: TSelectQue[],
+  displayFilter: boolean
+): TColumn[] => {
+  if (displayFilter) {
+    let filterColumns: TColumn[] = [];
+    selectedQues.map((selectedQue) => {
+      const { question } = selectedQue;
+      filterColumns = filterColumns.concat(
+        columns.filter((column) => column.title === question.name)
+      );
+    });
+    return filterColumns;
+  }
   return columns;
 };
 
