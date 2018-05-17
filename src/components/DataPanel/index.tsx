@@ -39,9 +39,10 @@ export default class DataPanel extends Component<IDataPanelProps> {
   static defaultProps: IDataPanelProps = {
     data: {
       quesData: [],
-      questions: [],
       selectedQues: [],
-      selectedDims: [],
+      reductionSelectedDims: [],
+      clusterSelectedDims: [],
+      matchSelectedDims: [],
     },
     tags: [],
     stage: {
@@ -70,7 +71,13 @@ export default class DataPanel extends Component<IDataPanelProps> {
   };
   render() {
     const { data, dispatch, stage, location, tags: dims } = this.props;
-    const { selectedQues, quesData, selectedDims } = data;
+    const {
+      selectedQues,
+      quesData,
+      matchSelectedDims,
+      reductionSelectedDims,
+      clusterSelectedDims,
+    } = data;
     const {
       analysisStage,
       indexState,
@@ -105,7 +112,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
             tagMatchState={tagMatchState}
             pathname={location.pathname}
             dims={dims}
-            selectedDims={selectedDims}
+            selectedDims={matchSelectedDims}
             analysisStage={analysisStage}
             selectedQues={selectedQues}
           />
@@ -127,9 +134,10 @@ export default class DataPanel extends Component<IDataPanelProps> {
         component: (
           <RecuceDimsComponent
             dims={dims}
+            selectedDims={reductionSelectedDims}
             percent={70}
-            dispatch={dispatch}
             analysisStage={analysisStage}
+            dispatch={dispatch}
           />
         ),
       },
@@ -147,7 +155,12 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '选择维度',
         component: (
-          <ClusterDimComponent dims={dims} analysisStage={analysisStage} dispatch={dispatch} />
+          <ClusterDimComponent
+            dims={dims}
+            selectedDims={clusterSelectedDims}
+            analysisStage={analysisStage}
+            dispatch={dispatch}
+          />
         ),
       },
       {
@@ -196,12 +209,12 @@ export default class DataPanel extends Component<IDataPanelProps> {
             </div>
           </TabPane>
           <TabPane tab="降维" key="2">
-            <Collapse bordered={false} activeKey={activePanelList}>
+            <Collapse bordered={false} onChange={this.handlePanelClick} activeKey={activePanelList}>
               {PanelComponent(4, 6)}
             </Collapse>
           </TabPane>
           <TabPane tab="聚类" key="3">
-            <Collapse bordered={false} activeKey={activePanelList}>
+            <Collapse bordered={false} onChange={this.handlePanelClick} activeKey={activePanelList}>
               {PanelComponent(6, 9)}
             </Collapse>
           </TabPane>

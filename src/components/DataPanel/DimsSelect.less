@@ -1,0 +1,19 @@
+@import '../../styles/themes/default';
+
+.tag-container {
+  padding-bottom: 24px;
+  :global {
+    .ant-tag {
+      border-color: @transBlack-4;
+      margin: 6px 8px;
+      font-size: @font-size-base;
+      height: 24px;
+      padding: 1px 8px;
+      background: @base-white;
+    }
+    .ant-tag-checkable-checked {
+      background: @blue-6;
+      border-color: transparent;
+    }
+  }
+}

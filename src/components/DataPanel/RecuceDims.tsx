@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Divider, Progress, Tag } from 'antd';
-import { TDim } from '../../models/data';
+import DimSelect from './DimsSelect';
+
+import { TDim, TDimsSelect } from '../../models/data';
 const { CheckableTag } = Tag;
 
 interface IRecuceDimsProps {
@@ -8,6 +10,7 @@ interface IRecuceDimsProps {
   percent: number;
   dispatch: Function;
   analysisStage: number;
+  selectedDims: TDimsSelect;
 }
 export default class RecuceDims extends Component<IRecuceDimsProps> {
   static defaultProps: IRecuceDimsProps = {
@@ -15,11 +18,17 @@ export default class RecuceDims extends Component<IRecuceDimsProps> {
     percent: 0,
     dispatch: () => {},
     analysisStage: 0,
+    selectedDims: [],
   };
   state = { checked: false };
-  handleChange = (checked) => {
-    this.setState({ checked });
+  selectDims = (checked, id) => {
+    if (checked) {
+      this.props.dispatch({ type: 'data/addReductionSelectedDims', payload: id });
+    } else {
+      this.props.dispatch({ type: 'data/removeReductionSelectedDims', payload: id });
+    }
   };
+
   resetSelection = () => {
     console.log('重置维度');
   };
@@ -32,18 +41,11 @@ export default class RecuceDims extends Component<IRecuceDimsProps> {
     }
   };
   render() {
-    const { percent, dims } = this.props;
+    const { percent, dims, selectedDims } = this.props;
     return (
       <div>
         <p>点击选择参与降维的维度</p>
-        {dims.map((dim: TDim) => {
-          const { id, selected, text } = dim;
-          return (
-            <CheckableTag key={id} checked={selected} onChange={this.handleChange}>
-              {text}
-            </CheckableTag>
-          );
-        })}
+        <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
         <div>
           <Button onClick={this.resetSelection}>重置</Button>
           <Button type="primary" ghost onClick={this.confirmSelection}>

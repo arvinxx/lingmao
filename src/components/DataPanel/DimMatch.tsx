@@ -38,7 +38,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
         // 将对象的 Id 与现有Id进行交换
         console.log('交换');
         console.log(oldId, id);
-        dispatch({ type: 'data/changeSelectionDims', payload: { oldId, newId: id } });
+        dispatch({ type: 'data/changeMatchSelectedDims', payload: { oldId, newId: id } });
       } else {
         // 将选中 Id 添加到 selectionDims 中
         dispatch({ type: 'data/addSelectionDims', payload: id });
@@ -64,6 +64,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
 
     if (this.props.analysisStage === 2) {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+
       this.props.dispatch({
         type: 'stage/addActivePanelList',
         payload: '3',
@@ -77,9 +78,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
   };
   render() {
     const { dims, selectedQues, tagMatchState, selectedDims } = this.props;
-    console.log(selectedDims);
     const filterDims = getFilterDims(dims, selectedDims);
-
     const dataSource = selectedQues.map((selectedQue) => selectedQue.question.name);
     return (
       <div className={styles.container}>
@@ -111,9 +110,10 @@ export default class DimMatch extends Component<IDimMatchProps> {
           bordered
           dataSource={dataSource}
           renderItem={(item, index) => (
-            <Item //@ts-ignore
-              onClick={(e) => this.handleTagMatch(index)}
+            <Item
               className={tagMatchState === index ? styles['list-active'] : ''}
+              //@ts-ignore
+              onClick={(e) => this.handleTagMatch(index)}
             >
               {item}
               <Tag

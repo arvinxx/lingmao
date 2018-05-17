@@ -8,12 +8,6 @@ export type TDim = {
   id: string;
   text: string;
 };
-export type TDataModel = {
-  quesData: Array<TQuesData>;
-  questions: Array<TTableData>;
-  selectedQues: Array<TSelectQue>;
-  selectedDims: Array<string>;
-};
 
 export type TSelectQue = {
   question: TTableData;
@@ -32,21 +26,29 @@ export type TQuesData = Array<{
     order: number;
   };
 }>;
+export type TAnswer = {
+  text: string;
+  id: string;
+};
 
 export type TTableData = {
   key: string;
   name: string;
 };
 
-export type TAnswer = {
-  text: string;
-  id: string;
-};
-
 export type TColumn = {
   key: string;
   title: string;
   dataIndex: string;
+};
+
+export type TDimsSelect = string[];
+export type TDataModel = {
+  quesData: Array<TQuesData>;
+  selectedQues: Array<TSelectQue>;
+  matchSelectedDims: TDimsSelect;
+  reductionSelectedDims: TDimsSelect;
+  clusterSelectedDims: TDimsSelect;
 };
 interface model extends DvaModel {
   state: TDataModel;
@@ -55,9 +57,10 @@ const model: model = {
   namespace: 'data',
   state: {
     quesData: [],
-    questions: [],
     selectedQues: [],
-    selectedDims: [],
+    clusterSelectedDims: [],
+    matchSelectedDims: [],
+    reductionSelectedDims: [],
   },
   reducers: {
     handleQuesData(state, { payload: quesData }) {
@@ -91,14 +94,34 @@ const model: model = {
     },
 
     addSelectionDims(state, { payload: newDimId }) {
-      return { ...state, selectedDims: [...state.selectedDims, newDimId] };
+      return { ...state, matchSelectedDims: [...state.matchSelectedDims, newDimId] };
     },
 
-    changeSelectionDims(state, { payload }) {
+    changeMatchSelectedDims(state, { payload }) {
       const { oldId, newId } = payload;
       return {
         ...state,
-        selectedDims: [...state.selectedDims.filter((id) => id !== oldId), newId],
+        matchSelectedDims: [...state.matchSelectedDims.filter((id) => id !== oldId), newId],
+      };
+    },
+
+    addReductionSelectedDims(state, { payload: newDims }) {
+      return { ...state, reductionSelectedDims: [...state.reductionSelectedDims, newDims] };
+    },
+
+    removeReductionSelectedDims(state, { payload: removeId }) {
+      return {
+        ...state,
+        reductionSelectedDims: state.reductionSelectedDims.filter((id) => id !== removeId),
+      };
+    },
+    addClusterSelectedDims(state, { payload: newDims }) {
+      return { ...state, clusterSelectedDims: [...state.clusterSelectedDims, newDims] };
+    },
+    removeClusterSelectedDims(state, { payload: removeId }) {
+      return {
+        ...state,
+        clusterSelectedDims: state.clusterSelectedDims.filter((id) => id !== removeId),
       };
     },
   },

@@ -253,13 +253,13 @@ describe('handleSelectedAnswers', () => {
   });
 });
 
-it('changeSelectionDims', () => {
-  const reducer = reducers.changeSelectionDims;
+it('changeMatchSelectedDims', () => {
+  const reducer = reducers.changeMatchSelectedDims;
   const state = {
     selectedDims: ['rJecwftRf', 'Byb9PfYRG', 'HkJtwMFRM'],
   };
   const action = {
-    type: 'data/changeSelectionDims',
+    type: 'data/changeMatchSelectedDims',
     payload: { oldId: 'rJecwftRf', newId: 'SJQcwMYAz' },
   };
   expect(reducer(state, action)).toEqual({

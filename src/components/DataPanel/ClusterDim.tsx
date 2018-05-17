@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
 import { Button, Divider, Icon, Tag } from 'antd';
-import { TDim } from '../../models/data';
-import { baseUrl } from '../../utils';
-import router from 'umi/router';
-
-const { CheckableTag } = Tag;
+import { TDim, TDimsSelect } from '../../models/data';
+import DimSelect from './DimsSelect';
 
 interface IClusterDimProps {
   dispatch: Function;
   dims: Array<TDim>;
   analysisStage: number;
+  selectedDims: TDimsSelect;
 }
 export default class ClusterDim extends Component<IClusterDimProps> {
   static defaultProps: IClusterDimProps = {
     dims: [],
     dispatch: () => {},
     analysisStage: 0,
+    selectedDims: [],
+  };
+
+  selectDims = (checked, id) => {
+    if (checked) {
+      this.props.dispatch({ type: 'data/addClusterSelectedDims', payload: id });
+    } else {
+      this.props.dispatch({ type: 'data/removeClusterSelectedDims', payload: id });
+    }
+    console.log(checked,id);
   };
 
   finish = () => {
@@ -24,22 +32,14 @@ export default class ClusterDim extends Component<IClusterDimProps> {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '7' });
       this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '6' });
-
     }
   };
   render() {
-    const { dims } = this.props;
+    const { dims, selectedDims } = this.props;
     return (
       <div>
         <p>点击选择参与降维的维度</p>
-        {dims.map((dim: TDim) => {
-          const { id, selected, text } = dim;
-          return (
-            <CheckableTag key={id} checked={selected} onChange={this.handleChange}>
-              {text}
-            </CheckableTag>
-          );
-        })}
+        <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
         <div>
           <Divider />
           <Button>重置</Button>
