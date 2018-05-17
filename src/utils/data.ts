@@ -54,33 +54,6 @@ export const getQuestions = (quesData: TQuesData[]): Array<TTableData> => {
   return questions;
 };
 
-export const getColumns = (quesData: TQuesData[]): Array<TColumn> => {
-  let columns: TColumn[] = [];
-  if (quesData.length > 0 && quesData[0].length > 0) {
-    quesData[0].map((record) => {
-      const { tagId, tagText, key, question } = record;
-      columns.push({ key: key, dataIndex: tagText !== '' ? tagId : question, title: question });
-    });
-    return columns;
-  } else return [];
-};
-
-export const getTableData = (quesData: TQuesData[]): Array<object> => {
-  let tableData: object[] = [];
-  quesData.map((ques) => {
-    let record: object = {};
-    ques.map((entries) => {
-      const { question, answer, tagText, tagId, key } = entries;
-      record['key'] = key;
-      if (tagText !== '') {
-        record[tagId] = answer.text;
-      } else record[question] = answer.text;
-    });
-    tableData.push(record);
-  });
-  return tableData;
-};
-
 export const getAnswers = (quesData: TQuesData[], question: string): Array<TTableData> => {
   let answers: Array<TTableData> = [];
   quesData.map((ques) => {
@@ -101,4 +74,41 @@ export const getKeyArrays = (selectedQuestions: Array<TTableData>): Array<string
   return selectedRowKeys;
 };
 
-export const generateIndexData = (savedData) => {};
+export const getColumns = (quesData: TQuesData[]): Array<TColumn> => {
+  let columns: TColumn[] = [];
+  if (quesData.length > 0 && quesData[0].length > 0) {
+    quesData[0].map((record) => {
+      const { tagId, tagText, key, question } = record;
+      columns.push({ key: key, dataIndex: tagText !== '' ? tagId : question, title: question });
+    });
+    return columns;
+  } else return [];
+};
+// for table page
+export const getTableData = (quesData: TQuesData[], displayOrder: boolean): Array<object> => {
+  let tableData: object[] = [];
+  quesData.map((ques) => {
+    let record: object = {};
+    ques.map((entries) => {
+      const { question, answer, tagText, tagId, key } = entries;
+      record['key'] = key;
+      if (tagText !== '') {
+        record[tagId] = displayOrder ? answer.order.toString() : answer.text;
+      } else {
+        record[question] = displayOrder ? answer.order.toString() : answer.text;
+      }
+    });
+    tableData.push(record);
+  });
+  return tableData;
+};
+
+export const getFilterTableData = <T>(tableData: Array<T>, isSelect: boolean): T[] => {
+  console.log('filter');
+  return tableData;
+};
+
+export const getFilterColumns = (columns: Array<TColumn>, isSelect: boolean): TColumn[] => {
+  console.log('columns');
+  return columns;
+};

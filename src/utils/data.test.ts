@@ -342,7 +342,7 @@ describe('getTableData', () => {
         '你的性别是？': '女',
       },
     ];
-    expect(getTableData(quesData)).toEqual(tableData);
+    expect(getTableData(quesData, false)).toEqual(tableData);
   });
   it('should return tagId as key', () => {
     const quesData = [
@@ -436,6 +436,100 @@ describe('getTableData', () => {
         '22222': '女',
       },
     ];
-    expect(getTableData(quesData)).toEqual(tableData);
+    expect(getTableData(quesData, false)).toEqual(tableData);
+  });
+  it('should return order as answer', () => {
+    const quesData = [
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '男', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小A', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '不男不女', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '11111',
+          tagText: '姓名',
+          key: generateId(),
+          question: '你的名字是？',
+          answer: { text: '小B', order: 0 },
+        },
+        {
+          tagId: '22222',
+          tagText: '性别',
+          key: generateId(),
+          question: '你的性别是？',
+          answer: { text: '女', order: 0 },
+        },
+      ],
+    ];
+    const tableData = [
+      {
+        key: generateId(),
+        '11111': '0',
+        '22222': '0',
+      },
+      {
+        key: generateId(),
+
+        '11111': '0',
+        '22222': '0',
+      },
+      {
+        key: generateId(),
+
+        '11111': '0',
+        '22222': '0',
+      },
+      {
+        key: generateId(),
+
+        '11111': '0',
+        '22222': '0',
+      },
+    ];
+    expect(getTableData(quesData, true)).toEqual(tableData);
   });
 });
