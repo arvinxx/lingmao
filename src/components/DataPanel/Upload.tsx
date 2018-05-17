@@ -43,9 +43,9 @@ export default class UploadData extends Component<IUploadDataProps, IUploadDataS
     });
 
     if (this.props.analysisStage === 0) {
-      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'data/addActivePanelList', payload: '1' });
-      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '0' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '1' });
+      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '0' });
     }
   };
   //TODO: 处理上传数据后的显示状态

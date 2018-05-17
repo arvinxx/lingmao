@@ -52,7 +52,7 @@ export default class TableData extends PureComponent<ITableDataProps> {
     return (
       <Card bordered={false} className={styles.container}>
         <div className={styles['button-group']}>
-          <Button style={{ marginRight: 16 }}>展示所有</Button>
+          {/*<Button style={{ marginRight: 16 }}>展示所有</Button>*/}
           <Button onClick={this.changeOrderDisplay}>显示{displayOrder ? '文字' : '编号'}</Button>
         </div>
         <Table

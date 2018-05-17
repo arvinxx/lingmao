@@ -48,14 +48,13 @@ export default class ReductionOpts extends Component<IReductionOptsProps> {
   };
   finish = () => {
     if (this.props.analysisStage === 5) {
-      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'data/addActivePanelList', payload: '6' });
-      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '5' });
-
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '6' });
+      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '5' });
     }
 
     // Tab 切换
-    this.props.dispatch({ type: 'data/changeTabStage', payload: '3' });
+    this.props.dispatch({ type: 'stage/changeTabStage', payload: '3' });
 
     // 路由跳转
     router.push(`${baseUrl(this.props.pathname)}/cluster`);

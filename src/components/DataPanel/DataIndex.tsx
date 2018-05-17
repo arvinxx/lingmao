@@ -28,32 +28,18 @@ export default class DataIndex extends Component<IDataIndexProps> {
     questionState: 0,
   };
 
-  questionStateNext = (answers) => {
-    const { selectedQues, questionState } = this.props;
-    if (questionState < selectedQues.length) {
-      this.props.dispatch({ type: 'data/questionStateNext' });
-    }
-    this.props.dispatch({ type: 'data/handleSelectedAnswers', payload: answers });
-  };
-  questionStateBack = (answers) => {
-    const { questionState } = this.props;
-    if (questionState > 0) {
-      this.props.dispatch({ type: 'data/questionStateBack' });
-    }
-    this.props.dispatch({ type: 'data/handleSelectedAnswers', payload: answers });
-  };
   indexStateNext = () => {
-    this.props.dispatch({ type: 'data/indexStateNext' });
+    this.props.dispatch({ type: 'stage/indexStateNext' });
   };
   indexStateBack = () => {
-    this.props.dispatch({ type: 'data/indexStateBack' });
+    this.props.dispatch({ type: 'stage/indexStateBack' });
   };
   finish = (answers) => {
     console.log(answers);
     if (this.props.analysisStage === 1) {
-      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'data/addActivePanelList', payload: '2' });
-      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '1' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '2' });
+      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '1' });
     }
   };
 

@@ -31,9 +31,9 @@ export default class DimMatch extends Component<IDimMatchProps> {
 
   finish = () => {
     if (this.props.analysisStage === 2) {
-      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'data/addActivePanelList', payload: '3' });
-      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '2' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '3' });
+      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '2' });
     }
     router.push(`${baseUrl(this.props.pathname)}/validation`);
   };

@@ -15,6 +15,7 @@ import styles from './index.less';
 
 import { dims } from '../../../mock/dims';
 import { TDataModel } from '../../models/data';
+import { TStageModel } from '../../models/stage';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -22,45 +23,42 @@ const Panel = Collapse.Panel;
 interface IDataPanelProps {
   dispatch: Function;
   data: TDataModel;
+  stage: TStageModel;
   location: { pathname: string };
 }
-@connect(({ data, routing }) => ({
+@connect(({ data, routing, stage }) => ({
   data,
+  stage,
   location: routing.location,
 }))
 export default class DataPanel extends Component<IDataPanelProps> {
   static defaultProps: IDataPanelProps = {
     data: {
+      quesData: [],
+      questions: [],
+      selectedQues: [],
+    },
+    stage: {
       indexState: 0,
       analysisStage: 0,
       tabStage: '1',
       activePanelList: ['0'],
-      quesData: [],
-      questions: [],
       questionState: 0,
-      selectedQues: [],
     },
     location: { pathname: '' },
     dispatch: () => {},
   };
   changeTabStage = (key) => {
-    this.props.dispatch({ type: 'data/changeTabStage', payload: key });
+    this.props.dispatch({ type: 'stage/changeTabStage', payload: key });
   };
   handlePanelClick = (key) => {
-    this.props.dispatch({ type: 'data/handlePanelClick', payload: key });
+    this.props.dispatch({ type: 'stage/handlePanelClick', payload: key });
   };
   render() {
-    const { data, dispatch, location } = this.props;
+    const { data, dispatch, stage, location } = this.props;
 
-    const {
-      analysisStage,
-      indexState,
-      selectedQues,
-      quesData,
-      tabStage,
-      activePanelList,
-      questionState,
-    } = data;
+    const { selectedQues, quesData } = data;
+    const { analysisStage, indexState, tabStage, activePanelList, questionState } = stage;
     const CollapseArray = [
       {
         text: '数据文件',
@@ -186,8 +184,6 @@ export default class DataPanel extends Component<IDataPanelProps> {
             </Collapse>
           </TabPane>
         </Tabs>
-
-
       </Card>
     );
   }

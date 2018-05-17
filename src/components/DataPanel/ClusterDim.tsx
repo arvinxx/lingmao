@@ -21,9 +21,9 @@ export default class ClusterDim extends Component<IClusterDimProps> {
   finish = () => {
     // 解锁下一条面板
     if (this.props.analysisStage === 6) {
-      this.props.dispatch({ type: 'data/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'data/addActivePanelList', payload: '7' });
-      this.props.dispatch({ type: 'data/removeActivePanelList', payload: '6' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '7' });
+      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '6' });
 
     }
   };
