@@ -27,7 +27,7 @@ export default class TagComponent extends PureComponent<ITagComponentProps> {
         {tags.map((tag: TTag, index) => {
           const { id, text } = tag;
           return (
-            <ContextMenuTrigger id="some-unique-identifier" key={id + 'trigger'}>
+            <ContextMenuTrigger id="some-unique-identifier" key={id + 'trigger'} holdToDisplay={-1}>
               <DraggableTag
                 key={id}
                 dispatch={dispatch}
