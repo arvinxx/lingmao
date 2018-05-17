@@ -3,7 +3,7 @@ import { getRule, postRule } from './mock/rule';
 import { getActivities, getNotice, getFakeList, getTreeData } from './mock/api';
 import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
-import node from './mock/document';
+import document from './mock/document';
 import tag from './mock/tags';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
@@ -15,6 +15,7 @@ const noProxy = process.env.NO_PROXY === 'true';
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
+  'GET /api/documents': document,
   'GET /api/currentUser': {
     $desc: '获取当前用户接口',
     $params: {
@@ -69,16 +70,10 @@ const proxy = {
   'GET /api/tags': mockjs.mock({
     'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }],
   }),
-  'GET /api/node': node,
   'GET /api/labels': tag,
-  'POST /api/labels': (req, res) => {
-    console.log(req);
-  },
 
   'GET /api/fake_chart_data': getFakeChartData,
-  'GET /api/fake_tree_data': getTreeData,
-  'GET /api/profile/basic': getProfileBasicData,
-  'GET /api/profile/advanced': getProfileAdvancedData,
+
   'POST /api/login/account': (req, res) => {
     const { password, userName, type } = req.body;
     if (password === '888888' && userName === 'admin') {
