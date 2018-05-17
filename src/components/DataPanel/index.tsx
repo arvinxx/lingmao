@@ -17,7 +17,7 @@ import { dims } from '../../../mock/dims';
 import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
 import { extractTags } from '../../utils';
-import { default as tag, TTag } from '../../models/tag';
+import {  TTag } from '../../models/tag';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;

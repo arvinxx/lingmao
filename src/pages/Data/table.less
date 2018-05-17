@@ -7,13 +7,29 @@
     background: @transBlack-9;
   }
 }
-
+.canvas {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.base-card {
+  background: @base-white;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+}
 .container {
   box-shadow: @shadow-1;
-  //flex: none;
-  min-width: 600px;
+  padding: 24px;
+  min-width: 700px;
   margin: 24px;
+  width: 900px;
+  .base-card;
+  display: flex;
+  flex-direction: column;
   :global {
+    .ant-table-body {
+      min-height: 600px;
+    }
     .ant-table-thead > tr > th {
       padding: 0 8px;
     }
