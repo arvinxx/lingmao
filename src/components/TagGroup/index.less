@@ -12,7 +12,7 @@
     }
     .ant-input {
       padding-left: 0;
-      width: 50%;
+      width: 35%;
     }
     .arrow {
       margin-top: 6px;
@@ -21,7 +21,15 @@
   .header {
     display: flex;
     justify-content: space-between;
+    user-select: none;
 
+    .title {
+      cursor: default;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      color: @text-color;
+    }
     .close {
       color: @white-5;
       opacity: 0;

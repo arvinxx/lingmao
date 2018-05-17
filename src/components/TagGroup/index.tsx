@@ -19,7 +19,6 @@ export default class TagGroup extends Component<ITagGroupProps> {
     tagGroups: [{ text: '未分组', id: 'temp', tags: [] }],
   };
   state = {
-    visible: false,
     tagGroupText: '',
     tagGroupPlaceHolder: '新的标签组',
   };
@@ -78,6 +77,15 @@ export default class TagGroup extends Component<ITagGroupProps> {
                         <Input
                           key={id + 'groups+input'}
                           value={text}
+                          onBlur={(e) => {
+                            this.setState({ editable: false });
+                          }}
+                          onPressEnter={(e) => {
+                            this.setState({ editable: false });
+                          }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
                           onChange={(e) => this.changeTagGroupText(e, id)}
                         />
                         <Popconfirm
