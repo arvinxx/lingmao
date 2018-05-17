@@ -3,13 +3,14 @@
 .tag-container {
   padding-bottom: 24px;
   :global {
-    .ant-tag-checkable {
+    .ant-tag {
       border-color: @transBlack-4;
       margin: 6px 8px;
       font-size: @font-size-base;
-      height: 32px;
-      padding: 4px 14px;
-      border-radius: 4px;
+      height: 24px;
+      padding: 1px 8px;
+      background: @base-white;
+      //border-radius: 4px;
     }
   }
 }
@@ -24,9 +25,37 @@
   :global {
     .ant-list-item {
       cursor: pointer;
+      padding-right: 12px;
       &:hover {
-        background: @red-1;
+        background: @white-1;
       }
     }
+    .ant-list-item-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
+  .list-active {
+    background: @blue-1;
+  }
+}
+
+.match-tag-base {
+  padding: 4px 10px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 0;
+}
+
+.match-tag-default {
+  .match-tag-base;
+  background: none;
+}
+.match-tag-active {
+  .match-tag-base;
+  border: none;
+  color: @transWhite-1;
+  background: @blue-6;
 }

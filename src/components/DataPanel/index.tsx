@@ -16,6 +16,8 @@ import styles from './index.less';
 import { dims } from '../../../mock/dims';
 import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
+import { extractTags } from '../../utils';
+import { default as tag, TTag } from '../../models/tag';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -24,10 +26,12 @@ interface IDataPanelProps {
   dispatch: Function;
   data: TDataModel;
   stage: TStageModel;
+  tags: TTag[];
   location: { pathname: string };
 }
-@connect(({ data, routing, stage }) => ({
+@connect(({ data, routing, tag, stage }) => ({
   data,
+  tags: extractTags(tag.tagGroups),
   stage,
   location: routing.location,
 }))
@@ -37,10 +41,13 @@ export default class DataPanel extends Component<IDataPanelProps> {
       quesData: [],
       questions: [],
       selectedQues: [],
+      selectedDims: [],
     },
+    tags: [],
     stage: {
       indexState: 0,
       analysisStage: 0,
+      tagMatchState: 0,
       tabStage: '1',
       activePanelList: ['0'],
       questionState: 0,
@@ -48,6 +55,13 @@ export default class DataPanel extends Component<IDataPanelProps> {
     location: { pathname: '' },
     dispatch: () => {},
   };
+
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'tag/fetchTagGroups',
+    });
+  }
+
   changeTabStage = (key) => {
     this.props.dispatch({ type: 'stage/changeTabStage', payload: key });
   };
@@ -55,10 +69,16 @@ export default class DataPanel extends Component<IDataPanelProps> {
     this.props.dispatch({ type: 'stage/handlePanelClick', payload: key });
   };
   render() {
-    const { data, dispatch, stage, location } = this.props;
-
-    const { selectedQues, quesData } = data;
-    const { analysisStage, indexState, tabStage, activePanelList, questionState } = stage;
+    const { data, dispatch, stage, location, tags: dims } = this.props;
+    const { selectedQues, quesData, selectedDims } = data;
+    const {
+      analysisStage,
+      indexState,
+      tabStage,
+      activePanelList,
+      questionState,
+      tagMatchState,
+    } = stage;
     const CollapseArray = [
       {
         text: '数据文件',
@@ -82,8 +102,10 @@ export default class DataPanel extends Component<IDataPanelProps> {
         component: (
           <DimMatchComponent
             dispatch={dispatch}
+            tagMatchState={tagMatchState}
             pathname={location.pathname}
             dims={dims}
+            selectedDims={selectedDims}
             analysisStage={analysisStage}
             selectedQues={selectedQues}
           />

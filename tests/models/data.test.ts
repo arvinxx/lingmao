@@ -2,7 +2,6 @@ import model from '../../src/models/data';
 import { generateId } from '../../src/utils/utils';
 import { getAnswers } from '../../src/utils';
 
-
 const reducers = model.reducers;
 
 it('handleSelectedQuestions', () => {
@@ -93,7 +92,7 @@ it('handleSelectedQuestions', () => {
   });
 });
 describe('handleSelectedAnswers', () => {
-  fit('should change answers order', () => {
+  it('should change answers order', () => {
     const reducer = reducers.handleSelectedAnswers;
     const state = {
       selectedQues: [
@@ -251,5 +250,19 @@ describe('handleSelectedAnswers', () => {
         },
       ],
     });
+  });
+});
+
+it('changeSelectionDims', () => {
+  const reducer = reducers.changeSelectionDims;
+  const state = {
+    selectedDims: ['rJecwftRf', 'Byb9PfYRG', 'HkJtwMFRM'],
+  };
+  const action = {
+    type: 'data/changeSelectionDims',
+    payload: { oldId: 'rJecwftRf', newId: 'SJQcwMYAz' },
+  };
+  expect(reducer(state, action)).toEqual({
+    selectedDims: ['Byb9PfYRG', 'HkJtwMFRM', 'SJQcwMYAz'],
   });
 });

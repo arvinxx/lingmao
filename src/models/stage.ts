@@ -3,6 +3,7 @@ import { DvaModel } from '../../typings/dva';
 export type TStageModel = {
   indexState: number;
   questionState: number;
+  tagMatchState: number;
   analysisStage: number;
   tabStage: string;
   activePanelList: Array<string>;
@@ -16,9 +17,9 @@ const stage: IStageModel = {
     indexState: 0,
     questionState: 0,
     analysisStage: 0,
+    tagMatchState: 0,
     tabStage: '1',
     activePanelList: ['0'],
-
   },
   reducers: {
     indexStateNext(state) {
@@ -84,6 +85,10 @@ const stage: IStageModel = {
         ...state,
         tabStage: key,
       };
+    },
+
+    handleTagMatchState(state, { payload: tagMatchState }) {
+      return { ...state, tagMatchState };
     },
   },
 };

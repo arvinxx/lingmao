@@ -1,6 +1,6 @@
 import XLSX from 'xlsx';
 import { uniqBy } from 'lodash';
-import { TColumn, TTableData, TQuesData } from '../models/data';
+import { TColumn, TTableData, TQuesData, TDim } from '../models/data';
 import { generateId } from './utils';
 
 export const xlsxToJson = (file: ArrayBuffer): Array<TQuesData> => {
@@ -111,4 +111,12 @@ export const getFilterTableData = <T>(tableData: Array<T>, isSelect: boolean): T
 export const getFilterColumns = (columns: Array<TColumn>, isSelect: boolean): TColumn[] => {
   console.log('columns');
   return columns;
+};
+
+export const getFilterDims = (dims: TDim[], selectDims: string[]): TDim[] => {
+  return dims.filter((dim) => {
+    return !selectDims.some((id) => {
+      return dim.id === id;
+    });
+  });
 };

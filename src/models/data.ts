@@ -1,21 +1,25 @@
 import { DvaModel } from '../../typings/dva';
 import { generateId, getAnswers } from '../utils';
-import { isEqual, sortBy } from 'lodash';
+import { isEqual, sortBy, concat } from 'lodash';
+
+import { TTag } from './tag';
 
 export type TDim = {
-  text: string;
-  selected: boolean;
   id: string;
+  text: string;
 };
 export type TDataModel = {
   quesData: Array<TQuesData>;
   questions: Array<TTableData>;
   selectedQues: Array<TSelectQue>;
+  selectedDims: Array<string>;
 };
 
 export type TSelectQue = {
   question: TTableData;
   answers: Array<TTableData>;
+  tagId: string;
+  tagText: string;
 };
 
 export type TQuesData = Array<{
@@ -53,6 +57,7 @@ const model: model = {
     quesData: [],
     questions: [],
     selectedQues: [],
+    selectedDims: [],
   },
   reducers: {
     handleQuesData(state, { payload: quesData }) {
@@ -68,6 +73,9 @@ const model: model = {
         })),
       };
     },
+    handleSelectedQues(state, { payload: selectedQues }) {
+      return { ...state, selectedQues };
+    },
     handleSelectedAnswers(state, { payload: newAnswers }: { payload: Array<TTableData> }) {
       const selectedQues: Array<TSelectQue> = state.selectedQues;
       let replaceIndex = -1;
@@ -81,7 +89,18 @@ const model: model = {
         return { ...state, selectedQues };
       } else return state;
     },
+
+    addSelectionDims(state, { payload: newDimId }) {
+      return { ...state, selectedDims: [...state.selectedDims, newDimId] };
+    },
+
+    changeSelectionDims(state, { payload }) {
+      const { oldId, newId } = payload;
+      return {
+        ...state,
+        selectedDims: [...state.selectedDims.filter((id) => id !== oldId), newId],
+      };
+    },
   },
 };
-
 export default model;
