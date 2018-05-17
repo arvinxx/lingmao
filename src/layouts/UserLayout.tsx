@@ -32,8 +32,7 @@ const copyright = (
   </Fragment>
 );
 
-// @ts-ignore TypeScript by now doesn't allow decorators to change the signature of the classes
-@withRouter
+@(withRouter as any)
 export default class UserLayout extends PureComponent {
   // getPageTitle() {
   //   const { routerData, location } = this.props;

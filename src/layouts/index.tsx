@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import H from 'history';
-// @ts-ignore umi withRouter 未包含声明文件
 import withRouter from 'umi/withRouter';
 
 
@@ -15,7 +14,7 @@ interface AuthRouteProps {
   history: H.History;
 }
 
-@withRouter
+@(withRouter as any)
 export default class AuthRoute extends Component<AuthRouteProps> {
   componentDidMount() {
     const {location} = this.props;

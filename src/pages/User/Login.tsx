@@ -7,11 +7,22 @@ import styles from './Login.less';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
+interface ILoginPageProps {
+  login: any;
+  submitting: boolean;
+  dispatch: Function;
+}
+
 @connect(({ login, loading }) => ({
   login,
   submitting: loading.effects['login/login'],
 }))
-export default class LoginPage extends Component<any> {
+export default class LoginPage extends Component<ILoginPageProps> {
+  static defaultProps: ILoginPageProps = {
+    login: {},
+    submitting: false,
+    dispatch: () => {},
+  };
   state = {
     type: 'account',
     autoLogin: true,
