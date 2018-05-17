@@ -1,4 +1,4 @@
-import { findIndexById, generateId } from './utils';
+import { findIndexById, generateId, reorder } from './utils';
 
 jest.mock('shortid');
 
@@ -28,7 +28,7 @@ describe('findIndexById', () => {
         value: '111',
       },
     ];
-    expect(findIndexById(arr, '3')).toThrowError('id 不正确，请重试');
+    expect(() => findIndexById(arr, '3')).toThrow('id 不正确，请重试');
   });
 });
 
@@ -38,4 +38,9 @@ describe('generateId', () => {
     expect(typeof id).toEqual('string');
     expect(id).toEqual('testKey');
   });
+});
+
+describe('reorder', () => {
+  const arr = ['313', '2543', '75676'];
+  expect(reorder(arr, 1, 2)).toEqual(['313', '75676', '2543']);
 });

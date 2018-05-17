@@ -3,17 +3,20 @@
 .tag-container {
   display: flex;
   flex-wrap: wrap;
-
+  transition: all @animation-duration-base;
   margin-top: 24px;
   :global {
     .ant-tag {
-      margin-right: 16px;
-      margin-bottom: 8px;
+      user-select: none;
+      margin: 0 8px;
       padding: 5px 18px;
       border-radius: 20px;
       height: 32px;
       font-size: @font-size-base;
       border: 1px solid @white-4;
+      &:active {
+        border: none;
+      }
     }
     .ant-tag-checkable-checked {
       border-color: transparent;

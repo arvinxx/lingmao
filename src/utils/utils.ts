@@ -113,9 +113,26 @@ export const dragDirection = (
   if (dragIndex > hoverIndex && hoverClientY < hoverMiddleY) {
     return 'upward';
   }
+
+};
+export const dragHDirection = (
+  dragIndex,
+  hoverIndex,
+  initialClientOffset,
+  clientOffset,
+  sourceClientOffset
+) => {
+  const hoverMiddleX = (initialClientOffset.x - sourceClientOffset.x) / 2;
+  const hoverClientX = clientOffset.x - sourceClientOffset.x;
+  if (dragIndex < hoverIndex && hoverClientX > hoverMiddleX) {
+    return 'right';
+  }
+  if (dragIndex > hoverIndex && hoverClientX < hoverMiddleX) {
+    return 'left';
+  }
 };
 
-export const reorder = (list, startIndex, endIndex) => {
+export const reorder = <T>(list:T[], startIndex:number, endIndex:number):T[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);

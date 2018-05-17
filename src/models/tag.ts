@@ -1,4 +1,4 @@
-import { findIndexById, generateId } from '../utils';
+import { findIndexById, generateId, reorder } from '../utils';
 import { concat } from 'lodash';
 import { queryDocument } from '../services/api';
 import { DvaModel } from '../../typings/dva';
@@ -16,9 +16,10 @@ export type TTagGroup = {
   id: string;
   tags: Array<TTag>;
 };
+export type TSelectedTags = string[];
 export type TTagModel = {
   tagVisible: boolean;
-  selectedTags: Array<string>;
+  selectedTags: TSelectedTags;
   tagGroups: Array<TTagGroup>;
   exportDisplay: string;
 };
@@ -68,7 +69,8 @@ const tag: ITagModel = {
       const { text, refId } = payload;
       const tagGroups: Array<TTagGroup> = concat(state.tagGroups);
       tagGroups[0].tags = [...state.tagGroups[0].tags, { text: text, id: generateId(), refId }];
-      return { ...state, tagGroups };
+      const newTagGroups = concat(tagGroups);
+      return { ...state, tagGroups: newTagGroups };
     },
     changeTagText(state, { payload }) {
       const { id, newText } = payload;
@@ -143,6 +145,56 @@ const tag: ITagModel = {
 
     handleExportDisplay(state, { payload: exportDisplay }) {
       return { ...state, exportDisplay };
+    },
+
+    handleTagIndexDrag(
+      state,
+      {
+        payload,
+      }: {
+        payload: {
+          start: { dragIndex: number; dragId: string };
+          end: { dropIndex: number; dropId: string };
+        };
+      }
+    ) {
+      const tagGroups: Array<TTagGroup> = state.tagGroups;
+      const { start, end } = payload;
+      const { dragId, dragIndex } = start;
+      const { dropId, dropIndex } = end;
+
+      const isInTagsGroup = (id, tags: Array<TTag>) => tags.some((tag: TTag) => tag.id === id);
+      let isSameGroup = false;
+      // 判断是否属于同一组
+      tagGroups.forEach((tagGroup: TTagGroup) => {
+        const { tags } = tagGroup;
+        if (isInTagsGroup(dragId, tags) && isInTagsGroup(dropId, tags)) {
+          const newTags = reorder(tags, dragIndex, dropIndex);
+          isSameGroup = true;
+          tagGroup.tags = newTags;
+          return { ...state, tagGroups };
+        }
+      });
+      //不是同一组的情况下，将加入那一组
+      if (!isSameGroup) {
+        let removed: TTag;
+        tagGroups.forEach((tagGroup: TTagGroup) => {
+          const { tags } = tagGroup;
+          if (isInTagsGroup(dragId, tags)) {
+            [removed] = tags.splice(dragIndex, 1);
+          }
+        });
+        tagGroups.forEach((tagGroup: TTagGroup) => {
+          const { tags } = tagGroup;
+          if (isInTagsGroup(dropId, tags)) {
+            tags.splice(dropIndex, 0, removed);
+            tagGroup.tags = concat(tags);
+            return { ...state, tagGroups };
+          }
+        });
+      }
+      const newTagGroups = concat(tagGroups);
+      return { ...state, tagGroups: newTagGroups };
     },
   },
 };

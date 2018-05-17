@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Collapse, Tag, Modal, Input } from 'antd';
 import { connect } from 'dva';
-import { TagGroup, ContextRightMenu } from 'components';
+import { TagGroup, ContextRightMenu } from '../../components';
 
-import { TInterview } from 'models/interview';
-import { TTag } from 'models/tag';
-import { extractTags, generateId } from 'utils';
+import { TInterview } from '../../models/interview';
+import { TTag } from '../../models/tag';
+import { extractTags, generateId } from '../../utils';
 
 import styles from './tag.less';
 import { saveTagGroups } from '../../services/api';
@@ -63,7 +63,9 @@ export default class Tags extends Component<ITagsProps> {
   };
 
   render() {
-    const { tagGroups, selectedTags } = this.props.tag;
+    const { dispatch, tag } = this.props;
+    const { tagGroups, selectedTags } = tag;
+    console.log('renderdsd');
     const tags = extractTags(tagGroups);
     return (
       <div className={styles.container}>
@@ -72,7 +74,7 @@ export default class Tags extends Component<ITagsProps> {
             <div className={styles.tips}>
               点击需要选中操作的一个或多个标签,鼠标右键使用菜单工具进行操作,点击空白处取消选中
             </div>
-            <TagGroup tagGroups={tagGroups} selectedTags={selectedTags} />
+            <TagGroup tagGroups={tagGroups} selectedTags={selectedTags} dispatch={dispatch} />
             <ContextRightMenu />
             <Modal
               mask={false}

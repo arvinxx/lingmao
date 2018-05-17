@@ -1,14 +1,23 @@
 import React, { Component, Fragment } from 'react';
 import { Collapse, Input, Popconfirm, Icon } from 'antd';
-import { connect } from 'dva';
 
 import Tags from './tags';
-import { generateId } from '../../utils';
 import styles from './index.less';
+import { TSelectedTags, TTagGroup } from '../../models/tag';
 
 const Panel = Collapse.Panel;
-@connect()
-export default class Index extends Component<any> {
+
+interface ITagGroupProps {
+  dispatch: Function;
+  tagGroups: Array<TTagGroup>;
+  selectedTags: TSelectedTags;
+}
+export default class TagGroup extends Component<ITagGroupProps> {
+  static defaultProps: ITagGroupProps = {
+    dispatch: () => {},
+    selectedTags: [],
+    tagGroups: [{ text: '未分组', id: 'temp', tags: [] }],
+  };
   state = {
     visible: false,
     tagGroupText: '',
@@ -49,13 +58,13 @@ export default class Index extends Component<any> {
     });
   };
   render() {
-    const { tagGroups, selectedTags } = this.props;
-    if (tagGroups[0] === undefined) tagGroups[0] = { text: 'ungroup', id: generateId(), tags: [] };
+    const { tagGroups, selectedTags, dispatch } = this.props;
     const ungroupTags = tagGroups[0].tags;
+    console.log('rend');
     return (
       <Fragment>
         <div className={styles.ungroup}>
-          <Tags tags={ungroupTags} selectedTags={selectedTags} />
+          <Tags tags={ungroupTags} selectedTags={selectedTags} dispatch={dispatch} />
         </div>
         <div className={styles.group}>
           {tagGroups.map((tagGroup, index) => {
@@ -65,9 +74,8 @@ export default class Index extends Component<any> {
                 <Collapse key={id + 'colap'} bordered={false}>
                   <Panel
                     key={id + 'Groups'}
-                    //@ts-ignore
                     header={
-                      <div className={styles.header} >
+                      <div className={styles.header}>
                         <Input
                           key={id + 'groups+input'}
                           value={text}
@@ -85,7 +93,7 @@ export default class Index extends Component<any> {
                       </div>
                     }
                   >
-                    <Tags tags={tags} selectedTags={selectedTags} />
+                    <Tags tags={tags} selectedTags={selectedTags} dispatch={dispatch} />
                   </Panel>
                 </Collapse>
               );

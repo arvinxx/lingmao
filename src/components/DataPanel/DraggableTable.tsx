@@ -4,6 +4,8 @@ import update from 'immutability-helper';
 import BodyRow from './DraggableRow';
 import styles from './DraggableTable.less';
 import { TSelectQue, TTableData } from '../../models/data';
+import { DragDropContext } from "react-dnd";
+import HTML5Backend from 'react-dnd-html5-backend';
 
 const { Column } = Table;
 const ButtonGroup = Button.Group;
@@ -17,6 +19,8 @@ interface IDragSortingTableProps {
   name: string;
 }
 
+
+@(DragDropContext(HTML5Backend) as any)
 export default class DragSortingTable extends PureComponent<IDragSortingTableProps> {
   moveRow = (dragIndex, hoverIndex) => {
     const { dataSource } = this.props;

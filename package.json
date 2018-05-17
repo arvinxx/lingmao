@@ -21,6 +21,7 @@
   "dependencies": {
     "@antv/data-set": "^0.8.8",
     "@babel/polyfill": "^7.0.0-beta.47",
+    "@types/react-dom": "^16.0.5",
     "axios": "^0.18.0",
     "bizcharts": "^3.1.7",
     "bizcharts-plugin-slider": "^2.0.3",
@@ -66,6 +67,7 @@
   "devDependencies": {
     "@commitlint/cli": "^6.2.0",
     "@types/enzyme": "^3.1.10",
+    "@types/immutability-helper": "^2.6.3",
     "@types/jest": "^22.2.3",
     "@types/lodash": "^4.14.108",
     "@types/mockdate": "^2.0.0",
@@ -90,8 +92,14 @@
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write"],
+    "**/*.{js,jsx}": [
+      "prettier --trailing-comma all --single-quote --write"
+    ],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
 }
