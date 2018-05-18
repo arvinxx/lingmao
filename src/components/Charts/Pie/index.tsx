@@ -10,9 +10,27 @@ import autoHeight from '../autoHeight';
 
 import styles from './index.less';
 
+interface PieProps {
+  animate?: boolean;
+  color?: string;
+  height: number;
+  hasLegend?: boolean;
+  padding?: [number, number, number, number];
+  percent?: number;
+  data?: Array<{
+    x: string | string;
+    y: number;
+  }>;
+  total?: string;
+  title?: React.ReactNode;
+  tooltip?: boolean;
+  valueFormat?: (value: string) => string;
+  subTitle?: React.ReactNode;
+}
+
 /* eslint react/no-danger:0 */
 @autoHeight()
-export default class Pie extends Component {
+export default class Pie extends Component<PieProps, any> {
   state = {
     legendData: [],
     legendBlock: false,
@@ -100,10 +118,10 @@ export default class Pie extends Component {
     const { legendData } = this.state;
     legendData[i] = newItem;
 
-    const filteredLegendData = legendData.filter(l => l.checked).map(l => l.x);
+    const filteredLegendData = legendData.filter((l) => l.checked).map((l) => l.x);
 
     if (this.chart) {
-      this.chart.filter('x', val => filteredLegendData.indexOf(val) > -1);
+      this.chart.filter('x', (val) => filteredLegendData.indexOf(val) > -1);
     }
 
     this.setState({
@@ -123,7 +141,7 @@ export default class Pie extends Component {
       forceFit = true,
       percent = 0,
       color,
-      inner = 0.75,
+      inner = 0.85,
       animate = true,
       colors,
       lineWidth = 1,
@@ -197,6 +215,7 @@ export default class Pie extends Component {
         <ReactFitText maxFontSize={25}>
           <div className={styles.chart}>
             <Chart
+              //@ts-ignore
               scale={scale}
               height={height}
               forceFit={forceFit}
@@ -208,6 +227,7 @@ export default class Pie extends Component {
               {!!tooltip && <Tooltip showTitle={false} />}
               <Coord type="theta" innerRadius={inner} />
               <Geom
+                //@ts-ignore
                 style={{ lineWidth, stroke: '#fff' }}
                 tooltip={tooltip && tooltipFormat}
                 type="intervalStack"
@@ -220,7 +240,6 @@ export default class Pie extends Component {
             {(subTitle || total) && (
               <div className={styles.total}>
                 {subTitle && <h4 className="pie-sub-title">{subTitle}</h4>}
-                {/* eslint-disable-next-line */}
                 {total && <div className="pie-stat" dangerouslySetInnerHTML={{ __html: total }} />}
               </div>
             )}

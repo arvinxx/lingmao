@@ -7,7 +7,7 @@ import pathToRegexp from 'path-to-regexp';
 import HeaderSearch from './HeaderSearch';
 
 import router from 'umi/router';
-import { generateId } from '../../utils';
+import { generateId, getBaseUrl } from '../../utils';
 
 const TabPane = Tabs.TabPane;
 type TIcon = {
@@ -24,7 +24,7 @@ type TPanel = {
 };
 interface IHeaderProps {
   header: Array<TPanel>;
-  pathname: string;
+  pathname?: string;
   dispatch?: any;
   showMenu?: boolean;
 }
@@ -51,7 +51,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
     const { pathname } = this.props;
     this.urlPanelParse(pathname);
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps:IHeaderProps) {
     this.urlPanelParse(nextProps.pathname);
   }
   // 根据路由状态更新
@@ -70,8 +70,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
 
   goToRoute = (path: string) => {
     const { pathname } = this.props;
-    const re = pathToRegexp('*/:panel');
-    let baseUrl = dropRight(drop(re.exec(pathname))).toString(); // 删掉第一个，删掉最后一个
+    const baseUrl = getBaseUrl(pathname);
     this.setState({
       currentPanel: path,
     });

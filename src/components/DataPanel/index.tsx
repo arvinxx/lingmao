@@ -23,7 +23,7 @@ const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
 
 interface IDataPanelProps {
-  dispatch: Function;
+  dispatch?: Function;
   data: TDataModel;
   stage: TStageModel;
   tags: TTag[];

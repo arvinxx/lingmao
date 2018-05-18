@@ -5,15 +5,24 @@
   border-radius: 4px;
 }
 
-.container {
+.row-container {
   display: flex;
   .base-card;
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  min-width: 600px;
   width: 100%;
-  margin: 24px;
+  margin-bottom: 24px;
+}
+.col-container {
+  .row-container;
+  flex-direction: column;
+  flex: none;
+  min-width: 200px;
+  max-width: 300px;
+  min-height: 400px;
+  margin: 12px;
+  justify-content: center;
 }
 
 .description {
@@ -23,4 +32,7 @@
 .pie {
   width: 150px;
   margin-right: 50px;
+}
+.col-pie {
+  width: 200px;
 }

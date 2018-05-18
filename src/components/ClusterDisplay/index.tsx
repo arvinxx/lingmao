@@ -13,6 +13,7 @@ interface IClusterDisplayProps {
     title: string;
   };
   index: number;
+  colMode?: boolean;
 }
 export default class ClusterDisplay extends Component<IClusterDisplayProps> {
   static defaultProps: IClusterDisplayProps = {
@@ -21,17 +22,17 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
       percent: 0,
       title: '',
     },
+    colMode: false,
     index: 0,
   };
 
   render() {
-    const { clusterResult, index } = this.props;
+    const { clusterResult, index, colMode } = this.props;
     const { dims, percent, title } = clusterResult;
     const color = colorPalette[index];
-    console.log(color);
     return (
-      <div className={styles.container}>
-        <div className={styles.pie}>
+      <div className={colMode ? styles['col-container'] : styles['row-container']}>
+        <div className={colMode ? styles['col-pie'] : styles.pie}>
           <Pie
             percent={percent}
             subTitle={title}
@@ -40,8 +41,13 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
             height={160}
           />
         </div>
-        <div className={styles.description}>
-          <DescriptionList size="large" title={''} col={2} layout="vertical">
+        <div className={colMode ? '' : styles.description}>
+          <DescriptionList
+            size="large"
+            title={''}
+            col={colMode ? 1 : 2}
+            layout={colMode ? 'vertical' : 'horizontal'}
+          >
             {dims.map((item, index) => (
               <Description key={index} term={item.term}>
                 {item.descr}

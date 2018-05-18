@@ -1,7 +1,11 @@
 import pathToRegexp from 'path-to-regexp';
-import { drop, dropRight } from 'lodash';
+import { drop, dropRight, tail } from 'lodash';
 
-export const baseUrl = (pathname: string): string => {
+export const getBaseUrl = (pathname: string): string => {
   const re = pathToRegexp('*/:panel');
-  return dropRight(drop(re.exec(pathname))).toString(); // 删掉第一个，删掉最后一个
+  return dropRight(drop(re.exec(pathname))).toString();
+};
+export const getLastRouter = (pathname: string): string => {
+  const re = pathToRegexp('*/:panel');
+  return tail(drop(re.exec(pathname))).toString();
 };

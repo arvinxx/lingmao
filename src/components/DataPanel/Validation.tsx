@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Button } from 'antd';
 import router from 'umi/router';
-import { baseUrl } from '../../utils';
+import { getBaseUrl } from '../../utils';
 
 interface IValidationProps {
   dispatch: Function;
@@ -29,7 +29,7 @@ export default class Validation extends Component<IValidationProps> {
     this.props.dispatch({ type: 'stage/changeTabStage', payload: '2' });
 
     // 完成路由跳转
-    router.push(`${baseUrl(this.props.pathname)}/reduction`);
+    router.push(`${getBaseUrl(this.props.pathname)}/reduction`);
   };
   render() {
     return (

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, Button, InputNumber, Collapse, Icon, message, Menu, Checkbox } from 'antd';
 import styles from './ReductionOpts.less';
 import { TDim } from '../../models/data';
-import { baseUrl } from '../../utils';
+import { getBaseUrl } from '../../utils';
 import router from 'umi/router';
 
 function handleMenuClick(e) {
@@ -57,7 +57,7 @@ export default class ReductionOpts extends Component<IReductionOptsProps> {
     this.props.dispatch({ type: 'stage/changeTabStage', payload: '3' });
 
     // 路由跳转
-    router.push(`${baseUrl(this.props.pathname)}/cluster`);
+    router.push(`${getBaseUrl(this.props.pathname)}/cluster`);
   };
   render() {
     return (

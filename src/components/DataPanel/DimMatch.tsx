@@ -4,7 +4,7 @@ import router from 'umi/router';
 import { isEmpty } from 'lodash';
 
 import { TDim, TSelectQue } from '../../models/data';
-import { baseUrl, getFilterDims, getKeyArrays } from '../../utils';
+import { getBaseUrl, getFilterDims, getKeyArrays } from '../../utils';
 import styles from './DimMatch.less';
 import { TTag } from '../../models/tag';
 
@@ -74,7 +74,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
         payload: '2',
       });
     }
-    router.push(`${baseUrl(this.props.pathname)}/validation`);
+    router.push(`${getBaseUrl(this.props.pathname)}/validation`);
   };
   render() {
     const { dims, selectedQues, tagMatchState, selectedDims } = this.props;

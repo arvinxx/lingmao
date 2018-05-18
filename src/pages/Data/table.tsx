@@ -60,7 +60,7 @@ export default class TableData extends PureComponent<ITableDataProps> {
       <div className={styles.container}>
         <div className={styles['button-group']}>
           <Button style={{ marginRight: 16 }} onClick={this.changeFilterDisplay}>
-            显示{displayFilter ? '选择' : '所有'}
+            显示{displayFilter ? '所有' : '选择'}
           </Button>
           <Button onClick={this.changeOrderDisplay}>显示{displayOrder ? '文字' : '编号'}</Button>
         </div>

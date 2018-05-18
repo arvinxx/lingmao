@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown, Button, Icon, InputNumber, Checkbox, Menu, message } from 'antd';
 import { TDim } from '../../models/data';
-import { baseUrl } from '../../utils';
+import { getBaseUrl } from '../../utils';
 import router from 'umi/router';
 
 const CheckboxGroup = Checkbox.Group;
@@ -43,7 +43,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps> {
   };
 
   finish = () => {
-    router.push(`${baseUrl(this.props.pathname)}/analysis`);
+    router.push(`${getBaseUrl(this.props.pathname)}/analysis`);
   };
 
   render() {

@@ -1,4 +1,9 @@
 export default [
+  'l(0) 0:#99f5ff 1:#a6a6ff',
+  'l(0) 0:#fdacc0 1:#fec1fa',
+  'l(0) 0:#a6ffd2 1:#86feeb',
+  'l(0) 0:#fe9 1:#ffe0a6',
+  'l(0) 0:#a6ffd2 1:#d0f0b3',
   '#a6a6ff',
   '#fdacc0',
   '#fe9',
