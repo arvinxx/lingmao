@@ -90,9 +90,10 @@ it('handleSelectedQuestions', () => {
     ],
   });
 });
-describe('handleSelectedAnswers', () => {
+
+describe('reorderSelectedAnswers', () => {
   fit('should change answers order', () => {
-    const reducer = reducers.handleSelectedAnswers;
+    const reducer = reducers.reorderSelectedAnswers;
     const state = {
       selectedQues: [
         {
@@ -142,7 +143,7 @@ describe('handleSelectedAnswers', () => {
       ],
     };
     const action = {
-      type: 'data/handleSelectedAnswers',
+      type: 'data/reorderSelectedAnswers',
       payload: { dragIndex: 0, hoverIndex: 1, index: 0 },
     };
     expect(reducer(state, action)).toEqual({

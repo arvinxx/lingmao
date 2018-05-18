@@ -24,7 +24,7 @@ interface IDragSortingTableProps {
 export default class DragSortingTable extends PureComponent<IDragSortingTableProps> {
   moveRow = (dragIndex, hoverIndex, index) => {
     this.props.dispatch({
-      type: 'data/handleSelectedAnswers',
+      type: 'data/reorderSelectedAnswers',
       payload: { dragIndex, hoverIndex, index },
     });
   };

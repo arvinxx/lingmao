@@ -77,7 +77,7 @@ const model: model = {
     handleSelectedQues(state, { payload: selectedQues }) {
       return { ...state, selectedQues };
     },
-    handleSelectedAnswers(state, { payload }) {
+    reorderSelectedAnswers(state, { payload }) {
       const { dragIndex, hoverIndex, index } = payload;
       const dragRow = state.selectedQues[index].answers[dragIndex];
       return {
