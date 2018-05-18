@@ -23,7 +23,6 @@ export default class Validation extends Component<IValidationProps> {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '4' });
       this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '3' });
-
     }
     // 完成Tab切换
     this.props.dispatch({ type: 'stage/changeTabStage', payload: '2' });
@@ -35,13 +34,13 @@ export default class Validation extends Component<IValidationProps> {
     return (
       <div>
         <div>
-          <Icon type="plus-circle-o" />
-          <p>添加检验维度</p>
+          {/*<Icon type="plus-circle-o" />*/}
+          <p>点击生成图表按钮获得可视化结果，点击跳转进入下一环节</p>
         </div>
         <div>
           <Button>生成图表</Button>
           <Button type="primary" onClick={this.finish}>
-            确认并跳转
+            跳转
           </Button>
         </div>
       </div>

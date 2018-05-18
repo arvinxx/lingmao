@@ -29,6 +29,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
   };
 
   indexStateNext = () => {
+    this.props.dispatch({ type: 'data/addAnswersToSelectQues' });
     this.props.dispatch({ type: 'stage/indexStateNext' });
   };
   indexStateBack = () => {
