@@ -82,138 +82,15 @@ it('handleSelectedQuestions', () => {
       ],
     ],
     selectedQues: [
-      { question: { key: 'aaaaa', name: 'aaaaa' }, answers: getAnswers(state.quesData, 'aaaaa') },
+      { question: { key: 'aaaaa', name: 'aaaaa' } },
       {
         question: { key: 'gdfycvh', name: 'gdfycvh' },
-        answers: getAnswers(state.quesData, 'gdfycvh'),
       },
     ],
   });
 });
-
-describe('reorderSelectedAnswers', () => {
-  fit('should change answers order', () => {
-    const reducer = reducers.reorderSelectedAnswers;
-    const state = {
-      selectedQues: [
-        {
-          question: {
-            name: '2.您的性别',
-            key: '2.您的性别',
-          },
-          answers: [
-            {
-              name: 'A.男',
-              key: 'SyttOw%Cf',
-            },
-            {
-              name: 'B.女',
-              key: 'HkZYtOP%CM',
-            },
-          ],
-        },
-        {
-          question: {
-            name: '3.您的年龄',
-            key: '3.您的年龄',
-          },
-          answers: [
-            {
-              name: 'E.49-60',
-              key: 'rJErYtOvuAz',
-            },
-            {
-              name: 'D.36-48',
-              key: 'SkSHFtODdAM',
-            },
-            {
-              name: 'B.18-26',
-              key: 'Bk8rKFdvu0f',
-            },
-            {
-              name: 'C.27-35',
-              key: 'ry7DYK%wuCM',
-            },
-            {
-              name: 'A.18岁以下',
-              key: 'SkY%Yt%wd0M',
-            },
-          ],
-        },
-      ],
-    };
-    const action = {
-      type: 'data/reorderSelectedAnswers',
-      payload: { dragIndex: 0, hoverIndex: 1, index: 0 },
-    };
-    expect(reducer(state, action)).toEqual({
-      selectedQues: [
-        {
-          question: {
-            name: '2.您的性别',
-            key: '2.您的性别',
-          },
-          answers: [
-            {
-              name: 'B.女',
-              key: 'HkZYtOP%CM',
-            },
-            {
-              name: 'A.男',
-              key: 'SyttOw%Cf',
-            },
-          ],
-        },
-        {
-          question: {
-            name: '3.您的年龄',
-            key: '3.您的年龄',
-          },
-          answers: [
-            {
-              name: 'E.49-60',
-              key: 'rJErYtOvuAz',
-            },
-            {
-              name: 'D.36-48',
-              key: 'SkSHFtODdAM',
-            },
-            {
-              name: 'B.18-26',
-              key: 'Bk8rKFdvu0f',
-            },
-            {
-              name: 'C.27-35',
-              key: 'ry7DYK%wuCM',
-            },
-            {
-              name: 'A.18岁以下',
-              key: 'SkY%Yt%wd0M',
-            },
-          ],
-        },
-      ],
-    });
-  });
-});
-
-it('removeMatchSelectionDims', () => {
-  const reducer = reducers.removeMatchSelectionDims;
-  const state = {
-    matchSelectedDims: ['2', '5', '6'],
-    selectedQues: [{ tagId: '1' }, { tagId: '2' }, { tagId: '5', tagText: 'dsda' }],
-  };
-  const action = {
-    type: 'data/removeMatchSelectionDims',
-    payload: 2,
-  };
-  expect(reducer(state, action)).toEqual({
-    matchSelectedDims: ['2', '6'],
-    selectedQues: [{ tagId: '1' }, { tagId: '2' }, { tagId: '', tagText: '' }],
-  });
-});
-it('handleSelectedQuestions', () => {
-  const reducer = reducers.handleSelectedQuestions;
+it('addAnswersToSelectQues', () => {
+  const reducer = reducers.addAnswersToSelectQues;
   const state = {
     quesData: [
       [
@@ -249,11 +126,13 @@ it('handleSelectedQuestions', () => {
         },
       ],
     ],
-    selectedQues: [],
+    selectedQues: [
+      { question: { key: 'aaaaa', name: 'aaaaa' } },
+      { question: { key: 'gdfycvh', name: 'gdfycvh' } },
+    ],
   };
   const action = {
-    type: 'data/handleSelectedQuestions',
-    payload: [{ key: 'aaaaa', name: 'aaaaa' }, { key: 'gdfycvh', name: 'gdfycvh' }],
+    type: 'data/addAnswersToSelectQues',
   };
   expect(reducer(state, action)).toEqual({
     quesData: [
@@ -297,6 +176,126 @@ it('handleSelectedQuestions', () => {
         answers: getAnswers(state.quesData, 'gdfycvh'),
       },
     ],
+  });
+});
+
+it('reorderSelectedAnswersr', () => {
+  const reducer = reducers.reorderSelectedAnswers;
+  const state = {
+    selectedQues: [
+      {
+        question: {
+          name: '2.您的性别',
+          key: '2.您的性别',
+        },
+        answers: [
+          {
+            name: 'A.男',
+            key: 'SyttOw%Cf',
+          },
+          {
+            name: 'B.女',
+            key: 'HkZYtOP%CM',
+          },
+        ],
+      },
+      {
+        question: {
+          name: '3.您的年龄',
+          key: '3.您的年龄',
+        },
+        answers: [
+          {
+            name: 'E.49-60',
+            key: 'rJErYtOvuAz',
+          },
+          {
+            name: 'D.36-48',
+            key: 'SkSHFtODdAM',
+          },
+          {
+            name: 'B.18-26',
+            key: 'Bk8rKFdvu0f',
+          },
+          {
+            name: 'C.27-35',
+            key: 'ry7DYK%wuCM',
+          },
+          {
+            name: 'A.18岁以下',
+            key: 'SkY%Yt%wd0M',
+          },
+        ],
+      },
+    ],
+  };
+  const action = {
+    type: 'data/reorderSelectedAnswers',
+    payload: { dragIndex: 0, hoverIndex: 1, index: 0 },
+  };
+  expect(reducer(state, action)).toEqual({
+    selectedQues: [
+      {
+        question: {
+          name: '2.您的性别',
+          key: '2.您的性别',
+        },
+        answers: [
+          {
+            name: 'B.女',
+            key: 'HkZYtOP%CM',
+          },
+          {
+            name: 'A.男',
+            key: 'SyttOw%Cf',
+          },
+        ],
+      },
+      {
+        question: {
+          name: '3.您的年龄',
+          key: '3.您的年龄',
+        },
+        answers: [
+          {
+            name: 'E.49-60',
+            key: 'rJErYtOvuAz',
+          },
+          {
+            name: 'D.36-48',
+            key: 'SkSHFtODdAM',
+          },
+          {
+            name: 'B.18-26',
+            key: 'Bk8rKFdvu0f',
+          },
+          {
+            name: 'C.27-35',
+            key: 'ry7DYK%wuCM',
+          },
+          {
+            name: 'A.18岁以下',
+            key: 'SkY%Yt%wd0M',
+          },
+        ],
+      },
+    ],
+  });
+});
+
+it('removeMatchSelectionDims', () => {
+  const reducer = reducers.removeMatchSelectionDims;
+  const state = {
+    matchSelectedDims: ['2', '5', '6'],
+    selectedQues: [{ tagId: '1' }, { tagId: '2' }, { tagId: '5', tagText: 'dsda' }],
+  };
+  const action = {
+    type: 'data/removeMatchSelectionDims',
+    payload: 2,
+  };
+  expect(reducer(state, action)).toEqual({
+    matchSelectedDims: ['2', '6'],
+    selectedQues: [{ tagId: '1' }, { tagId: '2' }, { tagId: '', tagText: '' }],
   });
 });
 

@@ -4,36 +4,45 @@ import { DimensionList, PersonaEditor } from '../../components';
 
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
-import { TTag, TTagModel } from '../../models/tag';
-import { getTagsArrById } from '../../utils';
-
+import { getTagGroupId, getTagsArrById } from '../../utils';
+import { TClusterResults } from '../../models/data';
+import clusterResults from '../../../mock/clusterResults';
 interface IEditProps {
   persona: TPersona;
-  tag: TTagModel;
-  dispatch: Function;
+  dispatch?: Function;
+  clusterResults: TClusterResults;
+  selectClusterIndex: number;
 }
-@connect(({ persona, tag }) => ({ persona, tag }))
+@connect(({ persona, data }) => ({
+  persona,
+  clusterResults: data.clusterResults,
+  selectClusterIndex: data.selectClusterIndex,
+}))
 export default class Edit extends Component<IEditProps> {
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'tag/fetchTagGroups',
-    });
-  }
+  static defaultProps: IEditProps = {
+    persona: {
+      checkedDims: [],
+      expandedDims: [],
+      dimVisible: true,
+      exportVisible: false,
+      personaData: [],
+    },
+    clusterResults: [],
+    selectClusterIndex: 0,
+  };
 
   render() {
-    const { persona, tag, dispatch } = this.props;
-    const { tagGroups } = tag;
-    const { checkedDims, dimVisible, expandedDims } = persona;
-    const tagArr = getTagsArrById(tagGroups, checkedDims);
+    const { persona, dispatch } = this.props;
+    const { checkedDims, dimVisible, expandedDims, personaData } = persona;
     return (
       <Fragment>
         <div className={styles.left}>
-          <PersonaEditor tagArr={tagArr} />
+          <PersonaEditor personaData={personaData} checkedDims={checkedDims} />
         </div>
         {dimVisible ? (
           <div className={styles.right}>
             <DimensionList
-              tagGroups={tagGroups}
+              clusterResult={clusterResults[0]}
               checkedDims={checkedDims}
               expandedDims={expandedDims}
               dispatch={dispatch}

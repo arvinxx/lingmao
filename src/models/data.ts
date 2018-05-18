@@ -41,12 +41,24 @@ export type TSelectedQue = {
 };
 export type TSelectedDims = string[];
 
+export type TCluster = {
+  tagId: string;
+  tagGroupId: string;
+  tagGroupText: string;
+  value: string;
+  tagText: string;
+};
+export type TClusterResult = TCluster[];
+export type TClusterResults = TClusterResult[];
+
 export type TDataModel = {
   quesData: TQuesData;
   selectedQues: Array<TSelectedQue>;
   matchSelectedDims: TSelectedDims;
   reductionSelectedDims: TSelectedDims;
   clusterSelectedDims: TSelectedDims;
+  clusterResults: TClusterResults;
+  selectClusterIndex: number;
 };
 interface model extends DvaModel {
   state: TDataModel;
@@ -59,21 +71,35 @@ const model: model = {
     clusterSelectedDims: [],
     matchSelectedDims: [],
     reductionSelectedDims: [],
+    clusterResults: [[]],
+    selectClusterIndex: 0,
   },
   reducers: {
     handleQuesData(state, { payload: quesData }) {
       return { ...state, quesData };
     },
 
+    //TODO 性能优化 点击确定时才会添加answers
     handleSelectedQuestions(state, { payload: selectedQuestions }: { payload: TTableData[] }) {
       return {
         ...state,
         selectedQues: selectedQuestions.map((selectedQuestion) => ({
           question: selectedQuestion,
-          answers: getAnswers(state.quesData, selectedQuestion.name),
         })),
       };
     },
+    addAnswersToSelectQues(state, action) {
+      {
+        return {
+          ...state,
+          selectedQues: state.selectedQues.map((selectedQue) => ({
+            question: selectedQue.question,
+            answers: getAnswers(state.quesData, selectedQue.question.name),
+          })),
+        };
+      }
+    },
+
     handleSelectedQues(state, { payload: selectedQues }) {
       return { ...state, selectedQues };
     },

@@ -69,6 +69,21 @@ describe('Reducers', () => {
       checkedDims: ['1', '3'],
     });
   });
+  it('handleDragPersonaData', () => {
+    const reducer = reducers.handleDragPersonaData;
+    const state = {
+      checkedDims: ['1', '2'],
+    };
+
+    const action = {
+      type: 'persona/handleDragPersonaData',
+      payload: { dragIndex: 0, dropIndex: 1 },
+    };
+
+    expect(reducer(state, action)).toEqual({
+      checkedDims: ['2', '1'],
+    });
+  });
 
   it('getDisplayDims', () => {
     const reducer = reducers.getDisplayDims;
