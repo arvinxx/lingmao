@@ -17,6 +17,7 @@ export type TTagGroup = {
   tags: Array<TTag>;
 };
 export type TSelectedTags = string[];
+
 export type TTagModel = {
   tagVisible: boolean;
   selectedTags: TSelectedTags;

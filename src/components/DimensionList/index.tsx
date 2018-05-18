@@ -3,17 +3,24 @@ import { Tree } from 'antd';
 
 import styles from './index.less';
 import { TTagGroup } from '../../models/tag';
+import { TClusterResult } from '../../models/data';
 
 const TreeNode = Tree.TreeNode;
 
 interface IDimensionListProps {
-  tagGroups: Array<TTagGroup>;
+  clusterResult: TClusterResult;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
   dispatch: Function;
 }
 
 export default class DimensionList extends Component<IDimensionListProps> {
+  static defaultProps: IDimensionListProps = {
+    checkedDims: [],
+    expandedDims: [],
+    dispatch: () => {},
+    clusterResult: [],
+  };
   onExpand = (expandedDims) => {
     this.props.dispatch({
       type: 'persona/changeExpandedDims',
@@ -27,23 +34,22 @@ export default class DimensionList extends Component<IDimensionListProps> {
     });
   };
 
-  renderTreeNodes = (tagGroups) => {
-    if (tagGroups !== undefined) {
-      return tagGroups.map((tagGroup) => {
-        if (tagGroup.tags) {
-          return (
-            <TreeNode title={tagGroup.text} key={tagGroup.id} dataRef={tagGroup}>
-              {this.renderTreeNodes(tagGroup.tags)}
-            </TreeNode>
-          );
-        }
-        return <TreeNode title={tagGroup.text} key={tagGroup.id} dataRef={tagGroup} />;
-      });
-    }
+  renderTreeNodes = (clusterResult: TClusterResult) => {
+    return clusterResult.map((cluster) => {
+      //TODO : 生成树形节点
+      // if (cluster.tagGroupId) {
+      //   return (
+      //     <TreeNode title={cluster.text} key={cluster.id} dataRef={cluster}>
+      //       {this.renderTreeNodes(cluster)}
+      //     </TreeNode>
+      //   );
+      // }
+      return <TreeNode title={cluster.tagText} key={cluster.tagId} dataRef={cluster} />;
+    });
   };
 
   render() {
-    const { tagGroups, expandedDims, checkedDims } = this.props;
+    const { clusterResult, expandedDims, checkedDims } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.title}>选择维度</div>
@@ -55,7 +61,7 @@ export default class DimensionList extends Component<IDimensionListProps> {
           onCheck={this.onCheck}
           checkedKeys={checkedDims}
         >
-          {this.renderTreeNodes(tagGroups)}
+          {this.renderTreeNodes(clusterResult)}
         </Tree>
       </div>
     );
