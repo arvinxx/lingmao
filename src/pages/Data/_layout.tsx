@@ -14,7 +14,7 @@ export default class InterviewLayout extends PureComponent {
         <Header header={header} />
         <Content>
           <div className={styles.container}>
-            {this.props.children}
+            <div className={styles.right}>{this.props.children}</div>
             <DataPanel />
           </div>
         </Content>

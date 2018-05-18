@@ -1,10 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Tooltip, Layout } from 'antd';
-import Authorized from 'utils/Authorized';
-import { dashboard as header } from 'common/header';
-import { Pie, WaterWave, Gauge, TagCloud } from 'components';
-import { Header } from 'components';
+import Authorized from '../../utils/Authorized';
+import { Pie, WaterWave, Gauge, TagCloud } from '../../components';
 import styles from './index.less';
 
 const { Secured } = Authorized;
@@ -22,12 +20,6 @@ const havePermissionAsync = new Promise((resolve) => {
   loading: loading.models.dashboard,
 }))
 export default class Index extends PureComponent<any, any> {
-  componentDidMount() {
-    // this.props.dispatch({
-    //   type: 'dashboard/fetchTags',
-    // });
-  }
-
   render() {
     const { dashboard, loading } = this.props;
     const { tags } = dashboard;

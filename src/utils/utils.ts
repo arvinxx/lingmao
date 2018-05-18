@@ -1,5 +1,7 @@
 import moment from 'moment';
 import shortid from 'shortid';
+import lessToJs from 'less-vars-to-js';
+import fs from 'fs';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -113,7 +115,6 @@ export const dragDirection = (
   if (dragIndex > hoverIndex && hoverClientY < hoverMiddleY) {
     return 'upward';
   }
-
 };
 export const dragHDirection = (
   dragIndex,
@@ -132,10 +133,18 @@ export const dragHDirection = (
   }
 };
 
-export const reorder = <T>(list:T[], startIndex:number, endIndex:number):T[] => {
+export const reorder = <T>(list: T[], startIndex: number, endIndex: number): T[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
   return result;
 };
+
+// export const colorPalette = () => {
+//   const paletteLess = fs.readFileSync('../styles/themes/color.less', 'utf8');
+//   const palette = lessToJs(paletteLess);
+//
+//   const displayPalette = Object.keys(palette).filter((color) => color.indexOf('displayColor') > -1);
+//   return displayPalette
+// };

@@ -1,6 +1,7 @@
 module.exports = {
   plugins: [
     'react-hot-loader/babel',
+    'transform-decorators-legacy',
     [
       'module-resolver',
       {

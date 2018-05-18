@@ -33,6 +33,7 @@ export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> =>
   });
 };
 
+//将 xlsx 转出的数据转换为保存的数据
 export const rawToSaved = (rawData: Array<object>): TQuesData => {
   let saveData: TQuesData = [];
   rawData.map((item) => {
@@ -150,10 +151,21 @@ export const getFilterColumns = (
   return columns;
 };
 
-export const getFilterDims = (dims: TDim[], selectDims: string[]): TDim[] => {
+/**
+ * 根据选择维度过滤已有的维度标签
+ * @param dims 所有维度
+ * @param selectDims 选择维度
+ * @param isFilter true 返回不包含选择维度信息，false 返回只包含选择维度信息
+ */
+export const getFilterDims = (
+  dims: TDim[],
+  selectDims: string[],
+  isFilter: boolean = true
+): TDim[] => {
   return dims.filter((dim) => {
-    return !selectDims.some((id) => {
+    const res = selectDims.some((id) => {
       return dim.id === id;
     });
+    return isFilter ? !res : res;
   });
 };

@@ -10,11 +10,7 @@ export default {
   },
   proxy: process.env.NO_PROXY
     ? {
-        '/api': {
-          target: 'http://localhost:7001/',
-          changeOrigin: true,
-          pathRewrite: { '^/api': '' },
-        },
+        '/api': 'http://localhost:7001/',
       }
     : {},
 };

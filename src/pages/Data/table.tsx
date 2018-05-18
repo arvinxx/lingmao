@@ -57,46 +57,44 @@ export default class TableData extends PureComponent<ITableDataProps> {
     const width = 120 * filterColumns.length;
 
     return (
-      <div className={styles.canvas}>
-        <div className={styles.container}>
-          <div className={styles['button-group']}>
-            <Button style={{ marginRight: 16 }} onClick={this.changeFilterDisplay}>
-              显示{displayFilter ? '选择' : '所有'}
-            </Button>
-            <Button onClick={this.changeOrderDisplay}>显示{displayOrder ? '文字' : '编号'}</Button>
-          </div>
-          <Table
-            loading={this.state.loading}
-            dataSource={filterData}
-            pagination={false}
-            onChange={this.onChange}
-            scroll={{ x: width, y: 720 }}
-            rowKey="uid"
-          >
-            {filterColumns.map((column: TColumn, index) => {
-              const { key, title, dataIndex } = column;
-              return (
-                <Column
-                  title={
-                    <Ellipsis length={15} tooltip>
-                      {title}
-                    </Ellipsis>
-                  }
-                  width={width / filterColumns.length}
-                  key={key + index}
-                  dataIndex={dataIndex}
-                  render={(text, record) => {
-                    return (
-                      <Ellipsis length={15} tooltip>
-                        {text}
-                      </Ellipsis>
-                    );
-                  }}
-                />
-              );
-            })}
-          </Table>
+      <div className={styles.container}>
+        <div className={styles['button-group']}>
+          <Button style={{ marginRight: 16 }} onClick={this.changeFilterDisplay}>
+            显示{displayFilter ? '选择' : '所有'}
+          </Button>
+          <Button onClick={this.changeOrderDisplay}>显示{displayOrder ? '文字' : '编号'}</Button>
         </div>
+        <Table
+          loading={this.state.loading}
+          dataSource={filterData}
+          pagination={false}
+          onChange={this.onChange}
+          scroll={{ x: width, y: 720 }}
+          rowKey="uid"
+        >
+          {filterColumns.map((column: TColumn, index) => {
+            const { key, title, dataIndex } = column;
+            return (
+              <Column
+                title={
+                  <Ellipsis length={15} tooltip>
+                    {title}
+                  </Ellipsis>
+                }
+                width={width / filterColumns.length}
+                key={key + index}
+                dataIndex={dataIndex}
+                render={(text, record) => {
+                  return (
+                    <Ellipsis length={15} tooltip>
+                      {text}
+                    </Ellipsis>
+                  );
+                }}
+              />
+            );
+          })}
+        </Table>
       </div>
     );
   }
