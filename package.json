@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env BROWSER=none ESLINT=none umi dev",
-    "start:no-proxy": "cross-env NO_PROXY=true BROWSER=none ESLINT=none umi dev",
+    "start:no-proxy": "cross-env NO_PROXY=true BROWSER=none HARD_SOURCE=none  ESLINT=none umi dev",
     "build": "cross-env ESLINT=none umi build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true umi build",
@@ -37,7 +37,6 @@
     "moment": "^2.21.0",
     "numeral": "^2.0.6",
     "omit.js": "^1.0.0",
-    "ory-editor-plugins-image": "^0.2.27",
     "path-to-regexp": "^2.2.0",
     "qs": "^6.5.2",
     "rc-drawer-menu": "^0.5.7",
@@ -93,14 +92,8 @@
     "umi-plugin-routes": "^0.1.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": [
-      "prettier --trailing-comma all --single-quote --write"
-    ],
+    "**/*.{js,jsx}": ["prettier --trailing-comma all --single-quote --write"],
     "**/*.less": "stylelint --syntax less --fix"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"]
 }
