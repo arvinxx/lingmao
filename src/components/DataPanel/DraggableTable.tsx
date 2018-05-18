@@ -3,7 +3,7 @@ import { Button, Table } from 'antd';
 import update from 'immutability-helper';
 import BodyRow from './DraggableRow';
 import styles from './DraggableTable.less';
-import { TSelectQue, TTableData } from '../../models/data';
+import { TSelectedQue, TTableData } from '../../models/data';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
@@ -11,7 +11,7 @@ const { Column } = Table;
 const ButtonGroup = Button.Group;
 
 interface IDragSortingTableProps {
-  selectedQues: TSelectQue[];
+  selectedQues: TSelectedQue[];
   questionState: number;
   dispatch: Function;
   dataSource: TTableData[];
@@ -55,7 +55,7 @@ export default class DragSortingTable extends PureComponent<IDragSortingTablePro
     this.props.dispatch({ type: 'stage/indexStateBack' });
   };
   finish = (selectedQues) => {
-    this.props.dispatch({ type: 'data/addOrderToquesData', payload: selectedQues });
+    this.props.dispatch({ type: 'data/addOrderToQuesData', payload: selectedQues });
     if (this.props.analysisStage === 1) {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '2' });

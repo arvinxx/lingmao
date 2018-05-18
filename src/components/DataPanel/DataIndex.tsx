@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Steps, Button, Table } from 'antd';
 import { getAnswers, getKeyArrays, getQuestions } from '../../utils';
 import styles from './DataIndex.less';
-import { TQuesData, TSelectQue } from '../../models/data';
+import { TQuesData, TSelectedQue } from '../../models/data';
 
 import DraggableTable from './DraggableTable';
 
@@ -15,7 +15,7 @@ interface IDataIndexProps {
   questionState: number;
   dispatch: Function;
   analysisStage: number;
-  selectedQues: Array<TSelectQue>;
+  selectedQues: Array<TSelectedQue>;
   quesData: TQuesData;
 }
 export default class DataIndex extends Component<IDataIndexProps> {

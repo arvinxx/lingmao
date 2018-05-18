@@ -7,7 +7,7 @@ import {
   TDim,
   TQuesDataItem,
   TQuesRecord,
-  TSelectQue,
+  TSelectedQue,
 } from '../models/data';
 import { generateId } from './utils';
 
@@ -114,7 +114,7 @@ export const getTableData = (quesData: TQuesData, displayOrder: boolean): Array<
 
 export const getFilterTableData = (
   tableData: Array<object>,
-  selectedQues: TSelectQue[],
+  selectedQues: TSelectedQue[],
   displayFilter: boolean
 ): object[] => {
   if (displayFilter) {
@@ -135,7 +135,7 @@ export const getFilterTableData = (
 
 export const getFilterColumns = (
   columns: Array<TColumn>,
-  selectedQues: TSelectQue[],
+  selectedQues: TSelectedQue[],
   displayFilter: boolean
 ): TColumn[] => {
   if (displayFilter) {

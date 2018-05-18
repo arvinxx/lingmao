@@ -122,7 +122,7 @@ export const data = [
     ],
   },
   {
-    text: '检验图表',
+    text: '数据图表',
     path: 'validation',
     left: [
       {

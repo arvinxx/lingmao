@@ -5,7 +5,7 @@ import styles from './table.less';
 import { Ellipsis } from '../../components';
 
 import { getFilterTableData, getColumns, getTableData, getFilterColumns } from '../../utils';
-import { TColumn, TQuesData, TSelectQue } from '../../models/data';
+import { TColumn, TQuesData, TSelectedQue } from '../../models/data';
 import { TTableModel } from '../../models/table';
 import { type } from 'os';
 const { Column } = Table;
@@ -14,7 +14,7 @@ interface ITableDataProps {
   quesData: TQuesData;
   dispatch: Function;
   table: TTableModel;
-  selectedQues: TSelectQue[];
+  selectedQues: TSelectedQue[];
 }
 
 @connect(({ data, table }) => ({ quesData: data.quesData, table, selectedQues: data.selectedQues }))

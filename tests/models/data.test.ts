@@ -91,7 +91,7 @@ it('handleSelectedQuestions', () => {
   });
 });
 describe('handleSelectedAnswers', () => {
-  it('should change answers order', () => {
+  fit('should change answers order', () => {
     const reducer = reducers.handleSelectedAnswers;
     const state = {
       selectedQues: [
@@ -203,7 +203,7 @@ describe('handleSelectedAnswers', () => {
       ],
     });
   });
-  it('should remain if nothing change', () => {
+  fit('should remain if nothing change', () => {
     const reducer = reducers.handleSelectedAnswers;
     const state = {
       selectedQues: [
@@ -252,6 +252,21 @@ describe('handleSelectedAnswers', () => {
   });
 });
 
+it('removeMatchSelectionDims', () => {
+  const reducer = reducers.removeMatchSelectionDims;
+  const state = {
+    matchSelectedDims: ['2', '5', '6'],
+    selectedQues: [{ tagId: '1' }, { tagId: '2' }, { tagId: '5', tagText: 'dsda' }],
+  };
+  const action = {
+    type: 'data/removeMatchSelectionDims',
+    payload: 2,
+  };
+  expect(reducer(state, action)).toEqual({
+    matchSelectedDims: ['2', '6'],
+    selectedQues: [{ tagId: '1' }, { tagId: '2' }, { tagId: '', tagText: '' }],
+  });
+});
 it('handleSelectedQuestions', () => {
   const reducer = reducers.handleSelectedQuestions;
   const state = {
@@ -340,8 +355,8 @@ it('handleSelectedQuestions', () => {
   });
 });
 
-it('addOrderToquesData', () => {
-  const reducer = reducers.addOrderToquesData;
+it('addOrderToQuesData', () => {
+  const reducer = reducers.addOrderToQuesData;
   const state = {
     quesData: [
       [
@@ -411,7 +426,7 @@ it('addOrderToquesData', () => {
     ],
   };
   const action = {
-    type: 'data/addOrderToquesData',
+    type: 'data/addOrderToQuesData',
     payload: [
       {
         question: { key: '你的性别是？', name: '你的性别是？' },

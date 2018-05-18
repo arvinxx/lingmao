@@ -9,7 +9,7 @@ import {
   getFilterColumns,
 } from './data';
 import { generateId } from './utils';
-import { TSelectQue } from '../models/data';
+import { TSelectedQue } from '../models/data';
 
 jest.mock('shortid');
 
@@ -874,7 +874,7 @@ it('getFilterTableData ', () => {
       '你的性别是？': '女',
     },
   ];
-  const selectedQues: TSelectQue[] = [
+  const selectedQues: TSelectedQue[] = [
     {
       question: { name: '你的名字是？', key: '你的名字是？' },
       tagText: '',
@@ -909,7 +909,7 @@ it('getFilterColumns ', () => {
     { key: generateId(), title: '你的性别是？', dataIndex: '你的性别是？' },
     { key: generateId(), title: 'dasfdsd', dataIndex: 'dasfdsd' },
   ];
-  const selectedQues: TSelectQue[] = [
+  const selectedQues: TSelectedQue[] = [
     {
       question: { name: '你的名字是？', key: '你的名字是？' },
       tagText: '',

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Button, Divider, Icon, Tag } from 'antd';
-import { TDim, TDimsSelect } from '../../models/data';
+import { TDim, TSelectedDims } from '../../models/data';
 import DimSelect from './DimsSelect';
 
 interface IClusterDimProps {
   dispatch: Function;
   dims: Array<TDim>;
   analysisStage: number;
-  selectedDims: TDimsSelect;
+  selectedDims: TSelectedDims;
 }
 export default class ClusterDim extends Component<IClusterDimProps> {
   static defaultProps: IClusterDimProps = {

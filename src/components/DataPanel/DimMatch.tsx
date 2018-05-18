@@ -3,7 +3,7 @@ import { Button, Tag, List } from 'antd';
 import router from 'umi/router';
 import { isEmpty } from 'lodash';
 
-import { TDim, TSelectQue } from '../../models/data';
+import { TDim, TSelectedQue } from '../../models/data';
 import { getBaseUrl, getFilterDims, getKeyArrays } from '../../utils';
 import styles from './DimMatch.less';
 import { TTag } from '../../models/tag';
@@ -17,7 +17,7 @@ interface IDimMatchProps {
   pathname: string;
   selectedDims: string[];
   tagMatchState: number;
-  selectedQues: Array<TSelectQue>;
+  selectedQues: Array<TSelectedQue>;
 }
 export default class DimMatch extends Component<IDimMatchProps> {
   static defaultProps: IDimMatchProps = {
@@ -41,7 +41,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
         dispatch({ type: 'data/changeMatchSelectedDims', payload: { oldId, newId: id } });
       } else {
         // 将选中 Id 添加到 selectionDims 中
-        dispatch({ type: 'data/addSelectionDims', payload: id });
+        dispatch({ type: 'data/addMatchSelectionDims', payload: id });
       }
       // 替换当前选中对象 tagId 与 text
       selectedQues[tagMatchState].tagId = id;
@@ -58,9 +58,15 @@ export default class DimMatch extends Component<IDimMatchProps> {
       payload: index,
     });
   };
+  removeMatchDim = (index) => {
+    this.props.dispatch({
+      type: 'data/removeMatchSelectionDims',
+      payload: index,
+    });
+  };
 
   finish = () => {
-    // 将 selectedQues 的数据发给 quesData
+    // TODO:将 selectedQues 的数据发给 quesData
 
     if (this.props.analysisStage === 2) {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
@@ -117,6 +123,8 @@ export default class DimMatch extends Component<IDimMatchProps> {
             >
               {item}
               <Tag
+                //@ts-ignore
+                onClick={()=>this.removeMatchDim(index)}
                 className={
                   isEmpty(selectedQues[index].tagId)
                     ? styles['match-tag-default']

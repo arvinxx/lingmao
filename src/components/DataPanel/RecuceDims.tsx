@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Divider, Progress, Tag } from 'antd';
 import DimSelect from './DimsSelect';
 
-import { TDim, TDimsSelect } from '../../models/data';
+import { TDim, TSelectedDims } from '../../models/data';
 const { CheckableTag } = Tag;
 
 interface IRecuceDimsProps {
@@ -10,7 +10,7 @@ interface IRecuceDimsProps {
   percent: number;
   dispatch: Function;
   analysisStage: number;
-  selectedDims: TDimsSelect;
+  selectedDims: TSelectedDims;
 }
 export default class RecuceDims extends Component<IRecuceDimsProps> {
   static defaultProps: IRecuceDimsProps = {
