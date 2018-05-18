@@ -143,16 +143,7 @@ describe('handleSelectedAnswers', () => {
     };
     const action = {
       type: 'data/handleSelectedAnswers',
-      payload: [
-        {
-          name: 'B.女',
-          key: 'HkZYtOP%CM',
-        },
-        {
-          name: 'A.男',
-          key: 'SyttOw%Cf',
-        },
-      ],
+      payload: { dragIndex: 0, hoverIndex: 1, index: 0 },
     };
     expect(reducer(state, action)).toEqual({
       selectedQues: [
@@ -198,53 +189,6 @@ describe('handleSelectedAnswers', () => {
               name: 'A.18岁以下',
               key: 'SkY%Yt%wd0M',
             },
-          ],
-        },
-      ],
-    });
-  });
-  fit('should remain if nothing change', () => {
-    const reducer = reducers.handleSelectedAnswers;
-    const state = {
-      selectedQues: [
-        {
-          question: '2',
-          answers: [
-            { key: '13', name: '1' },
-            { key: '43', name: '41' },
-            { key: '435', name: '51' },
-          ],
-        },
-        {
-          question: '3',
-          answers: [
-            { key: '315', name: '653' },
-            { key: '758', name: 'ghdf' },
-            { key: '546', name: 'dsf' },
-          ],
-        },
-      ],
-    };
-    const action = {
-      type: 'data/handleSelectedAnswers',
-      payload: [{ key: '13', name: '1' }, { key: '43', name: '41' }, { key: '435', name: '51' }],
-    };
-    expect(reducer(state, action)).toEqual({
-      selectedQues: [
-        {
-          question: '2',
-          answers: [
-            { key: '13', name: '1' },
-            { key: '43', name: '41' },
-            { key: '435', name: '51' },
-          ],
-        },
-        {
-          question: '3',
-          answers: [
-            { key: '315', name: '653' },
-            { key: '758', name: 'ghdf' },
-            { key: '546', name: 'dsf' },
           ],
         },
       ],

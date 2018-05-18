@@ -82,6 +82,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
                         analysisStage={analysisStage}
                         questionState={questionState}
                         dispatch={dispatch}
+                        tableIndex={index}
                       />
                     </div>
                   );

@@ -77,21 +77,19 @@ const model: model = {
     handleSelectedQues(state, { payload: selectedQues }) {
       return { ...state, selectedQues };
     },
-    handleSelectedAnswers(state, { payload: newAnswers }: { payload: Array<TTableData> }) {
-      let replaceIndex = -1;
-      if (
-        state.selectedQues.some((selectedQue) => {
-          replaceIndex++;
-          return isEqual(sortBy(selectedQue.answers, ['key']), sortBy(newAnswers, ['key']));
-        })
-      ) {
-        return {
-          ...state,
-          selectedQues: update(state.selectedQues, {
-            [replaceIndex]: { answers: { $set: newAnswers } },
-          }),
-        };
-      } else return state;
+    handleSelectedAnswers(state, { payload }) {
+      const { dragIndex, hoverIndex, index } = payload;
+      const dragRow = state.selectedQues[index].answers[dragIndex];
+      return {
+        ...state,
+        selectedQues: update(state.selectedQues, {
+          [index]: {
+            answers: {
+              $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
+            },
+          },
+        }),
+      };
     },
 
     addMatchSelectionDims(state, { payload: newDimId }) {

@@ -17,20 +17,15 @@ interface IDragSortingTableProps {
   dataSource: TTableData[];
   analysisStage: number;
   name: string;
+  tableIndex: number;
 }
 
 @(DragDropContext(HTML5Backend) as any)
 export default class DragSortingTable extends PureComponent<IDragSortingTableProps> {
-  moveRow = (dragIndex, hoverIndex) => {
-    const { dataSource } = this.props;
-    const dragRow = dataSource[dragIndex];
-
-    const newData = update(dataSource, {
-      $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
-    });
+  moveRow = (dragIndex, hoverIndex, index) => {
     this.props.dispatch({
       type: 'data/handleSelectedAnswers',
-      payload: newData,
+      payload: { dragIndex, hoverIndex, index },
     });
   };
 
@@ -64,20 +59,15 @@ export default class DragSortingTable extends PureComponent<IDragSortingTablePro
   };
 
   render() {
-    const { name, dataSource, questionState, selectedQues } = this.props;
+    const { name, dataSource, questionState, selectedQues, tableIndex } = this.props;
     return (
       <Table
         className={styles['index-table']}
         size="middle"
         dataSource={dataSource}
-        components={{
-          body: { row: BodyRow },
-        }}
+        components={{ body: { row: BodyRow } }}
         pagination={false}
-        onRow={(record, index) => ({
-          index,
-          moveRow: this.moveRow,
-        })}
+        onRow={(record, index) => ({ index, tableIndex, moveRow: this.moveRow })}
         footer={() => (
           <div className={styles['button-group']}>
             <ButtonGroup>

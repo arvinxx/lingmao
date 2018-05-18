@@ -15,13 +15,13 @@ const rowSource = {
 const rowTarget = {
   drop(props, monitor) {
     const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
+    const { index: hoverIndex, tableIndex } = props;
 
     if (dragIndex === hoverIndex) {
       return;
     }
 
-    props.moveRow(dragIndex, hoverIndex);
+    props.moveRow(dragIndex, hoverIndex, tableIndex);
 
     monitor.getItem().index = hoverIndex;
   },
@@ -44,7 +44,6 @@ export default class BodyRow extends PureComponent<any> {
       isOver,
       connectDragSource,
       connectDropTarget,
-      moveRow,
       dragRow,
       clientOffset,
       sourceClientOffset,
