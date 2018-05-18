@@ -20,8 +20,9 @@ const rowTarget = {
     if (dragIndex === hoverIndex) {
       return;
     }
-
-    props.moveRow(dragIndex, hoverIndex, tableIndex);
+    if (hoverIndex !== undefined) {
+      props.moveRow(dragIndex, hoverIndex, tableIndex);
+    }
 
     monitor.getItem().index = hoverIndex;
   },

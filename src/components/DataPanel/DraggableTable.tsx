@@ -29,19 +29,17 @@ export default class DragSortingTable extends PureComponent<IDragSortingTablePro
     });
   };
 
-  questionStateNext = (answers) => {
+  questionStateNext = () => {
     const { selectedQues, questionState } = this.props;
     if (questionState < selectedQues.length) {
       this.props.dispatch({ type: 'stage/questionStateNext' });
     }
-    this.props.dispatch({ type: 'data/handleSelectedAnswers', payload: answers });
   };
-  questionStateBack = (answers) => {
+  questionStateBack = () => {
     const { questionState } = this.props;
     if (questionState > 0) {
       this.props.dispatch({ type: 'stage/questionStateBack' });
     }
-    this.props.dispatch({ type: 'data/handleSelectedAnswers', payload: answers });
   };
   indexStateNext = () => {
     this.props.dispatch({ type: 'stage/indexStateNext' });
@@ -75,13 +73,13 @@ export default class DragSortingTable extends PureComponent<IDragSortingTablePro
                 type="ghost"
                 icon="left"
                 disabled={questionState === 0}
-                onClick={() => this.questionStateBack(dataSource)}
+                onClick={this.questionStateBack}
               />
               <Button
                 type="ghost"
                 icon="right"
                 disabled={questionState === selectedQues.length - 1}
-                onClick={() => this.questionStateNext(dataSource)}
+                onClick={this.questionStateNext}
               />
             </ButtonGroup>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
