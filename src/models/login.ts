@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { fakeAccountLogin } from '../services/api';
-import { setAuthority } from '../utils/authority';
-import { reloadAuthorized } from '../utils/Authorized';
+// import { setAuthority } from '../utils/authority';
+// import { reloadAuthorized } from '../utils/Authorized';
 import { DvaModel } from '../../typings/dva';
 
 export type TLoginModel = {
@@ -24,7 +24,7 @@ const login: model = {
       });
       // Login successfully
       if (response.status === 'ok') {
-        reloadAuthorized();
+        // reloadAuthorized();
         yield put(routerRedux.push('/'));
       }
     },
@@ -44,7 +44,7 @@ const login: model = {
             currentAuthority: 'guest',
           },
         });
-        reloadAuthorized();
+        // reloadAuthorized();
         yield put(routerRedux.push('/user/login'));
       }
     },
@@ -52,7 +52,7 @@ const login: model = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      // setAuthority(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,
