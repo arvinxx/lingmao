@@ -72,7 +72,7 @@ describe('Reducers', () => {
   it('handleDragPersonaData', () => {
     const reducer = reducers.handleDragPersonaData;
     const state = {
-      checkedDims: ['1', '2'],
+      personaData: ['1', '2'],
     };
 
     const action = {
@@ -81,7 +81,7 @@ describe('Reducers', () => {
     };
 
     expect(reducer(state, action)).toEqual({
-      checkedDims: ['2', '1'],
+      personaData: ['2', '1'],
     });
   });
 
