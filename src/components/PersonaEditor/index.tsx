@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { TTag } from '../../models/tag';
 import styles from './index.less';
 import { connect } from 'dva';
 import { DragDropContext } from 'react-dnd';

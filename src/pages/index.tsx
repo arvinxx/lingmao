@@ -1,22 +1,18 @@
-import React from 'react';
-import Authorized from '../utils/Authorized';
-//@ts-ignore
+import React, { PureComponent } from 'react';
 import Redirect from 'umi/redirect';
 
+import Authorized from '../utils/Authorized';
 const { AuthorizedRoute } = Authorized;
 
-class Index extends React.PureComponent {
+export default class Index extends PureComponent {
   render() {
-    return (
-      <AuthorizedRoute
-        path="/"
-        render={() => <Redirect to="/dashboard" />}
-        authority={['admin', 'user']}
-        //@ts-ignore TODO 修改组件 index.d.ts
-        redirectPath="/user/login"
-      />
-    );
+    return <Redirect to="/dashboard" />;
   }
 }
 
-export default Index;
+// <AuthorizedRoute
+//         path="/"
+//         render={() => <Redirect to="/dashboard" />}
+//         authority={['admin', 'user']}
+//         redirectPath="/user/login"
+//       />

@@ -1,6 +1,6 @@
 import { register } from '../pages/User/servers/register';
-import { setAuthority } from '../utils/authority';
-import { reloadAuthorized } from '../utils/Authorized';
+// import { setAuthority } from '../utils/authority';
+// import { reloadAuthorized } from '../utils/Authorized';
 
 export default {
   namespace: 'register',

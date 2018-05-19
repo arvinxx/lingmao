@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Layout } from 'antd';
 import { connect } from 'dva';
-//@ts-ignore umi 未定义
 import withRouter from 'umi/withRouter';
 
 import { SiderMenu } from '../components';
@@ -34,7 +33,7 @@ interface IBasicLayoutProps {
   showMenu?: boolean;
 }
 
-@withRouter
+@(withRouter as any)
 @connect(({ user, global }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
@@ -61,7 +60,7 @@ export default class BasicLayout extends Component<IBasicLayoutProps> {
         <SiderMenu
           logo={logo}
           showMenu={showMenu}
-          Authorized={Authorized}
+          // Authorized={Authorized}
           menuData={getMenuData()}
           collapsed={collapsed}
           location={location}
