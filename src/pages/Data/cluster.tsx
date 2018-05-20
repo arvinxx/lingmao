@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import { ClusterDisplay } from '../../components';
 import styles from './cluster.less';
-import clusterResults from '../../../mock/cluster';
+import { connect } from 'dva';
+import { TClusterResults } from '../../models/data';
 
-export default class Cluster extends Component {
+interface IClusterProps {
+  clusterResults: TClusterResults;
+}
+@connect(({ data }) => ({ clusterResults: data.clusterResults }))
+export default class Cluster extends Component<IClusterProps> {
+  static defaultProps: IClusterProps = {
+    clusterResults: [],
+  };
   render() {
+    const { clusterResults } = this.props;
     return (
       <div className={styles.container}>
         {clusterResults.map((clusterResult, index) => (

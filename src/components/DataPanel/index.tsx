@@ -44,7 +44,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       clusterSelectedDims: [],
       matchSelectedDims: [],
       selectClusterIndex: 0,
-      clusterResults: [],
+      clusterResults:[]
     },
     tags: [],
     stage: {
@@ -175,6 +175,8 @@ export default class DataPanel extends Component<IDataPanelProps> {
             analysisStage={analysisStage}
             pathname={location.pathname}
             dispatch={dispatch}
+            selectedDims={clusterSelectedDims}
+            quesData={quesData}
           />
         ),
       },

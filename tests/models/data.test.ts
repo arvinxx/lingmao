@@ -452,7 +452,7 @@ it('addOrderToQuesData', () => {
   });
 });
 
-fit('addMatchTagToQuesData ', () => {
+it('addMatchTagToQuesData ', () => {
   const reducer = reducers.addMatchTagToQuesData;
   const state = {
     quesData: [
@@ -555,6 +555,90 @@ fit('addMatchTagToQuesData ', () => {
         tagId: '3334',
         tagText: '标签2',
       },
+    ],
+  });
+});
+
+it('addClusterTypeToQuesData ', () => {
+  const reducer = reducers.addClusterTypeToQuesData;
+  const state = {
+    quesData: [
+      [
+        {
+          tagId: '123',
+          tagText: '标签1',
+          key: '12433241231',
+          question: 'aaaaa',
+          answer: { text: '1345', order: 0 },
+        },
+        {
+          tagId: '3334',
+          tagText: '标签2',
+          key: '12453241231',
+          question: 'gdfycvh',
+          answer: { text: '3464', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '123',
+          tagText: '标签1',
+          key: '124324871231',
+          question: 'aaaaa',
+          answer: { text: '5463121', order: 0 },
+        },
+        {
+          tagId: '3334',
+          tagText: '标签2',
+          key: '12432411231',
+          question: 'gdfycvh',
+          answer: { text: '357323bvf', order: 0 },
+        },
+      ],
+    ],
+  };
+  const action = {
+    type: 'data/addMatchTagToQuesData',
+    payload: [0, 1],
+  };
+  expect(reducer(state, action)).toEqual({
+    quesData: [
+      [
+        {
+          tagId: '123',
+          tagText: '标签1',
+          key: '12433241231',
+          type: 0,
+          question: 'aaaaa',
+          answer: { text: '1345', order: 0 },
+        },
+        {
+          tagId: '3334',
+          tagText: '标签2',
+          key: '12453241231',
+          type: 0,
+          question: 'gdfycvh',
+          answer: { text: '3464', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '123',
+          tagText: '标签1',
+          key: '124324871231',
+          type: 1,
+          question: 'aaaaa',
+          answer: { text: '5463121', order: 0 },
+        },
+        {
+          tagId: '3334',
+          tagText: '标签2',
+          key: '12432411231',
+          type: 1,
+          question: 'gdfycvh',
+          answer: { text: '357323bvf', order: 0 },
+        },
+      ],
     ],
   });
 });

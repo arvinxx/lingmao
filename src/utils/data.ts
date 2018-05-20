@@ -119,7 +119,7 @@ export const getFilterTableData = (
 ): object[] => {
   if (displayFilter) {
     return tableData.map((item: object) => {
-      // ts-ignore
+      // @ts-ignore
       let tempTableData = { key: item.key };
       selectedQues.map((selectedQue) => {
         const selectedQuestion = selectedQue.question.name;
@@ -171,6 +171,9 @@ export const getFilterDims = (
   });
 };
 
+/**
+ *  根据选择标签过滤问卷数据，用于降维与聚类
+ */
 export const getFilterQuesData = (quesData: TQuesData, selectDims: string[]): TQuesData => {
   return quesData.map((quesRecord) =>
     quesRecord.filter((quesItem) => {
@@ -180,6 +183,9 @@ export const getFilterQuesData = (quesData: TQuesData, selectDims: string[]): TQ
   );
 };
 
+/**
+ * 从问卷数据获得降维所需数据
+*/
 export const getClusterDataFromQuesData = (quesData: TQuesData): number[][] => {
   return quesData.map((quesDataRecord) =>
     quesDataRecord.map((quesDataItem) => quesDataItem.answer.order)

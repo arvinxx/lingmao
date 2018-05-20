@@ -1,6 +1,5 @@
 import Mock from 'mockjs';
-// Mock.Random.extend({
-// })
+
 
 const clusterResult = Mock.mock({
   'array|10-30': [
@@ -17,5 +16,6 @@ const clusterResult = Mock.mock({
 const clusterResults = Mock.mock({
   'array|2-7': [() => clusterResult.array],
 });
-console.log(clusterResults.array);
 export default clusterResults.array;
+
+export const clusterArray = [0, 0, 0, 1, 2, 1, 0, 0, 2, 0];

@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { Dropdown, Button, Icon, InputNumber, Checkbox, Menu, message } from 'antd';
-import { TDim } from '../../models/data';
-import { getBaseUrl } from '../../utils';
+import { TQuesData, TSelectedDims } from '../../models/data';
+import { getBaseUrl, getClusterDataFromQuesData, getFilterQuesData } from '../../utils';
 import router from 'umi/router';
-import { cluster } from '../../services/ml';
+import { cluster, getClusterDims, getClusterPercent } from '../../services/ml';
 
 const CheckboxGroup = Checkbox.Group;
 
-const data = {
-  data: [[1, 1, 2, 1], [1, 4, 2, 1], [-1, 5, -1, -1], [-1, -1, 6, -1.5]],
-  K: 3,
-};
 function handleMenuClick(e) {
   message.info('Click on menu item.');
   console.log('click', e);
@@ -29,20 +25,34 @@ interface IClusterMethodProps {
   dispatch: Function;
   analysisStage: number;
   pathname: string;
+  selectedDims: TSelectedDims;
+  quesData: TQuesData;
 }
 export default class ClusterMethod extends Component<IClusterMethodProps> {
   static defaultProps: IClusterMethodProps = {
     analysisStage: 0,
     dispatch: () => {},
     pathname: '',
+    quesData: [],
+    selectedDims: [],
   };
 
   startCluster = async () => {
-    console.log('start');
+    const { quesData, selectedDims, dispatch } = this.props;
+    const filterData = getFilterQuesData(quesData, selectedDims);
+    const data = { data: getClusterDataFromQuesData(filterData), K: 4 };
     try {
-      const res = await cluster(data);
-      const { clusters } = res;
-      console.log(clusters);
+      const { clusters } = await cluster(data);
+      const results = getClusterPercent(clusters);
+      dispatch({ type: 'data/addClusterTypeToQuesData', payload: clusters });
+      dispatch({
+        type: 'data/handleClusterResults',
+        payload: results.map((result, index) => ({
+          percent: result.percent,
+          title: `聚类 ${index + 1}`,
+          dims: getClusterDims(clusters, filterData, index),
+        })),
+      });
     } catch (e) {
       console.log(e);
     }

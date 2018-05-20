@@ -16,6 +16,8 @@ export type TQuesDataItem = {
     text: string;
     order: number;
   };
+  type: number;
+  typeName: string;
 };
 
 export type TTableData = {
@@ -33,16 +35,19 @@ export type TDim = {
   text: string;
 };
 
+export type TClusterDim = { text: string; value: number };
 export type TClusterResult = {
-  dims: Array<{ term; descr }>;
+  dims: Array<TClusterDim>;
   percent: number;
   title: string;
 };
+export type TClusterResults = TClusterResult[];
 export type TSelectedQue = {
   question: TTableData;
   answers: Array<TTableData>;
   tagId: string;
   tagText: string;
+  average: number;
 };
 export type TSelectedDims = string[];
 
@@ -53,6 +58,7 @@ export type TDataModel = {
   reductionSelectedDims: TSelectedDims;
   clusterSelectedDims: TSelectedDims;
   selectClusterIndex: number;
+  clusterResults: TClusterResults;
 };
 interface model extends DvaModel {
   state: TDataModel;
@@ -66,6 +72,7 @@ const model: model = {
     matchSelectedDims: [],
     reductionSelectedDims: [],
     selectClusterIndex: 0,
+    clusterResults: [],
   },
   reducers: {
     handleQuesData(state, { payload: quesData }) {
@@ -189,6 +196,21 @@ const model: model = {
             return quesDataItem;
           });
         }),
+      };
+    },
+
+    handleClusterResults(state, { payload: clusterResults }) {
+      return { ...state, clusterResults };
+    },
+    addClusterTypeToQuesData(state, { payload: cluster }) {
+      return {
+        ...state,
+        quesData: state.quesData.map((item, index) =>
+          item.map((quesDataItem: TQuesDataItem) => {
+            quesDataItem.type = cluster[index];
+            return quesDataItem;
+          })
+        ),
       };
     },
   },

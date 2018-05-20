@@ -8,7 +8,7 @@ const { Description } = DescriptionList;
 
 interface IClusterDisplayProps {
   clusterResult: {
-    dims: Array<{ term; descr }>;
+    dims: Array<{ text: string; value: number }>;
     percent: number;
     title: string;
   };
@@ -37,7 +37,7 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
             percent={percent}
             subTitle={title}
             color={color}
-            total={percent.toString() + '%'}
+            total={percent.toFixed(1).toString() + '%'}
             height={160}
           />
         </div>
@@ -49,8 +49,8 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
             layout={colMode ? 'vertical' : 'horizontal'}
           >
             {dims.map((item, index) => (
-              <Description key={index} term={item.term}>
-                {item.descr}
+              <Description key={index} term={item.text}>
+                {item.value.toFixed(1)}
               </Description>
             ))}
           </DescriptionList>
