@@ -45,7 +45,8 @@ export type TCluster = {
   tagId: string;
   tagGroupId: string;
   tagGroupText: string;
-  value: string;
+  value: number;
+  type: string;
   tagText: string;
 };
 export type TClusterResult = TCluster[];

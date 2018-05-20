@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { persona as header } from '../../common/header';
 import { Header } from '../../components';
@@ -9,12 +9,10 @@ const { Content } = Layout;
 export default class PersonaLayout extends Component {
   render() {
     return (
-      <Fragment>
+      <div className={styles.layout}>
         <Header header={header} />
-        <Content>
-          <div className={styles.container}>{this.props.children}</div>
-        </Content>
-      </Fragment>
+        <div className={styles.container}>{this.props.children}</div>
+      </div>
     );
   }
 }

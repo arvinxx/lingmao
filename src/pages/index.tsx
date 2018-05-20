@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import Redirect from 'umi/redirect';
 
-import Authorized from '../utils/Authorized';
-const { AuthorizedRoute } = Authorized;
+// import Authorized from '../utils/Authorized';
+// const { AuthorizedRoute } = Authorized;
 
 export default class Index extends PureComponent {
   render() {

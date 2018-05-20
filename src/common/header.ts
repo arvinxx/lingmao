@@ -204,6 +204,38 @@ export const data = [
 ];
 export const persona = [
   {
+    text: '匹配',
+    path: 'match',
+    left: [
+      {
+        text: 'left',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'right',
+        dispatch: {
+          type: '',
+        },
+      },
+      {
+        text: 'sync',
+        dispatch: {
+          type: '',
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'bars',
+        dispatch: {
+          type: 'persona/changeDimVisible',
+        },
+      },
+    ],
+  },
+  {
     text: '编辑',
     path: 'edit',
     left: [

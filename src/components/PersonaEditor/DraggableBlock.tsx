@@ -18,15 +18,12 @@ const dropTarget = {
     if (dragIndex === dropIndex) {
       return;
     }
-    console.log(dropIndex, dragIndex);
     if (dropIndex !== undefined) {
       dispatch({ type: 'persona/handleDragPersonaData', payload: { dragIndex, dropIndex } });
     }
     monitor.getItem().dragIndex = dropIndex;
   },
 };
-interface IDraggableBlockProps {}
-
 @DragSource('block', dragSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   dragItem: monitor.getItem(),
@@ -38,11 +35,7 @@ interface IDraggableBlockProps {}
 }))
 export default class DraggableBlock extends Component<any> {
   render() {
-    const { connectDragSource, children, isDragging, connectDropTarget } = this.props;
-    return connectDragSource(
-      connectDropTarget(
-        <div className={isDragging ? styles.dragging : styles.block}>{children}</div>
-      )
-    );
+    const { connectDragSource, children, connectDropTarget } = this.props;
+    return connectDragSource(connectDropTarget(<div className={styles.block}>{children}</div>));
   }
 }

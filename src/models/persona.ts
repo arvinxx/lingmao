@@ -1,16 +1,25 @@
-import { TTag, TTagGroup } from './tag';
 import { getTagsArrById, reorder } from '../utils';
 import update from 'immutability-helper';
 import { TClusterResult } from './data';
 import { DvaModel } from '../../typings/dva';
 import clusterResults from '../../mock/clusterResults';
 
+export type TBlockItem = {
+  text: string;
+  value: number;
+};
+export type TBlock = {
+  type: string;
+  values: TBlockItem[];
+};
+export type TBlockData = TBlock[];
 export type TPersona = {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
   personaData: TClusterResult;
+  blockData: TBlockData;
 };
 interface IPersonaModel extends DvaModel {
   state: TPersona;
@@ -23,6 +32,7 @@ const persona: IPersonaModel = {
     expandedDims: [],
     checkedDims: [],
     personaData: clusterResults[0],
+    blockData: [],
   },
   effects: {},
   reducers: {

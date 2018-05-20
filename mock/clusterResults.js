@@ -1,54 +1,21 @@
 import Mock from 'mockjs';
-// const data = Mock.mock({
-//   'data|1-10':[{
-//
-//   }]
+// Mock.Random.extend({
 // })
-export default [
-  [
+
+const clusterResult = Mock.mock({
+  'array|10-30': [
     {
-      tagId: '23123',
-      value: 'gdfs',
-      tagText: 'bgfnd',
-      tagGroupText: '',
-      tagGroupId: '',
-    },
-    {
-      tagId: '765',
-      value: '454bggf n',
-      tagText: 'rfewcdsc',
-      tagGroupText: '',
-      tagGroupId: '',
-    },
-    {
-      tagId: '342',
-      value: 'gdaeewve',
-      tagText: 'stdsfdsring',
-      tagGroupText: '',
-      tagGroupId: '',
+      tagId: '@guid',
+      'value|1-5.1': 1,
+      tagText: '@ctitle',
+      'type|1': ['activities', 'skill', 'attitude'],
+      tagGroupText: '@ctitle',
+      tagGroupId: '@guid',
     },
   ],
-  [
-    {
-      tagId: '23123',
-      value: 'yjtuynr',
-      tagText: 'rfdweq',
-      tagGroupText: '',
-      tagGroupId: '',
-    },
-    {
-      tagId: '765',
-      value: '324234',
-      tagText: 'string',
-      tagGroupText: '',
-      tagGroupId: '',
-    },
-    {
-      tagId: '342',
-      value: '324234',
-      tagText: 'stdsfdsring',
-      tagGroupText: '',
-      tagGroupId: '',
-    },
-  ],
-];
+});
+const clusterResults = Mock.mock({
+  'array|2-7': [() => clusterResult.array],
+});
+console.log(clusterResults.array);
+export default clusterResults.array;

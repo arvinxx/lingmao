@@ -3,7 +3,103 @@
 .container {
   display: flex;
   flex-direction: row;
+  width: 100%;
   flex-wrap: wrap;
-  padding: 24px;
+  flex: none;
+}
+.photo-container {
+  width: 35%;
+  .photo {
+    width: 100%;
+    height: 100%;
+  }
+}
+.content {
+  display: flex;
+  padding-right: 24px;
+  width: 65%;
+  flex-direction: column;
+}
+.title {
+  display: flex;
+  flex-direction: row;
+  height: 150px;
+  padding: 36px 12px 36px 24px;
+  align-items: baseline;
+  justify-content: space-between;
+  .name {
+    font-size: 36px;
+    margin-right: 12px;
+  }
+  .career {
+    font-size: 18px;
+    color: @text-color-secondary;
+  }
+  .percent {
+    display: flex;
+    width: 380px;
+    .text {
+      display: flex;
+      align-items: baseline;
+    }
+    .number {
+      font-size: 24px;
+      color: @primary-6;
+    }
+  }
 }
 
+.keywords {
+  padding: 0 48px 36px 48px;
+  font-size: 18px;
+}
+
+.body {
+  display: flex;
+  height: 100%;
+  .info {
+    font-size: 20px;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed @transBlack-4;
+    padding-bottom: 8px;
+  }
+  .basic {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    padding: 0 24px;
+    margin-right: 12px;
+    .bios {
+      font-size: 16px;
+      background: @transBlack-8;
+      padding: 24px 12px;
+    }
+  }
+
+  .right {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+
+    .features {
+      display: flex;
+      .feature {
+        font-size: 16px;
+        align-items: center;
+        margin-right: 24px;
+        margin-bottom: 24px;
+        .list {
+          margin-bottom: 0;
+          padding-left: 16px;
+          li {
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+    .behaviors {
+      display: flex;
+      background: @transBlack-8;
+    }
+  }
+}

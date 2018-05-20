@@ -1,11 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Tooltip, Layout } from 'antd';
-import Authorized from '../../utils/Authorized';
+// import Authorized from '../../utils/Authorized';
 import { Pie, WaterWave, Gauge, TagCloud } from '../../components';
 import styles from './index.less';
 
-const { Secured } = Authorized;
+// const { Secured } = Authorized;
 const { Content } = Layout;
 
 // use permission as a parameter
@@ -14,7 +14,7 @@ const havePermissionAsync = new Promise((resolve) => {
   setTimeout(() => resolve(), 1000);
 });
 
-@Secured(havePermissionAsync)
+// @Secured(havePermissionAsync)
 @connect(({ dashboard, loading }) => ({
   dashboard,
   loading: loading.models.dashboard,
