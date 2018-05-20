@@ -3,7 +3,6 @@ import { Button, Divider, Progress, Tag } from 'antd';
 import DimSelect from './DimsSelect';
 
 import { TDim, TSelectedDims } from '../../models/data';
-const { CheckableTag } = Tag;
 
 interface IRecuceDimsProps {
   dims: Array<TDim>;

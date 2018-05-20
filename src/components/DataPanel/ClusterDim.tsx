@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Divider, Icon, Tag } from 'antd';
 import { TDim, TSelectedDims } from '../../models/data';
 import DimSelect from './DimsSelect';
+import styles from './ClusterDim.less';
 
 interface IClusterDimProps {
   dispatch: Function;
@@ -23,7 +24,6 @@ export default class ClusterDim extends Component<IClusterDimProps> {
     } else {
       this.props.dispatch({ type: 'data/removeClusterSelectedDims', payload: id });
     }
-    console.log(checked,id);
   };
 
   finish = () => {
@@ -31,7 +31,6 @@ export default class ClusterDim extends Component<IClusterDimProps> {
     if (this.props.analysisStage === 6) {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '7' });
-      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '6' });
     }
   };
   render() {
@@ -41,15 +40,15 @@ export default class ClusterDim extends Component<IClusterDimProps> {
         <p>点击选择参与降维的维度</p>
         <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
         <div>
-          <Divider />
-          <Button>重置</Button>
+          <Button style={{ marginRight: 16 }}>重置</Button>
           <Button type="primary" ghost onClick={this.finish}>
             确认
           </Button>
         </div>
-        <div>
+        <div className={styles.info}>
           <Icon type="info-circle-o" />
-          <p>聚类数预估参考 3，5</p>
+
+          <div style={{ marginLeft: 12 }}>聚类数预估参考 3，5</div>
         </div>
       </div>
     );

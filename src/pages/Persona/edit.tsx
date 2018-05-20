@@ -4,18 +4,15 @@ import { DimensionList, PersonaEditor } from '../../components';
 
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
-import { getTagGroupId, getTagsArrById } from '../../utils';
-import { TClusterResults } from '../../models/data';
+
 import clusterResults from '../../../mock/clusterResults';
 interface IEditProps {
   persona: TPersona;
   dispatch?: Function;
-  clusterResults: TClusterResults;
   selectClusterIndex: number;
 }
 @connect(({ persona, data }) => ({
   persona,
-  clusterResults: data.clusterResults,
   selectClusterIndex: data.selectClusterIndex,
 }))
 export default class Edit extends Component<IEditProps> {
@@ -26,8 +23,8 @@ export default class Edit extends Component<IEditProps> {
       dimVisible: true,
       exportVisible: false,
       personaData: [],
+      blockData:[]
     },
-    clusterResults: [],
     selectClusterIndex: 0,
   };
 

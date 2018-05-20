@@ -41,24 +41,12 @@ export type TSelectedQue = {
 };
 export type TSelectedDims = string[];
 
-export type TCluster = {
-  tagId: string;
-  tagGroupId: string;
-  tagGroupText: string;
-  value: number;
-  type: string;
-  tagText: string;
-};
-export type TClusterResult = TCluster[];
-export type TClusterResults = TClusterResult[];
-
 export type TDataModel = {
   quesData: TQuesData;
   selectedQues: Array<TSelectedQue>;
   matchSelectedDims: TSelectedDims;
   reductionSelectedDims: TSelectedDims;
   clusterSelectedDims: TSelectedDims;
-  clusterResults: TClusterResults;
   selectClusterIndex: number;
 };
 interface model extends DvaModel {
@@ -72,7 +60,6 @@ const model: model = {
     clusterSelectedDims: [],
     matchSelectedDims: [],
     reductionSelectedDims: [],
-    clusterResults: [[]],
     selectClusterIndex: 0,
   },
   reducers: {
@@ -80,7 +67,6 @@ const model: model = {
       return { ...state, quesData };
     },
 
-    //TODO 性能优化 点击确定时才会添加answers
     handleSelectedQuestions(state, { payload: selectedQuestions }: { payload: TTableData[] }) {
       return {
         ...state,

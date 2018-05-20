@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import DraggableBlock from './DraggableBlock';
-import { TCluster, TClusterResult } from '../../models/data';
 import { getBlockData, getBlockText, getFilterBlockData } from '../../utils';
 import {
   features,
@@ -17,10 +16,10 @@ import {
   keywords,
 } from '../../../mock/persona';
 import { MiniProgress } from '../Charts';
-import { TBlock } from '../../models/persona';
+import { TBlock, TPersonaRecord } from '../../models/persona';
 
 interface IPersonaEditorProps {
-  personaData: TClusterResult;
+  personaData: TPersonaRecord;
   checkedDims: string[];
   dispatch?: Function;
 }

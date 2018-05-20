@@ -16,8 +16,8 @@ import styles from './index.less';
 import { dims } from '../../../mock/dims';
 import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
-import { extractTags } from '../../utils';
-import {  TTag } from '../../models/tag';
+import { extractTags, getFilterDims } from '../../utils';
+import { TTag } from '../../models/tag';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -43,6 +43,8 @@ export default class DataPanel extends Component<IDataPanelProps> {
       reductionSelectedDims: [],
       clusterSelectedDims: [],
       matchSelectedDims: [],
+      selectClusterIndex: 0,
+      clusterResults: [],
     },
     tags: [],
     stage: {
@@ -86,6 +88,9 @@ export default class DataPanel extends Component<IDataPanelProps> {
       questionState,
       tagMatchState,
     } = stage;
+
+    const matchDims = getFilterDims(dims, matchSelectedDims, false);
+
     const CollapseArray = [
       {
         text: '数据文件',
@@ -133,7 +138,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
         text: '选择维度',
         component: (
           <RecuceDimsComponent
-            dims={dims}
+            dims={matchDims}
             selectedDims={reductionSelectedDims}
             percent={70}
             analysisStage={analysisStage}
@@ -156,7 +161,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
         text: '选择维度',
         component: (
           <ClusterDimComponent
-            dims={dims}
+            dims={matchDims}
             selectedDims={clusterSelectedDims}
             analysisStage={analysisStage}
             dispatch={dispatch}

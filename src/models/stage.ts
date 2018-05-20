@@ -16,7 +16,7 @@ const stage: IStageModel = {
   state: {
     indexState: 0,
     questionState: 0,
-    analysisStage: 0,
+    analysisStage: 8,
     tagMatchState: 0,
     tabStage: '1',
     activePanelList: ['0'],

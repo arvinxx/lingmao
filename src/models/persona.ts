@@ -1,6 +1,5 @@
 import { getTagsArrById, reorder } from '../utils';
 import update from 'immutability-helper';
-import { TClusterResult } from './data';
 import { DvaModel } from '../../typings/dva';
 import clusterResults from '../../mock/clusterResults';
 
@@ -12,13 +11,25 @@ export type TBlock = {
   type: string;
   values: TBlockItem[];
 };
+
+export type TPersonaItem = {
+  tagId: string;
+  tagGroupId: string;
+  tagGroupText: string;
+  value: number;
+  type: string;
+  tagText: string;
+};
+export type TPersonaRecord = TPersonaItem[];
+export type TPersonaData = TPersonaRecord[];
+
 export type TBlockData = TBlock[];
 export type TPersona = {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
-  personaData: TClusterResult;
+  personaData: TPersonaData;
   blockData: TBlockData;
 };
 interface IPersonaModel extends DvaModel {

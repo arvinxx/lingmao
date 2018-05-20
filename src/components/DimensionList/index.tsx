@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Tree } from 'antd';
 
 import styles from './index.less';
-import { TTagGroup } from '../../models/tag';
-import { TClusterResult } from '../../models/data';
+import { TPersonaRecord } from "../../models/persona";
 
 const TreeNode = Tree.TreeNode;
 
 interface IDimensionListProps {
-  clusterResult: TClusterResult;
+  clusterResult: TPersonaRecord;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
   dispatch: Function;
@@ -34,7 +33,7 @@ export default class DimensionList extends Component<IDimensionListProps> {
     });
   };
 
-  renderTreeNodes = (clusterResult: TClusterResult) => {
+  renderTreeNodes = (clusterResult: TPersonaRecord) => {
     return clusterResult.map((cluster) => {
       //TODO : 生成树形节点
       // if (cluster.tagGroupId) {

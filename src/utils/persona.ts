@@ -1,16 +1,14 @@
-import { TClusterResult } from '../models/data';
-import { TBlock, TBlockData, TBlockItem } from '../models/persona';
+import { TBlock, TBlockData,  TPersonaRecord } from '../models/persona';
 import blockText from '../common/persona';
-import update from 'immutability-helper';
 
 export const getFilterBlockData = (
-  personaData: TClusterResult,
+  personaData: TPersonaRecord,
   selectDims: string[]
-): TClusterResult => {
+): TPersonaRecord => {
   return personaData.filter((persona) => selectDims.some((id) => persona.tagId === id));
 };
 
-export const getBlockData = (personaData: TClusterResult): TBlockData => {
+export const getBlockData = (personaData: TPersonaRecord): TBlockData => {
   const blockData: TBlockData = [];
   personaData.forEach((persona) => {
     const { type, value, tagText } = persona;

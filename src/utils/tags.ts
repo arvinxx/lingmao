@@ -1,6 +1,6 @@
 import { TTag, TTagGroup } from '../models/tag';
 import { tail } from 'lodash';
-import { TClusterResult, TClusterResults } from '../models/data';
+import { TPersonaRecord } from '../models/persona';
 
 export const extractTags = (tagGroups: Array<TTagGroup>): Array<TTag> => {
   let tags: Array<TTag> = [];
@@ -69,14 +69,14 @@ export const getStarData = (tagGroups: Array<TTagGroup>): TStarModel => {
   return { data, categories, links };
 };
 
-export const getTagGroupId = (clusterResult: TClusterResult): TClusterResult => {
-  return clusterResult.map((cluster) => {
-    if (cluster.tagGroupId !== '') {
-      return cluster;
+export const getTagGroupId = (personaRecord: TPersonaRecord): TPersonaRecord => {
+  return personaRecord.map((item) => {
+    if (item.tagGroupId !== '') {
+      return item;
     } else {
       //TODO : 获取 GroupId
       console.log('TODO : 获取 GroupId');
-      return cluster;
+      return item;
     }
   });
 };
