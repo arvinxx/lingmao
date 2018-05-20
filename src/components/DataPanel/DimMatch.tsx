@@ -6,7 +6,6 @@ import { isEmpty } from 'lodash';
 import { TDim, TSelectedQue } from '../../models/data';
 import { getBaseUrl, getFilterDims, getKeyArrays } from '../../utils';
 import styles from './DimMatch.less';
-import { TTag } from '../../models/tag';
 
 const { Item } = List;
 
@@ -66,21 +65,23 @@ export default class DimMatch extends Component<IDimMatchProps> {
   };
 
   finish = () => {
-    // TODO:将 selectedQues 的数据发给 quesData
+    const { dispatch, analysisStage, pathname } = this.props;
+    dispatch({
+      type: 'data/addMatchTagToQuesData',
+    });
+    if (analysisStage === 2) {
+      dispatch({ type: 'stage/addAnalysisStageCount' });
 
-    if (this.props.analysisStage === 2) {
-      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
-
-      this.props.dispatch({
+      dispatch({
         type: 'stage/addActivePanelList',
         payload: '3',
       });
-      this.props.dispatch({
+      dispatch({
         type: 'stage/removeActivePanelList',
         payload: '2',
       });
     }
-    router.push(`${getBaseUrl(this.props.pathname)}/validation`);
+    router.push(`${getBaseUrl(pathname)}/validation`);
   };
   render() {
     const { dims, selectedQues, tagMatchState, selectedDims } = this.props;
@@ -124,7 +125,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
               {item}
               <Tag
                 //@ts-ignore
-                onClick={()=>this.removeMatchDim(index)}
+                onClick={() => this.removeMatchDim(index)}
                 className={
                   isEmpty(selectedQues[index].tagId)
                     ? styles['match-tag-default']

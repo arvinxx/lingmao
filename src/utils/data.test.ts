@@ -7,6 +7,7 @@ import {
   getFilterDims,
   getFilterTableData,
   getFilterColumns,
+  getClusterDataFromQuesData, getFilterQuesData,
 } from './data';
 import { generateId } from './utils';
 import { TSelectedQue } from '../models/data';
@@ -927,4 +928,170 @@ it('getFilterColumns ', () => {
     { key: generateId(), title: '你的名字是？', dataIndex: '你的名字是？' },
     { key: generateId(), title: 'dasfdsd', dataIndex: 'dasfdsd' },
   ]);
+});
+
+it('getClusterDataFromQuesData', () => {
+  const quesData = [
+    [
+      {
+        tagId: '1',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 1 },
+      },
+      {
+        tagId: '2',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '男', order: 1 },
+      },
+      {
+        tagId: '3',
+        tagText: '',
+        key: generateId(),
+        question: 'fdsfdsf？',
+        answer: { text: '1', order: 0 },
+      },
+      {
+        tagId: '4',
+        tagText: '',
+        key: generateId(),
+        question: 'br gvdsc？',
+        answer: { text: 'trhytyhr', order: 1 },
+      },
+    ],
+    [
+      {
+        tagId: '1',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 2 },
+      },
+      {
+        tagId: '2',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '女', order: 2 },
+      },
+      {
+        tagId: '3',
+        tagText: '',
+        key: generateId(),
+        question: 'fdsfdsf？',
+        answer: { text: '2', order: 1 },
+      },
+      {
+        tagId: '4',
+        tagText: '',
+        key: generateId(),
+        question: 'br gvdsc？',
+        answer: { text: 'dsf', order: 0 },
+      },
+    ],
+  ];
+  expect(getClusterDataFromQuesData(quesData)).toEqual([[1, 1, 0, 1], [2, 2, 1, 0]]);
+});
+
+it('getFilterQuesData', () => {
+  const quesData = [
+    [
+      {
+        tagId: '1',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 1 },
+      },
+      {
+        tagId: '2',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '男', order: 1 },
+      },
+      {
+        tagId: '3',
+        tagText: '',
+        key: generateId(),
+        question: 'fdsfdsf？',
+        answer: { text: '1', order: 0 },
+      },
+      {
+        tagId: '4',
+        tagText: '',
+        key: generateId(),
+        question: 'br gvdsc？',
+        answer: { text: 'trhytyhr', order: 1 },
+      },
+    ],
+    [
+      {
+        tagId: '1',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 2 },
+      },
+      {
+        tagId: '2',
+        tagText: '',
+        key: generateId(),
+        question: '你的性别是？',
+        answer: { text: '女', order: 2 },
+      },
+      {
+        tagId: '3',
+        tagText: '',
+        key: generateId(),
+        question: 'fdsfdsf？',
+        answer: { text: '2', order: 1 },
+      },
+      {
+        tagId: '4',
+        tagText: '',
+        key: generateId(),
+        question: 'br gvdsc？',
+        answer: { text: 'dsf', order: 0 },
+      },
+    ],
+  ];
+  const selectDims = ['1','3'];
+  expect(getFilterQuesData(quesData,selectDims)).toEqual([
+    [
+      {
+        tagId: '1',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 1 },
+      },
+      {
+        tagId: '3',
+        tagText: '',
+        key: generateId(),
+        question: 'fdsfdsf？',
+        answer: { text: '1', order: 0 },
+      },
+    ],
+    [
+      {
+        tagId: '1',
+        tagText: '',
+        key: generateId(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 2 },
+      },
+      {
+        tagId: '3',
+        tagText: '',
+        key: generateId(),
+        question: 'fdsfdsf？',
+        answer: { text: '2', order: 1 },
+      },
+    ],
+  ])
 });

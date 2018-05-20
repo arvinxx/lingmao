@@ -33,6 +33,11 @@ export type TDim = {
   text: string;
 };
 
+export type TClusterResult = {
+  dims: Array<{ term; descr }>;
+  percent: number;
+  title: string;
+};
 export type TSelectedQue = {
   question: TTableData;
   answers: Array<TTableData>;
@@ -164,6 +169,27 @@ const model: model = {
         });
       });
       return { ...state, quesData };
+    },
+
+    addMatchTagToQuesData(state, action) {
+      const { quesData, selectedQues } = state;
+
+      return {
+        ...state,
+        quesData: quesData.map((quesRecord: TQuesRecord) => {
+          return quesRecord.map((quesDataItem) => {
+            const { question } = quesDataItem;
+            selectedQues.forEach((item: TSelectedQue) => {
+              const { tagId, tagText } = item;
+              if (item.question.name === question) {
+                quesDataItem.tagText = tagText;
+                quesDataItem.tagId = tagId;
+              }
+            });
+            return quesDataItem;
+          });
+        }),
+      };
     },
   },
 };

@@ -119,6 +119,7 @@ export const getFilterTableData = (
 ): object[] => {
   if (displayFilter) {
     return tableData.map((item: object) => {
+      // ts-ignore
       let tempTableData = { key: item.key };
       selectedQues.map((selectedQue) => {
         const selectedQuestion = selectedQue.question.name;
@@ -168,4 +169,19 @@ export const getFilterDims = (
     });
     return isFilter ? !res : res;
   });
+};
+
+export const getFilterQuesData = (quesData: TQuesData, selectDims: string[]): TQuesData => {
+  return quesData.map((quesRecord) =>
+    quesRecord.filter((quesItem) => {
+      const { tagId } = quesItem;
+      return selectDims.some((selectDim) => selectDim === tagId);
+    })
+  );
+};
+
+export const getClusterDataFromQuesData = (quesData: TQuesData): number[][] => {
+  return quesData.map((quesDataRecord) =>
+    quesDataRecord.map((quesDataItem) => quesDataItem.answer.order)
+  );
 };

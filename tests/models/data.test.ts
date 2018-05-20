@@ -179,7 +179,7 @@ it('addAnswersToSelectQues', () => {
   });
 });
 
-it('reorderSelectedAnswersr', () => {
+it('reorderSelectedAnswers', () => {
   const reducer = reducers.reorderSelectedAnswers;
   const state = {
     selectedQues: [
@@ -448,6 +448,113 @@ it('addOrderToQuesData', () => {
           answer: { text: '女', order: 2 },
         },
       ],
+    ],
+  });
+});
+
+fit('addMatchTagToQuesData ', () => {
+  const reducer = reducers.addMatchTagToQuesData;
+  const state = {
+    quesData: [
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: '12433241231',
+          question: 'aaaaa',
+          answer: { text: '1345', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: '12453241231',
+          question: 'gdfycvh',
+          answer: { text: '3464', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '',
+          tagText: '',
+          key: '124324871231',
+          question: 'aaaaa',
+          answer: { text: '5463121', order: 0 },
+        },
+        {
+          tagId: '',
+          tagText: '',
+          key: '12432411231',
+          question: 'gdfycvh',
+          answer: { text: '357323bvf', order: 0 },
+        },
+      ],
+    ],
+    selectedQues: [
+      {
+        question: { name: 'aaaaa', key: 'aaaaa' },
+        answers: [{ name: '1345', key: 'dsad' }, { name: '5463121', key: 'fdsfg' }],
+        tagId: '123',
+        tagText: '标签1',
+      },
+      {
+        question: { name: 'gdfycvh', key: 'gdfycvh' },
+        answers: [{ name: '3464', key: 'fgrew' }, { name: '357323bvf', key: 'vcxnnh' }],
+        tagId: '3334',
+        tagText: '标签2',
+      },
+    ],
+  };
+  const action = {
+    type: 'data/addMatchTagToQuesData',
+  };
+  expect(reducer(state, action)).toEqual({
+    quesData: [
+      [
+        {
+          tagId: '123',
+          tagText: '标签1',
+          key: '12433241231',
+          question: 'aaaaa',
+          answer: { text: '1345', order: 0 },
+        },
+        {
+          tagId: '3334',
+          tagText: '标签2',
+          key: '12453241231',
+          question: 'gdfycvh',
+          answer: { text: '3464', order: 0 },
+        },
+      ],
+      [
+        {
+          tagId: '123',
+          tagText: '标签1',
+          key: '124324871231',
+          question: 'aaaaa',
+          answer: { text: '5463121', order: 0 },
+        },
+        {
+          tagId: '3334',
+          tagText: '标签2',
+          key: '12432411231',
+          question: 'gdfycvh',
+          answer: { text: '357323bvf', order: 0 },
+        },
+      ],
+    ],
+    selectedQues: [
+      {
+        question: { name: 'aaaaa', key: 'aaaaa' },
+        answers: [{ name: '1345', key: 'dsad' }, { name: '5463121', key: 'fdsfg' }],
+        tagId: '123',
+        tagText: '标签1',
+      },
+      {
+        question: { name: 'gdfycvh', key: 'gdfycvh' },
+        answers: [{ name: '3464', key: 'fgrew' }, { name: '357323bvf', key: 'vcxnnh' }],
+        tagId: '3334',
+        tagText: '标签2',
+      },
     ],
   });
 });
