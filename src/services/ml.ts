@@ -1,8 +1,10 @@
 import kmeans from 'ml-kmeans';
 import { uniq } from 'lodash';
-import { clusterArray } from '../../mock/clusterResults';
 import { TClusterDim, TQuesData } from '../models/data';
 
+/**
+ * 聚类函数
+ */
 export const cluster = async (params) => {
   const { data, center, K } = params;
   if (data.length <= K) {
@@ -28,6 +30,12 @@ export const getClusterPercent = (clusterArray: number[]) => {
   });
 };
 
+/**
+ * 获取某一类的维度平均值
+ * @param clusterArray 聚类数组
+ * @param quesData 问卷数据
+ * @param cluster 要获取的类编号
+ */
 export const getClusterDims = (
   clusterArray: number[],
   quesData: TQuesData,

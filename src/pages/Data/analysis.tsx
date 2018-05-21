@@ -4,12 +4,13 @@ import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
 import H from 'History';
 
+import { connect } from 'dva';
 import { ClusterDisplay, Bar } from '../../components';
-import clusterResults from '../../../mock/cluster';
 import { TTag, TTagGroup } from '../../models/tag';
 
 import styles from './analysis.less';
 import { getBaseUrl } from '../../utils';
+import { TClusterResults } from '../../models/data';
 
 const { Item } = List;
 const mockDims = [
@@ -29,26 +30,25 @@ for (let i = 0; i < 5; i += 1) {
 }
 interface IAnalysisProps {
   selectDims: object[];
-  location: H.Location;
+  pathname: string;
   dataFile: string;
+  clusterResults: TClusterResults;
 }
 @(withRouter as any)
+@connect(({ data, routing }) => ({
+  clusterResults: data.clusterResults,
+  pathname: routing.location.pathname,
+}))
 export default class Index extends Component<IAnalysisProps> {
   static defaultProps: IAnalysisProps = {
     selectDims: mockDims,
-    location: {
-      pathname: '',
-      hash: '',
-      key: '',
-      search: '',
-      state: '',
-    },
+    pathname: '',
     dataFile: 'xxx.xls',
+    clusterResults: [],
   };
-
   render() {
-    const { selectDims, location, dataFile } = this.props;
-    const baseUrl = getBaseUrl(location.pathname);
+    const { selectDims, clusterResults, pathname, dataFile } = this.props;
+    const baseUrl = getBaseUrl(pathname);
     return (
       <div className={styles.container}>
         <div className={styles.left}>

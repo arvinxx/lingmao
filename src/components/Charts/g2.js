@@ -4,7 +4,7 @@ import { track, setTheme } from 'bizcharts';
 track(false);
 
 const config = {
-  defaultColor: '#1089ff',
+  defaultColor: '#439afc',
   shape: {
     interval: {
       fillOpacity: 1,

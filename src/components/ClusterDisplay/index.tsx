@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import DescriptionList from '../DescriptionList';
-import { Pie } from '../Charts';
+import { MiniProgress, Pie } from '../Charts';
+
 import styles from './index.less';
 import colorPalette from './color';
-
 const { Description } = DescriptionList;
 
 interface IClusterDisplayProps {
@@ -50,7 +50,14 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
           >
             {dims.map((item, index) => (
               <Description key={index} term={item.text}>
-                {item.value.toFixed(1)}
+                <div style={{ display: 'flex' }}>
+                  <MiniProgress
+                    percent={item.value * 20}
+                    strokeWidth={colMode ? 8 : 12}
+                    target={100}
+                  />
+                  <span style={{ marginLeft: 8 }}>{item.value.toFixed(1)}</span>
+                </div>
               </Description>
             ))}
           </DescriptionList>

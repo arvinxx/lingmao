@@ -49,7 +49,9 @@ export default class ReductionOpts extends Component<IReductionOptsProps> {
   finish = () => {
     if (this.props.analysisStage === 5) {
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '6' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '7' });
       this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '5' });
     }
 
