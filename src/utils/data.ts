@@ -1,23 +1,14 @@
-import XLSX from 'xlsx';
-import { uniqBy, has } from 'lodash';
+import { uniqBy } from 'lodash';
 import {
   TColumn,
   TTableData,
   TQuesData,
   TDim,
-  TQuesDataItem,
   TQuesRecord,
   TSelectedQue,
 } from '../models/data';
 import { generateId } from './utils';
 
-export const xlsxToJson = (file: ArrayBuffer): TQuesData => {
-  const workbook = XLSX.read(file, { type: 'buffer' });
-  const sheetNames = workbook.SheetNames;
-  const worksheet = workbook.Sheets[sheetNames[0]];
-  const rawData = XLSX.utils.sheet_to_json<JSON>(worksheet);
-  return rawToSaved(rawData);
-};
 
 export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> => {
   const temporaryFileReader = new FileReader();
@@ -45,6 +36,8 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
       record.push({
         tagId: '',
         tagText: '',
+        type: null,
+        typeName: '',
         key: generateId(),
         question,
         answer: { text: answer, order: 0 },
@@ -185,7 +178,7 @@ export const getFilterQuesData = (quesData: TQuesData, selectDims: string[]): TQ
 
 /**
  * 从问卷数据获得降维所需数据
-*/
+ */
 export const getClusterDataFromQuesData = (quesData: TQuesData): number[][] => {
   return quesData.map((quesDataRecord) =>
     quesDataRecord.map((quesDataItem) => quesDataItem.answer.order)

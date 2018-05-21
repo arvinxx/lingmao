@@ -159,6 +159,9 @@ const model: model = {
         clusterSelectedDims: state.clusterSelectedDims.filter((id) => id !== removeId),
       };
     },
+    handleClusterSelectedDims(state, { payload: clusterSelectedDims }) {
+      return { ...state, clusterSelectedDims };
+    },
 
     addOrderToQuesData(state, { payload: selectedQues }) {
       const quesData: TQuesData = concat(state.quesData);
