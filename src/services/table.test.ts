@@ -21,6 +21,8 @@ it('rawToSaved ', () => {
         key: generateId(),
         question: '你的名字是？',
         answer: { text: '小A', order: 0 },
+        type: null,
+        typeName: '',
       },
       {
         tagId: '',
@@ -28,6 +30,8 @@ it('rawToSaved ', () => {
         key: generateId(),
         question: '你的性别是？',
         answer: { text: '男', order: 0 },
+        type: null,
+        typeName: '',
       },
     ],
     [
@@ -37,6 +41,8 @@ it('rawToSaved ', () => {
         key: generateId(),
         question: '你的名字是？',
         answer: { text: '小B', order: 0 },
+        type: null,
+        typeName: '',
       },
       {
         tagId: '',
@@ -44,6 +50,8 @@ it('rawToSaved ', () => {
         key: generateId(),
         question: '你的性别是？',
         answer: { text: '女', order: 0 },
+        type: null,
+        typeName: '',
       },
     ],
   ];
@@ -51,5 +59,5 @@ it('rawToSaved ', () => {
 });
 
 it('addMissData', () => {
-// TODO: 补充缺失数据 #54
+  // TODO: 补充缺失数据 #54
 });
