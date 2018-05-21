@@ -41,7 +41,7 @@ export default class StarPic extends Component<IStarPicProps> {
       <div className="parent">
         <ReactEcharts
           option={this.getOption()}
-          style={{ height: '700px', width: '100%' }}
+          style={{ height: '500px', width: '100%' }}
           className="react_for_echarts"
         />
       </div>

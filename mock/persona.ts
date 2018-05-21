@@ -2,7 +2,7 @@ import Mock from 'mockjs';
 
 export const photo = Mock.mock({
   text: '画像照片',
-  value: '@dataImage("1000x800")',
+  value: '@dataImage("300x300")',
 });
 export const name = Mock.mock({ data: '@cname' }).data;
 export const career = Mock.mock({

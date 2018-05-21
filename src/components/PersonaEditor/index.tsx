@@ -39,14 +39,20 @@ export default class PersonaEditor extends Component<IPersonaEditorProps> {
           </div>
           <div className={styles.content}>
             <div className={styles.title}>
-              <div>
+              <div
+                style={{
+                  display: 'flex',
+
+                  flexDirection: 'column',
+                }}
+              >
                 <span className={styles.name}>{name}</span>
                 <span className={styles.career}>{career}</span>
               </div>
               <div className={styles.percent}>
                 <div className={styles.text}>
-                  <div style={{ width: 80, marginRight: 4 }}>人群占比</div>
-                  <div style={{ width: 80 }}>
+                  <div style={{ width: 64, marginRight: 4 }}>人群占比</div>
+                  <div style={{ width: 64 }}>
                     <span className={styles.number}> {percent} </span> %
                   </div>
                 </div>
@@ -69,7 +75,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps> {
                   <div style={{ marginBottom: 24 }}>
                     <div className={styles.info}> 基本信息 </div>
                     {basicInfo.map((item) => (
-                      <div key={item.type} style={{ fontSize: 16, marginBottom: 8 }}>
+                      <div key={item.type} style={{ fontSize: 14, marginBottom: 8 }}>
                         <span> {item.text}</span>
                         ： {item.value}
                       </div>

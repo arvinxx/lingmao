@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input, Icon, Popconfirm } from 'antd';
 import styles from './styles.less';
 
-interface IDimGroupProps {
+export interface IDimGroupProps {
   id: string;
   value: string;
   dispatch: Function;
