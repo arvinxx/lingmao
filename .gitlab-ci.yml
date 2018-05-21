@@ -21,7 +21,7 @@ lint:
   before_script:
       - npm install
   script:
-   - npm run lint
+   - npm run lint:style
 
 build:
   stage: build
