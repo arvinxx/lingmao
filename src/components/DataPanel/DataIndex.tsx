@@ -5,6 +5,7 @@ import styles from './DataIndex.less';
 import { TQuesData, TSelectedQue } from '../../models/data';
 
 import DraggableTable from './DraggableTable';
+import update from 'immutability-helper';
 
 const Step = Steps.Step;
 const ButtonGroup = Button.Group;
@@ -53,6 +54,7 @@ export default class DataIndex extends Component<IDataIndexProps> {
     } = this.props;
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRow) => {
+        console.log(selectedRow);
         this.props.dispatch({
           type: 'data/handleSelectedQuestions',
           payload: selectedRow,
@@ -91,36 +93,59 @@ export default class DataIndex extends Component<IDataIndexProps> {
               })}
             </div>
           ) : (
-            <Table
-              style={{ border: '1px solid #eee' }}
-              size="middle"
-              dataSource={dataSource}
-              pagination={false}
-              scroll={{ y: 240 }}
-              rowSelection={rowSelection}
-              footer={() => (
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button style={{ marginRight: 16 }} onClick={this.resetSelection}>
-                    重置
-                  </Button>
-                  <Button
-                    type="primary"
-                    ghost
-                    disabled={selectedQues.length === 0}
-                    onClick={this.indexStateNext}
-                  >
-                    确认
-                  </Button>
-                </div>
-              )}
-            >
-              <Column
-                title="全选"
-                key="name"
-                dataIndex="name"
-                render={(text, record) => <div>{text}</div>}
-              />
-            </Table>
+            <div className={styles['select-table']}>
+              <Table
+                style={{ border: '1px solid #eee' }}
+                size="middle"
+                dataSource={dataSource}
+                pagination={false}
+                onRow={(record) => ({
+                  onClick: () => {
+                    const selectRow = selectedQues.map((selectedQue) => selectedQue.question);
+                    const selectRowKey = selectedQues.map(
+                      (selectedQue) => selectedQue.question.key
+                    );
+                    const index = selectRowKey.indexOf(record.key);
+
+                    //取消选择
+                    if (index > -1) {
+                      this.props.dispatch({
+                        type: 'data/handleSelectedQuestions',
+                        payload: update(selectRow, {
+                          $splice: [[index, 1]],
+                        }),
+                      });
+                    } else {
+                      // TODO：增加选择
+                    }
+                  },
+                })}
+                scroll={{ y: 240 }}
+                rowSelection={rowSelection}
+                footer={() => (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button style={{ marginRight: 16 }} onClick={this.resetSelection}>
+                      重置
+                    </Button>
+                    <Button
+                      type="primary"
+                      ghost
+                      disabled={selectedQues.length === 0}
+                      onClick={this.indexStateNext}
+                    >
+                      确认
+                    </Button>
+                  </div>
+                )}
+              >
+                <Column
+                  title="全选"
+                  key="name"
+                  dataIndex="name"
+                  render={(text, record) => <div>{text}</div>}
+                />
+              </Table>
+            </div>
           )}
         </div>
       </div>
