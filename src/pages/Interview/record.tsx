@@ -5,6 +5,7 @@ import { DispatchProp } from 'react-redux';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 import { TagInput, RecordList, Upload } from '../../components';
+import TagList from './components/TagList';
 
 import { IInterview } from '../../models/interview';
 import { TTagGroup, TTagModel } from '../../models/tag';
@@ -87,7 +88,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
         tagGroups = tagGroups.map((tagGroup, index) => ({
           id: tagGroup.id === '' ? generateId() : tagGroup.id,
           text: index === 0 ? '未分组' : tagGroup.text,
-          tags: [],
+          tags: tagGroup.tags,
         }));
       } else {
         tagGroups = [{ id: generateId(), tags: [], text: '未分组' }];
@@ -115,13 +116,6 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
     saveDocument({ title, id, records, dimensions, selectedValues, tagGroups });
   }
 
-  deleteTag = (id) => {
-    this.props.dispatch({
-      type: 'tag/deleteTag',
-      payload: id,
-    });
-  };
-
   titleChange = (e) => {
     const text = e.target.value;
     this.props.dispatch({
@@ -130,77 +124,40 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
     });
   };
 
-  RecordComponent = () => {
+  render() {
+    const { interview, tagGroups, dispatch, recordDims } = this.props;
+    const { uploadVisible, tagVisible } = interview;
     const minPanelSize = 150;
-    const { recordDims, interview, tagGroups, dispatch } = this.props;
     const { title, records } = interview;
     const { dimensions, selectedValues } = recordDims;
     return (
-      <div className={styles.center}>
-        <ReflexContainer orientation="horizontal">
-          <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
-            <div className={styles.wrapper}>
-              <Input className={styles.title} onChange={this.titleChange} value={title} />
-              <RecordList records={records} dispatch={dispatch} tagGroups={tagGroups} />
-            </div>
-          </ReflexElement>
-          <ReflexSplitter>
-            <div className={styles.touch}>
-              <div className={styles['splitter-container']}>
-                <div className={styles.splitter} />
-              </div>
-            </div>
-          </ReflexSplitter>
-          <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-            <TagInput dimensions={dimensions} selectedValues={selectedValues} dispatch={dispatch} />
-          </ReflexElement>
-        </ReflexContainer>
-      </div>
-    );
-  };
-  LabelComponent = (tagVisible, tags) => {
-    if (tagVisible) {
-      return (
-        <div className={styles.right}>
-          <div className={styles.title}>标签</div>
-          <Menu
-            // onClick={this.deleteTag}
-            style={{ width: 200 }}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-          >
-            {tags.map((tag) => {
-              const { text, id } = tag;
-              return (
-                <Menu.Item className={styles.labels} key={id}>
-                  {text}
-                  <Popconfirm
-                    key={'ppp'}
-                    title="确认要删除吗?"
-                    onConfirm={() => this.deleteTag(id)}
-                    okText="是"
-                    cancelText="否"
-                  >
-                    <Icon type="close" className={styles.close} />
-                  </Popconfirm>
-                </Menu.Item>
-              );
-            })}
-          </Menu>
-        </div>
-      );
-    } else return <div />;
-  };
-  render() {
-    const { interview, tagGroups } = this.props;
-    const { uploadVisible, tagVisible } = interview;
-
-    return (
       <div className={styles.container}>
-        <Upload uploadVisible={uploadVisible} />
-        {this.RecordComponent()}
-        {this.LabelComponent(tagVisible, extractTags(tagGroups))}
+        {uploadVisible ? <Upload /> : <div />}
+        <div className={styles.center}>
+          <ReflexContainer orientation="horizontal">
+            <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
+              <div className={styles.wrapper}>
+                <Input className={styles.title} onChange={this.titleChange} value={title} />
+                <RecordList records={records} dispatch={dispatch} tagGroups={tagGroups} />
+              </div>
+            </ReflexElement>
+            <ReflexSplitter>
+              <div className={styles.touch}>
+                <div className={styles['splitter-container']}>
+                  <div className={styles.splitter} />
+                </div>
+              </div>
+            </ReflexSplitter>
+            <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
+              <TagInput
+                dimensions={dimensions}
+                selectedValues={selectedValues}
+                dispatch={dispatch}
+              />
+            </ReflexElement>
+          </ReflexContainer>
+        </div>
+        {tagVisible ? <TagList tags={extractTags(tagGroups)} dispatch={dispatch} /> : <div />}
       </div>
     );
   }
