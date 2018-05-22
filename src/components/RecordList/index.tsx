@@ -1,22 +1,20 @@
 import React, { PureComponent } from 'react';
-import { List } from 'antd';
 import { isEmpty } from 'lodash';
-import { TRecord, TTag, TTagGroup } from '../../models/interview';
-
-import Editor from './Editor';
+import { TTagGroup } from '../../models/tag';
 import styles from './index.less';
+import { DispatchProp } from 'react-redux';
+import ListEditor from './ListEditor';
 
-const { Item } = List;
-
-interface RecordListProps {
-  records: Array<TRecord>;
-  recordFocusId?: string;
-  dispatch: any;
-  loading: any;
+export interface IRecordListProps {
+  records: object;
   tagGroups: Array<TTagGroup>;
 }
 
-export default class RecordList extends PureComponent<RecordListProps> {
+export default class RecordList extends PureComponent<IRecordListProps & DispatchProp> {
+  static defaultProps: IRecordListProps = {
+    records: {},
+    tagGroups: [],
+  };
   addRecord = (id) => {
     this.props.dispatch({
       type: 'interview/addRecord',
@@ -41,31 +39,10 @@ export default class RecordList extends PureComponent<RecordListProps> {
   };
 
   render() {
-    const { records, recordFocusId, loading, dispatch, tagGroups } = this.props;
-
+    const { records, dispatch, tagGroups } = this.props;
     return (
       <div className={styles.list}>
-        <List
-          size="small"
-          itemLayout="horizontal"
-          dataSource={records}
-          loading={loading}
-          renderItem={(record: TRecord) => {
-            const { id, text, rawData } = record;
-            return (
-              <Item>
-                <Editor
-                  id={id}
-                  text={text}
-                  recordFocusId={recordFocusId}
-                  dispatch={dispatch}
-                  tagGroups={tagGroups}
-                  rawData={rawData}
-                />
-              </Item>
-            );
-          }}
-        />
+        <ListEditor dispatch={dispatch} tagGroups={tagGroups} records={records} />
       </div>
     );
   }

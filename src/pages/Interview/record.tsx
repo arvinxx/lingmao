@@ -1,37 +1,62 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Menu, Input, Icon, Popconfirm } from 'antd';
+import { DispatchProp } from 'react-redux';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
-
 import { TagInput, RecordList, Upload } from '../../components';
-import { TInterview } from '../../models/interview';
-import { TTagModel } from '../../models/tag';
+
+import { IInterview } from '../../models/interview';
+import { TTagGroup, TTagModel } from '../../models/tag';
+import { TRecordModel } from '../../models/recordDims';
+
+import { extractTags, generateId, initRecords } from '../../utils';
 import { queryDocument, saveDocument } from '../../services/api';
 
 import styles from './record.less';
-import { extractTags, generateId } from '../../utils';
-import { TRecordModel } from '../../models/recordDims';
-import { Connect, DispatchProp } from 'react-redux';
 
 interface IInterviewProps {
-  dispatch: any;
-  interview: TInterview;
+  interview: IInterview;
   loading: boolean;
   recordDims: TRecordModel;
-  tag: TTagModel;
+  tagGroups: TTagGroup[];
 }
 @connect(({ interview, tag, loading, recordDims }) => ({
   interview,
-  tag,
+  tagGroups: tag.tagGroups,
   recordDims,
   loading: loading.models.interview,
 }))
 export default class Interview extends Component<IInterviewProps & DispatchProp, any> {
+  static defaultProps: IInterviewProps = {
+    interview: {
+      tagVisible: false,
+      uploadVisible: true,
+      id: '',
+      records: {},
+      title: '',
+    },
+    loading: false,
+    tagGroups: [],
+    recordDims: {
+      selectedValues: [],
+      dimensions: [],
+    },
+  };
   async componentDidMount() {
     let documents = await queryDocument();
     documents = Array.isArray(documents) ? documents : [];
-    let { dimensions, selectedValues } = documents[0];
+    let { dimensions, selectedValues, title, records, id: docId } = documents[0];
+    if (records === undefined) {
+      records = initRecords('');
+    }
+    if (title === undefined) {
+      title = '';
+    }
+
+    if (docId === '') {
+      docId = generateId();
+    }
 
     const filterDimensions = dimensions.map((dimension) => {
       let { id, values, key } = dimension;
@@ -50,13 +75,13 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
         inputVisible: false,
       };
     });
-
     if (selectedValues === null) {
       selectedValues = [];
     }
 
     this.props.dispatch({
-      type: 'interview/fetchDocument',
+      type: 'interview/querryDocument',
+      payload: { title, records, docId },
     });
     this.props.dispatch({
       type: 'recordDims/querryRecordDims',
@@ -68,10 +93,9 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
   }
 
   componentWillUnmount() {
-    const { recordDims, interview, tag } = this.props;
+    const { recordDims, interview, tagGroups } = this.props;
     const { title, records, id } = interview;
     const { dimensions, selectedValues } = recordDims;
-    const { tagGroups } = tag;
 
     saveDocument({ title, id, records, dimensions, selectedValues, tagGroups });
   }
@@ -93,23 +117,16 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
 
   RecordComponent = () => {
     const minPanelSize = 150;
-    const { recordDims, interview, tag, dispatch } = this.props;
+    const { recordDims, interview, tagGroups, dispatch } = this.props;
     const { title, records } = interview;
     const { dimensions, selectedValues } = recordDims;
-    const { tagGroups } = tag;
-    const loading = this.props.loading;
     return (
       <div className={styles.center}>
         <ReflexContainer orientation="horizontal">
           <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
             <div className={styles.wrapper}>
               <Input className={styles.title} onChange={this.titleChange} value={title} />
-              <RecordList
-                loading={loading}
-                records={records}
-                dispatch={dispatch}
-                tagGroups={tagGroups}
-              />
+              <RecordList records={records} dispatch={dispatch} tagGroups={tagGroups} />
             </div>
           </ReflexElement>
           <ReflexSplitter>
@@ -161,8 +178,8 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
     } else return <div />;
   };
   render() {
-    const { uploadVisible, tagVisible } = this.props.interview;
-    const { tagGroups } = this.props.tag;
+    const { interview, tagGroups } = this.props;
+    const { uploadVisible, tagVisible } = interview;
 
     return (
       <div className={styles.container}>

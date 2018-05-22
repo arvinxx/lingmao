@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
-import { TTag } from 'models/tag';
+import { TTag } from '../../models/tag';
 import styles from './InputTooltip.less';
 
 export default class InputTooltip extends Component<any> {
@@ -28,39 +28,34 @@ export default class InputTooltip extends Component<any> {
     }
   };
   render() {
-    const { props, id, tags } = this.props;
-    const { children, attributes, editor, node } = props;
+    const { props, tags } = this.props;
+    const { children, attributes, editor } = props;
     return (
       <Popover
         overlayClassName={styles['tag-pop']}
-        // trigger="click"
         getPopupContainer={() => document.getElementById('tooltip') || document.body}
-        // visible={true}
         content={tags.map((tag: TTag) => {
           const { id: tid, refId, text } = tag;
-          if (refId === id) {
-            // 如果标签组属于该行
-            return (
-              <div key={tid + 'tag-container'} className={styles['tag-container']}>
-                <div key={tid + 'input-container'} className={styles['input-container']}>
-                  <Input
-                    className={styles.tag}
-                    onChange={(e) => this.changeTagText(e, tid)}
-                    value={text}
-                  />
-                  <Popconfirm
-                    key={'ppp'}
-                    title="确认要删除吗?"
-                    onConfirm={() => this.deleteTag(tid, editor)}
-                    okText="是"
-                    cancelText="否"
-                  >
-                    <Icon key={'close'} type="close" className={styles['value-delete']} />
-                  </Popconfirm>
-                </div>
+          return (
+            <div key={tid + 'tag-container'} className={styles['tag-container']}>
+              <div key={tid + 'input-container'} className={styles['input-container']}>
+                <Input
+                  className={styles.tag}
+                  onChange={(e) => this.changeTagText(e, tid)}
+                  value={text}
+                />
+                <Popconfirm
+                  key={'ppp'}
+                  title="确认要删除吗?"
+                  onConfirm={() => this.deleteTag(tid, editor)}
+                  okText="是"
+                  cancelText="否"
+                >
+                  <Icon key={'close'} type="close" className={styles['value-delete']} />
+                </Popconfirm>
               </div>
-            );
-          }
+            </div>
+          );
         })}
       >
         <span className={styles.underlines} {...attributes}>

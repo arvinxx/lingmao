@@ -1,41 +1,24 @@
-import { queryDocument } from '../services/api';
-import { concat } from 'lodash';
-import { findIndexById, generateId } from '../utils';
-import { Value } from 'slate';
-import Plain from 'slate-plain-serializer';
-import { TTagGroup } from './tag';
+import { DvaModel } from '../../typings/dva';
 
-export type TInterview = {
+export interface IInterview {
   title: string;
   records: object;
   id: string;
-  recordFocusId: string;
   uploadVisible: boolean;
   tagVisible: boolean;
-  tagGroups: Array<TTagGroup>;
-};
+}
 
-export const initRawData = () => {
-  return Plain.deserialize('').toJSON();
-};
-
-export default {
+interface IInterviewModel extends DvaModel {
+  state: IInterview;
+}
+const interview: IInterviewModel = {
   namespace: 'interview',
   state: {
     title: '',
-    records: [],
+    records: {},
     id: '',
     uploadVisible: true,
     tagVisible: true,
-  },
-  effects: {
-    *fetchDocument(action, { call, put }) {
-      const response = yield call(queryDocument);
-      yield put({
-        type: 'querryDocument',
-        payload: Array.isArray(response) ? response : [],
-      });
-    },
   },
   reducers: {
     changeUploadVisible(state, action) {
@@ -54,48 +37,15 @@ export default {
       return { ...state, title };
     },
 
-    querryDocument(state, { payload: documents }) {
-      let { title, records, id, dimensions, selectedValues } = documents[0];
-
-      dimensions.map((dimension) => {
-        let { id, values } = dimension;
-        id = id === '' ? generateId() : id;
-        values.map((value) => {
-          let { id } = value;
-          id = id === '' ? generateId() : id;
-          value.editable = false;
-          value.id = id;
-          delete value._id;
-        });
-        delete dimension._id;
-        dimension.values = values;
-        dimension.id = id;
-        dimension.inputVisible = false;
-      });
-      if (records === undefined) {
-        records = initRawData();
-      }
-      if (title === undefined) {
-        title = '';
-      }
-      if (selectedValues === null) {
-        selectedValues = [];
-      }
-      if (id === '') {
-        id = generateId();
-      }
-      return {
-        ...state,
-        records,
-        title,
-        id,
-        dimensions,
-        selectedValues,
-      };
+    querryDocument(state, { payload }) {
+      const { title, records, docId: id } = payload;
+      return { ...state, records, title, id };
     },
 
-    changeRecordRawData(state, { payload: records }) {
+    changeRecords(state, { payload: records }) {
       return { ...state, records };
     },
   },
 };
+
+export default interview;
