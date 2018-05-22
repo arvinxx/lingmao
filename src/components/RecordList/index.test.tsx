@@ -26,7 +26,7 @@ afterEach(() => {
 
 describe('RecordList 正常渲染样式', () => {
   it('RecordList Component should be render', () => {
-    expect(wrapper.find('Editor').length).toEqual(1);
+    expect(wrapper.find('ListEditor').length).toEqual(1);
     // expect(wrapper).toMatchSnapshot();
   });
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IEditorProps } from './Editor';
+import App, { IEditorProps } from './ListEditor';
 
 const rawData = {
   document: {
@@ -32,6 +32,5 @@ const props: IEditorProps = {
 };
 it('Render correct when receive props', () => {
   const wrapper = shallow(<App {...props} />);
-  expect(wrapper.find('.input').length).toEqual(1);
+  expect(wrapper.find('Editor').length).toEqual(1);
 });
-

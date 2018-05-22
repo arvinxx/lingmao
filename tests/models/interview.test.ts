@@ -54,6 +54,23 @@ describe('Reducers', () => {
       title: 'sda',
     });
   });
+
+  it('changeRecords', () => {
+    const reducer = reducers.changeRecords;
+    const state = {
+      records: '',
+    };
+
+    const action = {
+      type: 'interview/changeRecords',
+      payload: 'sda',
+    };
+
+    expect(reducer(state, action)).toEqual({
+      records: 'sda',
+    });
+  });
+
   it('changeTagVisible', () => {
     const reducer = reducers.changeTagVisible;
     const state = {

@@ -46,50 +46,65 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
   async componentDidMount() {
     let documents = await queryDocument();
     documents = Array.isArray(documents) ? documents : [];
-    let { dimensions, selectedValues, title, records, id: docId } = documents[0];
-    if (records === undefined) {
-      records = initRecords('');
-    }
-    if (title === undefined) {
-      title = '';
-    }
 
-    if (docId === '') {
-      docId = generateId();
-    }
+    if (documents.length > 0) {
+      let { dimensions, selectedValues, title, records, id: docId } = documents[0];
+      if (records === undefined) {
+        records = initRecords('');
+      }
+      if (title === undefined) {
+        title = '';
+      }
+      if (docId === '') {
+        docId = generateId();
+      }
 
-    const filterDimensions = dimensions.map((dimension) => {
-      let { id, values, key } = dimension;
-      return {
-        values: values.map((value) => {
-          let { id, text } = value;
-          id = id === '' ? generateId() : id;
-          return {
-            text,
-            id,
-            editable: false,
-          };
-        }),
-        key,
-        id: id === '' ? generateId() : id,
-        inputVisible: false,
-      };
-    });
-    if (selectedValues === null) {
-      selectedValues = [];
-    }
+      // 处理 dimensions
+      const filterDimensions = dimensions.map((dimension) => {
+        let { id, values, key } = dimension;
+        return {
+          values: values.map((value) => {
+            let { id, text } = value;
+            id = id === '' ? generateId() : id;
+            return {
+              text,
+              id,
+              editable: false,
+            };
+          }),
+          key,
+          id: id === '' ? generateId() : id,
+          inputVisible: false,
+        };
+      });
+      if (selectedValues === null) {
+        selectedValues = [];
+      }
 
-    this.props.dispatch({
-      type: 'interview/querryDocument',
-      payload: { title, records, docId },
-    });
-    this.props.dispatch({
-      type: 'recordDims/querryRecordDims',
-      payload: { dimensions: filterDimensions, selectedValues },
-    });
-    this.props.dispatch({
-      type: 'tag/fetchTagGroups',
-    });
+      // 处理 tagGroups
+      let { tagGroups } = documents[0];
+      if (tagGroups !== undefined && tagGroups !== null && tagGroups.length > 0) {
+        tagGroups = tagGroups.map((tagGroup, index) => ({
+          id: tagGroup.id === '' ? generateId() : tagGroup.id,
+          text: index === 0 ? '未分组' : tagGroup.text,
+          tags: [],
+        }));
+      } else {
+        tagGroups = [{ id: generateId(), tags: [], text: '未分组' }];
+      }
+      this.props.dispatch({
+        type: 'interview/querryDocument',
+        payload: { title, records, docId },
+      });
+      this.props.dispatch({
+        type: 'recordDims/querryRecordDims',
+        payload: { dimensions: filterDimensions, selectedValues },
+      });
+      this.props.dispatch({
+        type: 'tag/querryTagGroups',
+        payload: tagGroups,
+      });
+    }
   }
 
   componentWillUnmount() {

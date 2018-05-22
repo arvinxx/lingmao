@@ -2,18 +2,17 @@ import React, { Component } from 'react';
 import { Editor } from 'slate-react';
 import PluginEditList, { initValue } from './Editor';
 import { Value } from 'slate';
-
-const plugin = PluginEditList();
-const plugins = [plugin];
-
 import { extractTags } from '../../utils';
 import { TTagGroup } from '../../models/tag';
 import PopupMenu from './PopupMenu';
 import InputTooltip from './InputTooltip';
 import styles from './Editor.less';
+import { DispatchProp } from 'react-redux';
 
-export interface IEditorProps {
-  dispatch: any;
+const plugin = PluginEditList();
+const plugins = [plugin];
+
+export interface IListEditorProps {
   records: object;
   tagGroups: Array<TTagGroup>;
 }
@@ -23,7 +22,7 @@ interface IEditorStates {
   value: Value;
 }
 
-export default class ListEditor extends Component<IEditorProps, IEditorStates> {
+export default class ListEditor extends Component<IListEditorProps & DispatchProp, IEditorStates> {
   state = {
     value: Value.fromJSON(initValue),
     tagValue: '',
@@ -33,10 +32,6 @@ export default class ListEditor extends Component<IEditorProps, IEditorStates> {
   };
   private menu?: HTMLElement;
   private editorRef: HTMLElement;
-
-  constructor(props: IEditorProps) {
-    super(props);
-  }
 
   componentDidMount() {
     this.updateMenu();
@@ -93,11 +88,6 @@ export default class ListEditor extends Component<IEditorProps, IEditorStates> {
           </li>
         );
     }
-  };
-
-  changeFocus = (id) => {
-    console.log(id);
-    this.props.dispatch({ type: 'interview/changeRecordFocusId', payload: id });
   };
 
   render() {

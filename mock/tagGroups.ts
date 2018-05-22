@@ -4,9 +4,11 @@ export default [
     id: '1526132530988',
     tags: [
       {
-        text: '少门分，用被孟',
+        text: '测试标签1',
         id: 'rJecwftRf',
+        refText: '21312',
         refId: 'HJ@OwGtAG',
+        groupId: '1526132530988',
       },
     ],
   },

@@ -5,6 +5,22 @@ import { generateId } from '../../src/utils';
 const reducers = model.reducers;
 
 describe('Reducers', () => {
+  it('querryTagGroups', () => {
+    const reducer = reducers.querryTagGroups;
+    const state = {
+      tagGroups: [],
+    };
+
+    const action = {
+      type: 'tag/querryTagGroups',
+      payload: [{ id: 'dsad', tags: [], text: '未分组' }],
+    };
+
+    expect(reducer(state, action)).toEqual({
+      tagGroups: [{ id: 'dsad', tags: [], text: '未分组' }],
+    });
+  });
+
   it('addTag', () => {
     set('1/1/2000');
 

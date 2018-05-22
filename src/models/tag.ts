@@ -35,37 +35,11 @@ const tag: ITagModel = {
     selectedTags: [],
     exportDisplay: '1',
   },
-  effects: {
-    *fetchTagGroups(action, { call, put }) {
-      const response = yield call(queryDocument);
-      yield put({
-        type: 'querryTagGroups',
-        payload: Array.isArray(response) ? response : [],
-      });
-    },
-  },
   reducers: {
-    querryTagGroups(state, { payload: documents }) {
-      let { tagGroups } = documents[0];
-
-      if (tagGroups !== undefined && tagGroups !== null && tagGroups.length > 0) {
-        tagGroups.map((tagGroup, index) => {
-          let id = tagGroup.id;
-          id = id === '' ? generateId() : id;
-          if (index === 0) {
-            tagGroup.text = '未分组';
-          }
-          tagGroup.id = id;
-          delete tagGroup._id;
-        });
-      } else {
-        tagGroups = [{ id: generateId(), tags: [], text: '未分组' }];
-      }
-      return {
-        ...state,
-        tagGroups,
-      };
+    querryTagGroups(state, { payload: tagGroups }) {
+      return { ...state, tagGroups };
     },
+
     addTag(state, { payload }) {
       const { text, refId } = payload;
       const tagGroups: Array<TTagGroup> = concat(state.tagGroups);
