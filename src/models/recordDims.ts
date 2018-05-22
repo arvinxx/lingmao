@@ -1,6 +1,5 @@
 import { DvaModel } from '../../typings/dva';
 import { findIndexById, generateId } from '../utils';
-import { queryDocument } from '../services/api';
 
 export type TDimensionValue = {
   id: string;
@@ -30,43 +29,9 @@ const recordDims: IRecordDims = {
     selectedValues: [],
     dimensions: [],
   },
-  effects: {
-    *fetchRecordDims(action, { call, put }) {
-      const response = yield call(queryDocument);
-      yield put({
-        type: 'querryRecordDims',
-        payload: Array.isArray(response) ? response : [],
-      });
-    },
-  },
   reducers: {
-    querryRecordDims(state, { payload: documents }) {
-      let { dimensions, selectedValues } = documents[0];
-
-      dimensions.map((dimension) => {
-        let { id, values } = dimension;
-        id = id === '' ? generateId() : id;
-        values.map((value) => {
-          let { id } = value;
-          id = id === '' ? generateId() : id;
-          value.editable = false;
-          value.id = id;
-          delete value._id;
-        });
-        delete dimension._id;
-        dimension.values = values;
-        dimension.id = id;
-        dimension.inputVisible = false;
-      });
-
-      if (selectedValues === null) {
-        selectedValues = [];
-      }
-      return {
-        ...state,
-        dimensions,
-        selectedValues,
-      };
+    querryRecordDims(state, { payload: { dimensions, selectedValues } }) {
+      return { ...state, dimensions, selectedValues };
     },
 
     addDimensionKey(state, { payload: newDimension }) {
@@ -180,8 +145,14 @@ const recordDims: IRecordDims = {
       };
     },
 
-    changeSelectedValues(state, { payload: selectedValues }: { payload: TSelectedValues }) {
-      return { ...state, selectedValues };
+    changeSelectedValues(state, { payload }) {
+      const { id, checked } = payload;
+      return {
+        ...state,
+        selectedValues: checked
+          ? [...state.selectedValues, id]
+          : state.selectedValues.filter((t) => t !== id),
+      };
     },
   },
 };

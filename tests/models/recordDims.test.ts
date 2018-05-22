@@ -1,13 +1,35 @@
-import { generateId } from "../../src/utils";
-import model from "../../src/models/recordDims";
+import { generateId } from '../../src/utils';
+import model from '../../src/models/recordDims';
 
 jest.mock('shortid');
 
 const reducers = model.reducers;
 
-
 describe('Reducer', () => {
+  it('querryRecordDims', () => {
+    const reducer = reducers.querryRecordDims;
+    const state = {};
+    const action = {
+      type: 'recordDims/querryRecordDims',
+      payload: {
+        dimensions: [
+          { key: '1', id: '34', values: [] },
+          { key: '2', id: '21', values: [] },
+          { key: '3', id: '4', values: [] },
+        ],
+        selectedValues: ['1', '2'],
+      },
+    };
 
+    expect(reducer(state, action)).toEqual({
+      dimensions: [
+        { key: '1', id: '34', values: [] },
+        { key: '2', id: '21', values: [] },
+        { key: '3', id: '4', values: [] },
+      ],
+      selectedValues: ['1', '2'],
+    });
+  });
   describe('addDimensionKey', () => {
     it("should add a dimension key if it's not empty", () => {
       const reducer = reducers.addDimensionKey;
@@ -43,7 +65,6 @@ describe('Reducer', () => {
     });
   });
   it('deleteDimensionKey', () => {
-    const reducers = model.reducers;
     const reducer = reducers.deleteDimensionKey;
     const state = {
       dimensions: [
@@ -62,7 +83,6 @@ describe('Reducer', () => {
     });
   });
   it('changeDimensionKey', () => {
-    const reducers = model.reducers;
     const reducer = reducers.changeDimensionKey;
     const state = {
       dimensions: [
@@ -412,16 +432,24 @@ describe('Reducer', () => {
   it('changeSelectedValues', () => {
     const reducer = reducers.changeSelectedValues;
     const state = {
-      selectedValues: [],
+      selectedValues: ['1'],
     };
 
     const action = {
       type: 'recordDims/changeSelectedValues',
-      payload: ['1234', '1235175'],
+      payload: { id: '123', checked: true },
     };
 
     expect(reducer(state, action)).toEqual({
-      selectedValues: ['1234', '1235175'],
+      selectedValues: ['1', '123'],
+    });
+
+    const action2 = {
+      type: 'recordDims/changeSelectedValues',
+      payload: { id: '1', checked: false },
+    };
+    expect(reducer(state, action2)).toEqual({
+      selectedValues: [],
     });
   });
 });

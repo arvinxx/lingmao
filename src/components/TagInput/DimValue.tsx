@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Tag, Input, Icon, Popconfirm } from 'antd';
 const { CheckableTag } = Tag;
 import styles from './styles.less';
+import { DispatchProp } from 'react-redux';
 
-interface IDimValueProps {
+export interface IDimValueProps {
   id: string;
   vid: string;
   editable: boolean;
   text: string;
   selectedValues: string[];
-  dispatch: Function;
 }
-export default class DimValue extends Component<IDimValueProps> {
+export default class DimValue extends PureComponent<IDimValueProps & DispatchProp> {
   static defaultProps: IDimValueProps = {
     editable: false,
     id: '',
     text: '',
     vid: '',
     selectedValues: [],
-    dispatch: () => {},
   };
 
   oldValueChange = (e, id, vid) => {
@@ -31,13 +30,6 @@ export default class DimValue extends Component<IDimValueProps> {
     this.props.dispatch({
       type: 'recordDims/deleteDimensionValue',
       payload: { id, vid },
-    });
-  };
-
-  hideValueInput = (id) => {
-    this.props.dispatch({
-      type: 'recordDims/hideValueInput',
-      payload: id,
     });
   };
 
@@ -55,14 +47,9 @@ export default class DimValue extends Component<IDimValueProps> {
   };
 
   handleSelected(id: string, checked: boolean) {
-    const { selectedValues } = this.props;
-    const nextSelectedValues = checked
-      ? [...selectedValues, id]
-      : selectedValues.filter((t) => t !== id);
-
     this.props.dispatch({
       type: 'recordDims/changeSelectedValues',
-      payload: nextSelectedValues,
+      payload: { id, checked },
     });
   }
   render() {
@@ -82,7 +69,7 @@ export default class DimValue extends Component<IDimValueProps> {
       );
     } else {
       return (
-        <div key={vid + 'v-cont'} className={styles['value-container']}>
+        <div className={styles['value-container']}>
           <CheckableTag
             key={vid + 'checkbleTag'}
             checked={selectedValues.indexOf(vid) > -1}
@@ -93,13 +80,12 @@ export default class DimValue extends Component<IDimValueProps> {
             {text}
           </CheckableTag>
           <Popconfirm
-            key={vid + 'ppp'}
             title="确认要删除吗?"
             onConfirm={() => this.oldValueDelete(id, vid)}
             okText="是"
             cancelText="否"
           >
-            <Icon key={id + 'close'} type="close" className={styles['value-delete']} />
+            <Icon type="close" className={styles['value-delete']} />
           </Popconfirm>
         </div>
       );

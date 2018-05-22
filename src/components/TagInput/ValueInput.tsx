@@ -1,20 +1,19 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import { DispatchProp } from 'react-redux';
 import { Tag, Input, Icon } from 'antd';
 
 import styles from './styles.less';
 
-interface IValueInputProps {
+export interface IValueInputProps {
   id: string;
   inputVisible: boolean;
-  dispatch: Function;
 }
-export default class Index extends Component<IValueInputProps> {
+export default class ValueInput extends PureComponent<IValueInputProps & DispatchProp> {
   static defaultProps: IValueInputProps = {
     id: '',
     inputVisible: false,
-    dispatch: () => {},
   };
-  state = { newKey: '', newValue: '', newKeyPlaceHolder: '添加条目' };
+  state = { newValue: '' };
 
   newValueOnInput = (e) => {
     this.setState({ newValue: e.target.value });
@@ -40,6 +39,16 @@ export default class Index extends Component<IValueInputProps> {
     this.setState({ newValue: '' });
   };
 
+  cancelVOnEsc = (e, id) => {
+    if (e.key === 'Escape') {
+      this.props.dispatch({
+        type: 'recordDims/hideValueInput',
+        payload: id,
+      });
+      this.setState({ newValue: '' });
+    }
+  };
+
   showValueInput = (id) => {
     this.props.dispatch({
       type: 'recordDims/showValueInput',
@@ -57,6 +66,7 @@ export default class Index extends Component<IValueInputProps> {
           size="small"
           className={styles.input}
           value={newValue}
+          onKeyDown={(e) => this.cancelVOnEsc(e, id)}
           onChange={this.newValueOnInput}
           onPressEnter={(e) => this.newValueOnConfirm(id)}
           onBlur={() => this.newValueOnBlur(id)}
@@ -66,7 +76,7 @@ export default class Index extends Component<IValueInputProps> {
       return (
         <Tag
           key={`${id}-plus+++++++`}
-          //@ts-ignore Antd 未定义事件 props
+          //@ts-ignore Antd 未定义事件 props TODO
           onClick={() => this.showValueInput(id)}
           className={styles.plus}
         >

@@ -7,11 +7,12 @@ import 'react-reflex/styles.css';
 import { TagInput, RecordList, Upload } from '../../components';
 import { TInterview } from '../../models/interview';
 import { TTagModel } from '../../models/tag';
-import { saveDocument } from '../../services/api';
+import { queryDocument, saveDocument } from '../../services/api';
 
 import styles from './record.less';
-import { extractTags } from '../../utils';
+import { extractTags, generateId } from '../../utils';
 import { TRecordModel } from '../../models/recordDims';
+import { Connect, DispatchProp } from 'react-redux';
 
 interface IInterviewProps {
   dispatch: any;
@@ -26,13 +27,40 @@ interface IInterviewProps {
   recordDims,
   loading: loading.models.interview,
 }))
-export default class Interview extends Component<IInterviewProps, any> {
-  componentDidMount() {
+export default class Interview extends Component<IInterviewProps & DispatchProp, any> {
+  async componentDidMount() {
+    let documents = await queryDocument();
+    documents = Array.isArray(documents) ? documents : [];
+    let { dimensions, selectedValues } = documents[0];
+
+    const filterDimensions = dimensions.map((dimension) => {
+      let { id, values, key } = dimension;
+      return {
+        values: values.map((value) => {
+          let { id, text } = value;
+          id = id === '' ? generateId() : id;
+          return {
+            text,
+            id,
+            editable: false,
+          };
+        }),
+        key,
+        id: id === '' ? generateId() : id,
+        inputVisible: false,
+      };
+    });
+
+    if (selectedValues === null) {
+      selectedValues = [];
+    }
+
     this.props.dispatch({
       type: 'interview/fetchDocument',
     });
     this.props.dispatch({
-      type: 'recordDims/fetchRecordDims',
+      type: 'recordDims/querryRecordDims',
+      payload: { dimensions: filterDimensions, selectedValues },
     });
     this.props.dispatch({
       type: 'tag/fetchTagGroups',
@@ -41,7 +69,7 @@ export default class Interview extends Component<IInterviewProps, any> {
 
   componentWillUnmount() {
     const { recordDims, interview, tag } = this.props;
-    const { title, records,id } = interview;
+    const { title, records, id } = interview;
     const { dimensions, selectedValues } = recordDims;
     const { tagGroups } = tag;
 
@@ -65,7 +93,7 @@ export default class Interview extends Component<IInterviewProps, any> {
 
   RecordComponent = () => {
     const minPanelSize = 150;
-    const { recordDims, interview, tag,dispatch } = this.props;
+    const { recordDims, interview, tag, dispatch } = this.props;
     const { title, records } = interview;
     const { dimensions, selectedValues } = recordDims;
     const { tagGroups } = tag;
@@ -92,11 +120,7 @@ export default class Interview extends Component<IInterviewProps, any> {
             </div>
           </ReflexSplitter>
           <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-            <TagInput
-              dimensions={dimensions}
-              selectedValues={selectedValues}
-              dispatch={dispatch}
-            />
+            <TagInput dimensions={dimensions} selectedValues={selectedValues} dispatch={dispatch} />
           </ReflexElement>
         </ReflexContainer>
       </div>

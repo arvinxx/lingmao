@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Input, Icon, Popconfirm } from 'antd';
 import styles from './styles.less';
+import { DispatchProp } from 'react-redux';
 
 export interface IDimGroupProps {
   id: string;
   value: string;
-  dispatch: Function;
 }
-export default class DimGroup extends Component<IDimGroupProps> {
+export default class DimGroup extends PureComponent<IDimGroupProps & DispatchProp> {
   static defaultProps: IDimGroupProps = {
     id: '',
     value: '',
-    dispatch: () => {},
   };
 
   changeKey = (e, id) => {

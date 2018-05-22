@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 import { Input } from 'antd';
-import ValueInput from './valueInput';
-import DimGroup from './dimGroup';
-import DimValue from './dimValue';
+import { DispatchProp } from 'react-redux';
+
+import ValueInput from './ValueInput';
+import DimGroup from './DimGroup';
+import DimValue from './DimValue';
 
 import styles from './styles.less';
 import { TDimensions, TSelectedValues } from '../../models/recordDims';
 
-interface ILabelSelectProps {
+export interface ITagInputProps {
   dimensions: TDimensions;
   selectedValues: TSelectedValues;
-  dispatch: any;
 }
-interface ILabelSelectStates {
+interface ITagInputStates {
   newKey: string;
-  newValue: string;
   newKeyPlaceHolder: string;
 }
 
-export default class TagInput extends Component<ILabelSelectProps, ILabelSelectStates> {
-  static defaultProps: ILabelSelectProps = {
+export default class TagInput extends Component<ITagInputProps & DispatchProp, ITagInputStates> {
+  static defaultProps: ITagInputProps = {
     dimensions: [],
-    dispatch: () => {},
     selectedValues: [],
   };
-  state = { newKey: '', newValue: '', newKeyPlaceHolder: '添加条目' };
+  state = { newKey: '', newKeyPlaceHolder: '添加条目' };
 
   newKeyOnInput = (e) => {
     this.setState({ newKey: e.target.value });
   };
-  newKeyOnFocus = (e) => {
+  newKeyOnFocus = () => {
     this.setState({ newKeyPlaceHolder: '' });
   };
   newKeyOnBlur = () => {
@@ -55,14 +54,15 @@ export default class TagInput extends Component<ILabelSelectProps, ILabelSelectS
           const { key, values, id, inputVisible } = dimension;
           return (
             <div key={id + 'd-container'} className={styles['dimension-container']}>
-              <div key={id + 'k-container'} className={styles['key-container']}>
-                <DimGroup dispatch={dispatch} id={id} value={key} />
+              <div className={styles['key-container']}>
+                <DimGroup key={id + 'dimGroup'} dispatch={dispatch} id={id} value={key} />
               </div>
-              <div key={id + 'tag-container'} className={styles['tag-container']}>
+              <div className={styles['tag-container']}>
                 {values.map((value: any) => {
                   const { text, id: vid, editable } = value;
                   return (
                     <DimValue
+                      key={vid + 'tag-container'}
                       id={id}
                       vid={vid}
                       dispatch={dispatch}
