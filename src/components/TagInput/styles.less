@@ -127,6 +127,16 @@
   &:hover .delete {
     opacity: 1;
   }
+  :global {
+    .ant-input {
+      border: none;
+      border-radius: 0;
+      &:focus {
+        border: none;
+        box-shadow: none;
+      }
+    }
+  }
 }
 
 .tag-container {
@@ -157,7 +167,8 @@
   color: @text-color-secondary;
   padding-right: 11px;
   background: none;
-
+  border: none;
+  border-radius: 0;
   &:hover {
     background-color: @base-white;
     .input-border-hover;

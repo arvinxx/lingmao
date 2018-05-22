@@ -2,38 +2,19 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import App, { ITagInputProps } from './index';
 import { spy } from 'sinon';
+import dimensions from '../../../mock/dimensions';
 
 const setup = () => {
   const dispatch = spy();
-
-  const props: ITagInputProps = {
-    dimensions: [
-      {
-        id: '1',
-        key: 'd',
-        values: [{ text: '1', id: '1', editable: false }, { text: '3', id: '3', editable: false }],
-        inputVisible: false,
-      },
-      {
-        id: '2',
-        key: 'dg',
-        values: [{ text: '4', id: '4', editable: false }],
-        inputVisible: false,
-      },
-    ],
-    selectedValues: ['1', '5'],
-  };
+  const props: ITagInputProps = { dimensions, selectedValues: ['1', '5'] };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
-  return {
-    props,
-    wrapper,
-    dispatch,
-  };
+  return { props, wrapper, dispatch };
 };
 const { wrapper, props, dispatch } = setup();
 afterEach(() => {
   dispatch.resetHistory();
 });
+
 it('render', () => {
   expect(wrapper.find('.container').length).toEqual(1);
   expect(wrapper.find('DimGroup').length).toEqual(2);
