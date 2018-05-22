@@ -23,33 +23,33 @@ export default class DimValue extends Component<IDimValueProps> {
 
   oldValueChange = (e, id, vid) => {
     this.props.dispatch({
-      type: 'interview/changeDimensionValue',
+      type: 'recordDims/changeDimensionValue',
       payload: { id, vid, newValue: e.target.value },
     });
   };
   oldValueDelete = (id, vid) => {
     this.props.dispatch({
-      type: 'interview/deleteDimensionValue',
+      type: 'recordDims/deleteDimensionValue',
       payload: { id, vid },
     });
   };
 
   hideValueInput = (id) => {
     this.props.dispatch({
-      type: 'interview/hideValueInput',
+      type: 'recordDims/hideValueInput',
       payload: id,
     });
   };
 
   showValueEdit = (id, vid) => {
     this.props.dispatch({
-      type: 'interview/showValueEdit',
+      type: 'recordDims/showValueEdit',
       payload: { id, vid },
     });
   };
   hideValueEdit = (id, vid) => {
     this.props.dispatch({
-      type: 'interview/hideValueEdit',
+      type: 'recordDims/hideValueEdit',
       payload: { id, vid },
     });
   };
@@ -61,7 +61,7 @@ export default class DimValue extends Component<IDimValueProps> {
       : selectedValues.filter((t) => t !== id);
 
     this.props.dispatch({
-      type: 'interview/changeSelectedValues',
+      type: 'recordDims/changeSelectedValues',
       payload: nextSelectedValues,
     });
   }

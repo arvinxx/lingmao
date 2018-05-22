@@ -16,13 +16,13 @@ export default class DimGroup extends Component<IDimGroupProps> {
 
   changeKey = (e, id) => {
     this.props.dispatch({
-      type: 'interview/changeDimensionKey',
+      type: 'recordDims/changeDimensionKey',
       payload: { id, newKey: e.target.value },
     });
   };
   deleteKey = (id) => {
     this.props.dispatch({
-      type: 'interview/deleteDimensionKey',
+      type: 'recordDims/deleteDimensionKey',
       payload: id,
     });
   };

@@ -4,23 +4,26 @@ import { Menu, Input, Icon, Popconfirm } from 'antd';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
 
-import { TagInput, RecordList, Upload, Ellipsis } from 'components';
-import { TInterview } from 'models/interview';
+import { TagInput, RecordList, Upload } from '../../components';
+import { TInterview } from '../../models/interview';
 import { TTagModel } from '../../models/tag';
-import { saveDocument } from 'services/api';
+import { saveDocument } from '../../services/api';
 
 import styles from './record.less';
 import { extractTags } from '../../utils';
+import { TRecordModel } from '../../models/recordDims';
 
 interface IInterviewProps {
   dispatch: any;
   interview: TInterview;
   loading: boolean;
+  recordDims: TRecordModel;
   tag: TTagModel;
 }
-@connect(({ interview, tag, loading }) => ({
+@connect(({ interview, tag, loading, recordDims }) => ({
   interview,
   tag,
+  recordDims,
   loading: loading.models.interview,
 }))
 export default class Interview extends Component<IInterviewProps, any> {
@@ -29,13 +32,19 @@ export default class Interview extends Component<IInterviewProps, any> {
       type: 'interview/fetchDocument',
     });
     this.props.dispatch({
+      type: 'recordDims/fetchRecordDims',
+    });
+    this.props.dispatch({
       type: 'tag/fetchTagGroups',
     });
   }
 
   componentWillUnmount() {
-    const { title, records, id, dimensions, selectedValues } = this.props.interview;
-    const { tagGroups } = this.props.tag;
+    const { recordDims, interview, tag } = this.props;
+    const { title, records,id } = interview;
+    const { dimensions, selectedValues } = recordDims;
+    const { tagGroups } = tag;
+
     saveDocument({ title, id, records, dimensions, selectedValues, tagGroups });
   }
 
@@ -56,8 +65,10 @@ export default class Interview extends Component<IInterviewProps, any> {
 
   RecordComponent = () => {
     const minPanelSize = 150;
-    const { title, records, dimensions, selectedValues, recordFocusId } = this.props.interview;
-    const { tagGroups } = this.props.tag;
+    const { recordDims, interview, tag,dispatch } = this.props;
+    const { title, records } = interview;
+    const { dimensions, selectedValues } = recordDims;
+    const { tagGroups } = tag;
     const loading = this.props.loading;
     return (
       <div className={styles.center}>
@@ -67,9 +78,8 @@ export default class Interview extends Component<IInterviewProps, any> {
               <Input className={styles.title} onChange={this.titleChange} value={title} />
               <RecordList
                 loading={loading}
-                recordFocusId={recordFocusId}
                 records={records}
-                dispatch={this.props.dispatch}
+                dispatch={dispatch}
                 tagGroups={tagGroups}
               />
             </div>
@@ -85,7 +95,7 @@ export default class Interview extends Component<IInterviewProps, any> {
             <TagInput
               dimensions={dimensions}
               selectedValues={selectedValues}
-              dispatch={this.props.dispatch}
+              dispatch={dispatch}
             />
           </ReflexElement>
         </ReflexContainer>

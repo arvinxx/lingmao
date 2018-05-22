@@ -22,11 +22,11 @@ export default class Index extends Component<IValueInputProps> {
   newValueOnBlur = (id) => {
     const { newValue } = this.state;
     this.props.dispatch({
-      type: 'interview/addDimensionValue',
+      type: 'recordDims/addDimensionValue',
       payload: { id, newValue },
     });
     this.props.dispatch({
-      type: 'interview/hideValueInput',
+      type: 'recordDims/hideValueInput',
       payload: id,
     });
     this.setState({ newValue: '' });
@@ -34,7 +34,7 @@ export default class Index extends Component<IValueInputProps> {
   newValueOnConfirm = (id) => {
     const { newValue } = this.state;
     this.props.dispatch({
-      type: 'interview/addDimensionValue',
+      type: 'recordDims/addDimensionValue',
       payload: { id, newValue },
     });
     this.setState({ newValue: '' });
@@ -42,7 +42,7 @@ export default class Index extends Component<IValueInputProps> {
 
   showValueInput = (id) => {
     this.props.dispatch({
-      type: 'interview/showValueInput',
+      type: 'recordDims/showValueInput',
       payload: id,
     });
   };

@@ -5,20 +5,11 @@ import DimGroup from './dimGroup';
 import DimValue from './dimValue';
 
 import styles from './styles.less';
+import { TDimensions, TSelectedValues } from '../../models/recordDims';
 
-type TValue = {
-  id: string;
-  text: string;
-};
 interface ILabelSelectProps {
-  dimensions: Array<{
-    id: string;
-    key: string;
-    values: Array<TValue>;
-    inputVisible: boolean;
-    valueEditable: boolean;
-  }>;
-  selectedValues: Array<string>;
+  dimensions: TDimensions;
+  selectedValues: TSelectedValues;
   dispatch: any;
 }
 interface ILabelSelectStates {
@@ -43,14 +34,14 @@ export default class TagInput extends Component<ILabelSelectProps, ILabelSelectS
   };
   newKeyOnBlur = () => {
     this.props.dispatch({
-      type: 'interview/addDimensionKey',
+      type: 'recordDims/addDimensionKey',
       payload: this.state.newKey,
     });
     this.setState({ newKeyPlaceHolder: '添加条目', newKey: '' });
   };
   newKeyOnPressEnter = () => {
     this.props.dispatch({
-      type: 'interview/addDimensionKey',
+      type: 'recordDims/addDimensionKey',
       payload: this.state.newKey,
     });
     this.setState({ newKeyPlaceHolder: '', newKey: '' });
