@@ -4,7 +4,7 @@ import { getActivities, getNotice, getFakeList, getTreeData } from './mock/api';
 import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
 import document from './mock/document';
-import tag from './mock/tags';
+import tag from './mock/dimensions';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
