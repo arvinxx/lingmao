@@ -12,8 +12,6 @@ import { getCurrentItem } from '../utils';
  */
 export default (event: any, change: Change, editor: any, opts: Options): void | any => {
   // Shift+Enter 另起一行，不分列
-  console.log(event);
-  console.log(change);
   if (event.shiftKey) {
     return undefined;
   }

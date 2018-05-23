@@ -30,7 +30,16 @@ it('render', () => {
   expect(wrapper.find('.container').length).toEqual(1);
 });
 
-it('deleteTag should run when onConfirm', () => {
-  wrapper.find('Popconfirm').simulate('confirm');
-  expect(dispatch.callCount).toEqual(1);
+describe('response', () => {
+  it('deleteTag should run when onConfirm', () => {
+    wrapper.find('Popconfirm').simulate('confirm');
+    expect(dispatch.callCount).toEqual(1);
+  });
+
+  describe('点击标签目录筛选对应的记录', () => {
+    it('filterRecord should run when click tag', () => {
+      wrapper.find('.labels').simulate('click');
+      expect(dispatch.callCount).toEqual(1);
+    });
+  });
 });

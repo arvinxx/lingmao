@@ -2,12 +2,15 @@ import { findIndexById, generateId, reorder } from '../utils';
 import { concat } from 'lodash';
 import { queryDocument } from '../services/api';
 import { DvaModel } from '../../typings/dva';
+import update from 'immutability-helper';
 
 export type TTag = {
   id: string;
   text: string;
   refText: string;
   refId: string;
+  anchorOffset: number;
+  focusOffset: number;
   groupId: string;
 };
 
@@ -41,11 +44,25 @@ const tag: ITagModel = {
     },
 
     addTag(state, { payload }) {
-      const { text, refId } = payload;
-      const tagGroups: Array<TTagGroup> = concat(state.tagGroups);
-      tagGroups[0].tags = [...state.tagGroups[0].tags, { text: text, id: generateId(), refId }];
-      const newTagGroups = concat(tagGroups);
-      return { ...state, tagGroups: newTagGroups };
+      const { text, refId, offset } = payload;
+      return {
+        ...state,
+        tagGroups: update(state.tagGroups, {
+          0: {
+            tags: {
+              $push: [
+                {
+                  text,
+                  refText: text,
+                  refId,
+                  offset,
+                  id: generateId(),
+                },
+              ],
+            },
+          },
+        }),
+      };
     },
     changeTagText(state, { payload }) {
       const { id, newText } = payload;

@@ -17,6 +17,14 @@ export default class TagList extends Component<ITagListProps & DispatchProp> {
       payload: id,
     });
   };
+  filterRecord = (id) => {
+    console.log(id);
+    //TODO #38 点击标签目录筛选对应的记录
+    this.props.dispatch({
+      type: 'interview/filterRecord',
+      payload: id,
+    });
+  };
   render() {
     const { tags } = this.props;
     return (
@@ -31,7 +39,7 @@ export default class TagList extends Component<ITagListProps & DispatchProp> {
           {tags.map((tag) => {
             const { text, id } = tag;
             return (
-              <Menu.Item className={styles.labels} key={id}>
+              <Menu.Item className={styles.labels} key={id} onClick={() => this.filterRecord(id)}>
                 {text}
                 <Popconfirm
                   key={'ppp'}

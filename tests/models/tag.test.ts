@@ -22,8 +22,6 @@ describe('Reducers', () => {
   });
 
   it('addTag', () => {
-    set('1/1/2000');
-
     const reducer = reducers.addTag;
     const state = {
       tagGroups: [
@@ -36,18 +34,17 @@ describe('Reducers', () => {
     };
     const action = {
       type: 'tag/addTag',
-      payload: { text: 'dsa', refId: '1' },
+      payload: { text: 'dsa', refId: '1', offset: 5 },
     };
     expect(reducer(state, action)).toEqual({
       tagGroups: [
         {
           text: '未分组',
           id: '542424',
-          tags: [{ text: 'dsa', id: generateId(), refId: '1' }],
+          tags: [{ text: 'dsa',refText:'dsa', id: generateId(), offset: 5, refId: '1' }],
         },
       ],
     });
-    reset();
   });
   it('deleteTag', () => {
     const reducers = model.reducers;

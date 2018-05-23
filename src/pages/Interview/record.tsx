@@ -35,6 +35,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
       uploadVisible: true,
       id: '',
       records: {},
+      tagUpdate: false,
       title: '',
     },
     loading: false,
@@ -125,10 +126,9 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
   };
 
   render() {
-    const { interview, tagGroups, dispatch, recordDims } = this.props;
-    const { uploadVisible, tagVisible } = interview;
     const minPanelSize = 150;
-    const { title, records } = interview;
+    const { interview, tagGroups, dispatch, recordDims } = this.props;
+    const { uploadVisible, tagVisible, tagUpdate, title, records } = interview;
     const { dimensions, selectedValues } = recordDims;
     return (
       <div className={styles.container}>
@@ -138,7 +138,12 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
             <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
               <div className={styles.wrapper}>
                 <Input className={styles.title} onChange={this.titleChange} value={title} />
-                <RecordList records={records} dispatch={dispatch} tagGroups={tagGroups} />
+                <RecordList
+                  tagUpdate={tagUpdate}
+                  records={records}
+                  dispatch={dispatch}
+                  tagGroups={tagGroups}
+                />
               </div>
             </ReflexElement>
             <ReflexSplitter>

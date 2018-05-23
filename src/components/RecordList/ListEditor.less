@@ -1,24 +1,26 @@
-//noinspection CssUnknownTarget
-@import '~styles/themes/default';
+@import '../../styles/themes/default';
 
-//.editor > * > * + * {
-//  margin-top: 1em;
-//}
 .editor {
   width: 100%;
 }
-.input {
-  display: flex;
-  width: 100%;
-  &::before {
-    //display: inline-block;
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: @dark-5;
-    border-radius: 50%;
-    margin-right: 11px;
-    margin-top: 8px;
+.container {
+  margin-top: 8px;
+  ul {
+    padding-left: 16px;
+    height: 22px;
+  }
+  li {
+    padding-left: 4px;
+    transition: color @animation-duration-base;
+    div {
+      color: @text-color;
+    }
+    &:hover {
+      color: @heading-color;
+      div {
+        color: @text-color;
+      }
+    }
   }
 }
 

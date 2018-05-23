@@ -1,36 +1,79 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import App, { IEditorProps } from './ListEditor';
 
-const rawData = {
-  document: {
-    nodes: [
-      {
-        object: 'block',
-        type: 'paragraph',
-        nodes: [
-          {
-            object: 'text',
-            leaves: [
-              {
-                text: 'A line of text in a paragraph.',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+import { mount, shallow } from 'enzyme';
+import App, { IListEditorProps } from './ListEditor';
+import InputTooltip from './InputTooltip';
+
+import { spy } from 'sinon';
+import { extractTags, initRecords, initRecordsAsValue } from '../../utils';
+
+const setup = () => {
+  const dispatch = spy();
+  const props: IListEditorProps = {
+    records: initRecords(''),
+    tagGroups: [],
+  };
+  const wrapper = shallow(<App {...props} dispatch={dispatch} />);
+  return { props, wrapper, dispatch };
 };
-const props: IEditorProps = {
-  rawData,
-  dispatch: jest.fn(),
-  id: '1',
-  tagGroups: [],
-  text: '5',
-  recordFocusId: '4',
-};
-it('Render correct when receive props', () => {
-  const wrapper = shallow(<App {...props} />);
+
+const { wrapper, dispatch, props } = setup();
+afterEach(() => {
+  dispatch.resetHistory();
+});
+it('render', () => {
   expect(wrapper.find('Editor').length).toEqual(1);
+  expect(wrapper.find('PopupMenu').length).toEqual(1);
+});
+describe('response', () => {
+  it('changeRecords should run when change ', () => {
+    const value = initRecordsAsValue('3123213');
+    wrapper.find('Editor').simulate('change', { value });
+    expect(dispatch.callCount).toEqual(1);
+    expect(wrapper.state('value')).toEqual(value);
+  });
+});
+describe('function', () => {
+  const instance = wrapper.instance() as App;
+  it('setMenuRef', () => {
+    instance.setMenuRef('2');
+    expect(instance.menu).toEqual('2');
+  });
+  describe('renderNode', () => {
+    const renderNode = instance.renderNode;
+
+    it('should render ul', () => {
+      const props = {
+        node: { type: 'ul_list' },
+        children: <div>a</div>,
+        editor: { value: initRecordsAsValue('2') },
+      };
+      expect(renderNode(props)).toEqual(
+        <ul>
+          <div>a</div>
+        </ul>
+      );
+    });
+    it('should render li', () => {
+      const props = {
+        node: { type: 'list_item' },
+        children: <div>a</div>,
+        editor: { value: initRecordsAsValue('2') },
+      };
+      expect(renderNode(props)).toEqual(
+        <li title="">
+          <div>a</div>
+        </li>
+      );
+    });
+  });
+  it('renderMark', () => {
+    const renderMark = instance.renderMark;
+    const tagGroups = [];
+    const tags = extractTags(tagGroups);
+    const props = { dispatch, tagGroups };
+    expect(renderMark(props)).toEqual(
+      <InputTooltip props={props} tags={tags} dispatch={dispatch} />
+    );
+  });
 });

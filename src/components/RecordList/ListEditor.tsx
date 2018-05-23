@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Ref, RefObject } from 'react';
 import { Editor } from 'slate-react';
 import PluginEditList, { initValue } from './Editor';
 import { Value } from 'slate';
@@ -6,15 +6,17 @@ import { extractTags } from '../../utils';
 import { TTagGroup } from '../../models/tag';
 import PopupMenu from './PopupMenu';
 import InputTooltip from './InputTooltip';
-import styles from './Editor.less';
+import styles from './ListEditor.less';
 import { DispatchProp } from 'react-redux';
-
+import { createContext } from 'react-broadcast';
+const { Provider, Consumer } = createContext();
 const plugin = PluginEditList();
 const plugins = [plugin];
 
 export interface IListEditorProps {
   records: object;
   tagGroups: Array<TTagGroup>;
+  tagUpdate: boolean;
 }
 
 interface IEditorStates {
@@ -23,23 +25,27 @@ interface IEditorStates {
 }
 
 export default class ListEditor extends Component<IListEditorProps & DispatchProp, IEditorStates> {
+  static defaultProps: IListEditorProps = {
+    tagGroups: [],
+    records: initValue,
+    tagUpdate: false,
+  };
   state = {
     value: Value.fromJSON(initValue),
     tagValue: '',
   };
-  menuRef = (menu) => {
+  menu: HTMLElement;
+  setMenuRef = (menu) => {
     this.menu = menu;
   };
-  private menu?: HTMLElement;
-  private editorRef: HTMLElement;
 
   componentDidMount() {
     this.updateMenu();
+    this.setState({
+      value: Value.fromJSON(this.props.records),
+    });
   }
 
-  componentWillUpdate() {
-    return false;
-  }
   componentDidUpdate() {
     this.updateMenu();
   }
@@ -71,48 +77,60 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
   };
 
   renderNode = (props) => {
-    const { node, attributes, children, editor } = props;
-    const isCurrentItem = plugin.utils.getItemsAtRange(editor.value).contains(node);
-
+    const { node, attributes, children } = props;
     switch (node.type) {
       case 'ul_list':
         return <ul {...attributes}>{children}</ul>;
       case 'list_item':
+        return <li {...props.attributes}>{props.children}</li>;
+    }
+  };
+  renderMark = (props) => {
+    const { dispatch } = this.props;
+    const { value } = this.state;
+    const { mark } = props;
+    switch (mark.type) {
+      case 'underline':
         return (
-          <li
-            className={isCurrentItem ? 'current-item' : ''}
-            title={isCurrentItem ? 'Current Item' : ''}
-            {...props.attributes}
-          >
-            {props.children}
-          </li>
+          <Consumer>
+            {(tagGroups) => (
+              <InputTooltip
+                props={props}
+                value={value}
+                tags={extractTags(tagGroups)}
+                onChange={this.onChange}
+                dispatch={dispatch}
+              />
+            )}
+          </Consumer>
         );
     }
+  };
+  shouldNodeComponentUpdate = (props) => {
+    return props.node.type === 'list_item';
   };
 
   render() {
     const value: Value = this.state.value;
     const { dispatch, tagGroups } = this.props;
-    // const tags = extractTags(tagGroups);
     return (
       <div className={styles.container}>
         <div className={styles.editor}>
-          <Editor
-            ref={(editor) => (this.editorRef = editor)}
-            placeholder={'请开始你的表演'}
-            plugins={plugins}
-            value={this.state.value}
-            onChange={this.onChange}
-            renderNode={this.renderNode}
-            shouldNodeComponentUpdate={(props) => props.node.type === 'list_item'}
-            // renderMark={(props) => (
-            //   <InputTooltip props={props} id={id} tags={tags} dispatch={dispatch} />
-            // )}
-          />
+          <Provider value={tagGroups}>
+            <Editor
+              placeholder={'请开始你的表演'}
+              plugins={plugins}
+              value={this.state.value}
+              onChange={this.onChange}
+              renderNode={this.renderNode}
+              renderMark={this.renderMark}
+              shouldNodeComponentUpdate={this.shouldNodeComponentUpdate}
+            />
+          </Provider>
         </div>
         <div id="tooltip" />
         <PopupMenu
-          menuRef={this.menuRef}
+          menuRef={this.setMenuRef}
           value={value}
           onChange={this.onChange}
           dispatch={dispatch}

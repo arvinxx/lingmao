@@ -8,12 +8,14 @@ import ListEditor from './ListEditor';
 export interface IRecordListProps {
   records: object;
   tagGroups: Array<TTagGroup>;
+  tagUpdate: boolean;
 }
 
 export default class RecordList extends PureComponent<IRecordListProps & DispatchProp> {
   static defaultProps: IRecordListProps = {
     records: {},
     tagGroups: [],
+    tagUpdate: false,
   };
   addRecord = (id) => {
     this.props.dispatch({
@@ -39,10 +41,15 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
   };
 
   render() {
-    const { records, dispatch, tagGroups } = this.props;
+    const { records, dispatch, tagGroups, tagUpdate } = this.props;
     return (
       <div className={styles.list}>
-        <ListEditor dispatch={dispatch} tagGroups={tagGroups} records={records} />
+        <ListEditor
+          dispatch={dispatch}
+          tagUpdate={tagUpdate}
+          tagGroups={tagGroups}
+          records={records}
+        />
       </div>
     );
   }

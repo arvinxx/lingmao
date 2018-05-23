@@ -2,15 +2,22 @@ import React, { Component, Ref, RefObject } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './PopupMenu.less';
 import { Value } from 'slate';
+import { DispatchProp } from 'react-redux';
 
-interface IPopupMenuProps {
-  menuRef: any;
+export interface IPopupMenuProps {
+  menuRef;
   onChange: Function;
   value: Value;
-  dispatch: any;
 }
 
-export default class PopupMenu extends Component<IPopupMenuProps> {
+export default class PopupMenu extends Component<IPopupMenuProps & DispatchProp> {
+  constructor(props) {
+    super(props);
+    const doc = window.document;
+    this.node = doc.createElement('div');
+    doc.body.appendChild(this.node);
+  }
+  node: HTMLElement;
   checkState(type) {
     const { value } = this.props;
     return value.activeMarks.some((mark) => mark.type === type);
@@ -22,12 +29,15 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
     if (type === 'add') {
       // 可用状态时
       const text: string = window.getSelection().toString();
+      console.log(value);
+      console.log(value.change().addMark('underline'));
+      onChange(value.change().addMark('underline'));
+      const { focusKey: refId, anchorOffset, focusOffset } = value.selection;
+      const offset = Math.min(anchorOffset, focusOffset);
       dispatch({
         type: 'tag/addTag',
-        payload: { text },
+        payload: { text, refId, offset },
       });
-      onChange(value.change().addMark(''));
-      console.log('新增标签');
     }
   };
 
@@ -45,13 +55,11 @@ export default class PopupMenu extends Component<IPopupMenuProps> {
   }
 
   render() {
-    const root = window.document.getElementById('root');
-
     return ReactDOM.createPortal(
       <div className={styles.menu + ' ' + styles['hover-menu']} ref={this.props.menuRef}>
         {this.renderMarkButton('add', '新增标签')}
       </div>,
-      root
+      this.node
     );
   }
 }
