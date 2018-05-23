@@ -56,7 +56,7 @@ export default class InputTooltip extends Component<IInputTooltipProps & Dispatc
                 <div key={id + 'input-container'} className={styles['input-container']}>
                   <Input
                     className={styles.tag}
-                    style={{ width: text.length * 14 + 40 }}
+                    style={{ width: text.length * 14 + 32 }}
                     onChange={(e) => this.changeTagText(e, id)}
                     value={text}
                   />

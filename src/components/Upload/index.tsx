@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Radio, List, Collapse, Upload, message, Button, InputNumber, Icon } from 'antd';
-import { Ellipsis } from 'components';
+import { Ellipsis } from '../../components';
 
 import styles from './styles.less';
 
