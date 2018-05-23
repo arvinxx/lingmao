@@ -64,11 +64,12 @@ export default class ValueInput extends PureComponent<IValueInputProps & Dispatc
           key={`${id}-add`}
           type="text"
           size="small"
+          autoFocus={inputVisible}
           className={styles.input}
           value={newValue}
           onKeyDown={(e) => this.cancelVOnEsc(e, id)}
           onChange={this.newValueOnInput}
-          onPressEnter={(e) => this.newValueOnConfirm(id)}
+          onPressEnter={() => this.newValueOnConfirm(id)}
           onBlur={() => this.newValueOnBlur(id)}
         />
       );

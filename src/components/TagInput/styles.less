@@ -46,7 +46,7 @@
   }
 }
 .value-input {
-  width: 80px;
+  min-width: 72px;
   height: 24px;
   margin-right: 16px;
   padding-left: 10px;
@@ -77,8 +77,8 @@
 .value-container {
   display: inline-flex;
   justify-content: flex-end;
+  margin: 4px 0;
   margin-right: 8px;
-
   .value-delete {
     .icon-delete;
     font-size: @font-size-sm;
@@ -111,6 +111,7 @@
 }
 
 .dimension-container {
+  display: flex;
   &:not(:last-child) {
     margin-bottom: @padding-md;
   }
@@ -131,9 +132,11 @@
     .ant-input {
       border: none;
       border-radius: 0;
-      &:focus {
+      &:focus,
+      &:active {
         border: none;
         box-shadow: none;
+        .input-border-hover;
       }
     }
   }
@@ -169,13 +172,16 @@
   background: none;
   border: none;
   border-radius: 0;
+  box-shadow: none;
   &:hover {
     background-color: @base-white;
     .input-border-hover;
+    box-shadow: none;
   }
   &:focus {
     background-color: @base-white;
     .input-border;
     color: @text-color;
+    box-shadow: none;
   }
 }
