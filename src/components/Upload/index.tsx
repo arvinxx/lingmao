@@ -45,97 +45,82 @@ export default class UploadComp extends Component<any, any> {
   };
 
   render() {
-    const { uploadVisible } = this.props;
-    if (uploadVisible) {
-      return (
-        <div className={styles.left}>
-          <div className={styles.upload}>
-            <Dragger {...params}>
-              <p className="ant-upload-drag-icon">
-                <Icon type="inbox" />
-              </p>
-              <div className={styles['text-container']}>
-                <p className="ant-upload-text">点击或者拖拽上传</p>
-                <p className={styles.hint}>支持：docx、xls、md</p>
-              </div>
-            </Dragger>
+    return (
+      <div className={styles.left}>
+        <div className={styles.upload}>
+          <Dragger {...params}>
+            <p className="ant-upload-drag-icon">
+              <Icon type="inbox" />
+            </p>
+            <div className={styles['text-container']}>
+              <p className="ant-upload-text">点击或者拖拽上传</p>
+              <p className={styles.hint}>支持：docx、xls、md</p>
+            </div>
+          </Dragger>
 
-            <div className={styles['button-container']}>
-              <Button
-                type="primary"
-                ghost
-                disabled
-                size={'small'}
-                className={styles['button-style']}
-              >
-                上传提纲
-              </Button>
-              <Button
-                type="primary"
-                ghost
-                disabled
-                size={'small'}
-                className={styles['button-style']}
-              >
-                上传记录
-              </Button>
-            </div>
-            <div className={styles.preview}>
-              <List
-                header={<div style={{ textAlign: 'center' }}>前三行预览</div>}
-                footer={<div />}
-                size="small"
-                dataSource={data.slice(0, 3)}
-                renderItem={(item) => (
-                  <div className={styles['pre-contatiainer']}>
-                    <div className={styles.circle} />
-                    <Ellipsis length={20}>{item}</Ellipsis>
-                  </div>
-                )}
-                split={false}
-              />
-            </div>
-            <div className={styles.advanced}>
-              <Collapse bordered={false} defaultActiveKey={['1']}>
-                <Panel className={styles['adv-opts']} header="高级选项" key="1">
-                  <div className={styles.description}>格式化参数</div>
-                  <RadioGroup
-                    className={styles['radio-group']}
-                    onChange={this.RadioChange}
-                    value={this.state.value}
-                  >
-                    <Radio className={styles['radio-style']} value={1}>
-                      基于换行
-                    </Radio>
-                    <Radio className={styles['radio-style']} value={2}>
-                      基于分号
-                    </Radio>
-                    <Radio className={styles['radio-style']} value={3}>
-                      基于逗号
-                    </Radio>
-                    <Radio className={styles['radio-style']} value={4}>
-                      基于句号
-                    </Radio>
-                  </RadioGroup>
+          <div className={styles['button-container']}>
+            <Button type="primary" ghost disabled size={'small'} className={styles['button-style']}>
+              上传提纲
+            </Button>
+            <Button type="primary" ghost disabled size={'small'} className={styles['button-style']}>
+              上传记录
+            </Button>
+          </div>
+          <div className={styles.preview}>
+            <List
+              header={<div style={{ textAlign: 'center' }}>前三行预览</div>}
+              footer={<div />}
+              size="small"
+              dataSource={data.slice(0, 3)}
+              renderItem={(item) => (
+                <div className={styles['pre-contatiainer']}>
+                  <div className={styles.circle} />
+                  <Ellipsis length={20}>{item}</Ellipsis>
+                </div>
+              )}
+              split={false}
+            />
+          </div>
+          <div className={styles.advanced}>
+            <Collapse bordered={false} defaultActiveKey={['1']}>
+              <Panel className={styles['adv-opts']} header="高级选项" key="1">
+                <div className={styles.description}>格式化参数</div>
+                <RadioGroup
+                  className={styles['radio-group']}
+                  onChange={this.RadioChange}
+                  value={this.state.value}
+                >
+                  <Radio className={styles['radio-style']} value={1}>
+                    基于换行
+                  </Radio>
+                  <Radio className={styles['radio-style']} value={2}>
+                    基于分号
+                  </Radio>
+                  <Radio className={styles['radio-style']} value={3}>
+                    基于逗号
+                  </Radio>
+                  <Radio className={styles['radio-style']} value={4}>
+                    基于句号
+                  </Radio>
+                </RadioGroup>
 
-                  <div className={styles.delete}>
-                    删除前
-                    <InputNumber
-                      className={styles['delete-number']}
-                      min={1}
-                      size="small"
-                      max={10}
-                      defaultValue={3}
-                      onChange={(e) => console.log('changed', e)}
-                    />
-                    条内容
-                  </div>
-                </Panel>
-              </Collapse>
-            </div>
+                <div className={styles.delete}>
+                  删除前
+                  <InputNumber
+                    className={styles['delete-number']}
+                    min={1}
+                    size="small"
+                    max={10}
+                    defaultValue={3}
+                    onChange={(e) => console.log('changed', e)}
+                  />
+                  条内容
+                </div>
+              </Panel>
+            </Collapse>
           </div>
         </div>
-      );
-    } else return <div />;
+      </div>
+    );
   }
 }

@@ -4,8 +4,8 @@
   "description": "A revolution solution for design research",
   "private": true,
   "scripts": {
-    "start": "cross-env BROWSER=none ESLINT=none umi dev",
-    "start:no-proxy": "cross-env NO_PROXY=true BROWSER=none HARD_SOURCE=none  ESLINT=none TS_CONFIG_PATHS_PLUGIN=none umi dev",
+    "start": "cross-env NO_PROXY=true BROWSER=none HARD_SOURCE=none  ESLINT=none TS_CONFIG_PATHS_PLUGIN=none umi dev",
+    "start:proxy": "cross-env BROWSER=none ESLINT=none umi dev",
     "build": "cross-env ESLINT=none umi build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true umi build",
@@ -38,6 +38,7 @@
     "numeral": "^2.0.6",
     "omit.js": "^1.0.0",
     "path-to-regexp": "^2.2.0",
+    "puppeteer": "^1.4.0",
     "qs": "^6.5.2",
     "rc-drawer-menu": "^0.5.7",
     "react-beautiful-dnd": "^7.1.2",
