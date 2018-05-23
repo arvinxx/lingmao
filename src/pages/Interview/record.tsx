@@ -51,10 +51,10 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
 
     if (documents.length > 0) {
       let { dimensions, selectedValues, title, records, id: docId } = documents[0];
-      if (records === undefined) {
+      if (records === undefined || records === null) {
         records = initRecords('');
       }
-      if (title === undefined) {
+      if (title === undefined || records === null) {
         title = '';
       }
       if (docId === '') {
@@ -137,7 +137,12 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
           <ReflexContainer orientation="horizontal">
             <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
               <div className={styles.wrapper}>
-                <Input className={styles.title} onChange={this.titleChange} value={title} />
+                <Input
+                  className={styles.title}
+                  onChange={this.titleChange}
+                  placeholder="无标题"
+                  value={title}
+                />
                 <RecordList
                   tagUpdate={tagUpdate}
                   records={records}

@@ -1,4 +1,5 @@
 import { DvaModel } from '../../typings/dva';
+import { generateId, initRecords } from '../utils';
 
 export interface IInterview {
   title: string;
@@ -16,8 +17,8 @@ const interview: IInterviewModel = {
   namespace: 'interview',
   state: {
     title: '',
-    records: {},
-    id: '',
+    records: initRecords(''),
+    id: generateId(),
     uploadVisible: true,
     tagVisible: true,
     tagUpdate: false,

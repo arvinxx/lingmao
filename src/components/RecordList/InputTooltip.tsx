@@ -21,7 +21,6 @@ export default class InputTooltip extends Component<IInputTooltipProps & Dispatc
     value: undefined,
     onChange: () => {},
   };
-  count: number = 0;
   changeTagText = (e, id) => {
     const { dispatch, value, onChange } = this.props;
     onChange(value.change().blur());
@@ -45,20 +44,19 @@ export default class InputTooltip extends Component<IInputTooltipProps & Dispatc
   render() {
     const { props, tags } = this.props;
     const { children, attributes, editor } = props;
-    this.count++;
-    console.log(this.count);
     return (
       <span {...attributes}>
         <Popover
           overlayClassName={styles['tag-pop']}
           getPopupContainer={() => document.getElementById('tooltip') || document.body}
           content={tags.map((tag: TTag) => {
-            const { id, refId, offset, text } = tag;
-            return props.node.key === refId && props.offset === offset ? (
+            const { id, text, refText } = tag;
+            return props.text === refText ? (
               <div key={id + 'tag-container'} className={styles['tag-container']}>
                 <div key={id + 'input-container'} className={styles['input-container']}>
                   <Input
                     className={styles.tag}
+                    style={{ width: text.length * 14 + 40 }}
                     onChange={(e) => this.changeTagText(e, id)}
                     value={text}
                   />

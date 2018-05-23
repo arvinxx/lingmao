@@ -27,16 +27,11 @@ export default class PopupMenu extends Component<IPopupMenuProps & DispatchProp>
     const { value, onChange, dispatch } = this.props;
     event.preventDefault();
     if (type === 'add') {
-      // 可用状态时
       const text: string = window.getSelection().toString();
-      console.log(value);
-      console.log(value.change().addMark('underline'));
       onChange(value.change().addMark('underline'));
-      const { focusKey: refId, anchorOffset, focusOffset } = value.selection;
-      const offset = Math.min(anchorOffset, focusOffset);
       dispatch({
         type: 'tag/addTag',
-        payload: { text, refId, offset },
+        payload: { text },
       });
     }
   };

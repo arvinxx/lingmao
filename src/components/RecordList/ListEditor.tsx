@@ -1,8 +1,9 @@
 import React, { Component, Ref, RefObject } from 'react';
+import { setKeyGenerator } from 'slate';
 import { Editor } from 'slate-react';
 import PluginEditList, { initValue } from './Editor';
 import { Value } from 'slate';
-import { extractTags } from '../../utils';
+import { extractTags, generateId } from '../../utils';
 import { TTagGroup } from '../../models/tag';
 import PopupMenu from './PopupMenu';
 import InputTooltip from './InputTooltip';

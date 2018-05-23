@@ -8,9 +8,6 @@ export type TTag = {
   id: string;
   text: string;
   refText: string;
-  refId: string;
-  anchorOffset: number;
-  focusOffset: number;
   groupId: string;
 };
 
@@ -44,7 +41,7 @@ const tag: ITagModel = {
     },
 
     addTag(state, { payload }) {
-      const { text, refId, offset } = payload;
+      const { text } = payload;
       return {
         ...state,
         tagGroups: update(state.tagGroups, {
@@ -54,8 +51,6 @@ const tag: ITagModel = {
                 {
                   text,
                   refText: text,
-                  refId,
-                  offset,
                   id: generateId(),
                 },
               ],
