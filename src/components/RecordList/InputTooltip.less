@@ -71,9 +71,9 @@
   .input-container {
     display: flex;
     position: relative;
+
     .tag {
       border-radius: 20px !important;
-      opacity: 0.9;
       background: @primary-1;
       border: 1px solid @primary-2;
       margin-top: 10px;
@@ -85,7 +85,7 @@
       }
     }
     &:hover .tag {
-      background-color: @base-white;
+      background-color: @white-1;
       border-color: @base-white;
       box-shadow: @shadow-1;
       transform: scale(1.1);
@@ -98,12 +98,20 @@
       right: 4px;
       top: 18px;
       display: flex;
+      transition: all @animation-duration-base;
       &:hover {
         opacity: 1;
+        transform: translateX(2px) scale(1.1);
       }
     }
     .tag:hover ~ .value-delete {
       opacity: 1;
+      transform: translateX(2px) scale(1.1);
+    }
+    :global {
+      .ant-input:focus {
+        box-shadow: none;
+      }
     }
   }
 }
