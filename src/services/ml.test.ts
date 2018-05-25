@@ -1,22 +1,4 @@
-import { getClusterDims, getClusterPercent } from './ml';
-import { clusterArray } from '../../mock/clusterResults';
-
-it('getClusterPercent', () => {
-  expect(getClusterPercent(clusterArray)).toEqual([
-    {
-      count: 6,
-      percent: 60,
-    },
-    {
-      count: 2,
-      percent: 20,
-    },
-    {
-      count: 2,
-      percent: 20,
-    },
-  ]);
-});
+import { getClusterDims } from './ml';
 
 it('getClusterDims', () => {
   const quesData = [

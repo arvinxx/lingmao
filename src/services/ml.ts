@@ -16,20 +16,6 @@ export const cluster = async (params) => {
   }
 };
 
-export const getClusterPercent = (clusterArray: number[]) => {
-  const length = clusterArray.length;
-  const clusterArr = uniq(clusterArray).sort();
-  return clusterArr.map((cluster) => {
-    let count = 0;
-    clusterArray.forEach((number) => {
-      if (cluster === number) {
-        count++;
-      }
-    });
-    return { count, percent: count / length * 100 };
-  });
-};
-
 /**
  * 获取某一类的维度平均值
  * @param clusterArray 聚类数组

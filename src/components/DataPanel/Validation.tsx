@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Icon, Button } from 'antd';
 import router from 'umi/router';
 import { getBaseUrl } from '../../utils';
+import { TDim } from '../../models/data';
 
 interface IValidationProps {
   dispatch: Function;
@@ -17,6 +18,9 @@ export default class Validation extends Component<IValidationProps> {
     tabStage: '1',
   };
 
+  showCharts = () => {
+    this.props.dispatch({ type: 'stage/showCharts', payload: true });
+  };
   finish = () => {
     // 解锁下一条面板
     if (this.props.analysisStage === 3) {
@@ -38,7 +42,7 @@ export default class Validation extends Component<IValidationProps> {
           <p>点击生成图表按钮获得可视化结果，点击跳转进入下一环节</p>
         </div>
         <div>
-          <Button>生成图表</Button>
+          <Button onClick={this.showCharts}>生成图表</Button>
           <Button type="primary" onClick={this.finish}>
             跳转
           </Button>

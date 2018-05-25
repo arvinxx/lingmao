@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Button, Tag, List } from 'antd';
 import router from 'umi/router';
 import { isEmpty } from 'lodash';
+import { data } from '../../common/header';
 
 import { TDim, TSelectedQue } from '../../models/data';
-import { getBaseUrl, getFilterDims, getKeyArrays } from '../../utils';
+import { getBaseUrl, getFilterDims } from '../../utils';
 import styles from './DimMatch.less';
 
 const { Item } = List;
@@ -81,7 +82,7 @@ export default class DimMatch extends Component<IDimMatchProps> {
         payload: '2',
       });
     }
-    router.push(`${getBaseUrl(pathname)}/validation`);
+    router.push(`${getBaseUrl(pathname)}/${data[1].path}`); //跳转到 charts 页面
   };
   render() {
     const { dims, selectedQues, tagMatchState, selectedDims } = this.props;

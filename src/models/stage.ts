@@ -6,6 +6,7 @@ export type TStageModel = {
   tagMatchState: number;
   analysisStage: number;
   tabStage: string;
+  showCharts: boolean;
   activePanelList: Array<string>;
 };
 export interface IStageModel extends DvaModel {
@@ -19,6 +20,7 @@ const stage: IStageModel = {
     analysisStage: 0,
     tagMatchState: 0,
     tabStage: '1',
+    showCharts: false,
     activePanelList: ['0'],
   },
   reducers: {
@@ -84,6 +86,13 @@ const stage: IStageModel = {
       return {
         ...state,
         tabStage: key,
+      };
+    },
+
+    showCharts(state, { payload }) {
+      return {
+        ...state,
+        showCharts: payload,
       };
     },
 

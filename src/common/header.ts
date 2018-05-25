@@ -123,7 +123,7 @@ export const data = [
   },
   {
     text: '数据图表',
-    path: 'validation',
+    path: 'charts',
     left: [
       {
         text: 'left',

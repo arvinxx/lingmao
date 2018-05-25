@@ -18,6 +18,8 @@ import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
 import { extractTags, getFilterDims } from '../../utils';
 import { TTag } from '../../models/tag';
+import { queryDocument } from '../../services/api';
+import { getCleanTagGroups } from '../../services/cleanData';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -44,7 +46,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       clusterSelectedDims: [],
       matchSelectedDims: [],
       selectClusterIndex: 0,
-      clusterResults:[]
+      clusterResults: [],
     },
     tags: [],
     stage: {
@@ -59,10 +61,15 @@ export default class DataPanel extends Component<IDataPanelProps> {
     dispatch: () => {},
   };
 
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'tag/fetchTagGroups',
-    });
+  async componentDidMount() {
+    let documents = await queryDocument();
+    documents = Array.isArray(documents) ? documents : [];
+    if (documents.length > 0) {
+      this.props.dispatch({
+        type: 'tag/querryTagGroups',
+        payload: getCleanTagGroups(documents[0]),
+      });
+    }
   }
 
   changeTabStage = (key) => {

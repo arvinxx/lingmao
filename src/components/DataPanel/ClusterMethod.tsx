@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import { Dropdown, Button, Icon, InputNumber, Checkbox, Menu, Select } from 'antd';
+import { Button, Icon, InputNumber, Checkbox, Select } from 'antd';
 import { TQuesData, TSelectedDims } from '../../models/data';
-import { getBaseUrl, getClusterDataFromQuesData, getFilterQuesData } from '../../utils';
+import {
+  getBaseUrl,
+  getClusterDataFromQuesData,
+  getFilterQuesData,
+  getCountAndPercent,
+} from '../../utils';
 import router from 'umi/router';
-import { cluster, getClusterDims, getClusterPercent } from '../../services/ml';
+import { cluster, getClusterDims } from '../../services/ml';
 import styles from './ClusterMethod.less';
 
 const CheckboxGroup = Checkbox.Group;
@@ -53,7 +58,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
       const data = { data: getClusterDataFromQuesData(filterData), K };
       try {
         const { clusters } = await cluster(data);
-        const results = getClusterPercent(clusters);
+        const results = getCountAndPercent(clusters);
         dispatch({ type: 'data/addClusterTypeToQuesData', payload: clusters });
         dispatch({
           type: 'data/handleClusterResults',
