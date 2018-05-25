@@ -5,11 +5,9 @@ import core from './core';
 const KEY_ENTER = 'Enter';
 
 const onKeyDown = (opts: Options, event, change, editor): void | any => {
-  const args = [event, change, editor, opts];
-
   switch (event.key) {
     case KEY_ENTER:
-      return onEnter(...args);
+      return onEnter(event, change, editor, opts);
     default:
       return undefined;
   }

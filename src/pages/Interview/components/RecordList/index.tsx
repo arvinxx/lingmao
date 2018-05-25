@@ -5,7 +5,7 @@ import styles from './index.less';
 import { DispatchProp } from 'react-redux';
 import ListEditor from './ListEditor';
 import initValue from '../../../../../mock/records';
-import { Value } from 'slate';
+import { Value, Block } from 'slate';
 import PopupMenu from './PopupMenu';
 
 export interface IRecordListProps {
@@ -25,18 +25,11 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
     this.menu = menu;
   };
   menu: HTMLElement;
-
-  onChange = ({ value }) => {
-    const { dispatch } = this.props;
-    if (value.document !== this.state.value.document) {
-      dispatch({ type: 'interview/changeRecords', payload: value.toJSON() });
-    }
-    this.setState({ value });
-  };
   constructor(props) {
     super(props);
     this.state.value = Value.fromJSON(props.records);
   }
+
   componentDidMount() {
     this.updateMenu();
   }
@@ -62,12 +55,29 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
     menu.style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`;
   };
 
+  onChange = ({ value }) => {
+    const { dispatch } = this.props;
+    if (value.document !== this.state.value.document) {
+      dispatch({ type: 'interview/changeRecords', payload: value.toJSON() });
+    }
+    this.setState({ value });
+  };
+
+  //TODO 添加从上传的纯文本导入 Slate 的功能
+  addNewContent = () => {
+    const { value } = this.state;
+    const change = value.change().insertBlock('list_item');
+    Block.createList();
+    this.setState({ value: change.value });
+  };
+
   render() {
     const { records, dispatch, tagGroups } = this.props;
     const value: Value = this.state.value;
 
     return (
       <div className={styles.list}>
+        {/*<div onClick={this.addNewContent}> add text</div>*/}
         <ListEditor
           dispatch={dispatch}
           tagGroups={tagGroups}

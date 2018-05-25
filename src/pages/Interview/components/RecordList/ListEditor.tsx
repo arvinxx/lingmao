@@ -68,6 +68,7 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
     const { onChange, tagGroups, value } = this.props;
     return (
       <div className={styles.container}>
+
         <div className={styles.editor}>
           <Provider value={tagGroups}>
             <Editor

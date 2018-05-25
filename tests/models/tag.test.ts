@@ -34,14 +34,14 @@ describe('Reducers', () => {
     };
     const action = {
       type: 'tag/addTag',
-      payload: { text: 'dsa', refId: '1' },
+      payload: { text: 'dsa' },
     };
     expect(reducer(state, action)).toEqual({
       tagGroups: [
         {
           text: '未分组',
           id: '542424',
-          tags: [{ text: 'dsa', refText: 'dsa', id: generateId(), refId: '1' }],
+          tags: [{ text: 'dsa', refText: 'dsa', id: generateId() }],
         },
       ],
     });
@@ -492,7 +492,7 @@ describe('Reducers', () => {
         },
         {
           id: generateId(),
-          text: '未命名',
+          text: '未命名1',
           tags: [
             {
               id: '1',

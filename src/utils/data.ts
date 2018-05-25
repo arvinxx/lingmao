@@ -1,14 +1,6 @@
 import { uniqBy } from 'lodash';
-import {
-  TColumn,
-  TTableData,
-  TQuesData,
-  TDim,
-  TQuesRecord,
-  TSelectedQue,
-} from '../models/data';
+import { TColumn, TTableData, TQuesData, TDim, TQuesRecord, TSelectedQue } from '../models/data';
 import { generateId } from './utils';
-
 
 export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> => {
   const temporaryFileReader = new FileReader();
@@ -24,6 +16,19 @@ export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> =>
   });
 };
 
+export const readAsTextAsync = (inputFile: File): Promise<string> => {
+  const temporaryFileReader = new FileReader();
+  return new Promise((resolve, reject) => {
+    temporaryFileReader.onerror = () => {
+      temporaryFileReader.abort();
+      reject(new DOMException('文件存在问题，请重新上传'));
+    };
+    temporaryFileReader.onload = () => {
+      resolve(temporaryFileReader.result);
+    };
+    temporaryFileReader.readAsText(inputFile);
+  });
+};
 //将 xlsx 转出的数据转换为保存的数据
 export const rawToSaved = (rawData: Array<object>): TQuesData => {
   let saveData: TQuesData = [];

@@ -120,7 +120,7 @@ const tag: ITagModel = {
       });
       return {
         ...state,
-        tagGroups: [...tagGroups, { text: '未命名', id: generateId(), tags }],
+        tagGroups: [...tagGroups, { text: '未命名' + tagGroups.length, id: generateId(), tags }],
         selectedTags: [],
       };
     },

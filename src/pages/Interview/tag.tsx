@@ -3,19 +3,20 @@ import { Collapse, Tag, Modal, Input } from 'antd';
 import { connect } from 'dva';
 import { TagGroup, ContextRightMenu } from '../../components';
 
-import { TInterview } from '../../models/interview';
+import { IInterview } from '../../models/interview';
 import { TTag } from '../../models/tag';
 import { extractTags, generateId } from '../../utils';
 
 import styles from './tag.less';
-import { saveTagGroups } from '../../services/api';
+import { queryDocument, saveTagGroups } from '../../services/api';
+import { getCleanDimensions, getCleanDocument, getCleanTagGroups } from '../../services/cleanData';
 
 const Panel = Collapse.Panel;
 const CheckableTag = Tag.CheckableTag;
 
 interface ITagsProps {
   dispatch: any;
-  interview: TInterview;
+  interview: IInterview;
   loading: boolean;
   tag: any;
 }
@@ -31,10 +32,15 @@ export default class Tags extends Component<ITagsProps> {
     tagGroupText: '',
     tagGroupPlaceHolder: '新的标签组',
   };
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'tag/fetchTagGroups',
-    });
+  async componentDidMount() {
+    let documents = await queryDocument();
+    documents = Array.isArray(documents) ? documents : [];
+    if (documents.length > 0) {
+      this.props.dispatch({
+        type: 'tag/querryTagGroups',
+        payload: getCleanTagGroups(documents[0]),
+      });
+    }
   }
 
   componentWillUnmount() {

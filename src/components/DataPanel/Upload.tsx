@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Icon, Upload } from 'antd';
 import { readAsArrayBufferAsync } from '../../utils';
-import { xlsxToJson } from '../../services/table';
+import { xlsxToJson } from '../../services';
 
 import styles from './Upload.less';
 

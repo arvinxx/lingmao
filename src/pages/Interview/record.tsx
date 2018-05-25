@@ -10,11 +10,16 @@ import { IInterview } from '../../models/interview';
 import { TTagGroup, TTagModel } from '../../models/tag';
 import { TRecordModel } from '../../models/recordDims';
 
-import { extractTags, generateId, initRecords } from '../../utils';
-import { queryDocument, saveDocument } from '../../services';
+import { extractTags } from '../../utils';
+import {
+  queryDocument,
+  saveDocument,
+  getCleanDimensions,
+  getCleanDocument,
+  getCleanTagGroups,
+} from '../../services';
 
 import styles from './record.less';
-import { getCleanDimensions, getCleanDocument, getCleanTagGroups } from "../../services/cleanData";
 
 interface IInterviewProps {
   interview: IInterview;
@@ -55,7 +60,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
       });
       this.props.dispatch({
         type: 'recordDims/querryRecordDims',
-        payload:getCleanDimensions(documents[0]),
+        payload: getCleanDimensions(documents[0]),
       });
       this.props.dispatch({
         type: 'tag/querryTagGroups',

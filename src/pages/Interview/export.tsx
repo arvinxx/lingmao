@@ -7,30 +7,46 @@ import { StarPic } from '../../components';
 
 import { TTag, TTagGroup, TTagModel } from '../../models/tag';
 import { getStarData } from '../../utils';
+import { queryDocument, saveTagGroups } from '../../services/api';
+import { getCleanTagGroups } from '../../services/cleanData';
 const { Item } = List;
 const { TabPane } = Tabs;
 
 interface IExportProps {
-  tag: TTagModel;
+  tagGroups: TTagGroup[];
+  id: string;
+  exportDisplay: string;
   dispatch: Function;
 }
-@connect(({ tag }) => ({ tag }))
+@connect(({ tag, interview }) => ({
+  tag,
+  id: interview.id,
+  tagGroups: tag.tagGroups,
+  exportDisplay: tag.exportDisplay,
+}))
 export default class Export extends Component<IExportProps> {
   static defaultProps: IExportProps = {
-    tag: {
-      selectedTags: [],
-      tagGroups: [],
-      exportDisplay: '1',
-      tagVisible: true,
-    },
+    tagGroups: [],
+    exportDisplay: '1',
+    id: '',
     dispatch: () => {},
   };
 
-  componentDidMount() {
-    this.props.dispatch({
-      type: 'tag/fetchTagGroups',
-    });
+  async componentDidMount() {
+    let documents = await queryDocument();
+    documents = Array.isArray(documents) ? documents : [];
+    if (documents.length > 0) {
+      this.props.dispatch({
+        type: 'tag/querryTagGroups',
+        payload: getCleanTagGroups(documents[0]),
+      });
+    }
   }
+  componentWillUnmount() {
+    const { id, tagGroups } = this.props;
+    saveTagGroups({ id, tagGroups });
+  }
+
   changeDisplay = (key) => {
     this.props.dispatch({
       type: 'tag/handleExportDisplay',
@@ -38,8 +54,7 @@ export default class Export extends Component<IExportProps> {
     });
   };
   render() {
-    const { tag } = this.props;
-    const { tagGroups, exportDisplay } = tag;
+    const { tagGroups, exportDisplay } = this.props;
     const { categories, links, data } = getStarData(tagGroups);
     return (
       <div className={styles.container}>
