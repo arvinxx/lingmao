@@ -11,9 +11,10 @@ import { TTagGroup, TTagModel } from '../../models/tag';
 import { TRecordModel } from '../../models/recordDims';
 
 import { extractTags, generateId, initRecords } from '../../utils';
-import { queryDocument, saveDocument } from '../../services/api';
+import { queryDocument, saveDocument } from '../../services';
 
 import styles from './record.less';
+import { getCleanDimensions, getCleanDocument, getCleanTagGroups } from "../../services/cleanData";
 
 interface IInterviewProps {
   interview: IInterview;
@@ -34,7 +35,6 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
       uploadVisible: true,
       id: '',
       records: {},
-      raWRecords: undefined,
       title: '',
     },
     loading: false,
@@ -49,61 +49,17 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
     documents = Array.isArray(documents) ? documents : [];
 
     if (documents.length > 0) {
-      let { dimensions, selectedValues, title, records, id: docId } = documents[0];
-      if (records === undefined || records === null) {
-        records = initRecords('');
-      }
-      if (title === undefined || records === null) {
-        title = '';
-      }
-      if (docId === '') {
-        docId = generateId();
-      }
-
-      // 处理 dimensions
-      const filterDimensions = dimensions.map((dimension) => {
-        let { id, values, key } = dimension;
-        return {
-          values: values.map((value) => {
-            let { id, text } = value;
-            id = id === '' ? generateId() : id;
-            return {
-              text,
-              id,
-              editable: false,
-            };
-          }),
-          key,
-          id: id === '' ? generateId() : id,
-          inputVisible: false,
-        };
-      });
-      if (selectedValues === null) {
-        selectedValues = [];
-      }
-
-      // 处理 tagGroups
-      let { tagGroups } = documents[0];
-      if (tagGroups !== undefined && tagGroups !== null && tagGroups.length > 0) {
-        tagGroups = tagGroups.map((tagGroup, index) => ({
-          id: tagGroup.id === '' ? generateId() : tagGroup.id,
-          text: index === 0 ? '未分组' : tagGroup.text,
-          tags: tagGroup.tags,
-        }));
-      } else {
-        tagGroups = [{ id: generateId(), tags: [], text: '未分组' }];
-      }
       this.props.dispatch({
         type: 'interview/querryDocument',
-        payload: { title, records, docId },
+        payload: getCleanDocument(documents[0]),
       });
       this.props.dispatch({
         type: 'recordDims/querryRecordDims',
-        payload: { dimensions: filterDimensions, selectedValues },
+        payload:getCleanDimensions(documents[0]),
       });
       this.props.dispatch({
         type: 'tag/querryTagGroups',
-        payload: tagGroups,
+        payload: getCleanTagGroups(documents[0]),
       });
     }
   }
@@ -127,7 +83,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
   render() {
     const minPanelSize = 150;
     const { interview, tagGroups, dispatch, recordDims } = this.props;
-    const { uploadVisible, tagVisible, raWRecords, title, records } = interview;
+    const { uploadVisible, tagVisible, title, records } = interview;
     const { dimensions, selectedValues } = recordDims;
     return (
       <div className={styles.container}>
@@ -142,12 +98,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
                   placeholder="无标题"
                   value={title}
                 />
-                <RecordList
-                  raWRecords={raWRecords}
-                  records={records}
-                  dispatch={dispatch}
-                  tagGroups={tagGroups}
-                />
+                <RecordList records={records} dispatch={dispatch} tagGroups={tagGroups} />
               </div>
             </ReflexElement>
             <ReflexSplitter>
