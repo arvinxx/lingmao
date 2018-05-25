@@ -1,8 +1,8 @@
 import { Change } from 'slate';
 
 import Options from '../options';
-import { splitListItem, wrapInList } from '../changes';
-import { getCurrentItem } from '../utils';
+import { splitListItem, wrapInList } from '../changes/index';
+import { getCurrentItem } from '../utils/index';
 
 /**
  * User pressed Enter in an editor

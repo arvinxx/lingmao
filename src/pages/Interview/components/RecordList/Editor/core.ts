@@ -1,6 +1,6 @@
 import Options, { OptionsFormat } from './options';
-import { schema, validateNode } from './validation';
-import { wrapInList, splitListItem } from './changes';
+import { schema, validateNode } from './validation/index';
+import { wrapInList, splitListItem } from './changes/index';
 import {
   isList,
   isSelectionInList,
@@ -8,7 +8,7 @@ import {
   getCurrentList,
   getItemsAtRange,
   getPreviousItem,
-} from './utils';
+} from './utils/index';
 
 /**
  * Returns the core of the plugin, limited to the validation and normalization

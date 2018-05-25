@@ -2,7 +2,7 @@ import { Data, Value, Change, Block } from 'slate';
 import { List } from 'immutable';
 
 import Options from '../options';
-import { isList } from '../utils';
+import { isList } from '../utils/index';
 
 /**
  * Returns the highest list of blocks that cover the current selection

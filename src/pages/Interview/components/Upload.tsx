@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Radio, List, Collapse, Upload, message, Button, InputNumber, Icon } from 'antd';
-import { Ellipsis } from '../../components';
+import { Ellipsis } from '../../../components/index';
 
-import styles from './styles.less';
+import styles from './Upload.less';
 
 const Dragger = Upload.Dragger;
 const { Panel } = Collapse;

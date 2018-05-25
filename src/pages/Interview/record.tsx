@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Menu, Input, Icon, Popconfirm } from 'antd';
+import { Input } from 'antd';
 import { DispatchProp } from 'react-redux';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
-import { TagInput, RecordList, Upload } from '../../components';
-import TagList from './components/TagList';
+import { TagList, Upload, TagInput, RecordList } from './components';
 
 import { IInterview } from '../../models/interview';
 import { TTagGroup, TTagModel } from '../../models/tag';
@@ -35,7 +34,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
       uploadVisible: true,
       id: '',
       records: {},
-      tagUpdate: false,
+      raWRecords: undefined,
       title: '',
     },
     loading: false,
@@ -128,7 +127,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
   render() {
     const minPanelSize = 150;
     const { interview, tagGroups, dispatch, recordDims } = this.props;
-    const { uploadVisible, tagVisible, tagUpdate, title, records } = interview;
+    const { uploadVisible, tagVisible, raWRecords, title, records } = interview;
     const { dimensions, selectedValues } = recordDims;
     return (
       <div className={styles.container}>
@@ -144,7 +143,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
                   value={title}
                 />
                 <RecordList
-                  tagUpdate={tagUpdate}
+                  raWRecords={raWRecords}
                   records={records}
                   dispatch={dispatch}
                   tagGroups={tagGroups}

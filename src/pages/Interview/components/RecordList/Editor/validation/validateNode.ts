@@ -1,7 +1,7 @@
 // @flow
 import { Change, Node } from 'slate';
 
-import { isList } from '../utils';
+import { isList } from '../utils/index';
 import Options from '../options';
 
 // type Normalizer = Change => any;

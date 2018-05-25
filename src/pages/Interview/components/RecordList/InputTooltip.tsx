@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
-import { TTag } from '../../models/tag';
+import { TTag } from '../../../../models/tag';
 import styles from './InputTooltip.less';
 import { DispatchProp } from 'react-redux';
 import { Value } from 'slate';
 export interface IInputTooltipProps {
   tags: TTag[];
-  props: { children; attributes; editor };
+  props: { children; attributes; editor; text };
   onChange: Function;
   value: Value;
 }
@@ -17,6 +17,7 @@ export default class InputTooltip extends Component<IInputTooltipProps & Dispatc
       attributes: undefined,
       children: undefined,
       editor: undefined,
+      text: '',
     },
     value: undefined,
     onChange: () => {},
@@ -43,22 +44,22 @@ export default class InputTooltip extends Component<IInputTooltipProps & Dispatc
 
   render() {
     const { props, tags } = this.props;
-    const { children, attributes, editor } = props;
+    const { children, attributes, editor, text } = props;
     return (
       <span {...attributes}>
         <Popover
           overlayClassName={styles['tag-pop']}
           getPopupContainer={() => document.getElementById('tooltip') || document.body}
           content={tags.map((tag: TTag) => {
-            const { id, text, refText } = tag;
-            return props.text === refText ? (
+            const { id, text: value, refText } = tag;
+            return text === refText ? (
               <div key={id + 'tag-container'} className={styles['tag-container']}>
                 <div key={id + 'input-container'} className={styles['input-container']}>
                   <Input
                     className={styles.tag}
-                    style={{ width: text.length * 14 + 32 }}
+                    style={{ width: value.length * 14 + 32 }}
                     onChange={(e) => this.changeTagText(e, id)}
-                    value={text}
+                    value={value}
                   />
                   <Popconfirm
                     key={'ppp'}

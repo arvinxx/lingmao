@@ -7,7 +7,6 @@ export interface IInterview {
   id: string;
   uploadVisible: boolean;
   tagVisible: boolean;
-  tagUpdate: boolean; // 让悬浮标签可以正常更新
 }
 
 interface IInterviewModel extends DvaModel {
@@ -21,7 +20,6 @@ const interview: IInterviewModel = {
     id: generateId(),
     uploadVisible: true,
     tagVisible: true,
-    tagUpdate: false,
   },
   reducers: {
     changeUploadVisible(state, action) {

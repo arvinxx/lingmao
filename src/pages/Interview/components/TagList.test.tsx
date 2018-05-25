@@ -1,8 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { ITagListProps } from './TagList';
-
 import { spy } from 'sinon';
+import App, { ITagListProps } from './TagList';
 
 const setup = () => {
   const dispatch = spy();

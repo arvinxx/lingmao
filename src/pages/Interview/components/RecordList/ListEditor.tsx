@@ -1,10 +1,12 @@
 import React, { Component, Ref, RefObject } from 'react';
 import { setKeyGenerator } from 'slate';
 import { Editor } from 'slate-react';
-import PluginEditList, { initValue } from './Editor';
+import PluginEditList from './Editor';
+import initValue from '../../../../../mock/records';
+
 import { Value } from 'slate';
-import { extractTags, generateId } from '../../utils';
-import { TTagGroup } from '../../models/tag';
+import { extractTags } from '../../../../utils';
+import { TTagGroup } from '../../../../models/tag';
 import PopupMenu from './PopupMenu';
 import InputTooltip from './InputTooltip';
 import styles from './ListEditor.less';
@@ -17,64 +19,16 @@ const plugins = [plugin];
 export interface IListEditorProps {
   records: object;
   tagGroups: Array<TTagGroup>;
-  tagUpdate: boolean;
-}
-
-interface IEditorStates {
-  tagValue: string;
+  onChange: Function;
   value: Value;
 }
 
-export default class ListEditor extends Component<IListEditorProps & DispatchProp, IEditorStates> {
+export default class ListEditor extends Component<IListEditorProps & DispatchProp> {
   static defaultProps: IListEditorProps = {
     tagGroups: [],
     records: initValue,
-    tagUpdate: false,
-  };
-  state = {
+    onChange: () => {},
     value: Value.fromJSON(initValue),
-    tagValue: '',
-  };
-  menu: HTMLElement;
-  setMenuRef = (menu) => {
-    this.menu = menu;
-  };
-
-  componentDidMount() {
-    this.updateMenu();
-    this.setState({
-      value: Value.fromJSON(this.props.records),
-    });
-  }
-
-  componentDidUpdate() {
-    this.updateMenu();
-  }
-
-  updateMenu = () => {
-    const { menu } = this;
-    const { value } = this.state;
-    if (!menu) return;
-
-    if (value.isBlurred || value.isEmpty) {
-      menu.removeAttribute('style');
-      return;
-    }
-
-    const selection: Selection = window.getSelection();
-    const range: Range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-    menu.style.opacity = '1';
-    menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
-    menu.style.left = `${rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2}px`;
-  };
-
-  onChange = ({ value }) => {
-    const { dispatch } = this.props;
-    if (value.document !== this.state.value.document) {
-      dispatch({ type: 'interview/changeRecords', payload: value.toJSON() });
-    }
-    this.setState({ value });
   };
 
   renderNode = (props) => {
@@ -87,8 +41,7 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
     }
   };
   renderMark = (props) => {
-    const { dispatch } = this.props;
-    const { value } = this.state;
+    const { dispatch, value, onChange } = this.props;
     const { mark } = props;
     switch (mark.type) {
       case 'underline':
@@ -99,7 +52,7 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
                 props={props}
                 value={value}
                 tags={extractTags(tagGroups)}
-                onChange={this.onChange}
+                onChange={onChange}
                 dispatch={dispatch}
               />
             )}
@@ -112,8 +65,7 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
   };
 
   render() {
-    const value: Value = this.state.value;
-    const { dispatch, tagGroups } = this.props;
+    const { onChange, tagGroups, value } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.editor}>
@@ -121,8 +73,8 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
             <Editor
               placeholder={'请开始你的表演'}
               plugins={plugins}
-              value={this.state.value}
-              onChange={this.onChange}
+              value={value}
+              onChange={onChange}
               renderNode={this.renderNode}
               renderMark={this.renderMark}
               shouldNodeComponentUpdate={this.shouldNodeComponentUpdate}
@@ -130,12 +82,6 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
           </Provider>
         </div>
         <div id="tooltip" />
-        <PopupMenu
-          menuRef={this.setMenuRef}
-          value={value}
-          onChange={this.onChange}
-          dispatch={dispatch}
-        />
       </div>
     );
   }

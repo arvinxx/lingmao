@@ -1,5 +1,5 @@
 import Options, { OptionsFormat } from './options';
-import { onEnter } from './handlers';
+import { onEnter } from './handlers/index';
 import core from './core';
 
 const KEY_ENTER = 'Enter';
@@ -24,5 +24,3 @@ export default (opts: OptionsFormat = {}): Object => {
     onKeyDown: onKeyDown.bind(null, opts),
   };
 };
-
-export { default as initValue } from './initValue';

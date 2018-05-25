@@ -1,7 +1,7 @@
 import { Change } from 'slate';
 
 import Options from '../options';
-import { getCurrentItem } from '../utils';
+import { getCurrentItem } from '../utils/index';
 
 /**
  * Split a list item at the start of the current range.

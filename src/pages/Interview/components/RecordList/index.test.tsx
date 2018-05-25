@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import App, { IRecordListProps } from './index';
 import Plain from 'slate-plain-serializer';
 import { spy } from 'sinon';
-import tagGroups from '../../../mock/tagGroups';
+import tagGroups from '../../../../../mock/tagGroups';
 
 const setup = () => {
   const dispatch = spy();
@@ -31,6 +31,10 @@ describe('RecordList 正常渲染样式', () => {
   });
 });
 
-// describe('新建条目', () => {
-//   describe('按回车新建条目', () => {});
-// });
+describe('function', () => {
+  const instance = wrapper.instance() as App;
+  it('setMenuRef', () => {
+    instance.setMenuRef('2');
+    expect(instance.menu).toEqual('2');
+  });
+});
