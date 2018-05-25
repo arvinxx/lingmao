@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import App, { ITagInputProps } from './index';
 import { spy } from 'sinon';
-import dimensions from '../../../mock/dimensions';
+import dimensions from '../../../../../mock/dimensions';
 
 const setup = () => {
   const dispatch = spy();
