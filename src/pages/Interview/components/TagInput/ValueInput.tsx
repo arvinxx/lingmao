@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { DispatchProp } from 'react-redux';
 import { Tag, Input, Icon } from 'antd';
 
-import styles from './styles.less';
+import styles from './ValueInput.less';
 
 export interface IValueInputProps {
   id: string;
@@ -58,32 +58,28 @@ export default class ValueInput extends PureComponent<IValueInputProps & Dispatc
   render() {
     const { id, inputVisible } = this.props;
     const { newValue } = this.state;
-    if (inputVisible)
-      return (
-        <Input
-          key={`${id}-add`}
-          type="text"
-          size="small"
-          autoFocus={inputVisible}
-          className={styles.input}
-          value={newValue}
-          onKeyDown={(e) => this.cancelVOnEsc(e, id)}
-          onChange={this.newValueOnInput}
-          onPressEnter={() => this.newValueOnConfirm(id)}
-          onBlur={() => this.newValueOnBlur(id)}
-        />
-      );
-    else {
-      return (
-        <Tag
-          key={`${id}-plus+++++++`}
-          //@ts-ignore Antd 未定义事件 props TODO
-          onClick={() => this.showValueInput(id)}
-          className={styles.plus}
-        >
-          <Icon key={`${id}----icon`} type="plus" />
-        </Tag>
-      );
-    }
+    return inputVisible ? (
+      <Input
+        key={`${id}-add`}
+        type="text"
+        size="small"
+        autoFocus={inputVisible}
+        className={styles.input}
+        value={newValue}
+        onKeyDown={(e) => this.cancelVOnEsc(e, id)}
+        onChange={this.newValueOnInput}
+        onPressEnter={() => this.newValueOnConfirm(id)}
+        onBlur={() => this.newValueOnBlur(id)}
+      />
+    ) : (
+      <Tag
+        key={`${id}-plus+++++++`}
+        //@ts-ignore Antd 未定义事件 props TODO
+        onClick={() => this.showValueInput(id)}
+        className={styles.plus}
+      >
+        <Icon key={`${id}----icon`} type="plus" />
+      </Tag>
+    );
   }
 }

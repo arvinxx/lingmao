@@ -1,0 +1,53 @@
+@import '~styles/themes/default';
+
+.container {
+  padding: @padding-lg @padding-md @padding-md @padding-md;
+  :global {
+    .ant-input {
+      border-color: transparent;
+      box-shadow: none;
+      &:hover {
+        border: solid 1px @white-5;
+        box-shadow: none;
+      }
+      &:focus {
+        border: solid 1px @white-7;
+        color: @text-color;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.dimension-container {
+  display: flex;
+  align-items: center;
+  &:not(:last-child) {
+    margin-bottom: @padding-md;
+  }
+}
+
+.tag-container {
+  display: inline-flex;
+  margin-left: @padding-md;
+  max-width: 480px;
+  flex-wrap: wrap;
+}
+
+.add-key {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 136px;
+  text-align: right;
+  color: @text-color-secondary;
+  padding-right: 11px;
+  background: none;
+  border-radius: 4px;
+  &:hover {
+    background-color: @base-white;
+  }
+  &:focus {
+    color: @text-color;
+    background-color: @base-white;
+  }
+}

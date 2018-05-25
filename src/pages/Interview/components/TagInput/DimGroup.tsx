@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Input, Icon, Popconfirm } from 'antd';
-import styles from './styles.less';
+import styles from './DimGroup.less';
 import { DispatchProp } from 'react-redux';
 
 export interface IDimGroupProps {
@@ -29,7 +29,7 @@ export default class DimGroup extends PureComponent<IDimGroupProps & DispatchPro
     const { id, value } = this.props;
 
     return (
-      <div key={id + 'kcc'}>
+      <div key={id + 'kcc'} className={styles.container}>
         <Popconfirm
           key={id + 'pop'}
           title="确认要删除吗?"

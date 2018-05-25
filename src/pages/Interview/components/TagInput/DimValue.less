@@ -1,0 +1,62 @@
+@import '~styles/themes/default';
+
+.value-input {
+  min-width: 72px;
+  max-width: 120px;
+  height: 24px;
+  margin-right: 16px;
+  padding-left: 10px;
+  align-self: center;
+  font-size: @font-size-sm;
+  box-shadow: none;
+  border-radius: 4px;
+  background-color: @base-white;
+}
+
+.value-container {
+  display: inline-flex;
+  justify-content: flex-end;
+  margin: 4px 0;
+  margin-right: 8px;
+  .value-delete {
+    color: @white-5;
+    opacity: 0;
+    cursor: pointer;
+    transition: @animation-duration-base;
+    font-size: @font-size-sm;
+    margin-left: 4px;
+    display: flex;
+    align-self: center;
+
+    &:active {
+      color: @dark-2;
+      transform: scale(0.9);
+    }
+    &:hover {
+      color: @white-7;
+      transform: scale(1.1);
+    }
+  }
+  &:hover .value-delete {
+    opacity: 1;
+  }
+
+  :global {
+    .ant-tag {
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 0;
+      padding: 0 12px;
+      &-checkable {
+        background: @base-white;
+        border: 1px solid @transBlack-6;
+      }
+      &-checkable-checked {
+        background-color: @primary-color;
+        border: 1px solid @primary-color;
+      }
+    }
+  }
+}

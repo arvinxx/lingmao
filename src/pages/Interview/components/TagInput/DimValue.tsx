@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Tag, Input, Icon, Popconfirm } from 'antd';
 const { CheckableTag } = Tag;
-import styles from './styles.less';
+import styles from './DimValue.less';
 import { DispatchProp } from 'react-redux';
 
 export interface IDimValueProps {

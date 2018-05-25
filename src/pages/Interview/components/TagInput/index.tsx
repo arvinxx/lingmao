@@ -7,7 +7,7 @@ import DimGroup from './DimGroup';
 import DimValue from './DimValue';
 
 import styles from './styles.less';
-import { TDimensions, TSelectedValues } from '../../models/recordDims';
+import { TDimensions, TSelectedValues } from '../../../../models/recordDims';
 
 export interface ITagInputProps {
   dimensions: TDimensions;
@@ -54,9 +54,7 @@ export default class TagInput extends Component<ITagInputProps & DispatchProp, I
           const { key, values, id, inputVisible } = dimension;
           return (
             <div key={id + 'd-container'} className={styles['dimension-container']}>
-              <div className={styles['key-container']}>
-                <DimGroup key={id + 'dimGroup'} dispatch={dispatch} id={id} value={key} />
-              </div>
+              <DimGroup key={id + 'dimGroup'} dispatch={dispatch} id={id} value={key} />
               <div className={styles['tag-container']}>
                 {values.map((value: any) => {
                   const { text, id: vid, editable } = value;

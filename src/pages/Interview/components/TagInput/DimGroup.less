@@ -1,0 +1,38 @@
+@import '~styles/themes/default';
+
+.container {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 136px;
+  align-items: center;
+  text-align: right;
+  .delete {
+    color: @white-5;
+    opacity: 0;
+    cursor: pointer;
+    transition: @animation-duration-base;
+    &:active {
+      color: @dark-2;
+      transform: scale(0.9);
+    }
+    &:hover {
+      color: @white-7;
+      transform: scale(1.1);
+    }
+  }
+  &:hover .delete {
+    opacity: 1;
+  }
+}
+
+.exist-key {
+  .container;
+  max-width: 112px;
+  height: 28px;
+  background: none;
+  margin-left: 4px;
+  &:hover,
+  &:focus {
+    background-color: @base-white;
+  }
+}
