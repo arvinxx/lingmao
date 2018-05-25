@@ -6,7 +6,7 @@ import ValueInput from './ValueInput';
 import DimGroup from './DimGroup';
 import DimValue from './DimValue';
 
-import styles from './styles.less';
+import styles from './index.less';
 import { TDimensions, TSelectedValues } from '../../../../models/recordDims';
 
 export interface ITagInputProps {
