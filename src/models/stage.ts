@@ -1,5 +1,6 @@
 import { DvaModel } from '../../typings/dva';
 
+export type TReductionDiagrams = string[];
 export type TStageModel = {
   indexState: number;
   questionState: number;
@@ -8,7 +9,7 @@ export type TStageModel = {
   tabStage: string;
   showCharts: boolean;
   activePanelList: Array<string>;
-  reductionDiagrams: string[];
+  reductionDiagrams: TReductionDiagrams;
 };
 export interface IStageModel extends DvaModel {
   state: TStageModel;

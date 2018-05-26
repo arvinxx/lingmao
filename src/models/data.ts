@@ -2,7 +2,7 @@ import { DvaModel } from '../../typings/dva';
 import { getAnswers } from '../utils';
 import { concat } from 'lodash';
 import update from 'immutability-helper';
-import { Validation } from '../../mock/FA';
+import FA, { Validation } from '../../mock/FA';
 
 export type TQuesData = TQuesRecord[];
 export type TQuesRecord = TQuesDataItem[];
@@ -37,8 +37,10 @@ export type TDim = {
 export type TClusterDim = { text: string; value: number };
 
 export interface IFAResult {
-  KMO: number;
-  sig: number;
+  eigenValues: number[];
+  componentMatrix: number[][];
+  corr: number[][];
+  percent: number[];
 }
 export type TClusterResult = {
   dims: Array<TClusterDim>;
@@ -64,6 +66,8 @@ export type TDataModel = {
   selectClusterIndex: number;
   clusterResults: TClusterResults;
   FAResult: IFAResult;
+  KMO: number;
+  sig: number;
 };
 interface model extends DvaModel {
   state: TDataModel;
@@ -78,9 +82,13 @@ const model: model = {
     reductionSelectedDims: [],
     selectClusterIndex: 0,
     clusterResults: [],
+    KMO: Validation.kmo,
+    sig: Validation.sig,
     FAResult: {
-      KMO: Validation.kmo,
-      sig: Validation.sig,
+      eigenValues: FA.eigenValues,
+      componentMatrix: FA.componentMatrix,
+      corr: FA.corr,
+      percent: FA.percent,
     },
   },
   reducers: {

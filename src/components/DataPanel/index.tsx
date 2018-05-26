@@ -20,12 +20,12 @@ import { dims } from '../../../mock/dims';
 import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
 import { TTag } from '../../models/tag';
+import { DispatchProp } from 'react-redux';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
 
 interface IDataPanelProps {
-  dispatch?: Function;
   data: TDataModel;
   stage: TStageModel;
   tags: TTag[];
@@ -37,7 +37,7 @@ interface IDataPanelProps {
   stage,
   location: routing.location,
 }))
-export default class DataPanel extends Component<IDataPanelProps> {
+export default class DataPanel extends Component<IDataPanelProps & DispatchProp> {
   static defaultProps: IDataPanelProps = {
     data: {
       quesData: [],
@@ -47,10 +47,14 @@ export default class DataPanel extends Component<IDataPanelProps> {
       matchSelectedDims: [],
       selectClusterIndex: 0,
       clusterResults: [],
+      KMO: 0,
       FAResult: {
-        KMO: 0,
-        sig: 0,
+        eigenValues: [],
+        corr: [],
+        componentMatrix: [],
+        percent: [],
       },
+      sig: 0,
     },
     tags: [],
     stage: {
@@ -64,7 +68,6 @@ export default class DataPanel extends Component<IDataPanelProps> {
       reductionDiagrams: [],
     },
     location: { pathname: '' },
-    dispatch: () => {},
   };
 
   async componentDidMount() {
@@ -92,7 +95,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       matchSelectedDims,
       reductionSelectedDims,
       clusterSelectedDims,
-      FAResult,
+      KMO,
     } = data;
     const {
       analysisStage,
@@ -155,7 +158,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
           <ReduceDims
             dims={matchDims}
             selectedDims={reductionSelectedDims}
-            percent={FAResult.KMO}
+            percent={KMO}
             analysisStage={analysisStage}
             dispatch={dispatch}
           />

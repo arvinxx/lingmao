@@ -8,7 +8,7 @@ import { getBaseUrl } from '../../utils';
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
 
-const plainOptions = ['相关系数表', '碎石图', '总方差解释'];
+const plainOptions = ['相关系数表', '碎石图', '方差解释表'];
 
 export interface IReductionOptsProps {
   analysisStage: number;
