@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
-import { Button, Divider, Progress, Icon, Tooltip } from 'antd';
-import DimSelect from './DimsSelect';
+import { Button, Progress, Icon, Tooltip } from 'antd';
+import { DispatchProp } from 'react-redux';
+import DimsSelect from './DimsSelect';
 import styles from './RecuceDims.less';
 import { TDim, TSelectedDims } from '../../models/data';
 
-interface IRecuceDimsProps {
+export interface IReduceDimsProps {
   dims: Array<TDim>;
   percent: number;
-  dispatch: Function;
   analysisStage: number;
   selectedDims: TSelectedDims;
 }
-export default class RecuceDims extends Component<IRecuceDimsProps> {
-  static defaultProps: IRecuceDimsProps = {
+export default class ReduceDims extends Component<IReduceDimsProps & DispatchProp> {
+  static defaultProps: IReduceDimsProps = {
     dims: [],
     percent: 0,
-    dispatch: () => {},
     analysisStage: 0,
     selectedDims: [],
   };
-  state = { checked: false };
   selectDims = (checked, id) => {
     if (checked) {
       this.props.dispatch({ type: 'data/addReductionSelectedDims', payload: id });
@@ -29,7 +27,6 @@ export default class RecuceDims extends Component<IRecuceDimsProps> {
   };
 
   resetSelection = () => {
-    console.log('重置维度');
     this.props.dispatch({ type: 'data/handleReductionSelectedDims', payload: [] });
   };
   confirmSelection = () => {
@@ -41,22 +38,25 @@ export default class RecuceDims extends Component<IRecuceDimsProps> {
       this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '4' });
     }
   };
+
+  getStatus = (percent) => {
+    if (percent <= 50) {
+      return 'exception';
+    } else if (percent >= 80) {
+      return 'success';
+    } else return null;
+  };
+
   render() {
     const { percent, dims, selectedDims } = this.props;
     const percentValue = Math.floor(percent * 100);
 
-    const status = (function(percentValue) {
-      if (percentValue <= 50) {
-        return 'exception';
-      } else if (percentValue >= 80) {
-        return 'success';
-      } else return null;
-    })(percentValue);
+    const status = this.getStatus(percentValue);
 
     return (
       <div className={styles.container}>
         <p>点击选择参与降维的维度</p>
-        <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
+        <DimsSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
         <div>
           <Button
             disabled={selectedDims.length === 0}

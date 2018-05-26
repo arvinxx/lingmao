@@ -8,7 +8,7 @@ import ClusterMethodComponent from './ClusterMethod';
 import ClusterDimComponent from './ClusterDim';
 import ReductionOptsComponent from './ReductionOpts';
 import Charts from './Charts';
-import RecuceDimsComponent from './RecuceDims';
+import ReduceDims from './ReduceDims';
 import DimMatchComponent from './DimMatch';
 
 import styles from './index.less';
@@ -149,7 +149,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '选择维度',
         component: (
-          <RecuceDimsComponent
+          <ReduceDims
             dims={matchDims}
             selectedDims={reductionSelectedDims}
             percent={FAResult.KMO}
