@@ -1,0 +1,29 @@
+@import '~styles/themes/default';
+
+.container {
+  margin-left: 24px;
+}
+
+.bar {
+  .yellow {
+    :global {
+      .ant-progress-bg {
+        background: @gold-3;
+      }
+    }
+  }
+}
+
+.text {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.info {
+  color: @text-color-secondary;
+  margin-left: 8px;
+}
+
+.down {
+  margin-top: 24px;
+}
