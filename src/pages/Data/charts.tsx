@@ -10,7 +10,7 @@ import { connect } from 'dva';
 import { TDataModel, TDim } from '../../models/data';
 import { DispatchProp } from 'react-redux';
 import { TTag } from '../../models/tag';
-import { getChartsDataSetsByIndex, initDataSets } from '../../utils/charts';
+import { getChartsDataSets, initDataSets } from '../../utils/charts';
 
 interface IChartsProps {
   data: TDataModel;
@@ -39,7 +39,7 @@ export default class Charts extends Component<IChartsProps & DispatchProp> {
             {matchDims.map((dim, index) => {
               const selectedQue = selectedQues.find((selectedQue) => selectedQue.tagId === dim.id);
               if (selectedQue !== undefined) {
-                const data = getChartsDataSetsByIndex(dimData, index, selectedQue);
+                const data = getChartsDataSets(dimData, index, selectedQue);
                 const { cols, dv } = initDataSets(data);
                 return (
                   <div key={dim.id}>

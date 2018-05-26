@@ -1,5 +1,5 @@
 import { generateId } from './utils';
-import { getChartsDataSetsByIndex } from './charts';
+import { getChartsDataSets } from './charts';
 const quesData = [
   [
     {
@@ -48,8 +48,8 @@ const selectedQue = {
   ],
 };
 
-it('getChartsDataSetsByIndex', () => {
-  expect(getChartsDataSetsByIndex(quesData, 0, selectedQue)).toEqual([
+it('getChartsDataSets', () => {
+  expect(getChartsDataSets(quesData, 0, selectedQue)).toEqual([
     {
       count: 1,
       item: '小A',

@@ -3,6 +3,7 @@ import { Icon, Button } from 'antd';
 import router from 'umi/router';
 import { getBaseUrl } from '../../utils';
 import { TDim } from '../../models/data';
+import styles from './Charts.less';
 
 interface IValidationProps {
   dispatch: Function;
@@ -10,7 +11,7 @@ interface IValidationProps {
   tabStage: string;
   pathname: string;
 }
-export default class Validation extends Component<IValidationProps> {
+export default class Charts extends Component<IValidationProps> {
   static defaultProps: IValidationProps = {
     analysisStage: 0,
     dispatch: () => {},
@@ -36,16 +37,22 @@ export default class Validation extends Component<IValidationProps> {
   };
   render() {
     return (
-      <div>
+      <div className={styles.container}>
+        {/*TODO: 添加图标类型控制
+        <div className={styles.charts}>*/}
+        {/*<Icon type="plus-circle-o" />*/}
+        {/*</div>*/}
         <div>
-          {/*<Icon type="plus-circle-o" />*/}
-          <p>点击生成图表按钮获得可视化结果，点击跳转进入下一环节</p>
-        </div>
-        <div>
-          <Button onClick={this.showCharts}>生成图表</Button>
+          <Button onClick={this.showCharts} style={{ marginRight: 16 }}>
+            生成图表
+          </Button>
           <Button type="primary" onClick={this.finish}>
             跳转
           </Button>
+        </div>
+        <div className={styles.notice}>
+          <Icon type="exclamation-circle-o" style={{ marginRight: 8 }} />
+          <div>点击跳转进入下一环节</div>
         </div>
       </div>
     );

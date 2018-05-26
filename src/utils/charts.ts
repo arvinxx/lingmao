@@ -2,7 +2,7 @@ import { getCountAndPercent } from './index';
 import { DataView } from '@antv/data-set';
 import { TQuesData, TSelectedQue } from '../models/data';
 
-export const getChartsDataSetsByIndex = (
+export const getChartsDataSets = (
   dimData: TQuesData,
   index: number,
   selectedQue: TSelectedQue

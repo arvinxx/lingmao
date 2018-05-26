@@ -7,7 +7,7 @@ import DataIndexComponent from './DataIndex';
 import ClusterMethodComponent from './ClusterMethod';
 import ClusterDimComponent from './ClusterDim';
 import ReductionOptsComponent from './ReductionOpts';
-import ValidationComponent from './Validation';
+import Charts from './Charts';
 import RecuceDimsComponent from './RecuceDims';
 import DimMatchComponent from './DimMatch';
 
@@ -18,8 +18,7 @@ import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
 import { extractTags, getFilterDims } from '../../utils';
 import { TTag } from '../../models/tag';
-import { queryDocument } from '../../services/api';
-import { getCleanTagGroups } from '../../services/cleanData';
+import { queryDocument, getCleanTagGroups } from '../../services';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -56,6 +55,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       tabStage: '1',
       activePanelList: ['0'],
       questionState: 0,
+      showCharts: false,
     },
     location: { pathname: '' },
     dispatch: () => {},
@@ -133,7 +133,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '可视化图表',
         component: (
-          <ValidationComponent
+          <Charts
             analysisStage={analysisStage}
             pathname={location.pathname}
             dispatch={dispatch}
