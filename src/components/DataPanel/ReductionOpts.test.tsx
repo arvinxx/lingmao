@@ -8,6 +8,7 @@ const setup = () => {
   const props: IReductionOptsProps = {
     pathname: '/data/reduction',
     tabStage: '1',
+    diagrams: [],
     analysisStage: 5,
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
@@ -73,8 +74,8 @@ describe('response', () => {
     wrapper.setState({ method: '1' });
   });
   it('changeDiagram ', () => {
-    wrapper.find('CheckboxGroup').simulate('change', ['相关系数表']);
-    expect(wrapper.state('diagrams')).toEqual(['相关系数表']);
+    wrapper.find('CheckboxGroup').simulate('change', ['211']);
+    expect(dispatch.callCount).toEqual(1);
   });
   it('changeRotation  ', () => {
     wrapper.find('#rotation').simulate('change', '3');

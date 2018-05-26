@@ -8,6 +8,7 @@ export type TStageModel = {
   tabStage: string;
   showCharts: boolean;
   activePanelList: Array<string>;
+  reductionDiagrams: string[];
 };
 export interface IStageModel extends DvaModel {
   state: TStageModel;
@@ -17,11 +18,12 @@ const stage: IStageModel = {
   state: {
     indexState: 0,
     questionState: 0,
-    analysisStage: 0,
+    analysisStage: 9,
     tagMatchState: 0,
     tabStage: '1',
     showCharts: false,
     activePanelList: ['0'],
+    reductionDiagrams: [],
   },
   reducers: {
     indexStateNext(state) {
@@ -98,6 +100,10 @@ const stage: IStageModel = {
 
     handleTagMatchState(state, { payload: tagMatchState }) {
       return { ...state, tagMatchState };
+    },
+
+    handleReductionDiagrams(state, { payload: reductionDiagrams }) {
+      return { ...state, reductionDiagrams };
     },
   },
 };

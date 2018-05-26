@@ -2,23 +2,24 @@ import React, { Component, ReactNode } from 'react';
 import { Card, Tabs, Collapse } from 'antd';
 import { connect } from 'dva';
 
-import UploadComponent from './Upload';
-import DataIndexComponent from './DataIndex';
-import ClusterMethodComponent from './ClusterMethod';
-import ClusterDimComponent from './ClusterDim';
-import ReductionOptsComponent from './ReductionOpts';
+import Upload from './Upload';
+import DataIndex from './DataIndex';
+import DimMatch from './DimMatch';
 import Charts from './Charts';
 import ReduceDims from './ReduceDims';
-import DimMatchComponent from './DimMatch';
+import ReductionOpts from './ReductionOpts';
+import ClusterDim from './ClusterDim';
+import ClusterMethod from './ClusterMethod';
 
 import styles from './index.less';
+
+import { extractTags, getFilterDims } from '../../utils';
+import { queryDocument, getCleanTagGroups } from '../../services';
 
 import { dims } from '../../../mock/dims';
 import { TDataModel } from '../../models/data';
 import { TStageModel } from '../../models/stage';
-import { extractTags, getFilterDims } from '../../utils';
 import { TTag } from '../../models/tag';
-import { queryDocument, getCleanTagGroups } from '../../services';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -60,6 +61,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       activePanelList: ['0'],
       questionState: 0,
       showCharts: false,
+      reductionDiagrams: [],
     },
     location: { pathname: '' },
     dispatch: () => {},
@@ -99,6 +101,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       activePanelList,
       questionState,
       tagMatchState,
+      reductionDiagrams,
     } = stage;
 
     const matchDims = getFilterDims(dims, matchSelectedDims, false);
@@ -106,12 +109,12 @@ export default class DataPanel extends Component<IDataPanelProps> {
     const CollapseArray = [
       {
         text: '数据文件',
-        component: <UploadComponent dispatch={dispatch} analysisStage={analysisStage} />,
+        component: <Upload dispatch={dispatch} analysisStage={analysisStage} />,
       },
       {
         text: '数据编码',
         component: (
-          <DataIndexComponent
+          <DataIndex
             selectedQues={selectedQues}
             quesData={quesData}
             indexState={indexState}
@@ -124,7 +127,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '维度匹配',
         component: (
-          <DimMatchComponent
+          <DimMatch
             dispatch={dispatch}
             tagMatchState={tagMatchState}
             pathname={location.pathname}
@@ -161,10 +164,11 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '维度选项',
         component: (
-          <ReductionOptsComponent
+          <ReductionOpts
             pathname={location.pathname}
             analysisStage={analysisStage}
             dispatch={dispatch}
+            diagrams={reductionDiagrams}
             tabStage={tabStage}
           />
         ),
@@ -172,7 +176,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '选择维度',
         component: (
-          <ClusterDimComponent
+          <ClusterDim
             dims={matchDims}
             selectedDims={clusterSelectedDims}
             analysisStage={analysisStage}
@@ -183,7 +187,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       {
         text: '聚类方法',
         component: (
-          <ClusterMethodComponent
+          <ClusterMethod
             analysisStage={analysisStage}
             pathname={location.pathname}
             dispatch={dispatch}

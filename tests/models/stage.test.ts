@@ -1,6 +1,4 @@
 import model from '../../src/models/stage';
-import { generateId } from '../../src/utils/utils';
-import { getAnswers } from '../../src/utils';
 const reducers = model.reducers;
 
 describe('Reducers', () => {
@@ -51,5 +49,11 @@ describe('Reducers', () => {
     const state = { activePanelList: ['0', '3'] };
     const action = { type: 'stage/removeActivePanelList', payload: '3' };
     expect(reducer(state, action)).toEqual({ activePanelList: ['0'] });
+  });
+  it('handleReductionDiagrams', () => {
+    const reducer = reducers.handleReductionDiagrams;
+    const state = { reductionDiagrams: [] };
+    const action = { type: 'stage/handleReductionDiagrams', payload: ['3'] };
+    expect(reducer(state, action)).toEqual({ reductionDiagrams: ['3'] });
   });
 });

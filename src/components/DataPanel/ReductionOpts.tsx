@@ -14,12 +14,14 @@ export interface IReductionOptsProps {
   analysisStage: number;
   pathname: string;
   tabStage: string;
+  diagrams: string[];
 }
 export default class ReductionOpts extends Component<IReductionOptsProps & DispatchProp> {
   static defaultProps: IReductionOptsProps = {
     analysisStage: 0,
     pathname: '',
     tabStage: '',
+    diagrams: [],
   };
   state = {
     value: 100,
@@ -59,10 +61,11 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
     this.setState({ rotationMethod });
   };
   changeDiagram = (diagrams) => {
-    this.setState({ diagrams });
+    this.props.dispatch({ type: 'stage/handleReductionDiagrams', payload: diagrams });
   };
   render() {
-    const { value, method, rotationMethod, count, diagrams } = this.state;
+    const { diagrams } = this.props;
+    const { value, method, rotationMethod, count } = this.state;
     return (
       <div style={{ marginLeft: 24 }}>
         <div className={styles.method}>
