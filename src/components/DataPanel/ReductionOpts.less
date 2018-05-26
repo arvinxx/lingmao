@@ -1,11 +1,30 @@
 @import '../../styles/themes/default';
 .panel {
-  border-bottom: 0;
   :global {
     .ant-collapse-item > .ant-collapse-header {
       line-height: 20px;
       font-size: @font-size-base;
       color: @dark-5;
     }
+    .ant-collapse-item {
+      border-bottom: 0;
+    }
   }
+}
+.method {
+  display: flex;
+  align-items: center;
+}
+
+.rotation {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.diagram {
+  margin-top: 12px;
+}
+.buttons {
+  margin-top: 24px;
 }
