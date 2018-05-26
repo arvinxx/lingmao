@@ -46,6 +46,10 @@ export default class DataPanel extends Component<IDataPanelProps> {
       matchSelectedDims: [],
       selectClusterIndex: 0,
       clusterResults: [],
+      FAResult: {
+        KMO: 0,
+        sig: 0,
+      },
     },
     tags: [],
     stage: {
@@ -86,6 +90,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
       matchSelectedDims,
       reductionSelectedDims,
       clusterSelectedDims,
+      FAResult,
     } = data;
     const {
       analysisStage,
@@ -147,7 +152,7 @@ export default class DataPanel extends Component<IDataPanelProps> {
           <RecuceDimsComponent
             dims={matchDims}
             selectedDims={reductionSelectedDims}
-            percent={70}
+            percent={FAResult.KMO}
             analysisStage={analysisStage}
             dispatch={dispatch}
           />

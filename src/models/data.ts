@@ -1,9 +1,8 @@
 import { DvaModel } from '../../typings/dva';
-import { generateId, getAnswers } from '../utils';
-import { isEqual, sortBy, concat } from 'lodash';
+import { getAnswers } from '../utils';
+import { concat } from 'lodash';
 import update from 'immutability-helper';
-
-import { TTag } from './tag';
+import { Validation } from '../../mock/FA';
 
 export type TQuesData = TQuesRecord[];
 export type TQuesRecord = TQuesDataItem[];
@@ -36,6 +35,11 @@ export type TDim = {
 };
 
 export type TClusterDim = { text: string; value: number };
+
+export interface IFAResult {
+  KMO: number;
+  sig: number;
+}
 export type TClusterResult = {
   dims: Array<TClusterDim>;
   percent: number;
@@ -59,6 +63,7 @@ export type TDataModel = {
   clusterSelectedDims: TSelectedDims;
   selectClusterIndex: number;
   clusterResults: TClusterResults;
+  FAResult: IFAResult;
 };
 interface model extends DvaModel {
   state: TDataModel;
@@ -73,6 +78,10 @@ const model: model = {
     reductionSelectedDims: [],
     selectClusterIndex: 0,
     clusterResults: [],
+    FAResult: {
+      KMO: Validation.kmo,
+      sig: Validation.sig,
+    },
   },
   reducers: {
     handleQuesData(state, { payload: quesData }) {
@@ -147,6 +156,9 @@ const model: model = {
         ...state,
         reductionSelectedDims: state.reductionSelectedDims.filter((id) => id !== removeId),
       };
+    },
+    handleReductionSelectedDims(state, { payload: reductionSelectedDims }) {
+      return { ...state, reductionSelectedDims };
     },
 
     // 聚类维度选择
