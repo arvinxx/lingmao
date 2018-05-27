@@ -5,10 +5,9 @@ import { connect } from 'dva';
 import styles from './export.less';
 import { StarPic } from '../../components';
 
-import { TTag, TTagGroup, TTagModel } from '../../models/tag';
+import { TTag, TTagGroup } from '../../models/tag';
 import { getStarData } from '../../utils';
-import { queryDocument, saveTagGroups } from '../../services/api';
-import { getCleanTagGroups } from '../../services/cleanData';
+import { queryDocument, saveTagGroups, getCleanTagGroups } from '../../services';
 const { Item } = List;
 const { TabPane } = Tabs;
 

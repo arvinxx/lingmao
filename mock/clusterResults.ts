@@ -6,6 +6,7 @@ export const clusterResult = () =>
       {
         tagId: '@guid',
         'value|1-5.1': 1,
+        text: '@ctitle',
         tagText: '@ctitle',
         'type|1': ['activities', 'skill', 'attitude'],
         tagGroupText: '@ctitle',
@@ -13,9 +14,9 @@ export const clusterResult = () =>
       },
     ],
   });
-// const clusterResults = Mock.mock({
-//   'array|2-7': [() => clusterResult.array],
-// });
-// export default clusterResults.array;
+const clusterResults = Mock.mock({
+  'array|1-4': [() => clusterResult().array],
+});
+export const personaData = clusterResults.array;
 
 export const clusterArray = [0, 0, 0, 1, 2, 1, 0, 0, 2, 0];

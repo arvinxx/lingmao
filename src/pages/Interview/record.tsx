@@ -7,7 +7,7 @@ import 'react-reflex/styles.css';
 import { TagList, Upload, TagInput, RecordList } from './components';
 
 import { IInterview } from '../../models/interview';
-import { TTagGroup, TTagModel } from '../../models/tag';
+import { TTagGroup } from '../../models/tag';
 import { TRecordModel } from '../../models/recordDims';
 
 import { extractTags } from '../../utils';

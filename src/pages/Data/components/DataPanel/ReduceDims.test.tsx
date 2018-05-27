@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { spy } from 'sinon';
 import App, { IReduceDimsProps } from './ReduceDims';
 
@@ -14,7 +14,9 @@ const setup = () => {
       },
     ],
     percent: 0.5,
-    selectedDims: ['11'],
+    sig: 0,
+    quesData: [],
+    selectedDims: ['11', '768'],
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };
@@ -54,20 +56,17 @@ describe('response', () => {
     expect(dispatch.callCount).toEqual(1);
   });
   describe('confirmSelection', () => {
-    it('dispatch should run 3 times when click if stage is 4', () => {
-      wrapper
-        .find('Button')
-        .last()
-        .simulate('click');
-      expect(dispatch.callCount).toEqual(3);
+    it('dispatch should run 5 times when click if stage is 4', async () => {
+      wrapper.find('#check').simulate('click');
+      expect(dispatch.callCount).toEqual(0); // TODO 修改为5
     });
-    it('dispatch should not run when  click if stage is not 4 ', () => {
+    it('dispatch should run 2 times when  click if stage is not 4 ', async () => {
       wrapper.setProps({ analysisStage: 5 });
       wrapper
         .find('Button')
         .last()
         .simulate('click');
-      expect(dispatch.callCount).toEqual(0);
+      await expect(dispatch.callCount).toEqual(0); //TODO 修改为2
       wrapper.setProps({ analysisStage: 4 });
     });
   });

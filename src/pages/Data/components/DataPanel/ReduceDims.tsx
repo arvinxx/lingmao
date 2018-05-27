@@ -42,8 +42,8 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
     const data = getNumberDataFromQuesData(filterData);
     try {
       const { kmo, sig } = await getKMO(data);
-      this.props.dispatch({ type: 'data/handleKMO', payload: kmo });
-      this.props.dispatch({ type: 'data/handleSig', payload: sig });
+      dispatch({ type: 'data/handleKMO', payload: kmo });
+      dispatch({ type: 'data/handleSig', payload: sig });
     } catch (e) {
       //TODO 错误处理
       console.log(e);
@@ -82,6 +82,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
             重置
           </Button>
           <Button
+            id="check"
             type="primary"
             ghost
             disabled={selectedDims.length === 0}
