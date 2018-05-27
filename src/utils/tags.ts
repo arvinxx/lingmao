@@ -1,6 +1,6 @@
 import { TTag, TTagGroup } from '../models/tag';
 import { tail } from 'lodash';
-import { TPersonaRecord } from '../models/persona';
+import { TPersonaDims } from '../models/persona';
 
 export const extractTags = (tagGroups: Array<TTagGroup>): Array<TTag> => {
   let tags: Array<TTag> = [];
@@ -69,7 +69,7 @@ export const getStarData = (tagGroups: Array<TTagGroup>): TStarModel => {
   return { data, categories, links };
 };
 
-export const getTagGroupId = (personaRecord: TPersonaRecord): TPersonaRecord => {
+export const getTagGroupId = (personaRecord: TPersonaDims): TPersonaDims => {
   return personaRecord.map((item) => {
     if (item.tagGroupId !== '') {
       return item;

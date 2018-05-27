@@ -5,44 +5,56 @@ import { DimensionList, PersonaEditor } from '../../components';
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
 
-import clusterResults from '../../../mock/clusterResults';
+import { DispatchProp } from 'react-redux';
 interface IEditProps {
   persona: TPersona;
-  dispatch?: Function;
   selectClusterIndex: number;
 }
 @connect(({ persona, data }) => ({
   persona,
   selectClusterIndex: data.selectClusterIndex,
 }))
-export default class Edit extends Component<IEditProps> {
+export default class Edit extends Component<IEditProps & DispatchProp> {
   static defaultProps: IEditProps = {
     persona: {
       checkedDims: [],
       expandedDims: [],
       dimVisible: true,
       exportVisible: false,
-      personaData: [],
-      blockData:[]
+      name: '',
+      personaDimGroups: [],
+      personaDisplayDimGroups: [],
+      keywords: '',
     },
     selectClusterIndex: 0,
   };
 
   render() {
     const { persona, dispatch } = this.props;
-    const { checkedDims, dimVisible, expandedDims, personaData } = persona;
+    const {
+      checkedDims,
+      dimVisible,
+      expandedDims,
+      personaDimGroups,
+      personaDisplayDimGroups,
+    } = persona;
     return (
       <Fragment>
         <div className={styles.left}>
-          <PersonaEditor personaData={personaData} checkedDims={checkedDims} />
+          <PersonaEditor
+            personaDimGroups={personaDisplayDimGroups}
+            dispatch={dispatch}
+            persona={persona}
+            checkedDims={checkedDims}
+          />
         </div>
         {dimVisible ? (
           <div className={styles.right}>
             <DimensionList
-              clusterResult={clusterResults[0]}
               checkedDims={checkedDims}
               expandedDims={expandedDims}
               dispatch={dispatch}
+              personaDimGroups={personaDimGroups}
             />
           </div>
         ) : null}

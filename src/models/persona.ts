@@ -1,18 +1,9 @@
 import { getTagsArrById, reorder } from '../utils';
 import update from 'immutability-helper';
 import { DvaModel } from '../../typings/dva';
-import clusterResults from '../../mock/clusterResults';
+import { dimGroups } from '../common/persona';
 
-export type TBlockItem = {
-  text: string;
-  value: number;
-};
-export type TBlock = {
-  type: string;
-  values: TBlockItem[];
-};
-
-export type TPersonaItem = {
+export type TPersonaDim = {
   tagId: string;
   tagGroupId: string;
   tagGroupText: string;
@@ -20,17 +11,25 @@ export type TPersonaItem = {
   type: string;
   tagText: string;
 };
-export type TPersonaRecord = TPersonaItem[];
-export type TPersonaData = TPersonaRecord[];
+export type TPersonaDims = TPersonaDim[];
+export type TPersonaData = TPersonaDims[];
+export type TPersonaDimGroup = {
+  text: string;
+  key: string;
+  dims?: TPersonaDims;
+};
 
-export type TBlockData = TBlock[];
+export type TPersonaDimGroups = TPersonaDimGroup[];
+
 export type TPersona = {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
-  personaData: TPersonaData;
-  blockData: TBlockData;
+  personaDimGroups: TPersonaDimGroups;
+  personaDisplayDimGroups: TPersonaDimGroups;
+  keywords: string;
+  name: string;
 };
 interface IPersonaModel extends DvaModel {
   state: TPersona;
@@ -42,8 +41,10 @@ const persona: IPersonaModel = {
     exportVisible: false,
     expandedDims: [],
     checkedDims: [],
-    personaData: clusterResults[0],
-    blockData: [],
+    keywords: '',
+    name: '',
+    personaDimGroups: dimGroups,
+    personaDisplayDimGroups: [],
   },
   effects: {},
   reducers: {
@@ -79,18 +80,31 @@ const persona: IPersonaModel = {
       };
     },
 
-    handlePersonaData(state, { payload: personaData }) {
-      return { ...state, personaData };
+    handleDisplayDimGroups(state: TPersona, action) {
+      const { personaDimGroups, checkedDims } = state;
+      const filterDimGroups = personaDimGroups.filter((dimGroup: TPersonaDimGroup) =>
+        dimGroup.dims.some((dim) => checkedDims.some((item) => item === dim.tagId))
+      );
+      return {
+        ...state,
+        personaDisplayDimGroups: filterDimGroups.map((dimGroup) => ({
+          ...dimGroup,
+          dims: dimGroup.dims.filter((dim) => checkedDims.some((id) => id === dim.tagId)),
+        })),
+      };
     },
     handleDragPersonaData(state, { payload }) {
       const { dragIndex, dropIndex } = payload;
-      const dragItem = state.personaData[dragIndex];
+      const dragItem = state.personaDisplayDimGroups[dragIndex];
       return {
         ...state,
-        personaData: update(state.personaData, {
+        personaDisplayDimGroups: update(state.personaDisplayDimGroups, {
           $splice: [[dragIndex, 1], [dropIndex, 0, dragItem]],
         }),
       };
+    },
+    handleKeywords(state, { payload: keywords }) {
+      return { ...state, keywords };
     },
   },
 };

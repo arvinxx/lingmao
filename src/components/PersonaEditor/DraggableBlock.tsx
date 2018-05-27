@@ -35,7 +35,13 @@ const dropTarget = {
 }))
 export default class DraggableBlock extends Component<any> {
   render() {
-    const { connectDragSource, children, connectDropTarget } = this.props;
-    return connectDragSource(connectDropTarget(<div className={styles.block}>{children}</div>));
+    const { connectDragSource, children, connectDropTarget, key } = this.props;
+    return connectDragSource(
+      connectDropTarget(
+        <div key={key} className={styles.block}>
+          {children}
+        </div>
+      )
+    );
   }
 }

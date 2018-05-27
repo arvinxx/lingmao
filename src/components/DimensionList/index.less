@@ -2,16 +2,20 @@
 
 .container {
   width: 200px;
-  display: block;
+  display: flex;
+  flex-direction: column;
   user-select: none;
+  height: 100%;
+  padding-bottom: @padding-lg;
   .title {
-    margin: 24px;
+    margin: @padding-lg;
     text-align: center;
     font-size: @font-size-lg;
   }
 }
 
 .tree {
+  overflow: auto;
   li {
     background: @transBlack-8;
     //background: @blue-3;

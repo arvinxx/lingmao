@@ -1,36 +1,42 @@
 import React, { Component, Fragment } from 'react';
-import styles from './index.less';
-import { connect } from 'dva';
+import { Input } from 'antd';
+import { DispatchProp } from 'react-redux';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+
+import styles from './index.less';
 import DraggableBlock from './DraggableBlock';
-import { getBlockData, getBlockText, getFilterBlockData } from '../../utils';
+import { MiniProgress } from '../Charts';
+
 import {
-  features,
   photo,
-  name,
+  name as fakeName,
   percent,
   bios,
   basicInfo,
   career,
   keywords,
 } from '../../../mock/persona';
-import { MiniProgress } from '../Charts';
-import { TBlock, TPersonaRecord } from '../../models/persona';
+import { TPersona, TPersonaDimGroups } from '../../models/persona';
+
+const { TextArea } = Input;
 
 interface IPersonaEditorProps {
-  personaData: TPersonaRecord;
-  checkedDims: string[];
-  dispatch?: Function;
+  persona: TPersona;
+  personaDimGroups: TPersonaDimGroups;
 }
 
-@connect()
 @(DragDropContext(HTML5Backend) as any)
-export default class PersonaEditor extends Component<IPersonaEditorProps> {
+export default class PersonaEditor extends Component<IPersonaEditorProps & DispatchProp> {
+  changeKeywords = (e) => {
+    this.props.dispatch({
+      type: 'persona/handleKeywords',
+      payload: e.target.value,
+    });
+  };
   render() {
-    const { personaData, dispatch, checkedDims } = this.props;
-    const filterData = getFilterBlockData(personaData, checkedDims);
-    const blockData = getBlockData(filterData);
+    const { dispatch, persona, personaDimGroups } = this.props;
+    const { keywords, name } = persona;
     return (
       <Fragment>
         <div className={styles.container}>
@@ -42,12 +48,11 @@ export default class PersonaEditor extends Component<IPersonaEditorProps> {
               <div
                 style={{
                   display: 'flex',
-
-                  flexDirection: 'column',
+                  alignItems: 'end',
                 }}
               >
-                <span className={styles.name}>{name}</span>
-                <span className={styles.career}>{career}</span>
+                <span className={styles.name}>{name === '' ? fakeName : name}</span>
+                <div className={styles.career}>{career}</div>
               </div>
               <div className={styles.percent}>
                 <div className={styles.text}>
@@ -66,7 +71,12 @@ export default class PersonaEditor extends Component<IPersonaEditorProps> {
             </div>
             <div className={styles.keywords}>
               <span style={{ fontSize: 36, marginRight: 24 }}>"</span>
-              {keywords}
+              <Input
+                style={{ maxWidth: keywords.length * 20 }}
+                onChange={this.changeKeywords}
+                value={keywords}
+                placeholder="请输入口头禅"
+              />
               <span style={{ fontSize: 36, marginLeft: 24 }}>"</span>
             </div>
             <div className={styles.body}>
@@ -90,37 +100,24 @@ export default class PersonaEditor extends Component<IPersonaEditorProps> {
                 ) : null}
               </div>
               <div className={styles.right}>
-                <div className={styles.features}>
-                  {features.map((block) => {
-                    const { type, values } = block;
-                    return (
-                      <div key={type} className={styles.feature}>
-                        <div className={styles.info}> {getBlockText(block)}</div>
-                        <ul className={styles.list}>
-                          {values.map((text) => <li key={text}>{text}</li>)}
-                        </ul>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className={styles.behaviors}>
-                  {blockData.map((block: TBlock, index) => (
-                    <DraggableBlock key={index} dispatch={dispatch} index={index}>
-                      <div className={styles.info}>{getBlockText(block)}</div>
-                      {block.values.map((value) => (
-                        <div>
-                          {value.text}
+                {personaDimGroups.map((dimGroup, index) => (
+                  <DraggableBlock key={index} dispatch={dispatch} index={index}>
+                    <div key={index} className={styles.behaviors}>
+                      <div className={styles.info}>{dimGroup.text}</div>
+                      {dimGroup.dims.map((dim) => (
+                        <div key={dim.tagId}>
+                          {dim.tagText}
                           <MiniProgress
-                            percent={value.value * 10}
+                            percent={dim.value * 10}
                             color={'l(0) 0:#99f5ff 1:#a6a6ff'}
                             target={0}
                             strokeWidth={8}
                           />
                         </div>
                       ))}
-                    </DraggableBlock>
-                  ))}
-                </div>
+                    </div>
+                  </DraggableBlock>
+                ))}
               </div>
             </div>
           </div>

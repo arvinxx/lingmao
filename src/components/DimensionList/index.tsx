@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Tree } from 'antd';
 
 import styles from './index.less';
-import { TPersonaRecord } from "../../models/persona";
+import { TPersonaDimGroups, TPersonaDims } from '../../models/persona';
+import { DispatchProp } from 'react-redux';
 
 const TreeNode = Tree.TreeNode;
 
 interface IDimensionListProps {
-  clusterResult: TPersonaRecord;
   expandedDims: Array<string>;
   checkedDims: Array<string>;
-  dispatch: Function;
+  personaDimGroups: TPersonaDimGroups;
 }
 
-export default class DimensionList extends Component<IDimensionListProps> {
+export default class DimensionList extends Component<IDimensionListProps & DispatchProp> {
   static defaultProps: IDimensionListProps = {
     checkedDims: [],
     expandedDims: [],
-    dispatch: () => {},
-    clusterResult: [],
+    personaDimGroups: [],
   };
   onExpand = (expandedDims) => {
     this.props.dispatch({
@@ -31,24 +30,26 @@ export default class DimensionList extends Component<IDimensionListProps> {
       type: 'persona/changeCheckedDims',
       payload: checkedDims,
     });
+    this.props.dispatch({
+      type: 'persona/handleDisplayDimGroups',
+    });
   };
 
-  renderTreeNodes = (clusterResult: TPersonaRecord) => {
-    return clusterResult.map((cluster) => {
-      //TODO : 生成树形节点
-      // if (cluster.tagGroupId) {
-      //   return (
-      //     <TreeNode title={cluster.text} key={cluster.id} dataRef={cluster}>
-      //       {this.renderTreeNodes(cluster)}
-      //     </TreeNode>
-      //   );
-      // }
-      return <TreeNode title={cluster.tagText} key={cluster.tagId} dataRef={cluster} />;
+  renderTreeNodes = (personaDimGroups: TPersonaDimGroups) => {
+    return personaDimGroups.map((personaDimGroup) => {
+      const { dims, text, key } = personaDimGroup;
+      if (dims.length > 0) {
+        return (
+          <TreeNode title={text} key={key} dataRef={personaDimGroup}>
+            {dims.map((dim) => <TreeNode title={dim.tagText} key={dim.tagId} dataRef={dim} />)}
+          </TreeNode>
+        );
+      } else return <Fragment key={key} />;
     });
   };
 
   render() {
-    const { clusterResult, expandedDims, checkedDims } = this.props;
+    const { expandedDims, checkedDims, personaDimGroups } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.title}>选择维度</div>
@@ -60,7 +61,7 @@ export default class DimensionList extends Component<IDimensionListProps> {
           onCheck={this.onCheck}
           checkedKeys={checkedDims}
         >
-          {this.renderTreeNodes(clusterResult)}
+          {this.renderTreeNodes(personaDimGroups)}
         </Tree>
       </div>
     );

@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  flex-wrap: wrap;
   flex: none;
 }
 .photo-container {
@@ -16,24 +15,23 @@
 }
 .content {
   display: flex;
-  padding-right: 24px;
+  padding: @padding-sm @padding-lg;
   width: 65%;
   flex-direction: column;
 }
 .title {
   display: flex;
   flex-direction: row;
-  height: 150px;
-  padding: 24px 12px 12px 24px;
   align-items: end;
   justify-content: space-between;
   .name {
-    font-size: 36px;
+    font-size: 32px;
     margin-right: 12px;
   }
   .career {
     font-size: 16px;
     color: @text-color-secondary;
+    padding-bottom: 5px;
   }
   .percent {
     display: flex;
@@ -50,8 +48,17 @@
 }
 
 .keywords {
-  padding: 0 48px 36px 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 @padding-sm @padding-sm;
   font-size: 16px;
+  :global {
+    .ant-input {
+      min-width: 120px;
+      border: none;
+      box-shadow: none;
+    }
+  }
 }
 
 .body {
@@ -59,27 +66,27 @@
   height: 100%;
   .info {
     font-size: 16px;
-    margin-bottom: 16px;
+    margin-bottom: @padding-xs;
     border-bottom: 1px dashed @transBlack-4;
-    padding-bottom: 8px;
+    padding-bottom: @padding-xs;
   }
   .basic {
     display: flex;
     flex-direction: column;
     width: 30%;
-    padding: 0 24px;
     margin-right: 12px;
     .bios {
       font-size: 14px;
       background: @transBlack-8;
-      padding: 24px 12px;
+      padding: @padding-sm;
     }
   }
 
   .right {
     width: 70%;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    //flex-direction: column;
 
     .features {
       display: flex;
@@ -99,7 +106,7 @@
     }
     .behaviors {
       display: flex;
-      background: @transBlack-8;
+      flex-direction: column;
     }
   }
 }
