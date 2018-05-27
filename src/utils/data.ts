@@ -1,6 +1,7 @@
 import { uniqBy } from 'lodash';
 import { TColumn, TTableData, TQuesData, TDim, TQuesRecord, TSelectedQue } from '../models/data';
 import { generateId } from './utils';
+import { getAccumulation } from './index';
 
 export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> => {
   const temporaryFileReader = new FileReader();
@@ -184,8 +185,58 @@ export const getFilterQuesData = (quesData: TQuesData, selectDims: string[]): TQ
 /**
  * 从问卷数据获得降维所需数据
  */
-export const getClusterDataFromQuesData = (quesData: TQuesData): number[][] => {
+export const getNumberDataFromQuesData = (quesData: TQuesData): number[][] => {
   return quesData.map((quesDataRecord) =>
     quesDataRecord.map((quesDataItem) => quesDataItem.answer.order)
   );
+};
+
+/**
+ * 从降维结果数据获得方差解释表所需数据
+ */
+export const getEigenValuesData = (
+  eigenValues: number[],
+  percent: number[],
+  rEigenValues?: number[],
+  rPercent?: number[]
+) => {
+  let isRoation = true;
+  if (rEigenValues === undefined && rPercent === undefined) {
+    isRoation = false;
+  }
+  return isRoation
+    ? eigenValues.map((i, index) => ({
+        key: index,
+        dims: index + 1,
+        eigenValue: i.toFixed(3),
+        percent: (percent[index] * 100).toFixed(1) + '%',
+        acc: (getAccumulation(percent)[index] * 100).toFixed(1) + '%',
+        'r-eigenValue': rEigenValues[index].toFixed(3),
+        'r-percent': (rPercent[index] * 100).toFixed(1) + '%',
+        'r-acc': (getAccumulation(rPercent)[index] * 100).toFixed(1) + '%',
+      }))
+    : eigenValues.map((i, index) => ({
+        key: index,
+        dims: index + 1,
+        eigenValue: i.toFixed(3),
+        percent: (percent[index] * 100).toFixed(1) + '%',
+        acc: (getAccumulation(percent)[index] * 100).toFixed(1) + '%',
+      }));
+};
+
+/**
+ * 从降维结果数据获得展示表所需数据
+*/
+export const getColumnsAndData = (componentMatrix) => {
+  const columns = componentMatrix.map((comp, index) => ({
+    title: (index + 1).toString(),
+    dataIndex: index.toString(),
+    key: index.toString(),
+  }));
+  const data = componentMatrix.map((i, index) => ({
+    ...i.map((t) => t.toFixed(2)),
+    dims: index + 1,
+    key: index,
+  }));
+  return { columns, data };
 };

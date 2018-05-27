@@ -1,7 +1,7 @@
 import { Chart, Geom, Axis, Tooltip, Coord, Label, Legend, View, Guide, Shape } from 'bizcharts';
 import React, { Component } from 'react';
 interface IPlotsProps {
-  data: object[];
+  data: number[];
 }
 const cols = {
   value: {
@@ -19,9 +19,12 @@ export default class Plots extends Component<IPlotsProps> {
 
   render() {
     const { data } = this.props;
-
+    const chartData = data.map((eigenValue, index) => ({
+      n: index + 1,
+      value: eigenValue,
+    }));
     return (
-      <Chart height={400} data={data} scale={cols}>
+      <Chart height={400} data={chartData} scale={cols}>
         <Axis name="n" />
         <Axis
           name="value"

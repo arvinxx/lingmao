@@ -3,7 +3,7 @@ import { Button, Icon, InputNumber, Checkbox, Select } from 'antd';
 import { TQuesData, TSelectedDims } from '../../../../models/data';
 import {
   getBaseUrl,
-  getClusterDataFromQuesData,
+  getNumberDataFromQuesData,
   getFilterQuesData,
   getCountAndPercent,
 } from '../../../../utils';
@@ -55,7 +55,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
         console.log('ANOVA 表');
       }
       const filterData = getFilterQuesData(quesData, selectedDims);
-      const data = { data: getClusterDataFromQuesData(filterData), K };
+      const data = { data: getNumberDataFromQuesData(filterData), K };
       try {
         const { clusters } = await cluster(data);
         const results = getCountAndPercent(clusters);

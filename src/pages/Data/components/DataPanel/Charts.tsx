@@ -42,10 +42,10 @@ export default class Charts extends Component<IValidationProps> {
         {/*<Icon type="plus-circle-o" />*/}
         {/*</div>*/}
         <div>
-          <Button onClick={this.showCharts} style={{ marginRight: 16 }}>
+          <Button type="primary" onClick={this.showCharts} style={{ marginRight: 16 }}>
             生成图表
           </Button>
-          <Button type="primary" onClick={this.finish}>
+          <Button type="primary" ghost onClick={this.finish}>
             跳转
           </Button>
         </div>

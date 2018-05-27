@@ -13,6 +13,7 @@ const setup = () => {
     isReduced: true,
     rotation: false,
   };
+  //@ts-ignore TODO 如何解决 WrappedComponent 报错问题
   const wrapper = shallow(<App.WrappedComponent {...props} />);
   return { props, wrapper, dispatch };
 };

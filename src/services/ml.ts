@@ -1,6 +1,6 @@
 import kmeans from 'ml-kmeans';
-import { uniq } from 'lodash';
 import { TClusterDim, TQuesData } from '../models/data';
+import FA from '../../mock/FA';
 
 /**
  * 聚类函数
@@ -39,4 +39,24 @@ export const getClusterDims = (
       return value / filterQuesData.length;
     })(),
   }));
+};
+
+export const getKMO = async (data: number[][]): Promise<{ kmo: number; sig: number }> => {
+  console.log('KMO!', data);
+  //TODO 向服务器发送请求
+  return { kmo: Math.random(), sig: Math.random() };
+};
+
+export const getPCA = async (data: number[][], extractMethod) => {
+  console.log('PCA', extractMethod);
+  console.log('TODO 向服务器发送请求');
+  //TODO 向服务器发送请求
+  return FA;
+};
+
+export const getFA = async (data: number[][], extractMethod) => {
+  console.log('FA', extractMethod);
+  console.log('TODO 向服务器发送请求');
+  //TODO 向服务器发送请求
+  return FA;
 };

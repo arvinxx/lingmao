@@ -3,7 +3,10 @@ import { Button, InputNumber, Checkbox, Select } from 'antd';
 import router from 'umi/router';
 import { DispatchProp } from 'react-redux';
 import styles from './ReductionOpts.less';
-import { getBaseUrl } from '../../../../utils';
+
+import { getBaseUrl, getFilterQuesData, getNumberDataFromQuesData } from '../../../../utils';
+import { TQuesData, TSelectedDims } from '../../../../models/data';
+import { getFA, getPCA } from '../../../../services/ml';
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
@@ -14,7 +17,9 @@ export interface IReductionOptsProps {
   analysisStage: number;
   pathname: string;
   tabStage: string;
+  selectedDims: TSelectedDims;
   diagrams: string[];
+  quesData: TQuesData;
 }
 export default class ReductionOpts extends Component<IReductionOptsProps & DispatchProp> {
   static defaultProps: IReductionOptsProps = {
@@ -22,11 +27,13 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
     pathname: '',
     tabStage: '',
     diagrams: [],
+    selectedDims: [],
+    quesData: [],
   };
   state = {
     value: 100,
     count: 2,
-    method: '1',
+    method: 'extractRate',
     rotationMethod: '3',
     diagrams: [],
   };
@@ -63,12 +70,30 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
   changeDiagram = (diagrams) => {
     this.props.dispatch({ type: 'stage/handleReductionDiagrams', payload: diagrams });
   };
-  startReducing = () => {
+  startReduction = async () => {
+    const { quesData, selectedDims, dispatch } = this.props;
+    const { method, count, value, rotationMethod } = this.state;
+    const filterData = getFilterQuesData(quesData, selectedDims);
+    const data = getNumberDataFromQuesData(filterData);
+    const extractMethod = {};
+    extractMethod[method] = method === 'extractRate' ? value : count;
 
-    this.props.dispatch({ type: 'stage/startReducing' });
-    this.props.dispatch({
+    console.log(data);
+    try {
+      const res = await getPCA(data, extractMethod);
+      dispatch({ type: 'data/handlePCAResult', payload: res });
+      if (rotationMethod === '1') {
+        const FARes = await getFA(data, extractMethod);
+        dispatch({ type: 'data/handleFAResult', payload: FARes });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    dispatch({ type: 'stage/startReducing' });
+    dispatch({
       type: 'stage/handleReductionRotation',
-      payload: this.state.rotationMethod !== '3',
+      payload: rotationMethod !== '3',
     });
   };
 
@@ -84,16 +109,15 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
             //@ts-ignore
             id="method"
             style={{ width: 130 }}
-            defaultValue="1"
             value={method}
             placeholder="请选择降维方法"
             onChange={this.changeMethod}
           >
-            <Option value="1">特征值不小于</Option>
-            <Option value="2">聚类个数为</Option>
+            <Option value="extractRate">特征值不小于</Option>
+            <Option value="extractNumber">维度个数为</Option>
           </Select>
           <div style={{ marginLeft: 8 }}>
-            {method === '1' ? (
+            {method === 'extractRate' ? (
               <InputNumber
                 style={{ width: 72 }}
                 id="input-rate"
@@ -137,7 +161,7 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
           <CheckboxGroup options={plainOptions} value={diagrams} onChange={this.changeDiagram} />
         </div>
         <div className={styles.buttons}>
-          <Button type="primary" style={{ marginRight: 16 }} onClick={this.startReducing}>
+          <Button type="primary" style={{ marginRight: 16 }} onClick={this.startReduction}>
             确认
           </Button>
           <Button type="primary" ghost onClick={this.finish}>

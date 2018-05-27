@@ -3,20 +3,27 @@ import { Button, Progress, Icon, Tooltip } from 'antd';
 import { DispatchProp } from 'react-redux';
 import DimsSelect from './DimsSelect';
 import styles from './RecuceDims.less';
-import { TDim, TSelectedDims } from '../../../../models/data';
+import { TDim, TQuesData, TSelectedDims } from '../../../../models/data';
+import { getFilterQuesData, getNumberDataFromQuesData } from '../../../../utils';
+import { getKMO } from '../../../../services/ml';
 
 export interface IReduceDimsProps {
   dims: Array<TDim>;
   percent: number;
+  sig: number;
   analysisStage: number;
+  quesData: TQuesData;
+
   selectedDims: TSelectedDims;
 }
 export default class ReduceDims extends Component<IReduceDimsProps & DispatchProp> {
   static defaultProps: IReduceDimsProps = {
     dims: [],
     percent: 0,
+    sig: 0,
     analysisStage: 0,
     selectedDims: [],
+    quesData: [],
   };
   selectDims = (checked, id) => {
     if (checked) {
@@ -29,13 +36,22 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
   resetSelection = () => {
     this.props.dispatch({ type: 'data/handleReductionSelectedDims', payload: [] });
   };
-  confirmSelection = () => {
-    console.log('发送数据进行KMO计算');
-    console.log('将选择维度保存为降维需要的数据');
-    if (this.props.analysisStage === 4) {
-      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '5' });
-      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '4' });
+  confirmSelection = async () => {
+    const { quesData, selectedDims, analysisStage, dispatch } = this.props;
+    const filterData = getFilterQuesData(quesData, selectedDims);
+    const data = getNumberDataFromQuesData(filterData);
+    try {
+      const { kmo, sig } = await getKMO(data);
+      this.props.dispatch({ type: 'data/handleKMO', payload: kmo });
+      this.props.dispatch({ type: 'data/handleSig', payload: sig });
+    } catch (e) {
+      //TODO 错误处理
+      console.log(e);
+    }
+    if (analysisStage === 4) {
+      dispatch({ type: 'stage/addAnalysisStageCount' });
+      dispatch({ type: 'stage/addActivePanelList', payload: '5' });
+      dispatch({ type: 'stage/removeActivePanelList', payload: '4' });
     }
   };
 
@@ -48,7 +64,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
   };
 
   render() {
-    const { percent, dims, selectedDims } = this.props;
+    const { percent, dims, selectedDims, sig } = this.props;
     const percentValue = Math.floor(percent * 100);
 
     const status = this.getStatus(percentValue);
@@ -65,8 +81,13 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
           >
             重置
           </Button>
-          <Button type="primary" ghost onClick={this.confirmSelection}>
-            确认
+          <Button
+            type="primary"
+            ghost
+            disabled={selectedDims.length === 0}
+            onClick={this.confirmSelection}
+          >
+            检验
           </Button>
         </div>
         {percent ? (
@@ -76,8 +97,8 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
               <Tooltip
                 title={
                   <div>
-                    采用 KMO 算法 <br />小于 50% 不适合因子分析 <br />大于 80% 适合因子分析<br />50%-80%
-                    勉强合适
+                    采用 KMO 检验 <br />大于 80% 适合因子分析<br />50%-80% 勉强合适<br />小于 50%
+                    不适合因子分析（旋转方法请选择「不旋转」）
                   </div>
                 }
               >
@@ -90,6 +111,19 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
                 percent={percentValue}
                 status={status}
               />
+            </div>
+
+            <div>
+              可信度： {((1 - sig) * 100).toFixed(1)} %
+              <Tooltip
+                title={
+                  <div>
+                    采用 Bartlett 球形检验 <br />可信度大于 95% 视为有效
+                  </div>
+                }
+              >
+                <Icon type="exclamation-circle-o" className={styles.info} />
+              </Tooltip>
             </div>
           </div>
         ) : null}

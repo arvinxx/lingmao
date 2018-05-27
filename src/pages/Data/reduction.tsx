@@ -5,8 +5,13 @@ import styles from './reduction.less';
 
 import { Plots, VarianceExplain, CorrTable, CompMatrixTable } from './components';
 import { TReduction, TReductionDiagrams } from '../../models/stage';
-import { getAccumulation } from '../../utils';
-import { IFAResult } from '../../models/data';
+import {
+  getAccumulation,
+  getColumnsAndData,
+  getCorrColAndData,
+  getEigenValuesData,
+} from '../../utils';
+import { IPCAResult } from '../../models/data';
 
 const Panel = Collapse.Panel;
 
@@ -14,12 +19,14 @@ export interface IReductionProps {
   isReduced: boolean;
   diagrams: TReductionDiagrams;
   rotation: boolean;
-  FAResult: IFAResult;
+  PCAResult: IPCAResult;
+  FAResult: IPCAResult;
 }
 @connect(({ stage, data }) => ({
   isReduced: stage.reduction.isReduced,
   diagrams: stage.reduction.reductionDiagrams,
   rotation: stage.reduction.rotation,
+  PCAResult: data.PCAResult,
   FAResult: data.FAResult,
 }))
 export default class Reduction extends Component<IReductionProps> {
@@ -27,8 +34,13 @@ export default class Reduction extends Component<IReductionProps> {
     diagrams: [],
     rotation: false,
     isReduced: false,
-
     FAResult: {
+      componentMatrix: [],
+      corr: [],
+      eigenValues: [],
+      percent: [],
+    },
+    PCAResult: {
       componentMatrix: [],
       corr: [],
       eigenValues: [],
@@ -43,44 +55,21 @@ export default class Reduction extends Component<IReductionProps> {
     },
   };
   render() {
-    const { isReduced, rotation, diagrams, FAResult } = this.props;
-    const { eigenValues, componentMatrix, corr, percent } = FAResult;
+    const { isReduced, rotation, diagrams, PCAResult, FAResult } = this.props;
+    const { eigenValues, componentMatrix, corr, percent } = PCAResult;
+    const {
+      eigenValues: rEigenValues,
+      componentMatrix: rComponentMatrix,
+      percent: rPercent,
+    } = FAResult;
 
-    const CMColumns = componentMatrix.map((comp, index) => ({
-      title: (index + 1).toString(),
-      dataIndex: index.toString(),
-      key: index.toString(),
-    }));
-    const CMData = componentMatrix.map((i, index) => ({
-      ...i.map((t) => t.toFixed(1)),
-      dims: index + 1,
-      key: index,
-    }));
+    const displayComponentMatrix = rotation ? rComponentMatrix : componentMatrix;
+    const { columns: CMColumns, data: CMData } = getColumnsAndData(displayComponentMatrix);
+    const { columns: CorrColumns, data: corrData } = getColumnsAndData(corr);
 
-    const CorrColumns = corr.map((comp, index) => ({
-      title: (index + 1).toString(),
-      dataIndex: index.toString(),
-      key: index.toString(),
-    }));
-
-    const corrData = corr.map((i, index) => ({
-      ...i.map((t) => t.toFixed(2)),
-      key: index,
-      dims: index + 1,
-    }));
-
-    const chartData = eigenValues.map((eigenValue, index) => ({
-      n: index + 1,
-      value: eigenValue,
-    }));
-
-    const vEData = eigenValues.map((i, index) => ({
-      key: index,
-      eigenValue: i.toFixed(3),
-      percent: (percent[index] * 100).toFixed(1) + '%',
-      acc: (getAccumulation(percent)[index] * 100).toFixed(1) + '%',
-      dims: index + 1,
-    }));
+    const vEData = rotation
+      ? getEigenValuesData(eigenValues, percent, rEigenValues, rPercent)
+      : getEigenValuesData(eigenValues, percent);
 
     if (isReduced) {
       return (
@@ -94,7 +83,7 @@ export default class Reduction extends Component<IReductionProps> {
                 <Panel header={diagram} key="1">
                   {diagram === '碎石图' ? (
                     <div className={styles.plot}>
-                      <Plots data={chartData} />
+                      <Plots data={eigenValues} />
                     </div>
                   ) : diagram === '方差解释表' ? (
                     <VarianceExplain data={vEData} rotation={rotation} />

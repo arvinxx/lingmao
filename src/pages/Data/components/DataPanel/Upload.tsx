@@ -31,7 +31,7 @@ export default class UploadData extends Component<IUploadDataProps, IUploadDataS
       fileList: [...fileList, file],
       rawData: data,
     }));
-    return false;
+    return true;
   };
   uploadFile = () => {
     const { rawData } = this.state;

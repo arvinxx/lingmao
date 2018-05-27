@@ -2,7 +2,7 @@ import { DvaModel } from '../../typings/dva';
 import { getAnswers } from '../utils';
 import { concat } from 'lodash';
 import update from 'immutability-helper';
-import FA, { Validation } from '../../mock/FA';
+import FA from '../../mock/FA';
 
 export type TQuesData = TQuesRecord[];
 export type TQuesRecord = TQuesDataItem[];
@@ -36,7 +36,7 @@ export type TDim = {
 
 export type TClusterDim = { text: string; value: number };
 
-export interface IFAResult {
+export interface IPCAResult {
   eigenValues: number[];
   componentMatrix: number[][];
   corr: number[][];
@@ -65,7 +65,8 @@ export type TDataModel = {
   clusterSelectedDims: TSelectedDims;
   selectClusterIndex: number;
   clusterResults: TClusterResults;
-  FAResult: IFAResult;
+  FAResult: IPCAResult;
+  PCAResult: IPCAResult;
   KMO: number;
   sig: number;
 };
@@ -82,13 +83,19 @@ const model: model = {
     reductionSelectedDims: [],
     selectClusterIndex: 0,
     clusterResults: [],
-    KMO: Validation.kmo,
-    sig: Validation.sig,
+    KMO: 0,
+    sig: 0,
+    PCAResult: {
+      eigenValues: [],
+      componentMatrix: [],
+      corr: [],
+      percent: [],
+    },
     FAResult: {
-      eigenValues: FA.eigenValues,
-      componentMatrix: FA.componentMatrix,
-      corr: FA.corr,
-      percent: FA.percent,
+      eigenValues: [],
+      componentMatrix: [],
+      corr: [],
+      percent: [],
     },
   },
   reducers: {
@@ -235,6 +242,24 @@ const model: model = {
           })
         ),
       };
+    },
+    handleKMO(state, { payload: KMO }) {
+      return { ...state, KMO };
+    },
+    handleSig(state, { payload: sig }) {
+      return { ...state, sig };
+    },
+    handlePCAResult(state, { payload }: { payload: IPCAResult }) {
+      const { eigenValues, componentMatrix, corr, percent } = payload;
+      const PCAResult = { eigenValues, componentMatrix, corr, percent };
+      console.log(PCAResult);
+      return { ...state, PCAResult };
+    },
+    handleFAResult(state, { payload }: { payload: IPCAResult }) {
+      const { eigenValues, componentMatrix, corr, percent } = payload;
+      const FAResult = { eigenValues, componentMatrix, corr, percent };
+      console.log(FAResult);
+      return { ...state, FAResult };
     },
   },
 };

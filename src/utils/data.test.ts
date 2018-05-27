@@ -6,7 +6,7 @@ import {
   getFilterDims,
   getFilterTableData,
   getFilterColumns,
-  getClusterDataFromQuesData,
+  getNumberDataFromQuesData,
   getFilterQuesData,
 } from './data';
 import { generateId } from './utils';
@@ -883,7 +883,7 @@ it('getFilterColumns ', () => {
   ]);
 });
 
-it('getClusterDataFromQuesData', () => {
+it('getNumberDataFromQuesData', () => {
   const quesData = [
     [
       {
@@ -946,7 +946,7 @@ it('getClusterDataFromQuesData', () => {
       },
     ],
   ];
-  expect(getClusterDataFromQuesData(quesData)).toEqual([[1, 1, 0, 1], [2, 2, 1, 0]]);
+  expect(getNumberDataFromQuesData(quesData)).toEqual([[1, 1, 0, 1], [2, 2, 1, 0]]);
 });
 
 it('getFilterQuesData', () => {

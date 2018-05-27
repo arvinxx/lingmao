@@ -48,6 +48,12 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       selectClusterIndex: 0,
       clusterResults: [],
       KMO: 0,
+      PCAResult: {
+        eigenValues: [],
+        corr: [],
+        componentMatrix: [],
+        percent: [],
+      },
       FAResult: {
         eigenValues: [],
         corr: [],
@@ -100,6 +106,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       reductionSelectedDims,
       clusterSelectedDims,
       KMO,
+      sig,
     } = data;
     const {
       analysisStage,
@@ -164,20 +171,24 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
             dims={matchDims}
             selectedDims={reductionSelectedDims}
             percent={KMO}
+            sig={sig}
+            quesData={quesData}
             analysisStage={analysisStage}
             dispatch={dispatch}
           />
         ),
       },
       {
-        text: '维度选项',
+        text: '降维选项',
         component: (
           <ReductionOpts
             pathname={location.pathname}
+            selectedDims={reductionSelectedDims}
             analysisStage={analysisStage}
             dispatch={dispatch}
             diagrams={reductionDiagrams}
             tabStage={tabStage}
+            quesData={quesData}
           />
         ),
       },
