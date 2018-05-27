@@ -1,13 +1,13 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Table, Input, Button, Card } from 'antd';
 import { connect } from 'dva';
 import styles from './table.less';
 import { Ellipsis } from '../../components';
+import { isEqual } from 'lodash';
 
 import { getFilterTableData, getColumns, getTableData, getFilterColumns } from '../../utils';
 import { TColumn, TQuesData, TSelectedQue } from '../../models/data';
 import { TTableModel } from '../../models/table';
-import { type } from 'os';
 const { Column } = Table;
 
 interface ITableDataProps {
@@ -18,7 +18,7 @@ interface ITableDataProps {
 }
 
 @connect(({ data, table }) => ({ quesData: data.quesData, table, selectedQues: data.selectedQues }))
-export default class TableData extends PureComponent<ITableDataProps> {
+export default class TableData extends Component<ITableDataProps> {
   static defaultProps: ITableDataProps = {
     quesData: [],
     selectedQues: [],
@@ -33,6 +33,12 @@ export default class TableData extends PureComponent<ITableDataProps> {
     value: 0,
     loading: false,
   };
+
+  shouldComponentUpdate(nextProps) {
+    const { quesData, table } = this.props;
+    const { quesData: nextquesData, table: nextTable } = nextProps;
+    return !(isEqual(table, nextTable) && isEqual(quesData, nextquesData));
+  }
 
   onChange = (pagination, filters, sorter) => {
     console.log('params', pagination, filters, sorter);
@@ -70,7 +76,6 @@ export default class TableData extends PureComponent<ITableDataProps> {
           pagination={false}
           onChange={this.onChange}
           scroll={{ x: width, y: 720 }}
-          rowKey="uid"
         >
           {filterColumns.map((column: TColumn, index) => {
             const { key, title, dataIndex } = column;
