@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Divider, Icon, Tag } from 'antd';
-import { TDim, TSelectedDims } from '../../models/data';
+import { Button } from 'antd';
+import { TDim, TSelectedDims } from '../../../../models/data';
 import DimSelect from './DimsSelect';
 
 interface IClusterDimProps {

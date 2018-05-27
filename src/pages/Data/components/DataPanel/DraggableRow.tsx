@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { DragSource, DropTarget } from 'react-dnd';
-import { dragDirection } from '../../utils';
+import { dragDirection } from '../../../../utils';
 import styles from './DraggableTable.less';
 
 const rowSource = {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Steps, Button, Table } from 'antd';
-import { getAnswers, getKeyArrays, getQuestions } from '../../utils';
+import { getKeyArrays, getQuestions } from '../../../../utils';
 import styles from './DataIndex.less';
-import { TQuesData, TSelectedQue } from '../../models/data';
+import { TQuesData, TSelectedQue } from '../../../../models/data';
 
 import DraggableTable from './DraggableTable';
 import update from 'immutability-helper';

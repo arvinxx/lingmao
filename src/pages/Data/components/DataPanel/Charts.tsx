@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Button } from 'antd';
 import router from 'umi/router';
-import { getBaseUrl } from '../../utils';
-import { TDim } from '../../models/data';
+import { getBaseUrl } from '../../../../utils';
 import styles from './Charts.less';
 
 interface IValidationProps {

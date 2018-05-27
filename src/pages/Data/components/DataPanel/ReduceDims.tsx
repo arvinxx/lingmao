@@ -3,7 +3,7 @@ import { Button, Progress, Icon, Tooltip } from 'antd';
 import { DispatchProp } from 'react-redux';
 import DimsSelect from './DimsSelect';
 import styles from './RecuceDims.less';
-import { TDim, TSelectedDims } from '../../models/data';
+import { TDim, TSelectedDims } from '../../../../models/data';
 
 export interface IReduceDimsProps {
   dims: Array<TDim>;

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Button, Icon, InputNumber, Checkbox, Select } from 'antd';
-import { TQuesData, TSelectedDims } from '../../models/data';
+import { TQuesData, TSelectedDims } from '../../../../models/data';
 import {
   getBaseUrl,
   getClusterDataFromQuesData,
   getFilterQuesData,
   getCountAndPercent,
-} from '../../utils';
+} from '../../../../utils';
 import router from 'umi/router';
-import { cluster, getClusterDims } from '../../services/ml';
+import { cluster, getClusterDims } from '../../../../services/ml';
 import styles from './ClusterMethod.less';
 
 const CheckboxGroup = Checkbox.Group;

@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Button, Table } from 'antd';
-import update from 'immutability-helper';
 import BodyRow from './DraggableRow';
 import styles from './DraggableTable.less';
-import { TSelectedQue, TTableData } from '../../models/data';
+import { TSelectedQue, TTableData } from '../../../../models/data';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 

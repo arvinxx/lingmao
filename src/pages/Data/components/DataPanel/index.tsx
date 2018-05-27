@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Card, Tabs, Collapse } from 'antd';
 import { connect } from 'dva';
+import { DispatchProp } from 'react-redux';
 
 import Upload from './Upload';
 import DataIndex from './DataIndex';
@@ -13,14 +14,13 @@ import ClusterMethod from './ClusterMethod';
 
 import styles from './index.less';
 
-import { extractTags, getFilterDims } from '../../utils';
-import { queryDocument, getCleanTagGroups } from '../../services';
+import { extractTags, getFilterDims } from '../../../../utils';
+import { queryDocument, getCleanTagGroups } from '../../../../services';
 
-import { dims } from '../../../mock/dims';
-import { TDataModel } from '../../models/data';
-import { TStageModel } from '../../models/stage';
-import { TTag } from '../../models/tag';
-import { DispatchProp } from 'react-redux';
+import { dims } from '../../../../../mock/dims';
+import { TDataModel } from '../../../../models/data';
+import { TStageModel } from '../../../../models/stage';
+import { TTag } from '../../../../models/tag';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;

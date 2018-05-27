@@ -7,7 +7,6 @@ export { default as TagGroup } from './TagGroup';
 export { default as ContextRightMenu } from './ContextRightMenu';
 export { default as DimensionList } from './DimensionList';
 export { default as PersonaEditor } from './PersonaEditor';
-export { default as DataPanel } from './DataPanel';
 export { default as StarPic } from './StarPic';
 export { default as ClusterDisplay } from './ClusterDisplay';
 export { default as DescriptionList } from './DescriptionList';

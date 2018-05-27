@@ -3,7 +3,8 @@ import { Layout } from 'antd';
 import withRouter from 'umi/withRouter';
 
 import { data as header } from '../../common/header';
-import { Header, DataPanel } from '../../components';
+import { Header } from '../../components';
+import { DataPanel } from './components';
 
 import styles from './layout.less';
 import { getLastRouter } from '../../utils';

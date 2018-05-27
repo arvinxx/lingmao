@@ -3,7 +3,7 @@ import { Button, InputNumber, Checkbox, Select } from 'antd';
 import router from 'umi/router';
 import { DispatchProp } from 'react-redux';
 import styles from './ReductionOpts.less';
-import { getBaseUrl } from '../../utils';
+import { getBaseUrl } from '../../../../utils';
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;

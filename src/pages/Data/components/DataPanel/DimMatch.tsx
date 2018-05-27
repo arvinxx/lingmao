@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Button, Tag, List } from 'antd';
 import router from 'umi/router';
 import { isEmpty } from 'lodash';
-import { data } from '../../common/header';
+import { data } from '../../../../common/header';
 
-import { TDim, TSelectedQue } from '../../models/data';
-import { getBaseUrl, getFilterDims } from '../../utils';
+import { TDim, TSelectedQue } from '../../../../models/data';
+import { getBaseUrl, getFilterDims } from '../../../../utils';
 import styles from './DimMatch.less';
 
 const { Item } = List;
