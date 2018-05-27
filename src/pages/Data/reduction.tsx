@@ -4,23 +4,31 @@ import { Collapse } from 'antd';
 import styles from './reduction.less';
 
 import { Plots, VarianceExplain, CorrTable, CompMatrixTable } from './components';
-import { TReductionDiagrams } from '../../models/stage';
+import { TReduction, TReductionDiagrams } from '../../models/stage';
 import { getAccumulation } from '../../utils';
 import { IFAResult } from '../../models/data';
 
 const Panel = Collapse.Panel;
 
-interface IReductionProps {
+export interface IReductionProps {
+  isReduced: boolean;
   diagrams: TReductionDiagrams;
+  rotation: boolean;
   FAResult: IFAResult;
 }
-@connect(({ stage, data }) => ({ diagrams: stage.reductionDiagrams, FAResult: data.FAResult }))
+@connect(({ stage, data }) => ({
+  isReduced: stage.reduction.isReduced,
+  diagrams: stage.reduction.reductionDiagrams,
+  rotation: stage.reduction.rotation,
+  FAResult: data.FAResult,
+}))
 export default class Reduction extends Component<IReductionProps> {
   static defaultProps: IReductionProps = {
     diagrams: [],
+    rotation: false,
+    isReduced: false,
+
     FAResult: {
-      sig: 0,
-      KMO: 0,
       componentMatrix: [],
       corr: [],
       eigenValues: [],
@@ -35,7 +43,7 @@ export default class Reduction extends Component<IReductionProps> {
     },
   };
   render() {
-    const { diagrams, FAResult } = this.props;
+    const { isReduced, rotation, diagrams, FAResult } = this.props;
     const { eigenValues, componentMatrix, corr, percent } = FAResult;
 
     const CMColumns = componentMatrix.map((comp, index) => ({
@@ -74,7 +82,7 @@ export default class Reduction extends Component<IReductionProps> {
       dims: index + 1,
     }));
 
-    if (diagrams.length > 0) {
+    if (isReduced) {
       return (
         <div style={{ marginTop: 24, width: 600 }}>
           <div className={styles.card}>
@@ -89,7 +97,7 @@ export default class Reduction extends Component<IReductionProps> {
                       <Plots data={chartData} />
                     </div>
                   ) : diagram === '方差解释表' ? (
-                    <VarianceExplain data={vEData} rotation={false} />
+                    <VarianceExplain data={vEData} rotation={rotation} />
                   ) : diagram === '相关系数表' ? (
                     <CorrTable data={corrData} columns={CorrColumns} />
                   ) : null}
@@ -99,6 +107,6 @@ export default class Reduction extends Component<IReductionProps> {
           ))}
         </div>
       );
-    } else return <div>no data</div>;
+    } else return <div id="no-data">no data</div>;
   }
 }

@@ -27,7 +27,7 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
     value: 100,
     count: 2,
     method: '1',
-    rotationMethod: '1',
+    rotationMethod: '3',
     diagrams: [],
   };
 
@@ -63,6 +63,15 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
   changeDiagram = (diagrams) => {
     this.props.dispatch({ type: 'stage/handleReductionDiagrams', payload: diagrams });
   };
+  startReducing = () => {
+
+    this.props.dispatch({ type: 'stage/startReducing' });
+    this.props.dispatch({
+      type: 'stage/handleReductionRotation',
+      payload: this.state.rotationMethod !== '3',
+    });
+  };
+
   render() {
     const { diagrams } = this.props;
     const { value, method, rotationMethod, count } = this.state;
@@ -114,7 +123,6 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
             //@ts-ignore
             id="rotation"
             style={{ width: 130 }}
-            defaultValue="1"
             placeholder="请选择方法"
             value={rotationMethod}
             onChange={this.changeRotation}
@@ -129,7 +137,7 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
           <CheckboxGroup options={plainOptions} value={diagrams} onChange={this.changeDiagram} />
         </div>
         <div className={styles.buttons}>
-          <Button type="primary" style={{ marginRight: 16 }}>
+          <Button type="primary" style={{ marginRight: 16 }} onClick={this.startReducing}>
             确认
           </Button>
           <Button type="primary" ghost onClick={this.finish}>

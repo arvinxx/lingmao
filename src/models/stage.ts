@@ -1,6 +1,11 @@
 import { DvaModel } from '../../typings/dva';
 
 export type TReductionDiagrams = string[];
+export type TReduction = {
+  isReduced: boolean;
+  reductionDiagrams: TReductionDiagrams;
+  rotation: boolean;
+};
 export type TStageModel = {
   indexState: number;
   questionState: number;
@@ -9,7 +14,7 @@ export type TStageModel = {
   tabStage: string;
   showCharts: boolean;
   activePanelList: Array<string>;
-  reductionDiagrams: TReductionDiagrams;
+  reduction: TReduction;
 };
 export interface IStageModel extends DvaModel {
   state: TStageModel;
@@ -24,7 +29,11 @@ const stage: IStageModel = {
     tabStage: '1',
     showCharts: false,
     activePanelList: ['0'],
-    reductionDiagrams: [],
+    reduction: {
+      isReduced: false,
+      reductionDiagrams: [],
+      rotation: false,
+    },
   },
   reducers: {
     indexStateNext(state) {
@@ -104,7 +113,21 @@ const stage: IStageModel = {
     },
 
     handleReductionDiagrams(state, { payload: reductionDiagrams }) {
-      return { ...state, reductionDiagrams };
+      return { ...state, reduction: { ...state.reduction, reductionDiagrams } };
+    },
+
+    startReducing(state, action) {
+      return {
+        ...state,
+        reduction: { ...state.reduction, isReduced: true },
+      };
+    },
+
+    handleReductionRotation(state, { payload: rotation }) {
+      return {
+        ...state,
+        reduction: { ...state.reduction, rotation },
+      };
     },
   },
 };

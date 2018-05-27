@@ -65,7 +65,11 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       activePanelList: ['0'],
       questionState: 0,
       showCharts: false,
-      reductionDiagrams: [],
+      reduction: {
+        isReduced: false,
+        reductionDiagrams: [],
+        rotation: false,
+      },
     },
     location: { pathname: '' },
   };
@@ -104,9 +108,10 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       activePanelList,
       questionState,
       tagMatchState,
-      reductionDiagrams,
+      reduction,
     } = stage;
 
+    const { reductionDiagrams } = reduction;
     const matchDims = getFilterDims(dims, matchSelectedDims, false);
 
     const CollapseArray = [

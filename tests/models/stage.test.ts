@@ -52,8 +52,20 @@ describe('Reducers', () => {
   });
   it('handleReductionDiagrams', () => {
     const reducer = reducers.handleReductionDiagrams;
-    const state = { reductionDiagrams: [] };
+    const state = { reduction: { reductionDiagrams: [] } };
     const action = { type: 'stage/handleReductionDiagrams', payload: ['3'] };
-    expect(reducer(state, action)).toEqual({ reductionDiagrams: ['3'] });
+    expect(reducer(state, action)).toEqual({ reduction: { reductionDiagrams: ['3'] } });
+  });
+  it('startReducing', () => {
+    const reducer = reducers.startReducing;
+    const state = { reduction: { isReduced: false } };
+    const action = { type: 'stage/startReducing' };
+    expect(reducer(state, action)).toEqual({ reduction: { isReduced: true } });
+  });
+  it('handleReductionRotation', () => {
+    const reducer = reducers.handleReductionRotation;
+    const state = { reduction: { rotation: false } };
+    const action = { type: 'stage/handleReductionRotation', payload: true };
+    expect(reducer(state, action)).toEqual({ reduction: { rotation: true } });
   });
 });

@@ -1,6 +1,6 @@
 import { effects } from 'dva/saga';
 import model from '../../src/models/interview';
-import { queryDocument } from '../../src/services/api';
+import { queryDocument } from '../../src/services';
 import { generateId, initRecords } from '../../src/utils';
 
 jest.mock('shortid');
