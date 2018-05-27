@@ -1,0 +1,35 @@
+@import '~styles/themes/default';
+
+.wrapper {
+  :global {
+    .ant-modal-header {
+      border-bottom: none;
+    }
+    .ant-modal-title {
+      text-align: center;
+    }
+    .ant-modal-body {
+      padding-top: 0;
+    }
+  }
+}
+.container {
+  display: flex;
+  height: 480px;
+}
+.left {
+  width: 50%;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  .upload {
+    height: 100%;
+  }
+}
+.right {
+  width: 50%;
+  padding-left: 8px;
+  .photo {
+    width: 100%;
+  }
+}
