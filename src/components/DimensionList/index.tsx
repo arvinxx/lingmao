@@ -11,6 +11,7 @@ interface IDimensionListProps {
   expandedDims: Array<string>;
   checkedDims: Array<string>;
   personaDimGroups: TPersonaDimGroups;
+  index: number;
 }
 
 export default class DimensionList extends Component<IDimensionListProps & DispatchProp> {
@@ -18,6 +19,7 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
     checkedDims: [],
     expandedDims: [],
     personaDimGroups: [],
+    index: 0,
   };
   onExpand = (expandedDims) => {
     this.props.dispatch({
@@ -25,10 +27,10 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
       payload: expandedDims,
     });
   };
-  onCheck = (checkedDims) => {
+  onCheck = (checkedDims, index) => {
     this.props.dispatch({
       type: 'persona/changeCheckedDims',
-      payload: checkedDims,
+      payload: { checkedDims, index },
     });
     this.props.dispatch({
       type: 'persona/handleDisplayDimGroups',
@@ -49,7 +51,7 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
   };
 
   render() {
-    const { expandedDims, checkedDims, personaDimGroups } = this.props;
+    const { expandedDims, checkedDims, personaDimGroups, index } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.title}>选择维度</div>
@@ -58,7 +60,7 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
           checkable
           onExpand={this.onExpand}
           expandedKeys={expandedDims}
-          onCheck={this.onCheck}
+          onCheck={(e) => this.onCheck(e, index)}
           checkedKeys={checkedDims}
         >
           {this.renderTreeNodes(personaDimGroups)}

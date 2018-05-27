@@ -6,41 +6,65 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import styles from './index.less';
 import DraggableBlock from './DraggableBlock';
+import PhotoModal from './PhotoModal';
 import { MiniProgress } from '../Charts';
 
-import {
-  photo,
-  name as fakeName,
-  percent,
-  bios,
-  basicInfo,
-  career,
-  keywords,
-} from '../../../mock/persona';
-import { TPersona, TPersonaDimGroups } from '../../models/persona';
+import { name as fakeName, percent, basicInfo, career } from '../../../mock/persona';
+import { TBasicInfo, TPersona, TPersonaDimGroups } from '../../models/persona';
 
 const { TextArea } = Input;
 
 interface IPersonaEditorProps {
-  persona: TPersona;
+  persona: TBasicInfo;
   personaDimGroups: TPersonaDimGroups;
+  index: number;
+  showText: boolean;
 }
 
 @(DragDropContext(HTML5Backend) as any)
 export default class PersonaEditor extends Component<IPersonaEditorProps & DispatchProp> {
-  changeKeywords = (e) => {
+  state = {
+    modalVisible: false,
+  };
+  changePhoto = () => {
+    this.setState({ modalVisible: true });
+  };
+  setModalVisible = (modalVisible) => {
+    this.setState({ modalVisible: modalVisible });
+  };
+  changeBios = (e, index) => {
     this.props.dispatch({
-      type: 'persona/handleKeywords',
-      payload: e.target.value,
+      type: 'persona/handleBios',
+      payload: { text: e.target.value, index },
     });
   };
+  changeCareer = (e, index) => {
+    this.props.dispatch({
+      type: 'persona/handleCareer',
+      payload: { text: e.target.value, index },
+    });
+  };
+  changeName = (e, index) => {
+    this.props.dispatch({
+      type: 'persona/handleName',
+      payload: { text: e.target.value, index },
+    });
+  };
+  changeKeywords = (e, index) => {
+    this.props.dispatch({
+      type: 'persona/handleKeywords',
+      payload: { text: e.target.value, index },
+    });
+  };
+
   render() {
-    const { dispatch, persona, personaDimGroups } = this.props;
-    const { keywords, name } = persona;
+    const { dispatch, persona, personaDimGroups, index, showText } = this.props;
+    const { modalVisible } = this.state;
+    const { keywords, name, photo, bios, career } = persona;
     return (
       <Fragment>
         <div className={styles.container}>
-          <div className={styles['photo-container']}>
+          <div className={styles['photo-container']} onClick={this.changePhoto}>
             <img className={styles.photo} src={photo.value} alt={photo.text} />
           </div>
           <div className={styles.content}>
@@ -51,8 +75,18 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                   alignItems: 'end',
                 }}
               >
-                <span className={styles.name}>{name === '' ? fakeName : name}</span>
-                <div className={styles.career}>{career}</div>
+                <Input
+                  style={{ width: name.length * 36 }}
+                  onChange={(e) => this.changeName(e, index)}
+                  value={name}
+                  className={styles.name}
+                />
+                <Input
+                  style={{ width: career.length * 16 }}
+                  onChange={(e) => this.changeCareer(e, index)}
+                  value={career}
+                  className={styles.career}
+                />
               </div>
               <div className={styles.percent}>
                 <div className={styles.text}>
@@ -73,7 +107,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
               <span style={{ fontSize: 36, marginRight: 24 }}>"</span>
               <Input
                 style={{ maxWidth: keywords.length * 20 }}
-                onChange={this.changeKeywords}
+                onChange={(e) => this.changeKeywords(e, index)}
                 value={keywords}
                 placeholder="请输入口头禅"
               />
@@ -95,7 +129,13 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 {bios !== undefined ? (
                   <div>
                     <div className={styles.info}>个人介绍</div>
-                    <div className={styles.bios}>{bios}</div>
+                    <TextArea
+                      autosize
+                      className={styles.bios}
+                      onChange={(e) => this.changeBios(e, index)}
+                      placeholder="请输入个人介绍"
+                      value={bios}
+                    />
                   </div>
                 ) : null}
               </div>
@@ -104,17 +144,22 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                   <DraggableBlock key={index} dispatch={dispatch} index={index}>
                     <div key={index} className={styles.behaviors}>
                       <div className={styles.info}>{dimGroup.text}</div>
-                      {dimGroup.dims.map((dim) => (
-                        <div key={dim.tagId}>
-                          {dim.tagText}
-                          <MiniProgress
-                            percent={dim.value * 10}
-                            color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                            target={0}
-                            strokeWidth={8}
-                          />
-                        </div>
-                      ))}
+                      {dimGroup.dims.map(
+                        (dim) =>
+                          showText ? (
+                            <li key={dim.tagId}>{dim.text}</li>
+                          ) : (
+                            <div key={dim.tagId}>
+                              {dim.tagText}
+                              <MiniProgress
+                                percent={dim.value * 10}
+                                color={'l(0) 0:#99f5ff 1:#a6a6ff'}
+                                target={0}
+                                strokeWidth={8}
+                              />
+                            </div>
+                          )
+                      )}
                     </div>
                   </DraggableBlock>
                 ))}
@@ -122,6 +167,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
             </div>
           </div>
         </div>
+        <PhotoModal modalVisible={modalVisible} setModalVisible={this.setModalVisible} />
       </Fragment>
     );
   }

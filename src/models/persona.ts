@@ -1,35 +1,49 @@
-import { getTagsArrById, reorder } from '../utils';
+import { getTagsArrById } from '../utils';
 import update from 'immutability-helper';
 import { DvaModel } from '../../typings/dva';
-import { dimGroups } from '../common/persona';
+import { personaData } from '../common/persona';
 
 export type TPersonaDim = {
   tagId: string;
   tagGroupId: string;
   tagGroupText: string;
   value: number;
+  text: string;
   type: string;
   tagText: string;
 };
 export type TPersonaDims = TPersonaDim[];
-export type TPersonaData = TPersonaDims[];
 export type TPersonaDimGroup = {
   text: string;
   key: string;
   dims?: TPersonaDims;
 };
-
+export type TBasicInfo = {
+  keywords: string;
+  name: string;
+  bios: string;
+  displayIndex: string;
+  career: string;
+  photo: {
+    value: string;
+    text: string;
+  };
+};
+export type TPersonaDatum = {
+  dimGroups: TPersonaDimGroups;
+  checkedDims: Array<string>;
+  basicInfo: TBasicInfo;
+};
 export type TPersonaDimGroups = TPersonaDimGroup[];
-
+export type TPersonaData = TPersonaDatum[];
 export type TPersona = {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
-  checkedDims: Array<string>;
-  personaDimGroups: TPersonaDimGroups;
+  personaData: TPersonaData;
   personaDisplayDimGroups: TPersonaDimGroups;
-  keywords: string;
-  name: string;
+  showText: boolean;
+  displayIndex: string;
 };
 interface IPersonaModel extends DvaModel {
   state: TPersona;
@@ -40,11 +54,11 @@ const persona: IPersonaModel = {
     dimVisible: true,
     exportVisible: false,
     expandedDims: [],
-    checkedDims: [],
-    keywords: '',
-    name: '',
-    personaDimGroups: dimGroups,
+
+    personaData: personaData,
     personaDisplayDimGroups: [],
+    displayIndex: '1',
+    showText: false,
   },
   effects: {},
   reducers: {
@@ -66,10 +80,17 @@ const persona: IPersonaModel = {
         expandedDims,
       };
     },
-    changeCheckedDims(state, { payload: checkedDims }) {
+    changeCheckedDims(state, { payload }) {
+      const { checkedDims, index } = payload;
       return {
         ...state,
-        checkedDims,
+        personaData: update(state.personaData, {
+          [index]: {
+            checkedDims: {
+              $set: checkedDims,
+            },
+          },
+        }),
       };
     },
     getDisplayDims(state, { payload }) {
@@ -81,8 +102,9 @@ const persona: IPersonaModel = {
     },
 
     handleDisplayDimGroups(state: TPersona, action) {
-      const { personaDimGroups, checkedDims } = state;
-      const filterDimGroups = personaDimGroups.filter((dimGroup: TPersonaDimGroup) =>
+      const { personaData, displayIndex } = state;
+      const { dimGroups, checkedDims } = personaData[Number(displayIndex)];
+      const filterDimGroups = dimGroups.filter((dimGroup: TPersonaDimGroup) =>
         dimGroup.dims.some((dim) => checkedDims.some((item) => item === dim.tagId))
       );
       return {
@@ -93,6 +115,7 @@ const persona: IPersonaModel = {
         })),
       };
     },
+
     handleDragPersonaData(state, { payload }) {
       const { dragIndex, dropIndex } = payload;
       const dragItem = state.personaDisplayDimGroups[dragIndex];
@@ -103,8 +126,71 @@ const persona: IPersonaModel = {
         }),
       };
     },
-    handleKeywords(state, { payload: keywords }) {
-      return { ...state, keywords };
+    handleKeywords(state, { payload }) {
+      const { text, index } = payload;
+      return {
+        ...state,
+        personaData: update(state.personaData, {
+          [index]: {
+            basicInfo: {
+              keywords: {
+                $set: text,
+              },
+            },
+          },
+        }),
+      };
+    },
+    handleBios(state, { payload }) {
+      const { text, index } = payload;
+      return {
+        ...state,
+        personaData: update(state.personaData, {
+          [index]: {
+            basicInfo: {
+              bios: {
+                $set: text,
+              },
+            },
+          },
+        }),
+      };
+    },
+    handleCareer(state, { payload }) {
+      const { text, index } = payload;
+      return {
+        ...state,
+        personaData: update(state.personaData, {
+          [index]: {
+            basicInfo: {
+              career: {
+                $set: text,
+              },
+            },
+          },
+        }),
+      };
+    },
+    handleName(state, { payload }) {
+      const { text, index } = payload;
+      return {
+        ...state,
+        personaData: update(state.personaData, {
+          [index]: {
+            basicInfo: {
+              name: {
+                $set: text,
+              },
+            },
+          },
+        }),
+      };
+    },
+    handleDisplayIndex(state, { payload: displayIndex }) {
+      return { ...state, displayIndex };
+    },
+    handleShowText(state, action) {
+      return { ...state, showText: !state.showText };
     },
   },
 };

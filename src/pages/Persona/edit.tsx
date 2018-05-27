@@ -1,60 +1,74 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import { Tabs } from 'antd';
+
+import { DispatchProp } from 'react-redux';
 import { DimensionList, PersonaEditor } from '../../components';
 
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
+import { dimGroups } from '../../common/persona';
 
-import { DispatchProp } from 'react-redux';
+const { TabPane } = Tabs;
 interface IEditProps {
   persona: TPersona;
-  selectClusterIndex: number;
 }
+interface IEditDefaultProps {}
 @connect(({ persona, data }) => ({
   persona,
-  selectClusterIndex: data.selectClusterIndex,
 }))
-export default class Edit extends Component<IEditProps & DispatchProp> {
-  static defaultProps: IEditProps = {
-    persona: {
-      checkedDims: [],
-      expandedDims: [],
-      dimVisible: true,
-      exportVisible: false,
-      name: '',
-      personaDimGroups: [],
-      personaDisplayDimGroups: [],
-      keywords: '',
-    },
-    selectClusterIndex: 0,
+export default class Edit extends Component<IEditProps & IEditDefaultProps & DispatchProp> {
+  changePersonaIndex = (key) => {
+    this.props.dispatch({
+      type: 'persona/handleDisplayIndex',
+      payload: key,
+    });
+    this.props.dispatch({
+      type: 'persona/handleDisplayDimGroups',
+    });
   };
-
   render() {
     const { persona, dispatch } = this.props;
     const {
-      checkedDims,
       dimVisible,
       expandedDims,
-      personaDimGroups,
+      personaData,
       personaDisplayDimGroups,
+      displayIndex,
+      showText,
     } = persona;
+    const { checkedDims, dimGroups, basicInfo } = personaData[Number(displayIndex)];
     return (
       <Fragment>
         <div className={styles.left}>
-          <PersonaEditor
-            personaDimGroups={personaDisplayDimGroups}
-            dispatch={dispatch}
-            persona={persona}
-            checkedDims={checkedDims}
-          />
+          <Tabs
+            type="card"
+            className={styles.tabs}
+            activeKey={displayIndex}
+            onChange={this.changePersonaIndex}
+          >
+            {personaData.map((dimGroups, index) => (
+              <TabPane tab={'画像' + (index + 1)} key={index} />
+            ))}
+          </Tabs>
+          <div className={styles.editor}>
+            <PersonaEditor
+              personaDimGroups={personaDisplayDimGroups}
+              dispatch={dispatch}
+              persona={basicInfo}
+              showText={showText}
+              index={Number(displayIndex)}
+            />
+          </div>
         </div>
         {dimVisible ? (
           <div className={styles.right}>
             <DimensionList
+              index={Number(displayIndex)}
               checkedDims={checkedDims}
               expandedDims={expandedDims}
               dispatch={dispatch}
-              personaDimGroups={personaDimGroups}
+              personaDimGroups={dimGroups}
             />
           </div>
         ) : null}

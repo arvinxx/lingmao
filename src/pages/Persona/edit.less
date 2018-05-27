@@ -8,13 +8,24 @@
 
 .left {
   display: flex;
-  flex-grow: 1;
+  flex-direction: column;
   align-self: center;
-  width: 736px;
+  flex-grow: 1;
   margin: 12px 16px;
-  min-height: 400px;
-  height: 600px;
-  .base-card;
+  .tabs {
+    background: transparent;
+    :global {
+      .ant-tabs-nav-scroll {
+        text-align: left;
+      }
+    }
+  }
+  .editor {
+    min-height: 400px;
+    height: 600px;
+    display: flex;
+    .base-card;
+  }
 }
 
 .right {

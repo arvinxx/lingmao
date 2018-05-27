@@ -207,91 +207,30 @@ export const persona = [
     text: '匹配',
     path: 'match',
     left: [
-      {
-        text: 'left',
-        dispatch: {
-          type: '',
-        },
-      },
-      {
-        text: 'right',
-        dispatch: {
-          type: '',
-        },
-      },
-      {
-        text: 'sync',
-        dispatch: {
-          type: '',
-        },
-      },
+      { text: 'left', dispatch: { type: '' } },
+      { text: 'right', dispatch: { type: '' } },
+      { text: 'sync', dispatch: { type: '' } },
     ],
-    right: [
-      {
-        text: 'bars',
-        dispatch: {
-          type: 'persona/changeDimVisible',
-        },
-      },
-    ],
+    right: [{ text: 'bars', dispatch: { type: 'persona/changeDimVisible' } }],
   },
   {
     text: '编辑',
     path: 'edit',
     left: [
-      {
-        text: 'left',
-        dispatch: {
-          type: '',
-        },
-      },
-      {
-        text: 'right',
-        dispatch: {
-          type: '',
-        },
-      },
-      {
-        text: 'sync',
-        dispatch: {
-          type: '',
-        },
-      },
+      { text: 'left', dispatch: { type: '' } },
+      { text: 'right', dispatch: { type: '' } },
+      { text: 'sync', dispatch: { type: '' } },
     ],
     right: [
-      {
-        text: 'bars',
-        dispatch: {
-          type: 'persona/changeDimVisible',
-        },
-      },
+      { text: 'profile', dispatch: { type: 'persona/handleShowText' } },
+      { text: 'bars', dispatch: { type: 'persona/changeDimVisible' } },
     ],
   },
   {
     text: '导出',
     path: 'export',
-    left: [
-      {
-        text: 'left',
-        dispatch: {
-          type: '',
-        },
-      },
-      {
-        text: 'right',
-        dispatch: {
-          type: '',
-        },
-      },
-    ],
-    right: [
-      {
-        text: 'to-top',
-        dispatch: {
-          type: 'per',
-        },
-      },
-    ],
+    left: [{ text: 'left', dispatch: { type: '' } }, { text: 'right', dispatch: { type: '' } }],
+    right: [{ text: 'to-top', dispatch: { type: 'per' } }],
   },
 ];
 export const dashboard = {
