@@ -11,6 +11,7 @@ export default {
   proxy: process.env.NO_PROXY
     ? {
         '/api': 'http://localhost:7001/',
+        '/ml': 'http://192.168.9.242:9898',
       }
     : {},
 };
