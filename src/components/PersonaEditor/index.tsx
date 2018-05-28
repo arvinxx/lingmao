@@ -9,8 +9,7 @@ import DraggableBlock from './DraggableBlock';
 import PhotoModal from './PhotoModal';
 import { MiniProgress } from '../Charts';
 
-import { name as fakeName, percent, basicInfo, career } from '../../../mock/persona';
-import { TBasicInfo, TPersona, TPersonaDimGroups } from '../../models/persona';
+import { TBasicInfo, TPersonaDimGroups } from '../../models/persona';
 
 const { TextArea } = Input;
 
@@ -60,7 +59,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
   render() {
     const { dispatch, persona, personaDimGroups, index, showText } = this.props;
     const { modalVisible } = this.state;
-    const { keywords, name, photo, bios, career } = persona;
+    const { keywords, name, photo, bios, career, percent } = persona;
     return (
       <Fragment>
         <div className={styles.container}>
@@ -115,56 +114,57 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
             </div>
             <div className={styles.body}>
               <div className={styles.basic}>
-                {basicInfo.length > 0 ? (
+                {personaDimGroups.length > 0 && personaDimGroups[0].text === '基本信息' ? (
                   <div style={{ marginBottom: 24 }}>
                     <div className={styles.info}> 基本信息 </div>
-                    {basicInfo.map((item) => (
-                      <div key={item.type} style={{ fontSize: 14, marginBottom: 8 }}>
-                        <span> {item.text}</span>
-                        ： {item.value}
+                    {personaDimGroups[0].dims.map((item) => (
+                      <div key={item.tagId} style={{ fontSize: 14, marginBottom: 8 }}>
+                        <span> {item.tagText}</span>
+                        ： {item.text}
                       </div>
                     ))}
                   </div>
                 ) : null}
-                {bios !== undefined ? (
-                  <div>
-                    <div className={styles.info}>个人介绍</div>
-                    <TextArea
-                      autosize
-                      className={styles.bios}
-                      onChange={(e) => this.changeBios(e, index)}
-                      placeholder="请输入个人介绍"
-                      value={bios}
-                    />
-                  </div>
-                ) : null}
               </div>
               <div className={styles.right}>
-                {personaDimGroups.map((dimGroup, index) => (
-                  <DraggableBlock key={index} dispatch={dispatch} index={index}>
-                    <div key={index} className={styles.behaviors}>
-                      <div className={styles.info}>{dimGroup.text}</div>
-                      {dimGroup.dims.map(
-                        (dim) =>
-                          showText ? (
-                            <li key={dim.tagId}>{dim.text}</li>
-                          ) : (
-                            <div key={dim.tagId}>
-                              {dim.tagText}
-                              <MiniProgress
-                                percent={dim.value * 10}
-                                color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                                target={0}
-                                strokeWidth={8}
-                              />
-                            </div>
-                          )
-                      )}
-                    </div>
-                  </DraggableBlock>
-                ))}
+                {personaDimGroups.map(
+                  (dimGroup, index) =>
+                    dimGroup.text !== '基本信息' ? (
+                      <DraggableBlock key={index} dispatch={dispatch} index={index}>
+                        <div key={index} className={styles.behaviors}>
+                          <div className={styles.info}>{dimGroup.text}</div>
+                          {dimGroup.dims.map(
+                            (dim) =>
+                              showText ? (
+                                <li key={dim.tagId}>{dim.text}</li>
+                              ) : (
+                                <div key={dim.tagId}>
+                                  {dim.tagText}
+                                  <MiniProgress
+                                    percent={dim.value * 10}
+                                    color={'l(0) 0:#99f5ff 1:#a6a6ff'}
+                                    target={0}
+                                    strokeWidth={8}
+                                  />
+                                </div>
+                              )
+                          )}
+                        </div>
+                      </DraggableBlock>
+                    ) : null
+                )}
               </div>
             </div>
+            {bios === undefined ? null : (
+              <div className={styles.bios}>
+                <TextArea
+                  autosize
+                  onChange={(e) => this.changeBios(e, index)}
+                  placeholder="请在此输入画像的个人介绍"
+                  value={bios}
+                />
+              </div>
+            )}
           </div>
         </div>
         <PhotoModal modalVisible={modalVisible} setModalVisible={this.setModalVisible} />

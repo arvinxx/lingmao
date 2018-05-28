@@ -19,6 +19,7 @@ export type TPersonaDimGroup = {
   dims?: TPersonaDims;
 };
 export type TBasicInfo = {
+  percent: number;
   keywords: string;
   name: string;
   bios: string;

@@ -12,10 +12,6 @@ export const percent = Mock.mock({
   data: '@natural(1,40)',
 }).data;
 
-export const bios = Mock.mock({
-  data: '@cparagraph(3,5)',
-}).data;
-
 export const keywords = Mock.mock({
   data: '@csentence',
 }).data;
@@ -47,22 +43,6 @@ export const basicInfo = Mock.mock({
       type: '@guid',
       text: '@ctitle',
       value: '@ctitle',
-    },
-  ],
-}).data;
-export const features = Mock.mock({
-  data: [
-    {
-      type: 'motivations',
-      'values|1-3': ['@csentence'],
-    },
-    {
-      type: 'goals',
-      'values|1-3': ['@csentence'],
-    },
-    {
-      type: 'frustrations',
-      'values|1-3': ['@csentence'],
     },
   ],
 }).data;

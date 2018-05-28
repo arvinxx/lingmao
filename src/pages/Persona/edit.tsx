@@ -7,7 +7,6 @@ import { DimensionList, PersonaEditor } from '../../components';
 
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
-import { dimGroups } from '../../common/persona';
 
 const { TabPane } = Tabs;
 interface IEditProps {

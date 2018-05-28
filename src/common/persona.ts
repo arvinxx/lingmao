@@ -5,28 +5,38 @@ import photo2 from '../assets/photos/2.jpg';
 import { clusterResult } from '../../mock/clusterResults';
 import { career, name } from '../../mock/persona';
 
-export default [
-  {
-    type: 'motivations',
-    text: '动机',
-  },
-  {
-    type: 'goals',
-    text: '目标',
-  },
-  {
-    type: 'frustrations',
-    text: '痛点',
-  },
-  {
-    type: 'activities',
-    text: '活动',
-  },
-  { type: 'skill', text: '技能' },
-  { type: 'attitude', text: '态度' },
-];
-
 export const dimGroups = [
+  {
+    text: '基本信息',
+    key: 'basicInfo',
+    dims: [
+      {
+        tagId: '@guid',
+        text: '@natural(18,55)',
+        tagText: '年龄',
+      },
+      {
+        tagId: '@guid',
+        tagText: '性别',
+        'text|1': ['男', '女'],
+      },
+      {
+        tagId: '@guid',
+        tagText: '@ctitle',
+        text: '@ctitle',
+      },
+      {
+        tagId: '@guid',
+        tagText: '@ctitle',
+        text: '@ctitle',
+      },
+      {
+        tagId: '@guid',
+        tagText: '@ctitle',
+        text: '@ctitle',
+      },
+    ],
+  },
   {
     text: '动机',
     key: 'motivations',
@@ -76,6 +86,38 @@ export const dimGroups = [
 
 const dimGroups2 = [
   {
+    text: '基本信息',
+    key: 'basicInfo',
+    dims: [
+      {
+        tagId: '@guid',
+        text: '@natural(18,55)',
+        tagText: '年龄',
+      },
+      {
+        tagId: '@guid',
+        tagText: '性别',
+        'text|1': ['男', '女'],
+      },
+      {
+        tagId: '@guid',
+        tagText: '@ctitle',
+        text: '@ctitle',
+      },
+      {
+        tagId: '@guid',
+        tagText: '@ctitle',
+        text: '@ctitle',
+      },
+      {
+        tagId: '@guid',
+        tagText: '@ctitle',
+        text: '@ctitle',
+      },
+    ],
+  },
+
+  {
     text: '动机',
     key: 'motivations',
     dims: [],
@@ -123,11 +165,14 @@ const dimGroups2 = [
 ];
 
 export const personaData = Mock.mock({
-  'data|1-2': [
+  data: [
     {
       dimGroups,
       checkedDims: [],
       basicInfo: {
+        percent: Mock.mock({
+          data: '@natural(1,40)',
+        }).data,
         keywords: '',
         name: Mock.mock({ data: '@cname' }).data,
         bios: '',
@@ -144,6 +189,9 @@ export const personaData = Mock.mock({
       dimGroups: dimGroups2,
       checkedDims: [],
       basicInfo: {
+        percent: Mock.mock({
+          data: '@natural(1,40)',
+        }).data,
         keywords: '',
         name: Mock.mock({ data: '@cname' }).data,
         bios: '',

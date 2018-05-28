@@ -71,10 +71,19 @@
     }
   }
 }
+.bios {
+  font-size: 14px;
+  //background: @white-2;
 
+  textarea {
+    padding: @padding-sm !important;
+    background: @white-2;
+    resize: none;
+  }
+  min-height: 60px;
+}
 .body {
   display: flex;
-  height: 100%;
   .info {
     font-size: 16px;
     margin-bottom: @padding-xs;
@@ -86,14 +95,6 @@
     flex-direction: column;
     width: 30%;
     margin-right: 12px;
-    .bios {
-      font-size: 14px;
-      background: @transBlack-8;
-      padding: @padding-sm;
-      border: none;
-      resize: none;
-      box-shadow: none;
-    }
   }
 
   .right {
