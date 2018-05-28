@@ -101,9 +101,9 @@ export const getTableData = (quesData: TQuesData, displayOrder: boolean): Array<
       const { question, answer, tagText, tagId, key } = entries;
       record['key'] = key;
       if (tagText !== '') {
-        record[tagId] = displayOrder ? (answer.order + 1).toString() : answer.text;
+        record[tagId] = displayOrder ? answer.order.toString() : answer.text;
       } else {
-        record[question] = displayOrder ? (answer.order + 1).toString() : answer.text;
+        record[question] = displayOrder ? answer.order.toString() : answer.text;
       }
     });
     tableData.push(record);
@@ -226,7 +226,7 @@ export const getEigenValuesData = (
 
 /**
  * 从降维结果数据获得展示表所需数据
-*/
+ */
 export const getColumnsAndData = (componentMatrix) => {
   const columns = componentMatrix.map((comp, index) => ({
     title: (index + 1).toString(),

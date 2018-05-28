@@ -85,7 +85,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
             id="check"
             type="primary"
             ghost
-            disabled={selectedDims.length === 0}
+            disabled={selectedDims.length <= 1}
             onClick={this.confirmSelection}
           >
             检验

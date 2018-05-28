@@ -2,7 +2,6 @@ import { DvaModel } from '../../typings/dva';
 import { getAnswers } from '../utils';
 import { concat } from 'lodash';
 import update from 'immutability-helper';
-import FA from '../../mock/FA';
 
 export type TQuesData = TQuesRecord[];
 export type TQuesRecord = TQuesDataItem[];
@@ -199,7 +198,7 @@ const model: model = {
             TQuesDataRecord.forEach((TQuesDataItem) => {
               const { answer, question } = TQuesDataItem;
               if (question === selectedQuestion.name && selectedAnswer.name === answer.text) {
-                answer.order = index;
+                answer.order = index + 1;
               }
             });
           });

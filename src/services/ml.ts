@@ -57,10 +57,11 @@ export const getKMO = async (data: number[][]): Promise<{ kmo: number; sig: numb
 export const getPCA = async (data: number[][], extractMethod) => {
   console.log('PCA', extractMethod);
   // TODO 不同抽取方法
+  console.log(data);
   return await request('/ml/pca', {
     method: 'POST',
     'Content-Type': 'application/json; charset=utf-8',
-    body: data,
+    body: { data },
   });
 };
 
@@ -70,7 +71,7 @@ export const getFA = async (data: number[][], extractMethod) => {
   const res = await request('/ml/fa', {
     method: 'POST',
     'Content-Type': 'application/json; charset=utf-8',
-    body: data,
+    body: { data },
   });
   console.log(res);
   return FA;
