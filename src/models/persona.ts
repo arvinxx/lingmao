@@ -57,7 +57,7 @@ const persona: IPersonaModel = {
 
     personaData: personaData,
     personaDisplayDimGroups: [],
-    displayIndex: '1',
+    displayIndex: '0',
     showText: false,
   },
   effects: {},

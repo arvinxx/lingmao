@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { isEmpty } from 'lodash';
 import { TTagGroup } from '../../../../models/tag';
 import styles from './index.less';
 import { DispatchProp } from 'react-redux';
@@ -25,15 +24,21 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
     this.menu = menu;
   };
   menu: HTMLElement;
-  constructor(props) {
-    super(props);
-    this.state.value = Value.fromJSON(props.records);
-  }
 
   componentDidMount() {
     this.updateMenu();
+    this.setState({
+      value: Value.fromJSON(this.props.records),
+    });
   }
-
+  componentWillReceiveProps(nextProps) {
+    const nextValue = Value.fromJSON(nextProps.records);
+    // if (nextValue.document !== this.state.value.document) {
+    //   this.setState({
+    //     value: this.state.value.set('document', nextValue.document),
+    //   });
+    // }
+  }
   componentDidUpdate() {
     this.updateMenu();
   }
