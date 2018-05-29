@@ -1,6 +1,5 @@
 import { findIndexById, generateId, reorder } from '../utils';
 import { concat } from 'lodash';
-import { queryDocument } from '../services/api';
 import { DvaModel } from '../../typings/dva';
 import update from 'immutability-helper';
 
@@ -9,6 +8,8 @@ export type TTag = {
   text: string;
   refText: string;
   groupId: string;
+  value: number;
+  answerText: string;
 };
 
 export type TTagGroup = {
@@ -70,15 +71,12 @@ const tag: ITagModel = {
       };
     },
     deleteTag(state, { payload: id }) {
-      const newTagGroups = concat(
-        state.tagGroups.map((tagGroup: TTagGroup) => ({
-          ...tagGroup,
-          tags: tagGroup.tags.filter((tag) => tag.id !== id),
-        }))
-      );
       return {
         ...state,
-        tagGroups: newTagGroups,
+        tagGroups: state.tagGroups.map((tagGroup: TTagGroup) => ({
+          ...tagGroup,
+          tags: tagGroup.tags.filter((tag) => tag.id !== id),
+        })),
       };
     },
 

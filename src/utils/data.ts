@@ -1,4 +1,4 @@
-import { uniqBy, orderBy } from 'lodash';
+import { uniqBy, uniq, orderBy } from 'lodash';
 import { TColumn, TTableData, TQuesData, TDim, TQuesRecord, TSelectedQue } from '../models/data';
 import { generateId } from './utils';
 import { getAccumulation } from './index';
@@ -30,29 +30,6 @@ export const readAsTextAsync = (inputFile: File): Promise<string> => {
     temporaryFileReader.readAsText(inputFile);
   });
 };
-//将 xlsx 转出的数据转换为保存的数据
-export const rawToSaved = (rawData: Array<object>): TQuesData => {
-  let saveData: TQuesData = [];
-  rawData.map((item) => {
-    const entries = Object.entries(item);
-    let record: TQuesRecord = [];
-    entries.map((entry) => {
-      const question = entry[0];
-      const answer = entry[1];
-      record.push({
-        tagId: '',
-        tagText: '',
-        type: null,
-        typeName: '',
-        key: generateId(),
-        question,
-        answer: { text: answer, order: 0 },
-      });
-    });
-    saveData.push(record);
-  });
-  return saveData;
-};
 
 export const getQuestions = (quesData: TQuesData): Array<TTableData> => {
   let questions: TTableData[] = [];
@@ -73,6 +50,20 @@ export const getAnswers = (quesData: TQuesData, question: string): Array<TTableD
   });
   // 先求唯一，再排序
   return orderBy(uniqBy(answers, 'name'), 'name');
+};
+export const getAnswersByOrder = (quesData: TQuesData, question: string, order: number): string => {
+  let answers = [];
+  quesData.forEach((ques) => {
+    ques.map((item) => {
+      if (item.question === question) {
+        answers.push({ ...item.answer });
+      }
+    });
+  });
+  // 求唯一
+  answers = uniqBy(answers, 'text');
+  //取数
+  return answers.find((answer) => answer.order === order).text;
 };
 
 export const getKeyArrays = (selectedQuestions: Array<TTableData>): Array<string> => {
@@ -188,7 +179,7 @@ export const getFilterQuesData = (quesData: TQuesData, selectDims: string[]): TQ
  */
 export const getNumberDataFromQuesData = (quesData: TQuesData): number[][] => {
   return quesData.map((quesDataRecord) =>
-    quesDataRecord.map((quesDataItem) => quesDataItem.answer.order)
+    quesDataRecord.map((quesDataItem) => quesDataItem.answer.order + 1)
   );
 };
 

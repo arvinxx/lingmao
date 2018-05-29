@@ -58,6 +58,7 @@ export type TSelectedDims = string[];
 
 export type TDataModel = {
   quesData: TQuesData;
+  personaQuesData: TQuesData;
   selectedQues: Array<TSelectedQue>;
   matchSelectedDims: TSelectedDims;
   reductionSelectedDims: TSelectedDims;
@@ -78,6 +79,7 @@ const model: model = {
   namespace: 'data',
   state: {
     quesData: [],
+    personaQuesData: [],
     selectedQues: [],
     clusterSelectedDims: [],
     matchSelectedDims: [],
@@ -267,6 +269,9 @@ const model: model = {
     },
     handleDisplayPanel(state, action) {
       return { ...state, displayPanel: !state.displayPanel };
+    },
+    handlePersonaQuesData(state, { payload: personaQuesData }) {
+      return { ...state, personaQuesData };
     },
   },
 };

@@ -8,7 +8,7 @@ import {
   getCountAndPercent,
 } from '../../../../utils';
 import router from 'umi/router';
-import { cluster, getClusterDims } from '../../../../services/ml';
+import { cluster, getClusterDims, getPersonaQuesData } from '../../../../services/ml';
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -58,7 +58,6 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
       const { clusters } = await cluster(data);
       const results = getCountAndPercent(clusters);
       dispatch({ type: 'data/addClusterTypeToQuesData', payload: clusters });
-      console.log(results);
       dispatch({
         type: 'data/handleClusterResults',
         payload: results.map((result, index) => ({
@@ -67,7 +66,14 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
           dims: getClusterDims(clusters, filterData, index, selectedQues),
         })),
       });
+
+      //获得取得每个问题完整平均值的画像信息
+      dispatch({
+        type: 'data/handlePersonaQuesData',
+        payload: results.map((result, index) => getPersonaQuesData(quesData,clusters, index)),
+      });
     }
+
     if (method === '2') {
       //TODO :层次聚类法  ml-hclust
       console.log('HC');

@@ -1,6 +1,7 @@
 import XLSX from 'xlsx';
 import { TQuesData, TQuesRecord } from '../models/data';
 import { generateId } from '../utils';
+import { uniq, orderBy } from 'lodash';
 
 /**
  * 利用三方库将xlsx转成 json
@@ -25,7 +26,7 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
     let record: TQuesRecord = [];
     entries.map((entry) => {
       const question = entry[0];
-      const answer = entry[1];
+      const answer: string = entry[1];
       record.push({
         tagId: '',
         tagText: '',
@@ -33,12 +34,45 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
         typeName: '',
         key: generateId(),
         question,
-        answer: { text: answer, order: 0 },
+        answer: { text: answer, order: getAnswerOrder(answer) },
       });
     });
     saveData.push(record);
   });
+
   return saveData;
+};
+
+// TODO 修改成更加优雅地方法
+export const getAnswerOrder = (answer: string): number => {
+  let order = 0;
+  switch (answer.slice(0, 1)) {
+    case 'A' || 'a':
+      order = 0;
+      break;
+    case 'B' || 'b':
+      order = 1;
+      break;
+    case 'C' || 'c':
+      order = 2;
+      break;
+    case 'D' || 'd':
+      order = 3;
+      break;
+    case 'E' || 'e':
+      order = 4;
+      break;
+    case 'F' || 'f':
+      order = 5;
+      break;
+    case 'G' || 'g':
+      order = 6;
+      break;
+    case 'H' || 'h':
+      order = 7;
+      break;
+  }
+  return order;
 };
 
 export const addMissData = (quesData: TQuesData): TQuesData => {

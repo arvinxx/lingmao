@@ -2,8 +2,9 @@ import kmeans from 'ml-kmeans';
 import request from '../utils/request';
 import { meanBy } from 'lodash';
 
-import { TClusterDim, TQuesData, TSelectedQue } from '../models/data';
+import { TClusterDim, TQuesData, TQuesRecord, TSelectedQue } from '../models/data';
 import FA from '../../mock/FA';
+import { getAnswers, getAnswersByOrder } from '../utils';
 
 /**
  * 聚类函数
@@ -41,6 +42,29 @@ export const getClusterDims = (
       tagText: item.tagText,
       value: mean,
       text: filterSelectedQue.answers[Math.round(mean)].name,
+    };
+  });
+};
+
+export const getPersonaQuesData = (
+  quesData: TQuesData,
+  clusterArray: number[],
+  cIndex: number
+): TQuesRecord => {
+  return quesData[0].map((item, index) => {
+    //求得平均数
+    const mean = meanBy(
+      quesData.filter((i) => i.some((j) => j.type === clusterArray[cIndex])),
+      (i) => i[index].answer.order
+    );
+    return {
+      ...item,
+      key: 'persona-' + cIndex + '-' + index,
+      type: clusterArray[cIndex],
+      answer: {
+        text: getAnswersByOrder(quesData, item.question, Math.round(mean)),
+        order: mean,
+      },
     };
   });
 };
