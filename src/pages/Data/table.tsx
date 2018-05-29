@@ -71,11 +71,14 @@ export default class TableData extends Component<ITableDataProps> {
           <Button onClick={this.changeOrderDisplay}>显示{displayOrder ? '文字' : '编号'}</Button>
         </div>
         <Table
+          locale={{
+            emptyText: '暂无数据',
+          }}
           loading={this.state.loading}
           dataSource={filterData}
           pagination={false}
           onChange={this.onChange}
-          scroll={{ x: width, y: 720 }}
+          scroll={{ x: width, y: 440 }}
         >
           {filterColumns.map((column: TColumn, index) => {
             const { key, title, dataIndex } = column;

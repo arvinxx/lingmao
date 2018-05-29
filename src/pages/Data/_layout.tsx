@@ -19,7 +19,7 @@ export default class InterviewLayout extends PureComponent<any> {
         <Header header={header} />
         <Content>
           <div className={styles.container}>
-            <div className={styles.right}>{this.props.children}</div>
+            <div className={styles.left}>{this.props.children}</div>
             {getLastRouter(location.pathname) !== 'analysis' && <DataPanel />}
           </div>
         </Content>
