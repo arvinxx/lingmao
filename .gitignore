@@ -89,6 +89,7 @@ $RECYCLE.BIN/
 .com.apple.timemachine.donotpresent
 
 .umi-*
+.umi
 .umi/*
 
 package-lock.json

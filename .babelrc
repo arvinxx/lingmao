@@ -3,6 +3,7 @@
     "react-hot-loader/babel",
     "transform-decorators-legacy",
     "dva-hmr",
+    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }],
     [
       "module-resolver",
       {

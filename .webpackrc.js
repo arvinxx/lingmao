@@ -8,6 +8,7 @@ export default {
     utils: resolve(__dirname, './src/utils'),
     services: resolve(__dirname, './src/services'),
   },
+  es5ImcompatibleVersions: true,
   proxy: process.env.NO_PROXY
     ? {
         '/api': 'http://localhost:7001/',
