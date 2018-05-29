@@ -3,14 +3,14 @@ import { shallow } from 'enzyme';
 import { spy } from 'sinon';
 import App, { IReductionOptsProps } from './ReductionOpts';
 
-
 const setup = () => {
   const dispatch = spy();
   const props: IReductionOptsProps = {
     pathname: '/data/reduction',
     tabStage: '1',
     diagrams: [],
-    analysisStage: 5,
+    quesData: [],
+    selectedDims: [],
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };
@@ -42,21 +42,12 @@ describe('render', () => {
 
 describe('response', () => {
   describe('finish', () => {
-    it('dispatch should run 5 times when click if stage is 5', () => {
-      wrapper
-        .find('Button')
-        .last()
-        .simulate('click');
-      expect(dispatch.callCount).toEqual(6);
-    });
-    it('dispatch should not run when  click if stage is not 5 ', () => {
-      wrapper.setProps({ analysisStage: 6 });
+    it('dispatch should run click', () => {
       wrapper
         .find('Button')
         .last()
         .simulate('click');
       expect(dispatch.callCount).toEqual(1);
-      wrapper.setProps({ analysisStage: 5 });
     });
   });
   it('changeRate', () => {

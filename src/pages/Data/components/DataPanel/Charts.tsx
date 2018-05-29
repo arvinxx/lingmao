@@ -24,8 +24,17 @@ export default class Charts extends Component<IValidationProps> {
   finish = () => {
     // 解锁下一条面板
     if (this.props.analysisStage === 3) {
+      // 解锁降维与聚类面板
       this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
+
+      // 展开降维与聚类面板
       this.props.dispatch({ type: 'stage/addActivePanelList', payload: '4' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '5' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '6' });
+      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '7' });
       this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '3' });
     }
     // 完成Tab切换

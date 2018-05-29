@@ -6,7 +6,6 @@ import App, { IReduceDimsProps } from './ReduceDims';
 const setup = () => {
   const dispatch = spy();
   const props: IReduceDimsProps = {
-    analysisStage: 4,
     dims: [
       {
         text: '11',

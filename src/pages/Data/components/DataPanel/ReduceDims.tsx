@@ -11,7 +11,6 @@ export interface IReduceDimsProps {
   dims: Array<TDim>;
   percent: number;
   sig: number;
-  analysisStage: number;
   quesData: TQuesData;
 
   selectedDims: TSelectedDims;
@@ -21,7 +20,6 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
     dims: [],
     percent: 0,
     sig: 0,
-    analysisStage: 0,
     selectedDims: [],
     quesData: [],
   };
@@ -37,7 +35,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
     this.props.dispatch({ type: 'data/handleReductionSelectedDims', payload: [] });
   };
   confirmSelection = async () => {
-    const { quesData, selectedDims, analysisStage, dispatch } = this.props;
+    const { quesData, selectedDims, dispatch } = this.props;
     const filterData = getFilterQuesData(quesData, selectedDims);
     const data = getNumberDataFromQuesData(filterData);
     try {
@@ -46,12 +44,8 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
       dispatch({ type: 'data/handleSig', payload: sig });
     } catch (e) {
       //TODO 错误处理
+
       console.log(e);
-    }
-    if (analysisStage === 4) {
-      dispatch({ type: 'stage/addAnalysisStageCount' });
-      dispatch({ type: 'stage/addActivePanelList', payload: '5' });
-      dispatch({ type: 'stage/removeActivePanelList', payload: '4' });
     }
   };
 

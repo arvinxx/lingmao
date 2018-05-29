@@ -14,7 +14,6 @@ const CheckboxGroup = Checkbox.Group;
 const plainOptions = ['相关系数表', '碎石图', '方差解释表'];
 
 export interface IReductionOptsProps {
-  analysisStage: number;
   pathname: string;
   tabStage: string;
   selectedDims: TSelectedDims;
@@ -23,7 +22,6 @@ export interface IReductionOptsProps {
 }
 export default class ReductionOpts extends Component<IReductionOptsProps & DispatchProp> {
   static defaultProps: IReductionOptsProps = {
-    analysisStage: 0,
     pathname: '',
     tabStage: '',
     diagrams: [],
@@ -39,14 +37,6 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
   };
 
   finish = () => {
-    if (this.props.analysisStage === 5) {
-      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'stage/addAnalysisStageCount' });
-      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '6' });
-      this.props.dispatch({ type: 'stage/addActivePanelList', payload: '7' });
-      this.props.dispatch({ type: 'stage/removeActivePanelList', payload: '5' });
-    }
-
     // Tab 切换
     this.props.dispatch({ type: 'stage/changeTabStage', payload: '3' });
 
