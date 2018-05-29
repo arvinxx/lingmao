@@ -5,11 +5,10 @@ import { TagGroup, ContextRightMenu } from '../../components';
 
 import { IInterview } from '../../models/interview';
 import { TTag } from '../../models/tag';
-import { extractTags, generateId } from '../../utils';
+import { extractTags } from '../../utils';
 
 import styles from './tag.less';
-import { queryDocument, saveTagGroups } from '../../services/api';
-import { getCleanDimensions, getCleanDocument, getCleanTagGroups } from '../../services/cleanData';
+import { queryDocument, saveTagGroups, getCleanTagGroups } from '../../services';
 
 const Panel = Collapse.Panel;
 const CheckableTag = Tag.CheckableTag;
