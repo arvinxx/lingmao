@@ -1,0 +1,120 @@
+@import '~styles/themes/default';
+.base-card {
+  background: @base-white;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.content {
+  .base-card;
+  margin: @padding-lg;
+  padding: @padding-lg;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.sources {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  margin-right: @padding-md;
+  padding-right: @padding-md;
+}
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-bottom: @padding-sm;
+  color: @text-color-secondary;
+  height: 48px;
+}
+.title {
+  margin-bottom: 8px;
+  margin-left: @padding-sm;
+  font-size: 16px;
+
+  padding-bottom: @padding-xs;
+  //border-bottom: 1px solid @white-4;
+}
+.list-container {
+  height: calc(~'100% - 48px');
+  display: flex;
+  flex-direction: column;
+  background: @white-1;
+  border: 1px solid @white-2;
+  border-radius: 4px;
+  padding: @padding-sm;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  .tag {
+    height: auto;
+    margin-bottom: @padding-md;
+  }
+}
+
+.scroll {
+  width: 60%;
+  overflow: auto;
+}
+.board-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.board {
+  display: flex;
+  //height: 150px;
+  background: @white-1;
+  margin: @padding-xs 0;
+  padding: @padding-md;
+  border: 1px solid @white-2;
+  border-radius: 4px;
+  flex: auto;
+  flex-wrap: nowrap;
+  cursor: pointer;
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .dims {
+    display: flex;
+    align-items: center;
+    margin-right: @padding-md;
+    width: 80px;
+  }
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.tag {
+  display: flex;
+  align-items: center;
+  background: @base-white;
+  box-shadow: @shadow-1;
+  padding: @padding-xs @padding-md;
+  border-radius: 4px;
+  margin-bottom: @padding-sm;
+  margin-right: @padding-sm;
+  user-select: none;
+  cursor: pointer;
+  &:hover {
+    box-shadow: @shadow-2;
+  }
+  &:active {
+    background: @white-1;
+    box-shadow: @shadow-1;
+  }
+}
