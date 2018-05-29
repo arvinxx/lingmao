@@ -69,7 +69,7 @@ it('getAnswers', () => {
         tagText: '',
         key: generateId(),
         question: '你的性别是？',
-        answer: { text: '男', order: 0 },
+        answer: { text: 'A.男', order: 0 },
       },
     ],
     [
@@ -85,7 +85,7 @@ it('getAnswers', () => {
         tagText: '',
         key: generateId(),
         question: '你的性别是？',
-        answer: { text: '女', order: 0 },
+        answer: { text: 'C.女', order: 0 },
       },
     ],
     [
@@ -101,7 +101,7 @@ it('getAnswers', () => {
         tagText: '',
         key: generateId(),
         question: '你的性别是？',
-        answer: { text: '不男不女', order: 0 },
+        answer: { text: 'B.不男不女', order: 0 },
       },
     ],
     [
@@ -117,15 +117,15 @@ it('getAnswers', () => {
         tagText: '',
         key: generateId(),
         question: '你的性别是？',
-        answer: { text: '女', order: 0 },
+        answer: { text: 'C.女', order: 0 },
       },
     ],
   ];
 
   expect(getAnswers(quesData, '你的性别是？')).toEqual([
-    { key: generateId(), name: '男' },
-    { key: generateId(), name: '女' },
-    { key: generateId(), name: '不男不女' },
+    { key: generateId(), name: 'A.男' },
+    { key: generateId(), name: 'B.不男不女' },
+    { key: generateId(), name: 'C.女' },
   ]);
 });
 

@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash';
+import { uniqBy, orderBy } from 'lodash';
 import { TColumn, TTableData, TQuesData, TDim, TQuesRecord, TSelectedQue } from '../models/data';
 import { generateId } from './utils';
 import { getAccumulation } from './index';
@@ -64,14 +64,15 @@ export const getQuestions = (quesData: TQuesData): Array<TTableData> => {
 
 export const getAnswers = (quesData: TQuesData, question: string): Array<TTableData> => {
   let answers: Array<TTableData> = [];
-  quesData.map((ques) => {
+  quesData.forEach((ques) => {
     ques.map((item) => {
       if (item.question === question) {
         answers.push({ name: item.answer.text, key: generateId() });
       }
     });
   });
-  return uniqBy(answers, 'name');
+  // 先求唯一，再排序
+  return orderBy(uniqBy(answers, 'name'), 'name');
 };
 
 export const getKeyArrays = (selectedQuestions: Array<TTableData>): Array<string> => {
@@ -101,9 +102,9 @@ export const getTableData = (quesData: TQuesData, displayOrder: boolean): Array<
       const { question, answer, tagText, tagId, key } = entries;
       record['key'] = key;
       if (tagText !== '') {
-        record[tagId] = displayOrder ? answer.order.toString() : answer.text;
+        record[tagId] = displayOrder ? (answer.order + 1).toString() : answer.text;
       } else {
-        record[question] = displayOrder ? answer.order.toString() : answer.text;
+        record[question] = displayOrder ? (answer.order + 1).toString() : answer.text;
       }
     });
     tableData.push(record);
