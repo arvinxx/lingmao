@@ -24,7 +24,7 @@ const stage: IStageModel = {
   state: {
     indexState: 0,
     questionState: 0,
-    analysisStage: 9,
+    analysisStage: 0,
     tagMatchState: 0,
     tabStage: '1',
     showCharts: false,

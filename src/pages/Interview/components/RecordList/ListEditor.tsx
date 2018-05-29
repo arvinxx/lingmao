@@ -1,17 +1,16 @@
-import React, { Component, Ref, RefObject } from 'react';
+import React, { Component } from 'react';
 import { setKeyGenerator } from 'slate';
 import { Editor } from 'slate-react';
+import { DispatchProp } from 'react-redux';
+import { createContext } from 'react-broadcast';
 import PluginEditList from './Editor';
 import initValue from '../../../../../mock/records';
 
 import { Value } from 'slate';
 import { extractTags } from '../../../../utils';
 import { TTagGroup } from '../../../../models/tag';
-import PopupMenu from './PopupMenu';
 import InputTooltip from './InputTooltip';
 import styles from './ListEditor.less';
-import { DispatchProp } from 'react-redux';
-import { createContext } from 'react-broadcast';
 const { Provider, Consumer } = createContext();
 const plugin = PluginEditList();
 const plugins = [plugin];
@@ -68,7 +67,6 @@ export default class ListEditor extends Component<IListEditorProps & DispatchPro
     const { onChange, tagGroups, value } = this.props;
     return (
       <div className={styles.container}>
-
         <div className={styles.editor}>
           <Provider value={tagGroups}>
             <Editor

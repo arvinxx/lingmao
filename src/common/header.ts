@@ -174,9 +174,9 @@ export const data = [
     ],
     right: [
       {
-        text: 'tablet',
+        text: 'profile',
         dispatch: {
-          type: 'interview/changeTabletVisible',
+          type: 'data/sdsd',
         },
       },
     ],

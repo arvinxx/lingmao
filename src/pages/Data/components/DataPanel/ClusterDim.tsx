@@ -31,11 +31,9 @@ export default class ClusterDim extends Component<IClusterDimProps> {
   render() {
     const { dims, selectedDims } = this.props;
     return (
-      <div>
-        <div style={{ marginLeft: 24, marginBottom: 20 }}>点击选择参与降维的维度</div>
-        <div style={{ marginLeft: -8 }}>
-          <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
-        </div>
+      <div style={{ marginLeft: 24 }}>
+        <div style={{ marginBottom: 20 }}>点击选择参与聚类的维度</div>
+        <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
         <div>
           <Button disabled={selectedDims.length === 0} onClick={this.resetSelect}>
             重置

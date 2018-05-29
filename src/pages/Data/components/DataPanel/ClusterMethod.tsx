@@ -95,7 +95,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
   render() {
     const { K, options } = this.state;
     return (
-      <div style={{ marginTop: 8 }}>
+      <div style={{ marginTop: 8, marginLeft: 24 }}>
         <Select
           style={{ width: 150 }}
           defaultValue="1"

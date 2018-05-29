@@ -250,7 +250,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
               </Collapse>
             </div>
           </TabPane>
-          <TabPane tab="因子分析" key="2">
+          <TabPane tab="降维" key="2">
             <Collapse bordered={false} onChange={this.handlePanelClick} activeKey={activePanelList}>
               {PanelComponent(4, 6)}
             </Collapse>
