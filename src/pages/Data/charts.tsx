@@ -39,11 +39,11 @@ export default class Charts extends Component<IChartsProps & DispatchProp> {
             {matchDims.map((dim, index) => {
               const selectedQue = selectedQues.find((selectedQue) => selectedQue.tagId === dim.id);
               if (selectedQue !== undefined) {
-                const data = getChartsDataSets(dimData, index, selectedQue);
+                const data = getChartsDataSets(dimData, dim.id, selectedQue);
                 const { cols, dv } = initDataSets(data);
                 return (
                   <div key={dim.id}>
-                    {dim.text}
+                    <div style={{ textAlign: 'center' }}> {dim.text}</div>
                     <Chart height={400} data={dv} scale={cols} padding={[80, 100, 80, 80]} forceFit>
                       <Coord type="theta" radius={0.75} />
                       <Axis name="percent" />

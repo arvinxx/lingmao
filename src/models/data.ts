@@ -198,7 +198,7 @@ const model: model = {
             TQuesDataRecord.forEach((TQuesDataItem) => {
               const { answer, question } = TQuesDataItem;
               if (question === selectedQuestion.name && selectedAnswer.name === answer.text) {
-                answer.order = index + 1;
+                answer.order = index;
               }
             });
           });
