@@ -47,6 +47,8 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       matchSelectedDims: [],
       selectClusterIndex: 0,
       clusterResults: [],
+      displayPanel: true,
+      displayText: false,
       KMO: 0,
       PCAResult: {
         eigenValues: [],
@@ -173,7 +175,6 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
             percent={KMO}
             sig={sig}
             quesData={quesData}
-            analysisStage={analysisStage}
             dispatch={dispatch}
           />
         ),
@@ -184,7 +185,6 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
           <ReductionOpts
             pathname={location.pathname}
             selectedDims={reductionSelectedDims}
-            analysisStage={analysisStage}
             dispatch={dispatch}
             diagrams={reductionDiagrams}
             tabStage={tabStage}
@@ -198,7 +198,6 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
           <ClusterDim
             dims={matchDims}
             selectedDims={clusterSelectedDims}
-            analysisStage={analysisStage}
             dispatch={dispatch}
           />
         ),
@@ -207,9 +206,9 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
         text: '聚类方法',
         component: (
           <ClusterMethod
-            analysisStage={analysisStage}
             pathname={location.pathname}
             dispatch={dispatch}
+            selectedQues={selectedQues}
             selectedDims={clusterSelectedDims}
             quesData={quesData}
           />

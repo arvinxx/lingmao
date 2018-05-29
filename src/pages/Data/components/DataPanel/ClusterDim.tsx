@@ -6,14 +6,12 @@ import DimSelect from './DimsSelect';
 interface IClusterDimProps {
   dispatch: Function;
   dims: Array<TDim>;
-  analysisStage: number;
   selectedDims: TSelectedDims;
 }
 export default class ClusterDim extends Component<IClusterDimProps> {
   static defaultProps: IClusterDimProps = {
     dims: [],
     dispatch: () => {},
-    analysisStage: 0,
     selectedDims: [],
   };
 

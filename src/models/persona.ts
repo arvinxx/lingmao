@@ -5,11 +5,8 @@ import { personaData } from '../common/persona';
 
 export type TPersonaDim = {
   tagId: string;
-  tagGroupId: string;
-  tagGroupText: string;
   value: number;
   text: string;
-  type: string;
   tagText: string;
 };
 export type TPersonaDims = TPersonaDim[];

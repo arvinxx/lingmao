@@ -2,6 +2,7 @@
 
 .tag-container {
   padding-bottom: 24px;
+  user-select: none;
   :global {
     .ant-tag {
       border-color: @transBlack-4;
@@ -10,7 +11,9 @@
       height: 24px;
       padding: 1px 8px;
       background: @base-white;
-      //border-radius: 4px;
+      &:hover {
+        color: @blue-6;
+      }
     }
   }
 }

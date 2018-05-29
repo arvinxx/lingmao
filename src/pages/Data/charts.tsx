@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Chart, Geom, Axis, Tooltip, Legend, Coord, Label } from 'bizcharts';
 import { DataView } from '@antv/data-set';
-import { compact } from 'lodash';
 
 import styles from './charts.less';
-import { extractTags, getCountAndPercent, getFilterDims, getFilterQuesData } from '../../utils';
+import { extractTags, getFilterDims, getFilterQuesData } from '../../utils';
 import { connect } from 'dva';
 
-import { TDataModel, TDim } from '../../models/data';
+import { TDataModel } from '../../models/data';
 import { DispatchProp } from 'react-redux';
 import { TTag } from '../../models/tag';
 import { getChartsDataSets, initDataSets } from '../../utils/charts';

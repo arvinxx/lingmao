@@ -112,14 +112,7 @@ export const data = [
         },
       },
     ],
-    right: [
-      {
-        text: 'tablet',
-        dispatch: {
-          type: 'interview/changeTabletVisible',
-        },
-      },
-    ],
+    right: [{ text: 'bars', dispatch: { type: 'data/handleDisplayPanel' } }],
   },
   {
     text: '数据图表',
@@ -132,14 +125,7 @@ export const data = [
         },
       },
     ],
-    right: [
-      {
-        text: 'tablet',
-        dispatch: {
-          type: 'interview/changeTabletVisible',
-        },
-      },
-    ],
+    right: [{ text: 'bars', dispatch: { type: 'data/handleDisplayPanel' } }],
   },
   {
     text: '降维图表',
@@ -152,14 +138,7 @@ export const data = [
         },
       },
     ],
-    right: [
-      {
-        text: 'tablet',
-        dispatch: {
-          type: 'interview/changeTabletVisible',
-        },
-      },
-    ],
+    right: [{ text: 'bars', dispatch: { type: 'data/handleDisplayPanel' } }],
   },
   {
     text: '聚类结果',
@@ -173,35 +152,31 @@ export const data = [
       },
     ],
     right: [
-      {
-        text: 'profile',
-        dispatch: {
-          type: 'data/sdsd',
-        },
-      },
-    ],
-  },
-  {
-    text: '分析汇总',
-    path: 'analysis',
-    left: [
-      {
-        text: 'left',
-        onClick: (e) => {
-          console.log(e);
-        },
-      },
-    ],
-    right: [
-      {
-        text: 'tablet',
-        dispatch: {
-          type: 'interview/changeTabletVisible',
-        },
-      },
+      { text: 'profile', dispatch: { type: 'data/handleDisplayText' } },
+      { text: 'bars', dispatch: { type: 'data/handleDisplayPanel' } },
     ],
   },
 ];
+// {
+//   text: '分析汇总',
+//   path: 'analysis',
+//   left: [
+//     {
+//       text: 'left',
+//       onClick: (e) => {
+//         console.log(e);
+//       },
+//     },
+//   ],
+//   right: [
+//     {
+//       text: 'profile',
+//       dispatch: {
+//         type: 'data/handleDisplayText',
+//       },
+//     },
+//   ],
+// },
 export const persona = [
   {
     text: '匹配',

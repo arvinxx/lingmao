@@ -36,8 +36,6 @@ export default class DimMatch extends Component<IDimMatchProps> {
       const oldId = selectedQues[tagMatchState].tagId;
       if (oldId !== undefined) {
         // 将对象的 Id 与现有Id进行交换
-        console.log('交换');
-        console.log(oldId, id);
         dispatch({ type: 'data/changeMatchSelectedDims', payload: { oldId, newId: id } });
       } else {
         // 将选中 Id 添加到 selectionDims 中

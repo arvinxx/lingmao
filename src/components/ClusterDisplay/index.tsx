@@ -4,14 +4,12 @@ import { MiniProgress, Pie } from '../Charts';
 
 import styles from './index.less';
 import colorPalette from './color';
+import { TClusterResult } from '../../models/data';
 const { Description } = DescriptionList;
 
 interface IClusterDisplayProps {
-  clusterResult: {
-    dims: Array<{ text: string; value: number }>;
-    percent: number;
-    title: string;
-  };
+  displayText: boolean;
+  clusterResult: TClusterResult;
   index: number;
   colMode?: boolean;
 }
@@ -24,10 +22,11 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
     },
     colMode: false,
     index: 0,
+    displayText: false,
   };
 
   render() {
-    const { clusterResult, index, colMode } = this.props;
+    const { clusterResult, index, colMode, displayText } = this.props;
     const { dims, percent, title } = clusterResult;
     const color = colorPalette[index];
     return (
@@ -49,15 +48,19 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps> {
             layout={colMode ? 'vertical' : 'horizontal'}
           >
             {dims.map((item, index) => (
-              <Description key={index} term={item.text}>
-                <div style={{ display: 'flex' }}>
-                  <MiniProgress
-                    percent={item.value * 20}
-                    strokeWidth={colMode ? 8 : 12}
-                    target={100}
-                  />
-                  <span style={{ marginLeft: 8 }}>{item.value.toFixed(1)}</span>
-                </div>
+              <Description key={index} term={item.tagText}>
+                {displayText ? (
+                  <div>{item.text}</div>
+                ) : (
+                  <div style={{ display: 'flex' }}>
+                    <MiniProgress
+                      percent={item.value * 20}
+                      strokeWidth={colMode ? 8 : 12}
+                      target={100}
+                    />
+                    <span style={{ marginLeft: 8 }}>{item.value.toFixed(1)}</span>
+                  </div>
+                )}
               </Description>
             ))}
           </DescriptionList>

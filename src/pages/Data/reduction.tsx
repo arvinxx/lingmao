@@ -4,13 +4,8 @@ import { Collapse } from 'antd';
 import styles from './reduction.less';
 
 import { Plots, VarianceExplain, CorrTable, CompMatrixTable } from './components';
-import { TReduction, TReductionDiagrams } from '../../models/stage';
-import {
-  getAccumulation,
-  getColumnsAndData,
-  getCorrColAndData,
-  getEigenValuesData,
-} from '../../utils';
+import { TReductionDiagrams } from '../../models/stage';
+import { getColumnsAndData, getEigenValuesData } from '../../utils';
 import { IPCAResult } from '../../models/data';
 
 const Panel = Collapse.Panel;

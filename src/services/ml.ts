@@ -1,7 +1,8 @@
 import kmeans from 'ml-kmeans';
 import request from '../utils/request';
+import { meanBy } from 'lodash';
 
-import { TClusterDim, TQuesData } from '../models/data';
+import { TClusterDim, TQuesData, TSelectedQue } from '../models/data';
 import FA from '../../mock/FA';
 
 /**
@@ -10,7 +11,7 @@ import FA from '../../mock/FA';
 export const cluster = async (params) => {
   const { data, center, K } = params;
   if (data.length <= K) {
-    return new Error('聚类中心数大于等于维度值');
+    return new Error('聚类中心数大于等于数据个数');
   } else {
     if (center !== undefined) {
       return kmeans(data, K, { initialization: center });
@@ -19,28 +20,29 @@ export const cluster = async (params) => {
 };
 
 /**
- * 获取某一类的维度平均值
+ * 获取某一类的维度平均值与最接近的回答结果
  * @param clusterArray 聚类数组
  * @param quesData 问卷数据
  * @param cluster 要获取的类编号
+ * @param selectedQues 选择的问题信息
  */
 export const getClusterDims = (
   clusterArray: number[],
   quesData: TQuesData,
-  cluster: number
+  cluster: number,
+  selectedQues: TSelectedQue[]
 ): TClusterDim[] => {
   const filterQuesData = quesData.filter((quesData, index) => clusterArray[index] === cluster);
 
-  return filterQuesData[0].map((filterQuesDataItem, index) => ({
-    text: filterQuesDataItem.tagText,
-    value: (() => {
-      let value = 0;
-      filterQuesData.forEach((filterQuesDataB) => {
-        value += filterQuesDataB[index].answer.order;
-      });
-      return value / filterQuesData.length;
-    })(),
-  }));
+  return filterQuesData[0].map((item, index) => {
+    const mean = meanBy(filterQuesData, (i) => i[index].answer.order); //求得平均数
+    const filterSelectedQue = selectedQues.find((s) => s.tagId === item.tagId); //取出那个回答
+    return {
+      tagText: item.tagText,
+      value: mean,
+      text: filterSelectedQue.answers[Math.round(mean)].name,
+    };
+  });
 };
 
 export const getKMO = async (data: number[][]): Promise<{ kmo: number; sig: number }> => {

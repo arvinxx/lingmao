@@ -33,7 +33,7 @@ export type TDim = {
   text: string;
 };
 
-export type TClusterDim = { text: string; value: number };
+export type TClusterDim = { text: string; value: number; tagText: string };
 
 export interface IPCAResult {
   eigenValues: number[];
@@ -68,6 +68,8 @@ export type TDataModel = {
   PCAResult: IPCAResult;
   KMO: number;
   sig: number;
+  displayText: boolean;
+  displayPanel: boolean;
 };
 interface model extends DvaModel {
   state: TDataModel;
@@ -96,6 +98,8 @@ const model: model = {
       corr: [],
       percent: [],
     },
+    displayText: false,
+    displayPanel: true,
   },
   reducers: {
     handleQuesData(state, { payload: quesData }) {
@@ -250,15 +254,19 @@ const model: model = {
     },
     handlePCAResult(state, { payload }: { payload: IPCAResult }) {
       const { eigenValues, componentMatrix, corr, percent } = payload;
-      const PCAResult = { eigenValues, componentMatrix, corr, percent };
-      console.log(PCAResult);
-      return { ...state, PCAResult };
+      return { ...state, PCAResult: { eigenValues, componentMatrix, corr, percent } };
     },
     handleFAResult(state, { payload }: { payload: IPCAResult }) {
       const { eigenValues, componentMatrix, corr, percent } = payload;
       const FAResult = { eigenValues, componentMatrix, corr, percent };
       console.log(FAResult);
       return { ...state, FAResult };
+    },
+    handleDisplayText(state, action) {
+      return { ...state, displayText: !state.displayText };
+    },
+    handleDisplayPanel(state, action) {
+      return { ...state, displayPanel: !state.displayPanel };
     },
   },
 };
