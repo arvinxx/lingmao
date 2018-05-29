@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "react-hot-loader/babel",
+    "transform-decorators-legacy",
+    "dva-hmr",
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "components": "./components",
+          "styles": "./styles",
+          "utils": "./utils"
+        }
+      }
+    ]
+  ]
+}
