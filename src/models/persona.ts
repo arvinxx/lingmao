@@ -1,7 +1,6 @@
 import { getTagsArrById } from '../utils';
 import update from 'immutability-helper';
 import { DvaModel } from '../../typings/dva';
-import { personaData } from '../../mock/persona';
 import { TQuesRecord } from './data';
 import { basicInfo, dimGroups } from '../common/persona';
 import { generateTagId } from '../utils/persona';
@@ -239,6 +238,52 @@ const persona: IPersonaModel = {
                       value: answer.order,
                     },
                   ],
+                },
+              },
+            }),
+          };
+        }),
+      };
+    },
+
+    removeDimFromDimGroup(state, { payload }) {
+      const { tagId, index } = payload;
+      return {
+        ...state,
+        personaData: state.personaData.map((i) => ({
+          ...i,
+          dimGroups: update(i.dimGroups, {
+            [index]: {
+              dims: {
+                $set: i.dimGroups[index].dims.filter((dim: TPersonaDim) => dim.tagId !== tagId),
+              },
+            },
+          }),
+        })),
+      };
+    },
+
+    changeDimGroup(state, { payload }) {
+      const { dim: dragDim, dragGroup, dropGroup } = payload;
+
+      return {
+        ...state,
+        personaData: state.personaData.map((i: TPersonaDatum) => {
+          const { dimGroups } = i;
+          const dragGroupIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === dragGroup);
+          const dropGroupIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === dropGroup);
+          return {
+            ...i,
+            dimGroups: update(dimGroups, {
+              [dragGroupIndex]: {
+                dims: {
+                  $apply: (dims: TPersonaDims) =>
+                    dims.filter((dim) => dim.tagId !== (dragDim as TPersonaDim).tagId),
+                },
+              },
+              [dropGroupIndex]: {
+                dims: {
+                  $push: [dragDim],
                 },
               },
             }),

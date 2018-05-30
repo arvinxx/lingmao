@@ -3,6 +3,7 @@ import styles from './DraggableTag.less';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DispatchProp } from 'react-redux';
 import { dragHDirection } from '../../../utils';
+import { TPersonaDim } from '../../../models/persona';
 
 const dimSource = {
   beginDrag(props) {
@@ -10,6 +11,7 @@ const dimSource = {
       id: props.id,
       index: props.index,
       groupId: props.groupId,
+      dim: props.dim,
     };
   },
 };
@@ -39,6 +41,7 @@ interface IDraggableTagProps {
   id: string;
   index: number;
   groupId: string;
+  dim?: TPersonaDim;
 }
 interface IDnDProps {
   connectDragSource?: Function;
@@ -64,12 +67,6 @@ interface IDnDProps {
   initialClientOffset: monitor.getInitialClientOffset(),
 })) as any)
 export default class DraggableTag extends Component<IDraggableTagProps & DispatchProp & IDnDProps> {
-  static defaultProps: IDraggableTagProps = {
-    index: 0,
-    id: '',
-    groupId: '',
-  };
-
   render() {
     const {
       children,

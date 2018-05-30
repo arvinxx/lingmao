@@ -8,13 +8,11 @@ import { TQuesData } from '../../../models/data';
 
 const dimTarget = {
   drop(props: IDraggableListProps & DispatchProp, monitor) {
-    const { id, groupId } = monitor.getItem();
+    const { id, groupId, dim } = monitor.getItem();
     const { dimGroup, dispatch, personaQuesData } = props;
     if (groupId === dimGroup.key) {
       return;
     }
-    console.log('add DragId to dimGroup');
-    console.log(dimGroup);
 
     // Q1 判断来自问卷数据还是来自自身
 
@@ -25,17 +23,19 @@ const dimTarget = {
         type: 'persona/addDimToPersonaGroups',
         payload: { personaQuesData, personaDimId: id, groupId: dimGroup.key },
       });
+      return;
     }
 
     // Q1.2 自身需要添加Dim到新的类别中，删除原有的那一类
-
-    // dispatch({
-    //   type: 'persona/handleTagIndexDrag',
-    //   payload: {
-    //     start: { dragIndex, dragId },
-    //     end: { dropIndex, dropId },
-    //   },
-    // });
+    console.log(groupId, dimGroup.key, dim);
+    dispatch({
+      type: 'persona/changeDimGroup',
+      payload: {
+        dragGroup: groupId,
+        dropGroup: dimGroup.key,
+        dim,
+      },
+    });
 
     monitor.getItem().groupId = dimGroup.key;
   },
@@ -50,6 +50,7 @@ const dimTarget = {
 interface IDraggableListProps {
   dimGroup: TPersonaDimGroup;
   personaQuesData: TQuesData;
+  index: number;
 }
 interface IDnDProps {
   connectDropTarget?: Function;
@@ -65,8 +66,21 @@ interface IDnDProps {
 export default class DraggableList extends Component<
   IDraggableListProps & IDnDProps & DispatchProp
 > {
+  removeTag = (tagId, index) => {
+    this.props.dispatch({
+      type: 'persona/removeDimFromDimGroup',
+      payload: { tagId, index },
+    });
+  };
   render() {
-    const { connectDropTarget, dispatch, dimGroup, isOver, canDrop } = this.props;
+    const {
+      connectDropTarget,
+      dispatch,
+      dimGroup,
+      isOver,
+      canDrop,
+      index: groupIndex,
+    } = this.props;
     const { text, dims, key } = dimGroup;
     return connectDropTarget(
       <div className={isOver && canDrop ? styles['board-dragging'] : styles.board}>
@@ -78,9 +92,15 @@ export default class DraggableList extends Component<
               index={index}
               dispatch={dispatch}
               groupId={key}
+              dim={dim}
               id={dim.tagId}
             >
-              <div className={styles.tag}>{dim.tagText}</div>
+              <div
+                className={styles.tag}
+                onDoubleClick={() => this.removeTag(dim.tagId, groupIndex)}
+              >
+                {dim.tagText}
+              </div>
             </DraggableTag>
           ))}
         </div>

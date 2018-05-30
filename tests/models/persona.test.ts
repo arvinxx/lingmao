@@ -165,7 +165,7 @@ describe('Reducers', () => {
       ],
     });
   });
-  fit('addDimToPersonaGroups', () => {
+  it('addDimToPersonaGroups', () => {
     const reducer = reducers.addDimToPersonaGroups;
 
     const state = {
@@ -243,6 +243,87 @@ describe('Reducers', () => {
                   tagText: '3',
                   text: 'z',
                   value: 3.5,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  });
+  fit('changeDimGroup', () => {
+    const reducer = reducers.changeDimGroup;
+
+    const state = {
+      personaData: [
+        {
+          dimGroups: [
+            {
+              text: '痛点',
+              key: 'frustrations',
+              dims: [
+                {
+                  tagId: '1!',
+                  tagText: '1',
+                  text: '3',
+                  value: 0.5,
+                },
+              ],
+            },
+            {
+              text: '动机',
+              key: 'motivation',
+              dims: [
+                {
+                  tagId: '2！',
+                  tagText: '31',
+                  text: '34',
+                  value: 0.51,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const action = {
+      type: 'persona/changeDimGroup',
+      payload: {
+        dragGroup: 'frustrations',
+        dropGroup: 'motivation',
+        dim: {
+          tagId: '1!',
+          tagText: '1',
+          text: '3',
+          value: 0.5,
+        },
+      },
+    };
+    expect(reducer(state, action)).toEqual({
+      personaData: [
+        {
+          dimGroups: [
+            {
+              text: '痛点',
+              key: 'frustrations',
+              dims: [],
+            },
+            {
+              text: '动机',
+              key: 'motivation',
+              dims: [
+                {
+                  tagId: '2！',
+                  tagText: '31',
+                  text: '34',
+                  value: 0.51,
+                },
+                {
+                  tagId: '1!',
+                  tagText: '1',
+                  text: '3',
+                  value: 0.5,
                 },
               ],
             },

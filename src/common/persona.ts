@@ -1,4 +1,5 @@
 import Mock from 'mockjs';
+import photo1 from '../assets/photos/1.jpg';
 
 export const dimGroups = [
   {
@@ -65,6 +66,6 @@ export const basicInfo = {
   }).data,
   photo: {
     text: 'photo1',
-    value: 'photo1',
+    value: photo1,
   },
 };

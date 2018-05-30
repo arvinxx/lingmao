@@ -11,7 +11,6 @@ import { TTag } from '../../models/tag';
 import { extractTags, getFilterPersonaQuesData, getFilterQuesData } from '../../utils';
 import { DispatchProp } from 'react-redux';
 import { extractDims, generateTagId } from '../../utils/persona';
-import { personaData } from '../../../mock/persona';
 
 interface IMatchProps {
   personaQuesData: TQuesData;
@@ -60,7 +59,10 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
             ) : (
               <Fragment>
                 <div className={styles.info}>
-                  <Icon type="info-circle-o" style={{ marginRight: 8 }} />通过拖拽将需要的维度加入到右侧
+                  <Icon type="info-circle-o" style={{ marginRight: 8 }} />
+                  <div>
+                    拖拽需要的维度到分类区 <br /> 双击卡片取消分类
+                  </div>
                 </div>
 
                 <div className={styles['list-container']}>
@@ -92,6 +94,7 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
                   personaQuesData={filterPersonaQuesData}
                   key={d.key}
                   dimGroup={d}
+                  index={index}
                   dispatch={dispatch}
                 />
               ))}

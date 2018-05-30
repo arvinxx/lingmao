@@ -27,6 +27,10 @@
       padding-bottom: 0;
     }
     :global {
+      .ant-tree-title {
+        display: flex;
+        flex-wrap: wrap;
+      }
       .ant-tree-node-selected {
         background: none !important;
       }
@@ -34,6 +38,8 @@
         background: @base-white;
         li {
           background: @base-white;
+          display: flex;
+          flex-wrap: nowrap;
         }
         .ant-tree-node-content-wrapper {
           margin: 4px 0;
