@@ -34,14 +34,12 @@ const recordDims: IRecordDims = {
       return { ...state, dimensions, selectedValues };
     },
 
-    addDimensionKey(state, { payload: newDimension }) {
-      if (newDimension === '') {
-        return state;
-      } else
-        return {
-          ...state,
-          dimensions: [...state.dimensions, { key: newDimension, values: [], id: generateId() }],
-        };
+    addDimensionKey(state, { payload }) {
+      const { key, id } = payload;
+      return {
+        ...state,
+        dimensions: [...state.dimensions, { key, values: [], id }],
+      };
     },
     deleteDimensionKey(state, { payload: id }) {
       return {

@@ -37,16 +37,34 @@ describe('response', () => {
     expect(wrapper.state('newKeyPlaceHolder')).toEqual('');
   });
 
-  it('newKeyOnBlur should run when blur', () => {
-    Input.simulate('blur');
-    expect(wrapper.state('newKeyPlaceHolder')).toEqual('添加条目');
-    expect(wrapper.state('newKey')).toEqual('');
-    expect(dispatch.callCount).toEqual(1);
+  describe('newKeyOnBlur', () => {
+    it("newKeyOnBlur should run when blur if there's content", () => {
+      wrapper.setState({ newKey: '1' });
+      Input.simulate('blur');
+      expect(wrapper.state('newKeyPlaceHolder')).toEqual('添加条目');
+      expect(wrapper.state('newKey')).toEqual('');
+      expect(dispatch.callCount).toEqual(2);
+    });
+    it("newKeyOnBlur should not run when blur if there's no content", () => {
+      Input.simulate('blur');
+      expect(wrapper.state('newKeyPlaceHolder')).toEqual('添加条目');
+      expect(wrapper.state('newKey')).toEqual('');
+      expect(dispatch.callCount).toEqual(0);
+    });
   });
-  it('newKeyOnPressEnter should run when pressEnter', () => {
-    Input.simulate('pressEnter');
-    expect(wrapper.state('newKeyPlaceHolder')).toEqual('');
-    expect(wrapper.state('newKey')).toEqual('');
-    expect(dispatch.callCount).toEqual(1);
+  describe('newKeyOnBlur', () => {
+    it("newKeyOnBlur should run when blur if there's content", () => {
+      wrapper.setState({ newKey: '1' });
+      Input.simulate('pressEnter');
+      expect(wrapper.state('newKeyPlaceHolder')).toEqual('');
+      expect(wrapper.state('newKey')).toEqual('');
+      expect(dispatch.callCount).toEqual(2);
+    });
+    it("newKeyOnPressEnter should not run when pressEnter if there's no content", () => {
+      Input.simulate('pressEnter');
+      expect(wrapper.state('newKeyPlaceHolder')).toEqual('');
+      expect(wrapper.state('newKey')).toEqual('');
+      expect(dispatch.callCount).toEqual(0);
+    });
   });
 });

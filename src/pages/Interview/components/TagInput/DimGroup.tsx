@@ -18,10 +18,18 @@ export default class DimGroup extends PureComponent<IDimGroupProps & DispatchPro
       type: 'recordDims/changeDimensionKey',
       payload: { id, newKey: e.target.value },
     });
+    this.props.dispatch({
+      type: 'tag/changeTagText',
+      payload: { id, newText: e.target.value },
+    });
   };
   deleteKey = (id) => {
     this.props.dispatch({
       type: 'recordDims/deleteDimensionKey',
+      payload: id,
+    });
+    this.props.dispatch({
+      type: 'tag/deleteTag',
       payload: id,
     });
   };

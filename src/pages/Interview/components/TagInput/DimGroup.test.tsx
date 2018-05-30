@@ -27,7 +27,7 @@ describe('response', () => {
     describe('编辑模式下可直接编辑内容', () => {
       it('changeKey should run when change', () => {
         wrapper.find('Input').simulate('change', { target: { value: '1' } });
-        expect(dispatch.callCount).toEqual(1);
+        expect(dispatch.callCount).toEqual(2);
       });
     });
   });
@@ -43,7 +43,7 @@ describe('response', () => {
       it('deleteKey should run when confirm', () => {
         const wrapper = shallow(<App {...props} dispatch={dispatch} />);
         wrapper.find('Popconfirm').simulate('confirm');
-        expect(dispatch.callCount).toEqual(1);
+        expect(dispatch.callCount).toEqual(2);
       });
     });
   });

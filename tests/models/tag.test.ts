@@ -20,30 +20,56 @@ describe('Reducers', () => {
       tagGroups: [{ id: 'dsad', tags: [], text: '未分组' }],
     });
   });
-
-  it('addTag', () => {
-    const reducer = reducers.addTag;
-    const state = {
-      tagGroups: [
-        {
-          text: '未分组',
-          id: '542424',
-          tags: [],
-        },
-      ],
-    };
-    const action = {
-      type: 'tag/addTag',
-      payload: { text: 'dsa' },
-    };
-    expect(reducer(state, action)).toEqual({
-      tagGroups: [
-        {
-          text: '未分组',
-          id: '542424',
-          tags: [{ text: 'dsa', refText: 'dsa', id: generateId() }],
-        },
-      ],
+  describe('addTag', () => {
+    it('should generate a new id', () => {
+      const reducer = reducers.addTag;
+      const state = {
+        tagGroups: [
+          {
+            text: '未分组',
+            id: '542424',
+            tags: [],
+          },
+        ],
+      };
+      const action = {
+        type: 'tag/addTag',
+        payload: { text: 'dsa' },
+      };
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [
+          {
+            text: '未分组',
+            id: '542424',
+            tags: [{ text: 'dsa', refText: 'dsa', id: generateId() }],
+          },
+        ],
+      });
+    });
+    it('should use given id', () => {
+      const reducer = reducers.addTag;
+      const state = {
+        tagGroups: [
+          {
+            text: '未分组',
+            id: '542424',
+            tags: [],
+          },
+        ],
+      };
+      const action = {
+        type: 'tag/addTag',
+        payload: { text: 'dsa', id: '13' },
+      };
+      expect(reducer(state, action)).toEqual({
+        tagGroups: [
+          {
+            text: '未分组',
+            id: '542424',
+            tags: [{ text: 'dsa', refText: 'dsa', id: '13' }],
+          },
+        ],
+      });
     });
   });
   it('deleteTag', () => {

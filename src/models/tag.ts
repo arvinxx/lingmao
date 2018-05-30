@@ -42,7 +42,7 @@ const tag: ITagModel = {
     },
 
     addTag(state, { payload }) {
-      const { text } = payload;
+      const { text, id } = payload;
       return {
         ...state,
         tagGroups: update(state.tagGroups, {
@@ -52,7 +52,7 @@ const tag: ITagModel = {
                 {
                   text,
                   refText: text,
-                  id: generateId(),
+                  id: id !== undefined ? id : generateId(),
                 },
               ],
             },

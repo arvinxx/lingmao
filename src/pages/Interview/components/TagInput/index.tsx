@@ -8,6 +8,7 @@ import DimValue from './DimValue';
 
 import styles from './index.less';
 import { TDimensions, TSelectedValues } from '../../../../models/recordDims';
+import { generateId } from '../../../../utils';
 
 export interface ITagInputProps {
   dimensions: TDimensions;
@@ -32,17 +33,33 @@ export default class TagInput extends Component<ITagInputProps & DispatchProp, I
     this.setState({ newKeyPlaceHolder: '' });
   };
   newKeyOnBlur = () => {
-    this.props.dispatch({
-      type: 'recordDims/addDimensionKey',
-      payload: this.state.newKey,
-    });
+    const key = this.state.newKey;
+    if (key !== '') {
+      const id = generateId();
+      this.props.dispatch({
+        type: 'recordDims/addDimensionKey',
+        payload: { key, id },
+      });
+      this.props.dispatch({
+        type: 'tag/addTag',
+        payload: { text: key, id },
+      });
+    }
     this.setState({ newKeyPlaceHolder: '添加条目', newKey: '' });
   };
   newKeyOnPressEnter = () => {
-    this.props.dispatch({
-      type: 'recordDims/addDimensionKey',
-      payload: this.state.newKey,
-    });
+    const key = this.state.newKey;
+    if (key !== '') {
+      const id = generateId();
+      this.props.dispatch({
+        type: 'recordDims/addDimensionKey',
+        payload: { key, id },
+      });
+      this.props.dispatch({
+        type: 'tag/addTag',
+        payload: { text: key, id },
+      });
+    }
     this.setState({ newKeyPlaceHolder: '', newKey: '' });
   };
 

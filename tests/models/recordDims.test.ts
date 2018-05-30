@@ -30,38 +30,23 @@ describe('Reducer', () => {
       selectedValues: ['1', '2'],
     });
   });
-  describe('addDimensionKey', () => {
-    it("should add a dimension key if it's not empty", () => {
-      const reducer = reducers.addDimensionKey;
-      const state = {
-        dimensions: [],
-      };
-      const action = {
-        type: 'recordDims/addDimensionKey',
-        payload: 'dsa',
-      };
-      expect(reducer(state, action)).toEqual({
-        dimensions: [
-          {
-            key: 'dsa',
-            id: generateId(),
-            values: [],
-          },
-        ],
-      });
-    });
-    it("should remain if it's empty", () => {
-      const reducer = reducers.addDimensionKey;
-      const state = {
-        dimensions: [],
-      };
-      const action = {
-        type: 'recordDims/addDimensionKey',
-        payload: '',
-      };
-      expect(reducer(state, action)).toEqual({
-        dimensions: [],
-      });
+  it('addDimensionKey', () => {
+    const reducer = reducers.addDimensionKey;
+    const state = {
+      dimensions: [],
+    };
+    const action = {
+      type: 'recordDims/addDimensionKey',
+      payload: { key: 'dsa', id: generateId() },
+    };
+    expect(reducer(state, action)).toEqual({
+      dimensions: [
+        {
+          key: 'dsa',
+          id: generateId(),
+          values: [],
+        },
+      ],
     });
   });
   it('deleteDimensionKey', () => {

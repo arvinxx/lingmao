@@ -3,7 +3,7 @@ import model from '../../src/models/global';
 const reducers = model.reducers;
 
 describe('Reducers', () => {
-  it('addTag', () => {
+  it('changeMenuState', () => {
     const reducer = reducers.changeMenuState;
     const state = {
       showMenu: true,
