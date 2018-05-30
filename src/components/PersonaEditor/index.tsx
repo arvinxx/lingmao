@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Input } from 'antd';
 import { DispatchProp } from 'react-redux';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 
 import styles from './index.less';
 import DraggableBlock from './DraggableBlock';
@@ -20,7 +18,6 @@ interface IPersonaEditorProps {
   showText: boolean;
 }
 
-@(DragDropContext(HTML5Backend) as any)
 export default class PersonaEditor extends Component<IPersonaEditorProps & DispatchProp> {
   state = {
     modalVisible: false,

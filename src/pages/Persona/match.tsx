@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import styles from './match.less';
 import { Icon } from 'antd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-import { DraggableTag } from './components';
+import { DraggableTag, DraggableList } from './components';
 
 import { connect } from 'dva';
 import { TQuesData } from '../../models/data';
 import { TPersonaData } from '../../models/persona';
 import { personaQuesData } from '../../../mock/data';
-import { TTag, TTagGroup } from '../../models/tag';
-import { extractTags } from '../../utils';
+import { TTag } from '../../models/tag';
+import { extractTags, getFilterPersonaQuesData, getFilterQuesData } from '../../utils';
 import { DispatchProp } from 'react-redux';
+import { extractDims, generateTagId } from '../../utils/persona';
+import { personaData } from '../../../mock/persona';
 
 interface IMatchProps {
   personaQuesData: TQuesData;
@@ -24,18 +24,33 @@ interface IMatchProps {
   personaData: persona.personaData,
   tags: extractTags(tag.tagGroups),
 }))
-@(DragDropContext(HTML5Backend) as any)
 export default class Match extends Component<IMatchProps & DispatchProp> {
   static defaultProps: IMatchProps = {
     personaQuesData: [],
     personaData: [],
     tags: [],
   };
+  componentDidMount() {
+    // 根据 personaQuesData 初始化 personaData 数据
+    // const {personaQuesData}=this.props
+    const { personaData, dispatch } = this.props;
+    if (personaQuesData.length !== personaData.length) {
+      dispatch({
+        type: 'persona/initPersonaData',
+        payload: personaQuesData,
+      });
+    }
+  }
 
   render() {
     // const { personaQuesData, personaData } = this.props;
     const { personaData, dispatch } = this.props;
-    // console.log(personaQuesData);
+    // 从 personaData 中抽取 id
+    if (personaData.length === 0) {
+      return <div>loading...</div>;
+    }
+    const selectDims = extractDims(personaData[0].dimGroups);
+    const filterPersonaQuesData = getFilterPersonaQuesData(personaQuesData, selectDims);
     return (
       <div className={styles.container}>
         <div className={styles.content}>
@@ -51,11 +66,17 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
                 <div className={styles['list-container']}>
                   <div className={styles.title}> 问卷数据 </div>
                   <div className={styles.list}>
-                    {personaQuesData[0].map((record, index) => {
-                      const { question, key, tagId } = record;
+                    {filterPersonaQuesData[0].map((record, index) => {
+                      const { question, key, tagId, tagText } = record;
                       return (
-                        <DraggableTag dispatch={dispatch} key={key} index={index} id={tagId}>
-                          <div className={styles.tag}>{question}</div>
+                        <DraggableTag
+                          dispatch={dispatch}
+                          key={key}
+                          index={index}
+                          groupId={'ques'}
+                          id={generateTagId(tagId, question)}
+                        >
+                          <div className={styles.tag}>{tagText === '' ? question : tagText}</div>
                         </DraggableTag>
                       );
                     })}
@@ -67,21 +88,12 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
           <div className={styles.scroll}>
             <div className={styles['board-container']}>
               {personaData[0].dimGroups.map((d, index) => (
-                <div className={styles.board} key={d.key}>
-                  <div className={styles.dims}>{d.text}</div>
-                  <div className={styles['tag-container']}>
-                    {d.dims.map((dim, index) => (
-                      <DraggableTag
-                        key={dim.tagId}
-                        index={index}
-                        dispatch={dispatch}
-                        id={dim.tagId}
-                      >
-                        <div className={styles.tag}>{dim.tagText}</div>
-                      </DraggableTag>
-                    ))}
-                  </div>
-                </div>
+                <DraggableList
+                  personaQuesData={filterPersonaQuesData}
+                  key={d.key}
+                  dimGroup={d}
+                  dispatch={dispatch}
+                />
               ))}
             </div>
           </div>

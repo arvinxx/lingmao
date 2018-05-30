@@ -201,12 +201,12 @@ export const persona = [
       { text: 'bars', dispatch: { type: 'persona/changeDimVisible' } },
     ],
   },
-  {
-    text: '导出',
-    path: 'export',
-    left: [{ text: 'left', dispatch: { type: '' } }, { text: 'right', dispatch: { type: '' } }],
-    right: [{ text: 'to-top', dispatch: { type: 'per' } }],
-  },
+  // {
+  //   text: '导出',
+  //   path: 'export',
+  //   left: [{ text: 'left', dispatch: { type: '' } }, { text: 'right', dispatch: { type: '' } }],
+  //   right: [{ text: 'to-top', dispatch: { type: 'per' } }],
+  // },
 ];
 export const dashboard = {
   left: [

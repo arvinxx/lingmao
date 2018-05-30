@@ -1,0 +1,56 @@
+@import '~styles/themes/default';
+
+.board {
+  display: flex;
+  //height: 150px;
+  background: @white-1;
+  margin: @padding-xs 0;
+  padding: @padding-md;
+  border: 2px solid @white-2;
+  border-radius: 4px;
+  flex: auto;
+  flex-wrap: nowrap;
+  user-select: none;
+  transition: all @animation-duration-base;
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .dims {
+    display: flex;
+    align-items: center;
+    margin-right: @padding-md;
+    width: 80px;
+  }
+}
+
+.board-dragging {
+  .board;
+  background: @blue-1;
+  border: 2px dashed @blue-3;
+}
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.tag {
+  display: flex;
+  align-items: center;
+  background: @base-white;
+  box-shadow: @shadow-1;
+  padding: @padding-xs @padding-md;
+  border-radius: 4px;
+  margin-bottom: @padding-sm;
+  margin-right: @padding-sm;
+  user-select: none;
+  cursor: pointer;
+  transition: all @animation-duration-base;
+  &:hover {
+    box-shadow: @shadow-2;
+  }
+}
+
+//box-shadow: @shadow-1;

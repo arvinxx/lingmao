@@ -9,6 +9,7 @@ const dimSource = {
     return {
       id: props.id,
       index: props.index,
+      groupId: props.groupId,
     };
   },
 };
@@ -37,6 +38,7 @@ const dimTarget = {
 interface IDraggableTagProps {
   id: string;
   index: number;
+  groupId: string;
 }
 interface IDnDProps {
   connectDragSource?: Function;
@@ -65,6 +67,7 @@ export default class DraggableTag extends Component<IDraggableTagProps & Dispatc
   static defaultProps: IDraggableTagProps = {
     index: 0,
     id: '',
+    groupId: '',
   };
 
   render() {

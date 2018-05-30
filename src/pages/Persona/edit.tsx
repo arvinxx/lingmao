@@ -36,6 +36,9 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
       displayIndex,
       showText,
     } = persona;
+    if (personaData.length === 0) {
+      return <div>no persona data</div>;
+    }
     const { checkedDims, dimGroups, basicInfo } = personaData[Number(displayIndex)];
     return (
       <Fragment>

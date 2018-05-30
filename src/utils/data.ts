@@ -2,6 +2,7 @@ import { uniqBy, uniq, orderBy } from 'lodash';
 import { TColumn, TTableData, TQuesData, TDim, TQuesRecord, TSelectedQue } from '../models/data';
 import { generateId } from './utils';
 import { getAccumulation } from './index';
+import { generateTagId } from './persona';
 
 export const readAsArrayBufferAsync = (inputFile: File): Promise<ArrayBuffer> => {
   const temporaryFileReader = new FileReader();
@@ -231,4 +232,13 @@ export const getColumnsAndData = (componentMatrix) => {
     key: index,
   }));
   return { columns, data };
+};
+
+export const getFilterPersonaQuesData = (
+  quesData: TQuesData,
+  selectionDims: string[]
+): TQuesData => {
+  return quesData.map((i) =>
+    i.filter((item) => !selectionDims.some((id) => generateTagId(item.tagId, item.question) === id))
+  );
 };

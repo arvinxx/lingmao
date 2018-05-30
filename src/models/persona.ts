@@ -1,7 +1,10 @@
 import { getTagsArrById } from '../utils';
 import update from 'immutability-helper';
 import { DvaModel } from '../../typings/dva';
-import { personaData } from '../common/persona';
+import { personaData } from '../../mock/persona';
+import { TQuesRecord } from './data';
+import { basicInfo, dimGroups } from '../common/persona';
+import { generateTagId } from '../utils/persona';
 
 export type TPersonaDim = {
   tagId: string;
@@ -53,7 +56,7 @@ const persona: IPersonaModel = {
     exportVisible: false,
     expandedDims: [],
 
-    personaData: personaData,
+    personaData: [],
     personaDisplayDimGroups: [],
     displayIndex: '0',
     showText: false,
@@ -189,6 +192,59 @@ const persona: IPersonaModel = {
     },
     handleShowText(state, action) {
       return { ...state, showText: !state.showText };
+    },
+
+    initPersonaData(state, { payload: personaQuesData }) {
+      return {
+        ...state,
+        personaData: personaQuesData.map((personaRecord, index) => {
+          return {
+            dimGroups,
+            checkedDims: [],
+            // TODO 添加人群占比信息
+            basicInfo: {
+              ...basicInfo,
+            },
+          };
+        }),
+      };
+    },
+
+    addDimToPersonaGroups(state, { payload }) {
+      const { personaQuesData, personaDimId, groupId } = payload;
+      // 前提： personaData 存在数据
+      return {
+        ...state,
+        personaData: personaQuesData.map((personaRecord: TQuesRecord, index) => {
+          // 三个值用于赋给 persona 的 dim
+          const { tagText, answer, question } = personaRecord.find((item) => {
+            // 如果不存在 tagId 时用 question 替换，传进来的 tagId 也是一样的操作逻辑
+            return generateTagId(item.tagId, item.question) === personaDimId;
+          });
+
+          const personaDatum: TPersonaDatum = state.personaData[index];
+          const { dimGroups, ...resData } = personaDatum;
+          // 找到丢进去的组别序号
+          const dIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === groupId);
+          return {
+            ...resData,
+            dimGroups: update(dimGroups, {
+              [dIndex]: {
+                dims: {
+                  $push: [
+                    {
+                      tagId: personaDimId,
+                      tagText: tagText === '' ? question : tagText,
+                      text: answer.text,
+                      value: answer.order,
+                    },
+                  ],
+                },
+              },
+            }),
+          };
+        }),
+      };
     },
   },
 };

@@ -1,4 +1,5 @@
 import model from '../../src/models/persona';
+
 const reducers = model.reducers;
 
 describe('Persona Model', () => {
@@ -160,6 +161,92 @@ describe('Reducers', () => {
           refText: '',
           refId: '',
           groupId: '',
+        },
+      ],
+    });
+  });
+  fit('addDimToPersonaGroups', () => {
+    const reducer = reducers.addDimToPersonaGroups;
+
+    const state = {
+      personaData: [
+        {
+          dimGroups: [
+            {
+              text: '痛点',
+              key: 'frustrations',
+              dims: [
+                {
+                  tagId: '1!',
+                  tagText: '1',
+                  text: '3',
+                  value: 0.5,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const action = {
+      type: 'persona/getDisplayDims',
+      payload: {
+        personaQuesData: [
+          [
+            {
+              tagText: '1',
+              tagId: '1!',
+              key: 'persona-0-0',
+              type: 1,
+              answer: { order: 0.5, text: '3' },
+              question: 'b',
+            },
+            {
+              tagText: '2',
+              tagId: '2!',
+              key: 'persona-0-1',
+              type: 1,
+              answer: { order: 3, text: 'q' },
+              question: 'd',
+            },
+            {
+              tagText: '3',
+              tagId: '3!',
+              key: 'persona-0-2',
+              type: 1,
+              answer: { order: 3.5, text: 'z' },
+              question: 'c',
+            },
+          ],
+        ],
+        groupId: 'frustrations',
+        personaDimId: '3!',
+      },
+    };
+    expect(reducer(state, action)).toEqual({
+      personaData: [
+        {
+          dimGroups: [
+            {
+              text: '痛点',
+              key: 'frustrations',
+              dims: [
+                {
+                  tagId: '1!',
+                  tagText: '1',
+                  text: '3',
+                  value: 0.5,
+                },
+                {
+                  tagId: '3!',
+                  tagText: '3',
+                  text: 'z',
+                  value: 3.5,
+                },
+              ],
+            },
+          ],
         },
       ],
     });
