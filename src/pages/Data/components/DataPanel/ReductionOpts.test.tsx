@@ -30,13 +30,13 @@ describe('render', () => {
     expect(wrapper.find('InputNumber').length).toEqual(1);
   });
   it('should render Rate Input', () => {
-    wrapper.setState({ method: '1' });
+    wrapper.setState({ method: 'extractRate' });
     expect(wrapper.find('#input-rate').length).toEqual(1);
   });
   it('should render Count Input', () => {
-    wrapper.setState({ method: '2' });
+    wrapper.setState({ method: 'extractNumber' });
     expect(wrapper.find('#input-count').length).toEqual(1);
-    wrapper.setState({ method: '1' });
+    wrapper.setState({ method: 'extractRate' });
   });
 });
 
@@ -57,13 +57,13 @@ describe('response', () => {
   it('ChangeMethod', () => {
     wrapper.find('#method').simulate('change', '2');
     expect(wrapper.state('method')).toEqual('2');
-    wrapper.setState({ method: '1' });
+    wrapper.setState({ method: 'extractRate' });
   });
   it('changeCount ', () => {
-    wrapper.setState({ method: '2' });
+    wrapper.setState({ method: 'extractNumber' });
     wrapper.find('#input-count').simulate('change', 6);
     expect(wrapper.state('count')).toEqual(6);
-    wrapper.setState({ method: '1' });
+    wrapper.setState({ method: 'extractRate' });
   });
   it('changeDiagram ', () => {
     wrapper.find('CheckboxGroup').simulate('change', ['211']);

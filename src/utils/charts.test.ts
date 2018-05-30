@@ -49,7 +49,7 @@ const selectedQue = {
 };
 
 it('getChartsDataSets', () => {
-  expect(getChartsDataSets(quesData, 0, selectedQue)).toEqual([
+  expect(getChartsDataSets(quesData, '1', selectedQue)).toEqual([
     {
       count: 1,
       item: '小A',
