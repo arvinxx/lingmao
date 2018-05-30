@@ -31,9 +31,8 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
   };
   componentDidMount() {
     // 根据 personaQuesData 初始化 personaData 数据
-    // const {personaQuesData}=this.props
-    const { personaData, dispatch } = this.props;
-    if (personaQuesData.length !== personaData.length) {
+    const { personaData, dispatch, personaQuesData } = this.props;
+    if (personaQuesData.length !== 0 && personaQuesData.length !== personaData.length) {
       dispatch({
         type: 'persona/initPersonaData',
         payload: personaQuesData,
@@ -42,11 +41,10 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
   }
 
   render() {
-    // const { personaQuesData, personaData } = this.props;
-    const { personaData, dispatch } = this.props;
+    const { personaData, dispatch, personaQuesData } = this.props;
     // 从 personaData 中抽取 id
-    if (personaData.length === 0) {
-      return <div>loading...</div>;
+    if (personaData.length === 0 || personaQuesData.length === 0) {
+      return <div>noData</div>;
     }
     const selectDims = extractDims(personaData[0].dimGroups);
     const filterPersonaQuesData = getFilterPersonaQuesData(personaQuesData, selectDims);
@@ -54,38 +52,34 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.sources}>
-            {personaQuesData.length === 0 ? (
-              <div>no data</div>
-            ) : (
-              <Fragment>
-                <div className={styles.info}>
-                  <Icon type="info-circle-o" style={{ marginRight: 8 }} />
-                  <div>
-                    拖拽需要的维度到分类区 <br /> 双击卡片取消分类
-                  </div>
+            <Fragment>
+              <div className={styles.info}>
+                <Icon type="info-circle-o" style={{ marginRight: 8 }} />
+                <div>
+                  拖拽需要的维度到分类区 <br /> 双击卡片取消分类
                 </div>
+              </div>
 
-                <div className={styles['list-container']}>
-                  <div className={styles.title}> 问卷数据 </div>
-                  <div className={styles.list}>
-                    {filterPersonaQuesData[0].map((record, index) => {
-                      const { question, key, tagId, tagText } = record;
-                      return (
-                        <DraggableTag
-                          dispatch={dispatch}
-                          key={key}
-                          index={index}
-                          groupId={'ques'}
-                          id={generateTagId(tagId, question)}
-                        >
-                          <div className={styles.tag}>{tagText === '' ? question : tagText}</div>
-                        </DraggableTag>
-                      );
-                    })}
-                  </div>
+              <div className={styles['list-container']}>
+                <div className={styles.title}> 问卷数据 </div>
+                <div className={styles.list}>
+                  {filterPersonaQuesData[0].map((record, index) => {
+                    const { question, key, tagId, tagText } = record;
+                    return (
+                      <DraggableTag
+                        dispatch={dispatch}
+                        key={key}
+                        index={index}
+                        groupId={'ques'}
+                        id={generateTagId(tagId, question)}
+                      >
+                        <div className={styles.tag}>{tagText === '' ? question : tagText}</div>
+                      </DraggableTag>
+                    );
+                  })}
                 </div>
-              </Fragment>
-            )}
+              </div>
+            </Fragment>
           </div>
           <div className={styles.scroll}>
             <div className={styles['board-container']}>
