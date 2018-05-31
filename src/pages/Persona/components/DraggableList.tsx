@@ -4,7 +4,7 @@ import { DropTarget } from 'react-dnd';
 import DraggableTag from './DraggableTag';
 import { DispatchProp } from 'react-redux';
 import { TPersonaDimGroup } from '../../../models/persona';
-import { TQuesData } from '../../../models/data';
+import { TPersonaQuesData, TQuesData } from '../../../models/data';
 
 const dimTarget = {
   drop(props: IDraggableListProps & DispatchProp, monitor) {
@@ -49,7 +49,7 @@ const dimTarget = {
 
 interface IDraggableListProps {
   dimGroup: TPersonaDimGroup;
-  personaQuesData: TQuesData;
+  personaQuesData: TPersonaQuesData;
   index: number;
 }
 interface IDnDProps {

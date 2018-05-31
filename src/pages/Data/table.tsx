@@ -78,7 +78,7 @@ export default class TableData extends Component<ITableDataProps> {
           dataSource={filterData}
           pagination={false}
           onChange={this.onChange}
-          scroll={{ x: width, y: 440 }}
+          scroll={{ x: width, y: 550 }}
         >
           {filterColumns.map((column: TColumn, index) => {
             const { key, title, dataIndex } = column;

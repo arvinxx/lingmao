@@ -47,7 +47,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
             type="card"
             className={styles.tabs}
             activeKey={displayIndex}
-            onChange={this.changePersonaIndex}
+            onChange={(key) => this.changePersonaIndex(key)}
           >
             {personaData.map((dimGroups, index) => (
               <TabPane tab={'画像' + (index + 1)} key={index} />

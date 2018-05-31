@@ -19,7 +19,7 @@ const dropTarget = {
       return;
     }
     if (dropIndex !== undefined) {
-      dispatch({ type: 'persona/handleDragPersonaData', payload: { dragIndex, dropIndex } });
+      dispatch({ type: 'persona/handleDragDisplayDim', payload: { dragIndex, dropIndex } });
     }
     monitor.getItem().dragIndex = dropIndex;
   },

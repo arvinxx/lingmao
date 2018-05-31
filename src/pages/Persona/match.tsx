@@ -63,7 +63,7 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
               <div className={styles['list-container']}>
                 <div className={styles.title}> 问卷数据 </div>
                 <div className={styles.list}>
-                  {filterPersonaQuesData[0].map((record, index) => {
+                  {filterPersonaQuesData[0].quesData.map((record, index) => {
                     const { question, key, tagId, tagText } = record;
                     return (
                       <DraggableTag

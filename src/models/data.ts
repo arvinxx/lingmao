@@ -56,9 +56,28 @@ export type TSelectedQue = {
 };
 export type TSelectedDims = string[];
 
+export type TPersonaQuesData = TPersonaQuesDatum[];
+export type TPersonaQuesDatum = {
+  type: number;
+  percent: number;
+  typeName: string;
+  quesData: TPersonaQuesItem[];
+};
+
+export type TPersonaQuesItem = {
+  key: string;
+  tagId: string;
+  tagText: string;
+  question: string;
+  answer: {
+    text: string;
+    order: number;
+  };
+};
+
 export type TDataModel = {
   quesData: TQuesData;
-  personaQuesData: TQuesData;
+  personaQuesData: TPersonaQuesData;
   selectedQues: Array<TSelectedQue>;
   matchSelectedDims: TSelectedDims;
   reductionSelectedDims: TSelectedDims;

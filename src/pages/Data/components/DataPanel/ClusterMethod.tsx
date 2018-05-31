@@ -8,7 +8,7 @@ import {
   getCountAndPercent,
 } from '../../../../utils';
 import router from 'umi/router';
-import { cluster, getClusterDims, getPersonaQuesData } from '../../../../services/ml';
+import { cluster, getClusterDims, getPersonaQuesDatum } from '../../../../services/ml';
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -70,7 +70,9 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
       //获得取得每个问题完整平均值的画像信息
       dispatch({
         type: 'data/handlePersonaQuesData',
-        payload: results.map((result, index) => getPersonaQuesData(quesData,clusters, index)),
+        payload: results.map((result, index) =>
+          getPersonaQuesDatum(quesData, clusters, index, result.percent)
+        ),
       });
     }
 

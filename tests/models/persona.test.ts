@@ -58,31 +58,36 @@ describe('Reducers', () => {
   it('changeCheckedDims', () => {
     const reducer = reducers.changeCheckedDims;
     const state = {
-      checkedDims: [],
+      personaData: [
+        {},
+        {
+          checkedDims: [],
+        },
+      ],
     };
 
     const action = {
       type: 'persona/changeCheckedDims',
-      payload: ['1', '3'],
+      payload: { checkedDims: ['1', '3'], index: 1 },
     };
 
     expect(reducer(state, action)).toEqual({
-      checkedDims: ['1', '3'],
+      personaData: [{}, { checkedDims: ['1', '3'] }],
     });
   });
-  it('handleDragPersonaData', () => {
-    const reducer = reducers.handleDragPersonaData;
+  it('handleDragDisplayDim', () => {
+    const reducer = reducers.handleDragDisplayDim;
     const state = {
-      personaData: ['1', '2'],
+      personaDisplayDimGroups: ['1', '2'],
     };
 
     const action = {
-      type: 'persona/handleDragPersonaData',
+      type: 'persona/handleDragDisplayDim',
       payload: { dragIndex: 0, dropIndex: 1 },
     };
 
     expect(reducer(state, action)).toEqual({
-      personaData: ['2', '1'],
+      personaDisplayDimGroups: ['2', '1'],
     });
   });
 
@@ -193,32 +198,34 @@ describe('Reducers', () => {
       type: 'persona/getDisplayDims',
       payload: {
         personaQuesData: [
-          [
-            {
-              tagText: '1',
-              tagId: '1!',
-              key: 'persona-0-0',
-              type: 1,
-              answer: { order: 0.5, text: '3' },
-              question: 'b',
-            },
-            {
-              tagText: '2',
-              tagId: '2!',
-              key: 'persona-0-1',
-              type: 1,
-              answer: { order: 3, text: 'q' },
-              question: 'd',
-            },
-            {
-              tagText: '3',
-              tagId: '3!',
-              key: 'persona-0-2',
-              type: 1,
-              answer: { order: 3.5, text: 'z' },
-              question: 'c',
-            },
-          ],
+          {
+            quesData: [
+              {
+                tagText: '1',
+                tagId: '1!',
+                key: 'persona-0-0',
+                type: 1,
+                answer: { order: 0.5, text: '3' },
+                question: 'b',
+              },
+              {
+                tagText: '2',
+                tagId: '2!',
+                key: 'persona-0-1',
+                type: 1,
+                answer: { order: 3, text: 'q' },
+                question: 'd',
+              },
+              {
+                tagText: '3',
+                tagId: '3!',
+                key: 'persona-0-2',
+                type: 1,
+                answer: { order: 3.5, text: 'z' },
+                question: 'c',
+              },
+            ],
+          },
         ],
         groupId: 'frustrations',
         personaDimId: '3!',
@@ -251,7 +258,7 @@ describe('Reducers', () => {
       ],
     });
   });
-  fit('changeDimGroup', () => {
+  it('changeDimGroup', () => {
     const reducer = reducers.changeDimGroup;
 
     const state = {

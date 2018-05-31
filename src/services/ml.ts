@@ -2,7 +2,13 @@ import kmeans from 'ml-kmeans';
 import request from '../utils/request';
 import { meanBy } from 'lodash';
 
-import { TClusterDim, TQuesData, TQuesRecord, TSelectedQue } from '../models/data';
+import {
+  TClusterDim,
+  TPersonaQuesDatum,
+  TQuesData,
+  TQuesRecord,
+  TSelectedQue,
+} from '../models/data';
 import FA from '../../mock/FA';
 import { getAnswers, getAnswersByOrder } from '../utils';
 
@@ -46,27 +52,33 @@ export const getClusterDims = (
   });
 };
 
-export const getPersonaQuesData = (
+export const getPersonaQuesDatum = (
   quesData: TQuesData,
   clusterArray: number[],
-  cIndex: number
-): TQuesRecord => {
-  return quesData[0].map((item, index) => {
-    //求得平均数
-    const mean = meanBy(
-      quesData.filter((i) => i.some((j) => j.type === clusterArray[cIndex])),
-      (i) => i[index].answer.order
-    );
-    return {
-      ...item,
-      key: 'persona-' + cIndex + '-' + index,
-      type: clusterArray[cIndex],
-      answer: {
-        text: getAnswersByOrder(quesData, item.question, Math.round(mean)),
-        order: mean,
-      },
-    };
-  });
+  cIndex: number,
+  percent: number
+): TPersonaQuesDatum => {
+  return {
+    percent,
+    typeName: '类别' + clusterArray[cIndex],
+    type: clusterArray[cIndex],
+    quesData: quesData[0].map((item, index) => {
+      //求得平均数
+      const mean = meanBy(
+        quesData.filter((i) => i.some((j) => j.type === clusterArray[cIndex])),
+        (i) => i[index].answer.order
+      );
+      const { type, typeName, ...restItem } = item;
+      return {
+        ...restItem,
+        key: 'persona-' + cIndex + '-' + index,
+        answer: {
+          text: getAnswersByOrder(quesData, item.question, Math.round(mean)),
+          order: mean,
+        },
+      };
+    }),
+  };
 };
 
 export const getKMO = async (data: number[][]): Promise<{ kmo: number; sig: number }> => {

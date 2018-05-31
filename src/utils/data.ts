@@ -1,5 +1,13 @@
 import { uniqBy, uniq, orderBy } from 'lodash';
-import { TColumn, TTableData, TQuesData, TDim, TQuesRecord, TSelectedQue } from '../models/data';
+import {
+  TColumn,
+  TTableData,
+  TQuesData,
+  TDim,
+  TQuesRecord,
+  TSelectedQue,
+  TPersonaQuesData,
+} from '../models/data';
 import { generateId } from './utils';
 import { getAccumulation } from './index';
 import { generateTagId } from './persona';
@@ -235,10 +243,13 @@ export const getColumnsAndData = (componentMatrix) => {
 };
 
 export const getFilterPersonaQuesData = (
-  quesData: TQuesData,
+  quesData: TPersonaQuesData,
   selectionDims: string[]
-): TQuesData => {
-  return quesData.map((i) =>
-    i.filter((item) => !selectionDims.some((id) => generateTagId(item.tagId, item.question) === id))
-  );
+): TPersonaQuesData => {
+  return quesData.map((i) => ({
+    ...i,
+    quesData: i.quesData.filter(
+      (item) => !selectionDims.some((id) => generateTagId(item.tagId, item.question) === id)
+    ),
+  }));
 };

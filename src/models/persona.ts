@@ -1,7 +1,7 @@
 import { getTagsArrById } from '../utils';
 import update from 'immutability-helper';
 import { DvaModel } from '../../typings/dva';
-import { TQuesRecord } from './data';
+import { TPersonaQuesData, TPersonaQuesDatum, TQuesRecord } from './data';
 import { basicInfo, dimGroups } from '../common/persona';
 import { generateTagId } from '../utils/persona';
 
@@ -17,6 +17,8 @@ export type TPersonaDimGroup = {
   key: string;
   dims?: TPersonaDims;
 };
+export type TPersonaDimGroups = TPersonaDimGroup[];
+
 export type TBasicInfo = {
   percent: number;
   keywords: string;
@@ -34,7 +36,6 @@ export type TPersonaDatum = {
   checkedDims: Array<string>;
   basicInfo: TBasicInfo;
 };
-export type TPersonaDimGroups = TPersonaDimGroup[];
 export type TPersonaData = TPersonaDatum[];
 export type TPersona = {
   dimVisible: boolean;
@@ -54,7 +55,6 @@ const persona: IPersonaModel = {
     dimVisible: true,
     exportVisible: false,
     expandedDims: [],
-
     personaData: [],
     personaDisplayDimGroups: [],
     displayIndex: '0',
@@ -116,7 +116,7 @@ const persona: IPersonaModel = {
       };
     },
 
-    handleDragPersonaData(state, { payload }) {
+    handleDragDisplayDim(state, { payload }) {
       const { dragIndex, dropIndex } = payload;
       const dragItem = state.personaDisplayDimGroups[dragIndex];
       return {
@@ -209,14 +209,27 @@ const persona: IPersonaModel = {
       };
     },
 
-    addDimToPersonaGroups(state, { payload }) {
+    addDimToPersonaGroups(
+      state,
+      {
+        payload,
+      }: {
+        payload: {
+          personaQuesData: TPersonaQuesData;
+          personaDimId: string;
+          groupId: string;
+        };
+      }
+    ) {
       const { personaQuesData, personaDimId, groupId } = payload;
       // 前提： personaData 存在数据
       return {
         ...state,
-        personaData: personaQuesData.map((personaRecord: TQuesRecord, index) => {
+        personaData: personaQuesData.map((personaQuesDatum: TPersonaQuesDatum, index) => {
+
           // 三个值用于赋给 persona 的 dim
-          const { tagText, answer, question } = personaRecord.find((item) => {
+          const { quesData } = personaQuesDatum;
+          const { tagText, answer, question } = quesData.find((item) => {
             // 如果不存在 tagId 时用 question 替换，传进来的 tagId 也是一样的操作逻辑
             return generateTagId(item.tagId, item.question) === personaDimId;
           });

@@ -1,4 +1,4 @@
-import { getClusterDims, getPersonaQuesData } from './ml';
+import { getClusterDims, getPersonaQuesDatum } from './ml';
 
 it('getClusterDims', () => {
   const quesData = [
@@ -38,7 +38,7 @@ it('getClusterDims', () => {
   ]);
 });
 
-it('getPersonaQuesData ', () => {
+it('getPersonaQuesDatum ', () => {
   const quesData = [
     [
       { tagText: '1', type: 1, answer: { order: 0, text: '1' }, question: 'b' },
@@ -57,9 +57,34 @@ it('getPersonaQuesData ', () => {
     ],
   ];
   const cluster = [1, 2, 1];
-  expect(getPersonaQuesData(quesData, cluster, 0)).toEqual([
-    { tagText: '1', key: 'persona-0-0', type: 1, answer: { order: 0.5, text: '3' }, question: 'b' },
-    { tagText: '2', key: 'persona-0-1', type: 1, answer: { order: 3, text: 'q' }, question: 'd' },
-    { tagText: '3', key: 'persona-0-2', type: 1, answer: { order: 3.5, text: 'z' }, question: 'c' },
-  ]);
+  expect(getPersonaQuesDatum(quesData, cluster, 0, 2 / 3)).toEqual({
+    typeName: '类别1',
+    percent: 2 / 3,
+    type: 1,
+    quesData: [
+      {
+        tagText: '1',
+        key: 'persona-0-0',
+        answer: { order: 0.5, text: '3' },
+        question: 'b',
+      },
+      { tagText: '2', key: 'persona-0-1', answer: { order: 3, text: 'q' }, question: 'd' },
+      {
+        tagText: '3',
+        key: 'persona-0-2',
+        answer: { order: 3.5, text: 'z' },
+        question: 'c',
+      },
+    ],
+  });
+  expect(getPersonaQuesDatum(quesData, cluster, 1, 1 / 3)).toEqual({
+    typeName: '类别2',
+    percent: 1 / 3,
+    type: 2,
+    quesData: [
+      { tagText: '1', key: 'persona-1-0', answer: { order: 2, text: '2' }, question: 'b' },
+      { tagText: '2', key: 'persona-1-1', answer: { order: 1, text: 'w' }, question: 'd' },
+      { tagText: '3', key: 'persona-1-2', answer: { order: 2, text: 'x' }, question: 'c' },
+    ],
+  });
 });
