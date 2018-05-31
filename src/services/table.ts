@@ -27,6 +27,8 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
     entries.map((entry) => {
       const question = entry[0];
       const answer: string = entry[1];
+      const cleanAnswer =
+        answer.match(/^[A-Za-z]\./).length === 0 ? answer : answer.replace(/^[A-Za-z]\./, '');
       record.push({
         tagId: '',
         tagText: '',
@@ -34,7 +36,7 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
         typeName: '',
         key: generateId(),
         question,
-        answer: { text: answer, order: getAnswerOrder(answer) },
+        answer: { text: cleanAnswer, order: getAnswerOrder(answer) },
       });
     });
     saveData.push(record);
