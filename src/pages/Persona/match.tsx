@@ -4,16 +4,18 @@ import { Icon } from 'antd';
 import { DraggableTag, DraggableList } from './components';
 
 import { connect } from 'dva';
-import { TQuesData } from '../../models/data';
-import { TPersonaData } from '../../models/persona';
-import { personaQuesData } from '../../../mock/data';
-import { TTag } from '../../models/tag';
-import { extractTags, getFilterPersonaQuesData, getFilterQuesData } from '../../utils';
-import { DispatchProp } from 'react-redux';
+import { extractTags, getFilterPersonaQuesData } from '../../utils';
 import { extractDims, generateTagId } from '../../utils/persona';
 
+import { TPersonaQuesData } from '../../models/data';
+import { TPersonaData } from '../../models/persona';
+import { TTag } from '../../models/tag';
+import { DispatchProp } from 'react-redux';
+
+import { personaQuesData } from '../../../mock/data';
+
 interface IMatchProps {
-  personaQuesData: TQuesData;
+  personaQuesData: TPersonaQuesData;
   personaData: TPersonaData;
   tags: TTag[];
 }

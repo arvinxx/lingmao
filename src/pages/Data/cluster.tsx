@@ -12,7 +12,11 @@ interface IClusterProps {
 interface IClusterDefaultProps {
   clusterResults: TClusterResults;
 }
-@connect(({ data }) => ({ clusterResults: data.clusterResults, displayText: data.displayText }))
+@connect(({ data }) => ({
+  clusterResults: data.clusterResults,
+  displayText: data.displayText,
+  personaQuesData: data.personaQuesData,
+}))
 export default class Cluster extends Component<
   IClusterProps & IClusterDefaultProps & DispatchProp
 > {
@@ -21,6 +25,7 @@ export default class Cluster extends Component<
   };
   render() {
     const { clusterResults, displayText, dispatch, personaQuesData } = this.props;
+
     return clusterResults.length > 0 ? (
       <div className={styles.container}>
         {clusterResults.map((clusterResult, index) => (
@@ -28,7 +33,7 @@ export default class Cluster extends Component<
             key={index + 'DISPLAY'}
             index={index}
             clusterResult={clusterResult}
-            personaQuesDatum={personaQuesData[index]}
+            personaQuesDatum={personaQuesData.length > 0 ? personaQuesData[index] : null}
             displayText={displayText}
             dispatch={dispatch}
           />

@@ -7,14 +7,18 @@ import { DimensionList, PersonaEditor } from '../../components';
 
 import styles from './edit.less';
 import { TPersona } from '../../models/persona';
+import { TPersonaQuesData } from '../../models/data';
+// import { personaQuesData as clusterResult } from '../../../mock/data';
 
 const { TabPane } = Tabs;
 interface IEditProps {
   persona: TPersona;
+  clusterResult: TPersonaQuesData;
 }
 interface IEditDefaultProps {}
 @connect(({ persona, data }) => ({
   persona,
+  clusterResult: data.personaQuesData,
 }))
 export default class Edit extends Component<IEditProps & IEditDefaultProps & DispatchProp> {
   changePersonaIndex = (key) => {
@@ -27,7 +31,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     });
   };
   render() {
-    const { persona, dispatch } = this.props;
+    const { persona, dispatch, clusterResult } = this.props;
     const {
       dimVisible,
       expandedDims,
@@ -49,13 +53,12 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
             activeKey={displayIndex}
             onChange={(key) => this.changePersonaIndex(key)}
           >
-            {personaData.map((dimGroups, index) => (
-              <TabPane tab={'画像' + (index + 1)} key={index} />
-            ))}
+            {clusterResult.map((cluster, index) => <TabPane tab={cluster.typeName} key={index} />)}
           </Tabs>
           <div className={styles.editor}>
             <PersonaEditor
               personaDimGroups={personaDisplayDimGroups}
+              clusterResult={clusterResult}
               dispatch={dispatch}
               persona={basicInfo}
               showText={showText}

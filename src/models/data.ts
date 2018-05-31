@@ -292,6 +292,26 @@ const model: model = {
     handlePersonaQuesData(state, { payload: personaQuesData }) {
       return { ...state, personaQuesData };
     },
+
+    changePersonaTypeName(state, { payload }) {
+      const { value, index } = payload;
+      console.log(value, index);
+      try {
+        return {
+          ...state,
+          personaQuesData: update(state.personaQuesData, {
+            [index]: {
+              typeName: {
+                $set: value,
+              },
+            },
+          }),
+        };
+      } catch (e) {
+        console.log(e);
+      }
+      return state;
+    },
   },
 };
 export default model;
