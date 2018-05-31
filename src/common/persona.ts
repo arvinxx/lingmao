@@ -1,6 +1,8 @@
 import Mock from 'mockjs';
-import photo1 from '../assets/photos/1.jpg';
+import { females, males } from '../assets/photos';
 
+const photo = [...females, ...males];
+const { Random } = Mock;
 export const dimGroups = [
   {
     text: '基本信息',
@@ -54,18 +56,15 @@ export const dimGroups = [
   },
 ];
 
-export const basicInfo = {
-  percent: Mock.mock({
-    data: '@natural(1,40)',
-  }).data,
+export const basicInfo = () => ({
   keywords: '',
-  name: Mock.mock({ data: '@cname' }).data,
+  name: Random.cname(),
   bios: '',
   career: Mock.mock({
     'data|1': ['医生', '设计师', '制图员', '摄影师', '建筑师', '工业工程师', '画家'],
   }).data,
   photo: {
     text: 'photo1',
-    value: photo1,
+    value: photo[Math.random() * photo.length],
   },
-};
+});

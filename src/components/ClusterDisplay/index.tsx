@@ -4,7 +4,8 @@ import { MiniProgress, Pie } from '../Charts';
 
 import styles from './index.less';
 import colorPalette from './color';
-import { TClusterResult } from '../../models/data';
+import { TClusterResult, TPersonaQuesData, TPersonaQuesDatum } from '../../models/data';
+import { DispatchProp } from 'react-redux';
 const { Description } = DescriptionList;
 
 interface IClusterDisplayProps {
@@ -12,8 +13,9 @@ interface IClusterDisplayProps {
   clusterResult: TClusterResult;
   index: number;
   colMode?: boolean;
+  personaQuesDatum?: TPersonaQuesDatum;
 }
-export default class ClusterDisplay extends Component<IClusterDisplayProps> {
+export default class ClusterDisplay extends Component<IClusterDisplayProps & DispatchProp> {
   static defaultProps: IClusterDisplayProps = {
     clusterResult: {
       dims: [],

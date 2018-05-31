@@ -66,12 +66,11 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
           dims: getClusterDims(clusters, filterData, index, selectedQues),
         })),
       });
-
       //获得取得每个问题完整平均值的画像信息
       dispatch({
         type: 'data/handlePersonaQuesData',
         payload: results.map((result, index) =>
-          getPersonaQuesDatum(quesData, clusters, index, result.percent)
+          getPersonaQuesDatum(quesData, index, result.percent)
         ),
       });
     }

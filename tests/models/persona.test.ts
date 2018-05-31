@@ -1,4 +1,5 @@
 import model from '../../src/models/persona';
+import { basicInfo, dimGroups } from '../../src/common/persona';
 
 const reducers = model.reducers;
 
@@ -335,6 +336,101 @@ describe('Reducers', () => {
               ],
             },
           ],
+        },
+      ],
+    });
+  });
+
+  it('initPersonaData', () => {
+    const reducer = reducers.initPersonaData;
+
+    const state = {
+      personaData: [
+        {
+          dimGroups: [
+            {
+              text: '痛点',
+              key: 'frustrations',
+              dims: [
+                {
+                  tagId: '1!',
+                  tagText: '1',
+                  text: '3',
+                  value: 0.5,
+                },
+              ],
+            },
+            {
+              text: '动机',
+              key: 'motivation',
+              dims: [
+                {
+                  tagId: '2！',
+                  tagText: '31',
+                  text: '34',
+                  value: 0.51,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const action = {
+      type: 'persona/initPersonaData',
+      payload: [
+        {
+          typeName: '类别1',
+          percent: 2 / 3,
+          type: 1,
+          quesData: [
+            {
+              tagText: '1',
+              key: 'persona-0-0',
+              answer: { order: 0.5, text: '3' },
+              question: 'b',
+            },
+            { tagText: '2', key: 'persona-0-1', answer: { order: 3, text: 'q' }, question: 'd' },
+            {
+              tagText: '3',
+              key: 'persona-0-2',
+              answer: { order: 3.5, text: 'z' },
+              question: 'c',
+            },
+          ],
+        },
+        {
+          typeName: '类别2',
+          percent: 1 / 3,
+          type: 2,
+          quesData: [
+            { tagText: '1', key: 'persona-1-0', answer: { order: 2, text: '2' }, question: 'b' },
+            { tagText: '2', key: 'persona-1-1', answer: { order: 1, text: 'w' }, question: 'd' },
+            { tagText: '3', key: 'persona-1-2', answer: { order: 2, text: 'x' }, question: 'c' },
+          ],
+        },
+      ],
+    };
+    expect(reducer(state, action)).toEqual({
+      personaData: [
+        {
+          dimGroups,
+          checkedDims: [],
+          typeName: '类别1',
+          basicInfo: {
+            ...basicInfo(),
+            percent: 2 / 3,
+          },
+        },
+        {
+          dimGroups,
+          checkedDims: [],
+          typeName: '类别2',
+          basicInfo: {
+            ...basicInfo(),
+            percent: 1 / 3,
+          },
         },
       ],
     });

@@ -73,7 +73,6 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
     const { recordDims, interview, tagGroups } = this.props;
     const { title, records, id } = interview;
     const { dimensions, selectedValues } = recordDims;
-
     saveDocument({ title, id, records, dimensions, selectedValues, tagGroups });
   }
 

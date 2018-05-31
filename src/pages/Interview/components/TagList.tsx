@@ -30,30 +30,32 @@ export default class TagList extends Component<ITagListProps & DispatchProp> {
     return (
       <div className={styles.container}>
         <div className={styles.title}>标签</div>
-        <Menu
-          style={{ width: 200 }}
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          mode="inline"
-        >
-          {tags.map((tag) => {
-            const { text, id } = tag;
-            return (
-              <Menu.Item className={styles.labels} key={id} onClick={() => this.filterRecord(id)}>
-                {text}
-                <Popconfirm
-                  key={'ppp'}
-                  title="确认要删除吗?"
-                  onConfirm={() => this.deleteTag(id)}
-                  okText="是"
-                  cancelText="否"
-                >
-                  <Icon type="close" className={styles.close} />
-                </Popconfirm>
-              </Menu.Item>
-            );
-          })}
-        </Menu>
+        <div className={styles['tag-container']}>
+          <Menu
+            style={{ width: 200 }}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+          >
+            {tags.map((tag) => {
+              const { text, id } = tag;
+              return (
+                <Menu.Item className={styles.labels} key={id} onClick={() => this.filterRecord(id)}>
+                  {text}
+                  <Popconfirm
+                    key={'ppp'}
+                    title="确认要删除吗?"
+                    onConfirm={() => this.deleteTag(id)}
+                    okText="是"
+                    cancelText="否"
+                  >
+                    <Icon type="close" className={styles.close} />
+                  </Popconfirm>
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </div>{' '}
       </div>
     );
   }

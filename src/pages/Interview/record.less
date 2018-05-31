@@ -8,12 +8,6 @@
   margin: 12px 8px;
 }
 
-.base-card {
-  background: @base-white;
-  box-shadow: @shadow-1;
-  border-radius: 4px;
-}
-
 .center {
   display: flex;
   flex-grow: 1;
@@ -21,13 +15,13 @@
   max-width: 1000px;
   margin: 0 16px;
   min-height: 600px;
-  .base-card;
+  background: @base-white;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
   .up-container {
     background: @base-white;
-
     .wrapper {
       padding: @padding-lg 48px;
-      height: 100%;
     }
 
     .title {

@@ -15,10 +15,13 @@
   box-shadow: @shadow-1;
   border-radius: 4px;
   transition: opacity 0.75s;
-
+  &:active {
+    box-shadow: @shadow-0;
+    transform: translateY(1px);
+  }
   .button-container {
     height: 100%;
-    padding: 8px 6px;
+    padding: 6px 10px;
     color: @dark-6;
     cursor: pointer;
     &[data-active='true'] {

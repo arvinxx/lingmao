@@ -54,24 +54,23 @@ export const getClusterDims = (
 
 export const getPersonaQuesDatum = (
   quesData: TQuesData,
-  clusterArray: number[],
-  cIndex: number,
+  cType: number,
   percent: number
 ): TPersonaQuesDatum => {
   return {
     percent,
-    typeName: '类别' + clusterArray[cIndex],
-    type: clusterArray[cIndex],
+    typeName: '类别' + (cType + 1),
+    type: cType + 1,
     quesData: quesData[0].map((item, index) => {
       //求得平均数
       const mean = meanBy(
-        quesData.filter((i) => i.some((j) => j.type === clusterArray[cIndex])),
+        quesData.filter((i) => i.some((j) => j.type === cType)),
         (i) => i[index].answer.order
       );
       const { type, typeName, ...restItem } = item;
       return {
         ...restItem,
-        key: 'persona-' + cIndex + '-' + index,
+        key: 'persona-' + cType + '-' + index,
         answer: {
           text: getAnswersByOrder(quesData, item.question, Math.round(mean)),
           order: mean,

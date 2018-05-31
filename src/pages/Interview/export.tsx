@@ -63,24 +63,28 @@ export default class Export extends Component<IExportProps> {
           activeKey={exportDisplay}
           onChange={this.changeDisplay}
         >
-          <TabPane tab="需求层级列表" key="1" />
-          <TabPane tab="星球图" key="2" />
+          <TabPane tab="维度星球图" key="1" />
+          <TabPane tab="维度列表" key="2" />
         </Tabs>
         <div className={styles.content}>
-          {exportDisplay === '1' ? (
+          {exportDisplay === '2' ? (
             <List
               dataSource={tagGroups}
               grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 6, xxl: 6 }}
-              renderItem={(item: TTagGroup) => (
-                <Item>
-                  <Card title={item.text}>
-                    <List
-                      dataSource={item.tags}
-                      renderItem={(tag: TTag) => <Item> {tag.text}</Item>}
-                    />
-                  </Card>
-                </Item>
-              )}
+              renderItem={(item: TTagGroup) =>
+                item.tags.length === 0 ? (
+                  <div />
+                ) : (
+                  <Item>
+                    <Card title={item.text}>
+                      <List
+                        dataSource={item.tags}
+                        renderItem={(tag: TTag) => <Item> {tag.text}</Item>}
+                      />
+                    </Card>
+                  </Item>
+                )
+              }
             />
           ) : (
             <div className={styles.star}>

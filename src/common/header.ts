@@ -18,7 +18,7 @@ export const interview = [
       {
         text: 'sync',
         dispatch: {
-          type: '',
+          type: 'interview/sync',
         },
       },
       {

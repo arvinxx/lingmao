@@ -88,7 +88,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 <div className={styles.text}>
                   <div style={{ width: 64, marginRight: 4 }}>人群占比</div>
                   <div style={{ width: 64 }}>
-                    <span className={styles.number}> {percent} </span> %
+                    <span className={styles.number}> {percent.toFixed(0)} </span> %
                   </div>
                 </div>
                 <MiniProgress

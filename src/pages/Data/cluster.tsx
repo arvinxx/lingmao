@@ -2,20 +2,25 @@ import React, { Component } from 'react';
 import { ClusterDisplay } from '../../components';
 import styles from './cluster.less';
 import { connect } from 'dva';
-import { TClusterResults } from '../../models/data';
+import { TClusterResults, TPersonaQuesData } from '../../models/data';
+import { DispatchProp } from 'react-redux';
 
 interface IClusterProps {
-  clusterResults: TClusterResults;
+  personaQuesData: TPersonaQuesData;
   displayText: boolean;
 }
+interface IClusterDefaultProps {
+  clusterResults: TClusterResults;
+}
 @connect(({ data }) => ({ clusterResults: data.clusterResults, displayText: data.displayText }))
-export default class Cluster extends Component<IClusterProps> {
-  static defaultProps: IClusterProps = {
+export default class Cluster extends Component<
+  IClusterProps & IClusterDefaultProps & DispatchProp
+> {
+  static defaultProps: IClusterDefaultProps = {
     clusterResults: [],
-    displayText: false,
   };
   render() {
-    const { clusterResults, displayText } = this.props;
+    const { clusterResults, displayText, dispatch, personaQuesData } = this.props;
     return clusterResults.length > 0 ? (
       <div className={styles.container}>
         {clusterResults.map((clusterResult, index) => (
@@ -23,7 +28,9 @@ export default class Cluster extends Component<IClusterProps> {
             key={index + 'DISPLAY'}
             index={index}
             clusterResult={clusterResult}
+            personaQuesDatum={personaQuesData[index]}
             displayText={displayText}
+            dispatch={dispatch}
           />
         ))}
       </div>

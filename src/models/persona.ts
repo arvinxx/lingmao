@@ -4,6 +4,7 @@ import { DvaModel } from '../../typings/dva';
 import { TPersonaQuesData, TPersonaQuesDatum, TQuesRecord } from './data';
 import { basicInfo, dimGroups } from '../common/persona';
 import { generateTagId } from '../utils/persona';
+import Mock from 'mockjs';
 
 export type TPersonaDim = {
   tagId: string;
@@ -35,6 +36,7 @@ export type TPersonaDatum = {
   dimGroups: TPersonaDimGroups;
   checkedDims: Array<string>;
   basicInfo: TBasicInfo;
+  typeName: string;
 };
 export type TPersonaData = TPersonaDatum[];
 export type TPersona = {
@@ -196,13 +198,14 @@ const persona: IPersonaModel = {
     initPersonaData(state, { payload: personaQuesData }) {
       return {
         ...state,
-        personaData: personaQuesData.map((personaRecord, index) => {
+        personaData: personaQuesData.map((personaQuesDatum: TPersonaQuesDatum) => {
           return {
             dimGroups,
             checkedDims: [],
-            // TODO 添加人群占比信息
+            typeName: personaQuesDatum.typeName,
             basicInfo: {
-              ...basicInfo,
+              ...basicInfo(),
+              percent: personaQuesDatum.percent || 0,
             },
           };
         }),
@@ -226,7 +229,6 @@ const persona: IPersonaModel = {
       return {
         ...state,
         personaData: personaQuesData.map((personaQuesDatum: TPersonaQuesDatum, index) => {
-
           // 三个值用于赋给 persona 的 dim
           const { quesData } = personaQuesDatum;
           const { tagText, answer, question } = quesData.find((item) => {

@@ -9,12 +9,11 @@ import { extractTags } from '../../utils';
 
 import styles from './tag.less';
 import { queryDocument, saveTagGroups, getCleanTagGroups } from '../../services';
+import { DispatchProp } from 'react-redux';
 
-const Panel = Collapse.Panel;
 const CheckableTag = Tag.CheckableTag;
 
 interface ITagsProps {
-  dispatch: any;
   interview: IInterview;
   loading: boolean;
   tag: any;
@@ -25,7 +24,7 @@ interface ITagsProps {
   tag,
   loading: loading.models.tag,
 }))
-export default class Tags extends Component<ITagsProps> {
+export default class Tags extends Component<ITagsProps & DispatchProp> {
   state = {
     visible: false,
     tagGroupText: '',

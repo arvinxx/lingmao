@@ -41,23 +41,22 @@ it('getClusterDims', () => {
 it('getPersonaQuesDatum ', () => {
   const quesData = [
     [
-      { tagText: '1', type: 1, answer: { order: 0, text: '1' }, question: 'b' },
-      { tagText: '2', type: 1, answer: { order: 3, text: 'q' }, question: 'd' },
-      { tagText: '3', type: 1, answer: { order: 4, text: 'z' }, question: 'c' },
+      { tagText: '1', type: 0, answer: { order: 0, text: '1' }, question: 'b' },
+      { tagText: '2', type: 0, answer: { order: 3, text: 'q' }, question: 'd' },
+      { tagText: '3', type: 0, answer: { order: 4, text: 'z' }, question: 'c' },
     ],
     [
-      { tagText: '1', type: 2, answer: { order: 2, text: '2' }, question: 'b' },
-      { tagText: '2', type: 2, answer: { order: 1, text: 'w' }, question: 'd' },
-      { tagText: '3', type: 2, answer: { order: 2, text: 'x' }, question: 'c' },
+      { tagText: '1', type: 1, answer: { order: 2, text: '2' }, question: 'b' },
+      { tagText: '2', type: 1, answer: { order: 1, text: 'w' }, question: 'd' },
+      { tagText: '3', type: 1, answer: { order: 2, text: 'x' }, question: 'c' },
     ],
     [
-      { tagText: '1', type: 1, answer: { order: 1, text: '3' }, question: 'b' },
-      { tagText: '2', type: 1, answer: { order: 3, text: 'q' }, question: 'd' },
-      { tagText: '3', type: 1, answer: { order: 3, text: 'c' }, question: 'c' },
+      { tagText: '1', type: 0, answer: { order: 1, text: '3' }, question: 'b' },
+      { tagText: '2', type: 0, answer: { order: 3, text: 'q' }, question: 'd' },
+      { tagText: '3', type: 0, answer: { order: 3, text: 'c' }, question: 'c' },
     ],
   ];
-  const cluster = [1, 2, 1];
-  expect(getPersonaQuesDatum(quesData, cluster, 0, 2 / 3)).toEqual({
+  expect(getPersonaQuesDatum(quesData, 0, 2 / 3)).toEqual({
     typeName: '类别1',
     percent: 2 / 3,
     type: 1,
@@ -77,7 +76,7 @@ it('getPersonaQuesDatum ', () => {
       },
     ],
   });
-  expect(getPersonaQuesDatum(quesData, cluster, 1, 1 / 3)).toEqual({
+  expect(getPersonaQuesDatum(quesData, 1, 1 / 3)).toEqual({
     typeName: '类别2',
     percent: 1 / 3,
     type: 2,
