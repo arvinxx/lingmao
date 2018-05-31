@@ -28,7 +28,7 @@ export type TBasicInfo = {
   displayIndex: string;
   career: string;
   photo: {
-    value: string;
+    value: any[];
     text: string;
   };
 };

@@ -65,6 +65,6 @@ export const basicInfo = () => ({
   }).data,
   photo: {
     text: 'photo1',
-    value: photo[Math.random() * photo.length],
+    value: photo,
   },
 });

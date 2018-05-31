@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Input } from 'antd';
+import { isEmpty } from 'lodash';
+
 import DescriptionList from '../DescriptionList';
 import { MiniProgress, Pie } from '../Charts';
 
@@ -27,8 +30,15 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps & Dis
     displayText: false,
   };
 
+  handleTitleChange = (e, index) => {
+    this.props.dispatch({
+      type: 'data/changePersonaTypeName',
+      payload: { value: e.target.value, index },
+    });
+  };
+
   render() {
-    const { clusterResult, index, colMode, displayText } = this.props;
+    const { clusterResult, index, colMode, displayText, personaQuesDatum } = this.props;
     const { dims, percent, title } = clusterResult;
     const color = colorPalette[index];
     return (
@@ -36,7 +46,13 @@ export default class ClusterDisplay extends Component<IClusterDisplayProps & Dis
         <div className={colMode ? styles['col-pie'] : styles.pie}>
           <Pie
             percent={percent}
-            subTitle={title}
+            subTitle={
+              <Input
+                className={styles.title}
+                value={isEmpty(personaQuesDatum) ? 'no-data' : personaQuesDatum.typeName}
+                onChange={(e) => this.handleTitleChange(e, index)}
+              />
+            }
             color={color}
             total={percent.toFixed(1).toString() + '%'}
             height={160}

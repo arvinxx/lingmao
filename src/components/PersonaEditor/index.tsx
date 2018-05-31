@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Input } from 'antd';
 import { DispatchProp } from 'react-redux';
+import { females, males } from '../../assets/photos';
 
 import styles from './index.less';
 import DraggableBlock from './DraggableBlock';
@@ -8,12 +9,14 @@ import PhotoModal from './PhotoModal';
 import { MiniProgress } from '../Charts';
 
 import { TBasicInfo, TPersonaDimGroups } from '../../models/persona';
+import { TPersonaQuesData } from '../../models/data';
 
 const { TextArea } = Input;
 
 interface IPersonaEditorProps {
   persona: TBasicInfo;
   personaDimGroups: TPersonaDimGroups;
+  clusterResult: TPersonaQuesData;
   index: number;
   showText: boolean;
 }
@@ -21,8 +24,17 @@ interface IPersonaEditorProps {
 export default class PersonaEditor extends Component<IPersonaEditorProps & DispatchProp> {
   state = {
     modalVisible: false,
+    imgIndex: Math.floor(Math.random() * 4),
   };
-  changePhoto = () => {
+  changePhoto = (length) => {
+    const { imgIndex } = this.state;
+    let nextImgIndex = Math.floor(Math.random() * length);
+    while (nextImgIndex === imgIndex) {
+      nextImgIndex = Math.floor(Math.random() * length);
+    }
+    this.setState({ imgIndex: nextImgIndex });
+  };
+  customPhoto = () => {
     this.setState({ modalVisible: true });
   };
   setModalVisible = (modalVisible) => {
@@ -54,14 +66,40 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
   };
 
   render() {
-    const { dispatch, persona, personaDimGroups, index, showText } = this.props;
-    const { modalVisible } = this.state;
+    const { dispatch, persona, personaDimGroups, index, showText, clusterResult } = this.props;
+    const { modalVisible, imgIndex } = this.state;
     const { keywords, name, photo, bios, career, percent } = persona;
+
+    // 根据性别判断采用男性图片或女性图片
+    let gender = clusterResult[index].quesData.find((item) => item.tagText === '性别').answer.text;
+    let img = photo.value;
+    const res = gender.match(/[男女]/);
+    gender = res.length !== 0 ? res[0] : '';
+    switch (gender) {
+      case '男':
+        img = males;
+        break;
+      case '女':
+        img = females;
+        break;
+    }
     return (
       <Fragment>
         <div className={styles.container}>
-          <div className={styles['photo-container']} onClick={this.changePhoto}>
-            <img className={styles.photo} src={photo.value} alt={photo.text} />
+          <div className={styles['photo-combine']}>
+            <div className={styles['photo-container']}>
+              <img className={styles.photo} src={img[imgIndex]} alt="用户画像" />
+            </div>
+            <div className={styles['toolbar-container']}>
+              <div className={styles.toolbar}>
+                <div className={styles.tool} onClick={() => this.changePhoto(img.length)}>
+                  切换图片
+                </div>
+                <div className={styles.tool} onClick={this.customPhoto}>
+                  自定义图片
+                </div>
+              </div>
+            </div>
           </div>
           <div className={styles.content}>
             <div className={styles.title}>

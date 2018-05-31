@@ -166,7 +166,6 @@ it('addAnswersToSelectQues', () => {
           key: '12432411231',
           question: 'gdfycvh',
           answer: { text: '357323bvf', order: 0 },
-
         },
       ],
     ],
@@ -599,7 +598,7 @@ it('addClusterTypeToQuesData ', () => {
     ],
   };
   const action = {
-    type: 'data/addMatchTagToQuesData',
+    type: 'data/addClusterTypeToQuesData',
     payload: [0, 1],
   };
   expect(reducer(state, action)).toEqual({
@@ -640,6 +639,34 @@ it('addClusterTypeToQuesData ', () => {
           answer: { text: '357323bvf', order: 0 },
         },
       ],
+    ],
+  });
+});
+
+it('changePersonaTypeName', () => {
+  const reducer = reducers.changePersonaTypeName;
+  const state = {
+    personaQuesData: [
+      {
+        typeName: '1',
+      },
+      {
+        typeName: '2',
+      },
+    ],
+  };
+  const action = {
+    type: 'data/changePersonaTypeName',
+    payload: { value: 'das', index: 1 },
+  };
+  expect(reducer(state, action)).toEqual({
+    personaQuesData: [
+      {
+        typeName: '1',
+      },
+      {
+        typeName: 'das',
+      },
     ],
   });
 });
