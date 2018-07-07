@@ -8,7 +8,7 @@ export default {
     '@/services': resolve(__dirname, './src/services'),
     '@/common': resolve(__dirname, './src/common'),
     '@/assets': resolve(__dirname, './src/assets'),
-    'styles': resolve(__dirname, './src/styles'),
+    styles: resolve(__dirname, './src/styles'),
   },
   proxy: process.env.MOCK
     ? {}
