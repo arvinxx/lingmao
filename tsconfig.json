@@ -5,7 +5,15 @@
     "lib": ["es2017", "dom"],
     "moduleResolution": "node",
     "jsx": "react",
+    "allowJs": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/utils": ["./src/utils"],
+      "@/components": ["./src/components"],
+      "@/common": ["./src/common"],
+      "@/assets": ["./src/assets"]
+    }
   }
 }
