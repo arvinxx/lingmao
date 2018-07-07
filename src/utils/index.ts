@@ -4,3 +4,4 @@ export * from './router';
 export * from './data';
 export * from './record';
 export * from './dataMath';
+export * from './menu';

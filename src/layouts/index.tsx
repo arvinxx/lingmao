@@ -4,46 +4,24 @@ import withRouter from 'umi/withRouter';
 
 import UserLayout from './UserLayout';
 import BasicLayout from './BasicLayout';
-import { queryCurrent } from '../services/user';
 
-const publicList: Array<string> = ['/user/login', '/user/register'];
+import { UserLayout as UserLayoutList } from '@/common';
 
-interface AuthRouteProps {
+export interface ILayoutEntryProps {
   location: H.Location;
   history: H.History;
 }
 
 @(withRouter as any)
-export default class AuthRoute extends Component<AuthRouteProps> {
-  componentDidMount() {
-    const { location } = this.props;
-    const { pathname } = location;
-    // if (publicList.indexOf(pathname) < 0) {
-    //   this.AuthCurrentUser();
-    // }
-  }
-
-  // AuthCurrentUser = async () => {
-  //   try {
-  //     const res = await queryCurrent();
-  //     if (res.status === 200) {
-  //       if (res.data.code === 0) {
-  //         // 有登陆信息
-  //         console.log(res.data);
-  //       } else {
-  //         this.props.history.push('/user/login');
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // Layout 选择
+export default class LayoutEntry extends Component<ILayoutEntryProps> {
+  // Layout 入口
   render() {
     const { location, children } = this.props;
     const { pathname } = location;
-    if (publicList.indexOf(pathname) > -1) {
+
+    // 如果路由地址是登录注册的话，使用登录注册布局
+    // 否则使用基础布局
+    if (UserLayoutList.indexOf(pathname) > -1) {
       return <UserLayout>{children}</UserLayout>;
     } else {
       return <BasicLayout>{children}</BasicLayout>;

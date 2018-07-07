@@ -1,54 +1,32 @@
 import React, { Component, Fragment } from 'react';
+
 import { Layout } from 'antd';
+import { DispatchProp } from 'react-redux';
 import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
+import { SiderMenu } from '@/components';
 
-import { SiderMenu } from '../components';
-import Authorized from '../utils/Authorized';
-import { getMenuData } from '../common/menu';
+import { getMenuData } from '@/utils';
 
 import styles from './BasicLayout.less';
-import logo from '../assets/logo.png';
+import logo from '@/assets/logo.png';
 
-const redirectData: any[] = [];
-const getRedirect = (item) => {
-  if (item && item.children) {
-    if (item.children[0] && item.children[0].path) {
-      redirectData.push({
-        from: `/${item.path}`,
-        to: `/${item.children[0].path}`,
-      });
-      item.children.forEach((children) => {
-        getRedirect(children);
-      });
-    }
-  }
-};
-getMenuData().forEach(getRedirect);
-
-interface IBasicLayoutProps {
+export interface IBasicLayoutProps {
   collapsed?: boolean;
   location?: any;
-  dispatch?: any;
   showMenu?: boolean;
 }
 
 @(withRouter as any)
-@connect(({ user, global }) => ({
-  currentUser: user.currentUser,
+@connect(({ global }) => ({
   collapsed: global.collapsed,
   showMenu: global.showMenu,
 }))
-export default class BasicLayout extends Component<IBasicLayoutProps> {
+export default class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
   handleMenuCollapse = (collapsedState) => {
     this.props.dispatch({
       type: 'global/changeLayoutCollapsed',
       payload: collapsedState,
-    });
-  };
-  handleMenuState = () => {
-    this.props.dispatch({
-      type: 'global/changeMenuState',
     });
   };
 
@@ -60,7 +38,6 @@ export default class BasicLayout extends Component<IBasicLayoutProps> {
         <SiderMenu
           logo={logo}
           showMenu={showMenu}
-          // Authorized={Authorized}
           menuData={getMenuData()}
           collapsed={collapsed}
           location={location}

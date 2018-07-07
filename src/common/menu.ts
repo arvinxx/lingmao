@@ -1,6 +1,4 @@
-import { isUrl } from '../utils';
-
-const menuData = [
+export const menuData = [
   {
     name: '总览',
     icon: 'dashboard',
@@ -27,23 +25,3 @@ const menuData = [
     path: 'persona',
   },
 ];
-
-function formatter(data, parentPath = '', parentAuthority?) {
-  return data.map((item) => {
-    let { path } = item;
-    if (!isUrl(path)) {
-      path = parentPath + item.path;
-    }
-    const result = {
-      ...item,
-      path,
-      authority: item.authority || parentAuthority,
-    };
-    if (item.children) {
-      result.children = formatter(item.children, `${parentPath}${item.path}/`, item.authority);
-    }
-    return result;
-  });
-}
-
-export const getMenuData = () => formatter(menuData);
