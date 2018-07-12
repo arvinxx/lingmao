@@ -18,14 +18,14 @@ export interface IBasicLayoutProps {
 }
 
 @(withRouter as any)
-@connect(({ global }) => ({
-  collapsed: global.collapsed,
-  showMenu: global.showMenu,
+@connect(({ menu }) => ({
+  collapsed: menu.collapsed,
+  showMenu: menu.showMenu,
 }))
 export default class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
   handleMenuCollapse = (collapsedState) => {
     this.props.dispatch({
-      type: 'global/changeLayoutCollapsed',
+      type: 'menu/changeMenuCollapsed',
       payload: collapsedState,
     });
   };
