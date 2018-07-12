@@ -22,9 +22,9 @@ export default class LayoutEntry extends Component<ILayoutEntryProps> {
     // 如果路由地址是登录注册的话，使用登录注册布局
     // 否则使用基础布局
     if (UserLayoutList.indexOf(pathname) > -1) {
-      return <UserLayout>{children}</UserLayout>;
+      return <UserLayout id="UserLayout">{children}</UserLayout>;
     } else {
-      return <BasicLayout>{children}</BasicLayout>;
+      return <BasicLayout id="BasicLayout">{children}</BasicLayout>;
     }
   }
 }

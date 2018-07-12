@@ -1,12 +1,16 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, Component } from 'react';
+import H from 'history';
+
 import { Redirect, Switch, withRouter } from 'react-router';
 import Link from 'umi/link';
 
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
-import GlobalFooter from '../components/GlobalFooter';
+import { GlobalFooter } from '@/components';
+import { getPageTitle } from '@/utils';
+
 import styles from './UserLayout.less';
-import logo from '../assets/logo.png';
+import logo from '@/assets/logo.png';
 
 const links = [
   {
@@ -31,23 +35,18 @@ const copyright = (
     Copyright <Icon type="copyright" /> 2018 灵 猫
   </Fragment>
 );
+export interface IUserLayoutProps {
+  location: H.Location;
+}
 
 @(withRouter as any)
-export default class UserLayout extends PureComponent {
-  // getPageTitle() {
-  //   const { routerData, location } = this.props;
-  //   const { pathname } = location;
-  //   let title = 'LEGION';
-  //   if (routerData[pathname] && routerData[pathname].name) {
-  //     title = `${routerData[pathname].name} - LEGION`;
-  //   }
-  //   return title;
-  // }
-
+export default class UserLayout extends Component<IUserLayoutProps> {
   render() {
-    const {children} = this.props;
+    const { children, location } = this.props;
+    const { pathname } = location;
+    const title = '灵猫';
     return (
-      <DocumentTitle title={'this.getPageTitle()'}>
+      <DocumentTitle title={getPageTitle(pathname, title)}>
         <div className={styles.container}>
           <div className={styles.content}>
             <div className={styles.top}>
@@ -57,9 +56,7 @@ export default class UserLayout extends PureComponent {
                   <span className={styles.title}>灵 猫</span>
                 </Link>
               </div>
-              <div className={styles.desc}>
-                友好强大的用户研究工具
-              </div>
+              <div className={styles.desc}>友好强大的用户研究工具</div>
             </div>
             <Switch>
               <Fragment>{children}</Fragment>
