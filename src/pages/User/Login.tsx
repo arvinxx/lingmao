@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Checkbox, Alert, Icon } from 'antd';
+import { DispatchProp } from 'react-redux';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Checkbox, Alert, Icon } from 'antd';
-import { Login } from '../../components';
+
+import { Login } from '@/components';
 import styles from './Login.less';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
@@ -10,18 +12,16 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 interface ILoginPageProps {
   login: any;
   submitting: boolean;
-  dispatch: Function;
 }
 
 @connect(({ login, loading }) => ({
   login,
   submitting: loading.effects['login/login'],
 }))
-export default class LoginPage extends Component<ILoginPageProps> {
+export default class LoginPage extends Component<ILoginPageProps & DispatchProp> {
   static defaultProps: ILoginPageProps = {
     login: {},
     submitting: false,
-    dispatch: () => {},
   };
   state = {
     type: 'account',

@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
+import { fakeAccountLogin } from '@/services';
 // import { setAuthority } from '../utils/authority';
 // import { reloadAuthorized } from '../utils/Authorized';
 import { DvaModel } from '../../typings/dva';
@@ -11,7 +11,6 @@ interface model extends DvaModel {
   state: TLoginModel;
 }
 const login: model = {
-  namespace: 'login',
   state: {
     status: undefined,
   },
