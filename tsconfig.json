@@ -13,6 +13,8 @@
       "@/utils": ["./src/utils"],
       "@/components": ["./src/components"],
       "@/common": ["./src/common"],
+      "@/models/*": ["./src/models/*"],
+      "@/services": ["./src/services"],
       "@/assets": ["./src/assets"]
     }
   }
