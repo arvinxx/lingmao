@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import App, { ITagInputProps } from './index';
 import { spy } from 'sinon';
-import dimensions from '../../../../../mock/dimensions';
+import dimensions from '@/mock/dimensions';
 
 const setup = () => {
   const dispatch = spy();
@@ -39,7 +39,7 @@ describe('response', () => {
 
   describe('newKeyOnBlur', () => {
     it("newKeyOnBlur should run when blur if there's content", () => {
-      wrapper.setState({ newKey: '1' });
+      wrapper.setState({ newLabel: '1' });
       Input.simulate('blur');
       expect(wrapper.state('newKeyPlaceHolder')).toEqual('添加条目');
       expect(wrapper.state('newKey')).toEqual('');
@@ -54,7 +54,7 @@ describe('response', () => {
   });
   describe('newKeyOnBlur', () => {
     it("newKeyOnBlur should run when blur if there's content", () => {
-      wrapper.setState({ newKey: '1' });
+      wrapper.setState({ newLabel: '1' });
       Input.simulate('pressEnter');
       expect(wrapper.state('newKeyPlaceHolder')).toEqual('');
       expect(wrapper.state('newKey')).toEqual('');

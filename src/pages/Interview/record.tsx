@@ -4,94 +4,83 @@ import { Input } from 'antd';
 import { DispatchProp } from 'react-redux';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import 'react-reflex/styles.css';
-import { TagList, Upload, TagInput, RecordList } from './components';
+import { TagList, Upload, TagSelector, RecordList } from './components';
 
-import { IInterview } from '../../models/interview';
-import { TTagGroup } from '../../models/tag';
-import { TRecordModel } from '../../models/recordDims';
+import { IRecordState } from './models/record';
+import { IInterviewDisplayState } from './models/interviewDisplay';
+import { ILabel, ITagState } from '@/models/tag';
 
-import { extractTags } from '../../utils';
+import { extractTags } from '@/utils';
 import {
   queryDocument,
   saveDocument,
   getCleanDimensions,
   getCleanDocument,
   getCleanTagGroups,
-} from '../../services';
+} from '@/services';
 
 import styles from './record.less';
 
-interface IInterviewProps {
-  interview: IInterview;
+interface IRecordProps {
+  record: IRecordState;
   loading: boolean;
-  recordDims: TRecordModel;
-  tagGroups: TTagGroup[];
+  interviewDisplay: IInterviewDisplayState;
+  tag: ITagState;
 }
-@connect(({ interview, tag, loading, recordDims }) => ({
-  interview,
-  tagGroups: tag.tagGroups,
-  recordDims,
-  loading: loading.models.interview,
+@connect(({ record, tag, loading, interviewDisplay }) => ({
+  record,
+  interviewDisplay,
+  tag,
+  loading: loading.models.record,
 }))
-export default class Interview extends Component<IInterviewProps & DispatchProp, any> {
-  static defaultProps: IInterviewProps = {
-    interview: {
-      tagVisible: false,
-      uploadVisible: true,
-      id: '',
+export default class Record extends Component<IRecordProps & DispatchProp> {
+  static defaultProps: IRecordProps = {
+    record: {
+      key: '',
       records: {},
       title: '',
     },
     loading: false,
-    tagGroups: [],
-    recordDims: {
-      selectedValues: [],
-      dimensions: [],
+    tag: {
+      labels: [],
+      selectedTags: [],
+    },
+    interviewDisplay: {
+      exportDisplay: '1',
+      uploadVisible: false,
+      labelMenuVisible: true,
     },
   };
   async componentDidMount() {
     let documents = await queryDocument();
     documents = Array.isArray(documents) ? documents : [];
 
-    if (documents.length > 0) {
-      this.props.dispatch({
-        type: 'interview/querryDocument',
-        payload: getCleanDocument(documents[0]),
-      });
-      this.props.dispatch({
-        type: 'recordDims/querryRecordDims',
-        payload: getCleanDimensions(documents[0]),
-      });
-      this.props.dispatch({
-        type: 'tag/querryTagGroups',
-        payload: getCleanTagGroups(documents[0]),
-      });
-    }
-  }
-
-  componentWillUnmount() {
-    const { recordDims, interview, tagGroups } = this.props;
-    const { title, records, id } = interview;
-    const { dimensions, selectedValues } = recordDims;
-    saveDocument({ title, id, records, dimensions, selectedValues, tagGroups });
+    // if (documents.length > 0) {
+    //   this.props.dispatch({
+    //     type: 'tag/getLabels',
+    //     payload: getCleanTagGroups(documents[0]),
+    //   });
+    // }
   }
 
   titleChange = (e) => {
     const text = e.target.value;
     this.props.dispatch({
-      type: 'interview/changeTitle',
+      type: 'record/changeTitle',
       payload: text,
     });
   };
 
   render() {
     const minPanelSize = 150;
-    const { interview, tagGroups, dispatch, recordDims } = this.props;
-    const { uploadVisible, tagVisible, title, records } = interview;
-    const { dimensions, selectedValues } = recordDims;
+    const { record, tag, interviewDisplay, dispatch } = this.props;
+    const { title, records } = record;
+    const { labels, selectedTags } = tag;
+    const { labelMenuVisible, uploadVisible } = interviewDisplay;
     return (
       <div className={styles.container}>
-        {uploadVisible ? <Upload /> : <div />}
+        <div />
+        {/*{uploadVisible ? <Upload /> : <div />}*/}
         <div className={styles.center}>
           <ReflexContainer orientation="horizontal">
             <ReflexElement flex="0.6" className={styles['up-container']} minSize={minPanelSize}>
@@ -102,7 +91,7 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
                   placeholder="无标题"
                   value={title}
                 />
-                <RecordList records={records} dispatch={dispatch} tagGroups={tagGroups} />
+                <RecordList records={records} dispatch={dispatch} labels={labels} />
               </div>
             </ReflexElement>
             <ReflexSplitter>
@@ -113,15 +102,13 @@ export default class Interview extends Component<IInterviewProps & DispatchProp,
               </div>
             </ReflexSplitter>
             <ReflexElement flex="0.4" className={styles['down-container']} minSize={minPanelSize}>
-              <TagInput
-                dimensions={dimensions}
-                selectedValues={selectedValues}
-                dispatch={dispatch}
-              />
+              <TagSelector labels={labels} selectedTags={selectedTags} dispatch={dispatch} />
             </ReflexElement>
           </ReflexContainer>
         </div>
-        {tagVisible ? <TagList tags={extractTags(tagGroups)} dispatch={dispatch} /> : <div />}
+        <div />
+
+        {/*{labelMenuVisible ? <TagList tags={extractTags(labels)} dispatch={dispatch} /> : <div />}*/}
       </div>
     );
   }

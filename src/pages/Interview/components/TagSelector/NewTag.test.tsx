@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IValueInputProps } from './ValueInput';
+import App, { IValueInputProps } from './NewTag';
 
 import { spy } from 'sinon';
 

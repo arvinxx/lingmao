@@ -1,58 +1,58 @@
-import { findIndexById, generateId, reorder } from '../utils';
 import { concat } from 'lodash';
-import { DvaModel } from '../../typings/dva';
+import { findIndexByKey, generateKey, reorder } from '@/utils';
+import { findIndex } from 'lodash';
+
+import { DvaModel } from '@/typings/dva';
 import update from 'immutability-helper';
 
-export type TTag = {
-  id: string;
+export interface ITag {
+  key: string;
   text: string;
   refText: string;
-  groupId: string;
   value: number;
-  answerText: string;
-};
+  editable: boolean;
+}
 
-export type TTagGroup = {
+export interface ILabel {
   text: string;
-  id: string;
-  tags: Array<TTag>;
-};
+  key: string;
+  tags: Array<ITag>;
+  inputVisible: boolean;
+}
+
 export type TSelectedTags = string[];
 
-export type TTagModel = {
+export interface ITagState {
   tagVisible: boolean;
   selectedTags: TSelectedTags;
-  tagGroups: Array<TTagGroup>;
+  labels: Array<ILabel>;
   exportDisplay: string;
-};
-export interface ITagModel extends DvaModel {
-  state: TTagModel;
 }
-const tag: ITagModel = {
-  namespace: 'tag',
+
+const tag: DvaModel & { state: ITagState } = {
   state: {
     tagVisible: true,
-    tagGroups: [{ text: '未分组', id: generateId(), tags: [] }],
+    labels: [{ text: '未分组', key: generateKey(), tags: [], inputVisible: false }],
     selectedTags: [],
     exportDisplay: '1',
   },
   reducers: {
-    querryTagGroups(state, { payload: tagGroups }) {
-      return { ...state, tagGroups };
+    getLabels(state, { payload: labels }) {
+      return { ...state, labels };
     },
 
     addTag(state, { payload }) {
-      const { text, id } = payload;
+      const { text, key } = payload;
+      const labels = state.labels;
       return {
         ...state,
-        tagGroups: update(state.tagGroups, {
-          0: {
+        labels: update(labels, {
+          [findIndex(labels, ['key', key])]: {
             tags: {
               $push: [
                 {
                   text,
-                  refText: text,
-                  id: id !== undefined ? id : generateId(),
+                  key: generateKey(),
                 },
               ],
             },
@@ -60,79 +60,74 @@ const tag: ITagModel = {
         }),
       };
     },
+    deleteTag(state, { payload: key }) {
+      return {
+        ...state,
+        labels: state.labels.map((label: ILabel) => ({
+          ...label,
+          tags: label.tags.filter((tag) => tag.key !== key),
+        })),
+      };
+    },
     changeTagText(state, { payload }) {
-      const { id, newText } = payload;
+      const { key, text } = payload;
       return {
         ...state,
-        tagGroups: state.tagGroups.map((tagGroup: TTagGroup) => ({
-          ...tagGroup,
-          tags: tagGroup.tags.map((tag) => ({ ...tag, text: tag.id === id ? newText : tag.text })),
-        })),
-      };
-    },
-    deleteTag(state, { payload: id }) {
-      return {
-        ...state,
-        tagGroups: state.tagGroups.map((tagGroup: TTagGroup) => ({
-          ...tagGroup,
-          tags: tagGroup.tags.filter((tag) => tag.id !== id),
-        })),
-      };
-    },
-
-    addTagGroup(state, { payload: text }) {
-      if (text === '') {
-        return state;
-      } else
-        return { ...state, tagGroups: [...state.tagGroups, { text, tags: [], id: generateId() }] };
-    },
-    changeTagGroupText(state, { payload }) {
-      const { id, newText } = payload;
-      if (findIndexById(state.tagGroups, id) !== 0) {
-        return {
-          ...state,
-          tagGroups: state.tagGroups.map((tagGroup) => ({
-            ...tagGroup,
-            text: tagGroup.id === id ? newText : tagGroup.text,
-          })),
-        };
-      } else return state;
-    },
-    deleteTagGroup(state, { payload: id }) {
-      if (findIndexById(state.tagGroups, id) !== 0) {
-        return {
-          ...state,
-          tagGroups: state.tagGroups.filter((tagGroup) => tagGroup.id !== id),
-        };
-      } else return state;
-    },
-
-    addTagToNewGroup(state, action) {
-      const { tagGroups, selectedTags } = state;
-      let tags: Array<TTag> = [];
-      selectedTags.map((id) => {
-        tags = tags.concat(tagGroups[0].tags.filter((tag) => tag.id === id));
-        tagGroups[0].tags = tagGroups[0].tags.filter((tag) => {
-          return tag.id !== id;
-        });
-      });
-      return {
-        ...state,
-        tagGroups: [...tagGroups, { text: '未命名' + tagGroups.length, id: generateId(), tags }],
-        selectedTags: [],
+        labels: state.labels.map((label: ILabel) => {
+          const { tags } = label;
+          const index = findIndex(label.tags, ['key', key]);
+          // 如果没找到 key 则返回原值，如果找到 key 就修改值
+          return index < 0
+            ? label
+            : {
+                ...label,
+                tags: update(tags, {
+                  [index]: {
+                    text: { $set: text },
+                  },
+                }),
+              };
+        }),
       };
     },
 
-    changeSelectedTags(state, { payload }) {
-      const { id, checked } = payload;
-      const selectedTags = checked
-        ? [...state.selectedTags, id]
-        : state.selectedTags.filter((t) => t !== id);
-      return { ...state, selectedTags };
+    addLabel(state, { payload: text }) {
+      return text === ''
+        ? state
+        : { ...state, labels: [...state.labels, { text, tags: [], key: generateKey() }] };
+    },
+    deleteLabel(state, { payload: key }) {
+      return findIndex(state.labels, ['key', key]) <= 0
+        ? state
+        : {
+            ...state,
+            labels: state.labels.filter((label) => label.key !== key),
+          };
+    },
+    changeLabelText(state, { payload }) {
+      const { key, text } = payload;
+      const index = findIndex(state.labels, ['key', key]);
+      return index <= 0
+        ? state
+        : {
+            ...state,
+            labels: update(state.labels, {
+              [index]: {
+                text: { $set: text },
+              },
+            }),
+          };
     },
 
-    handleExportDisplay(state, { payload: exportDisplay }) {
-      return { ...state, exportDisplay };
+    handleSelectedTags(state, { payload }) {
+      const { key, checked } = payload;
+      return {
+        ...state,
+        // 如果为真则添加到 tags 中，否则过滤掉
+        selectedTags: checked
+          ? [...state.selectedTags, key]
+          : state.selectedTags.filter((t) => t !== key),
+      };
     },
 
     handleTagIndexDrag(
@@ -146,45 +141,111 @@ const tag: ITagModel = {
         };
       }
     ) {
-      const tagGroups: Array<TTagGroup> = state.tagGroups;
+      const labels: Array<ILabel> = state.labels;
       const { start, end } = payload;
       const { dragId, dragIndex } = start;
       const { dropId, dropIndex } = end;
 
-      const isInTagsGroup = (id, tags: Array<TTag>) => tags.some((tag: TTag) => tag.id === id);
+      const isInTagsGroup = (key, tags: Array<ITag>) => tags.some((tag: ITag) => tag.key === key);
       let isSameGroup = false;
       // 判断是否属于同一组
-      tagGroups.forEach((tagGroup: TTagGroup) => {
-        const { tags } = tagGroup;
+      labels.forEach((label: ILabel) => {
+        const { tags } = label;
         if (isInTagsGroup(dragId, tags) && isInTagsGroup(dropId, tags)) {
           const newTags = reorder(tags, dragIndex, dropIndex);
           isSameGroup = true;
-          tagGroup.tags = newTags;
-          return { ...state, tagGroups };
+          label.tags = newTags;
+          return { ...state, labels };
         }
       });
       //不是同一组的情况下，将加入那一组
       if (!isSameGroup) {
-        let removed: TTag;
-        tagGroups.forEach((tagGroup: TTagGroup) => {
-          const { tags } = tagGroup;
+        let removed: ITag;
+        labels.forEach((label: ILabel) => {
+          const { tags } = label;
           if (isInTagsGroup(dragId, tags)) {
             [removed] = tags.splice(dragIndex, 1);
-            tagGroup.tags = concat(tags);
-            return { ...state, tagGroups };
+            label.tags = concat(tags);
+            return { ...state, labels };
           }
         });
-        tagGroups.forEach((tagGroup: TTagGroup) => {
-          const { tags } = tagGroup;
+        labels.forEach((label: ILabel) => {
+          const { tags } = label;
           if (isInTagsGroup(dropId, tags)) {
             tags.splice(dropIndex, 0, removed);
-            tagGroup.tags = concat(tags);
-            return { ...state, tagGroups };
+            label.tags = concat(tags);
+            return { ...state, labels };
           }
         });
       }
-      const newTagGroups = concat(tagGroups);
-      return { ...state, tagGroups: newTagGroups };
+      const newLabels = concat(labels);
+      return { ...state, labels: newLabels };
+    },
+
+    showTagInput(state, { payload: key }) {
+      const labels = state.labels;
+      const index = findIndex(labels, ['key', key]);
+      return {
+        ...state,
+        labels: update(labels, {
+          [index]: {
+            inputVisible: { $set: true },
+          },
+        }),
+      };
+    },
+    hideTagInput(state, { payload: key }) {
+      const labels = state.labels;
+      const index = findIndex(labels, ['key', key]);
+      return {
+        ...state,
+        labels: update(labels, {
+          [index]: {
+            inputVisible: { $set: false },
+          },
+        }),
+      };
+    },
+
+    showTagEdit(state, { payload: key }) {
+      return {
+        ...state,
+        labels: state.labels.map((label: ILabel) => {
+          const { tags } = label;
+          const index = findIndex(label.tags, ['key', key]);
+          // 如果没找到 key 则返回原值，如果找到 key 就修改值
+          return index < 0
+            ? label
+            : {
+                ...label,
+                tags: update(tags, {
+                  [index]: {
+                    editable: { $set: true },
+                  },
+                }),
+              };
+        }),
+      };
+    },
+    hideTagEdit(state, { payload: key }) {
+      return {
+        ...state,
+        labels: state.labels.map((label: ILabel) => {
+          const { tags } = label;
+          const index = findIndex(label.tags, ['key', key]);
+          // 找到 key 对应的 index 修改 editable 为 false
+          return index < 0
+            ? label
+            : {
+                ...label,
+                tags: update(tags, {
+                  [index]: {
+                    editable: { $set: false },
+                  },
+                }),
+              };
+        }),
+      };
     },
   },
 };

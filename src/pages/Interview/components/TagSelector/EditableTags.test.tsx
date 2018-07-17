@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IDimValueProps } from './DimValue';
+import App, { IDimValueProps } from './EditableTags';
 import { spy } from 'sinon';
 
 const setup = () => {
@@ -27,7 +27,7 @@ describe('CheckableTag', () => {
   });
   describe('响应操作', () => {
     describe('双击标签进入编辑模式', () => {
-      it('showValueEdit should run when double click', () => {
+      it('showTagEdit should run when double click', () => {
         wrapper.find('CheckableTag').simulate('doubleClick');
         expect(dispatch.callCount).toEqual(1);
       });
@@ -37,7 +37,7 @@ describe('CheckableTag', () => {
       wrapper.find('CheckableTag').simulate('change', true);
       expect(dispatch.callCount).toEqual(1);
     });
-    it('oldValueDelete should run when confirm', () => {
+    it('deleteTag should run when confirm', () => {
       const wrapper = shallow(<App {...props} dispatch={dispatch} />);
       wrapper.find('Popconfirm').simulate('confirm');
       expect(dispatch.callCount).toEqual(1);
@@ -56,7 +56,7 @@ describe('Input', () => {
     expect(wrapper.find('.value-container').length).toEqual(0);
   });
   describe('响应操作', () => {
-    it('oldValueChange should run when change text', () => {
+    it('editTagText should run when change text', () => {
       Input.simulate('change', { target: { value: '23' } });
       expect(dispatch.callCount).toEqual(1);
     });

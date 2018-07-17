@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IDimGroupProps } from './DimGroup';
+import App, { IDimGroupProps } from './Label';
 import { spy } from 'sinon';
 
 const setup = () => {
@@ -25,7 +25,7 @@ describe('response', () => {
       //TODO CSS
     });
     describe('编辑模式下可直接编辑内容', () => {
-      it('changeKey should run when change', () => {
+      it('changeLabel should run when change', () => {
         wrapper.find('Input').simulate('change', { target: { value: '1' } });
         expect(dispatch.callCount).toEqual(2);
       });
@@ -40,7 +40,7 @@ describe('response', () => {
 
   describe('点击删除 ICON 跳出确认框', () => {
     describe('点击确认删除标签', () => {
-      it('deleteKey should run when confirm', () => {
+      it('deleteLabel should run when confirm', () => {
         const wrapper = shallow(<App {...props} dispatch={dispatch} />);
         wrapper.find('Popconfirm').simulate('confirm');
         expect(dispatch.callCount).toEqual(2);
