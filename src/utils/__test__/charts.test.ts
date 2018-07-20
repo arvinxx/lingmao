@@ -1,18 +1,18 @@
-import { generateId } from './utils';
-import { getChartsDataSets } from './charts';
+import { generateKey } from '../utils';
+import { getChartsDataSets } from '@/utils';
 const quesData = [
   [
     {
       tagId: '1',
       tagText: '',
-      key: generateId(),
+      key: generateKey(),
       question: '你的名字是？',
       answer: { text: '小A', order: 1 },
     },
     {
       tagId: '2',
       tagText: '',
-      key: generateId(),
+      key: generateKey(),
       question: '你的性别是？',
       answer: { text: '男', order: 1 },
     },
@@ -21,14 +21,14 @@ const quesData = [
     {
       tagId: '1',
       tagText: '',
-      key: generateId(),
+      key: generateKey(),
       question: '你的名字是？',
       answer: { text: '小B', order: 2 },
     },
     {
       tagId: '2',
       tagText: '',
-      key: generateId(),
+      key: generateKey(),
       question: '你的性别是？',
       answer: { text: '女', order: 2 },
     },

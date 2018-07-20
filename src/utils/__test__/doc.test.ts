@@ -1,4 +1,4 @@
-import { extractPlainText } from './doc';
+import { extractPlainText } from '../doc';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 

@@ -1,20 +1,20 @@
-import { TTag, TTagGroup } from '../models/tag';
+import { ITag, ILabel } from '@/models/tag';
 import { tail } from 'lodash';
-import { TPersonaDims } from '../models/persona';
+import { TPersonaDims } from '@/models/persona';
 
-export const extractTags = (tagGroups: Array<TTagGroup>): Array<TTag> => {
-  let tags: Array<TTag> = [];
+export const extractTags = (tagGroups: Array<ILabel>): Array<ITag> => {
+  let tags: Array<ITag> = [];
   if (tagGroups !== undefined) {
-    tagGroups.map((tagGroup: TTagGroup) => {
+    tagGroups.map((tagGroup: ILabel) => {
       tags.push(...tagGroup.tags);
     });
     return tags;
   } else return [];
 };
 
-export const getTagsArrById = (tagGroups: Array<TTagGroup>, Ids: Array<string>): Array<TTag> => {
+export const getTagsArrById = (tagGroups: Array<ILabel>, Ids: Array<string>): Array<ITag> => {
   if (tagGroups !== undefined && Ids !== undefined) {
-    let tagsArr: Array<TTag> = [];
+    let tagsArr: Array<ITag> = [];
     Ids.map((id) => {
       tagGroups.map((tagGroup) => {
         const temp = tagGroup.tags.filter((tag) => tag.id === id);
@@ -44,7 +44,7 @@ export type TStarModel = {
 };
 
 // TODO 关联潜在需求和需求强度
-export const getStarData = (tagGroups: Array<TTagGroup>): TStarModel => {
+export const getStarData = (tagGroups: Array<ILabel>): TStarModel => {
   let data: TStarData[] = [];
   let categories: TStarCategory[] = [];
   let links: TStarLink[] = [];

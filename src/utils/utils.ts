@@ -1,59 +1,4 @@
-import moment from 'moment';
 import shortid from 'shortid';
-import lessToJs from 'less-vars-to-js';
-import fs from 'fs';
-
-export function fixedZero(val) {
-  return val * 1 < 10 ? `0${val}` : val;
-}
-
-export function getTimeDistance(type) {
-  const now = new Date();
-  const oneDay = 1000 * 60 * 60 * 24;
-
-  if (type === 'today') {
-    now.setHours(0);
-    now.setMinutes(0);
-    now.setSeconds(0);
-    return [moment(now), moment(now.getTime() + (oneDay - 1000))];
-  }
-
-  if (type === 'week') {
-    let day = now.getDay();
-    now.setHours(0);
-    now.setMinutes(0);
-    now.setSeconds(0);
-
-    if (day === 0) {
-      day = 6;
-    } else {
-      day -= 1;
-    }
-
-    const beginTime = now.getTime() - day * oneDay;
-
-    return [moment(beginTime), moment(beginTime + (7 * oneDay - 1000))];
-  }
-
-  if (type === 'month') {
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const nextDate = moment(now).add(1, 'months');
-    const nextYear = nextDate.year();
-    const nextMonth = nextDate.month();
-
-    return [
-      moment(`${year}-${fixedZero(month + 1)}-01 00:00:00`),
-      moment(moment(`${nextYear}-${fixedZero(nextMonth + 1)}-01 00:00:00`).valueOf() - 1000),
-    ];
-  }
-
-  if (type === 'year') {
-    const year = now.getFullYear();
-
-    return [moment(`${year}-01-01 00:00:00`), moment(`${year}-12-31 23:59:59`)];
-  }
-}
 
 export function getPlainNode(nodeList, parentPath = '') {
   const arr: any[] = [];
@@ -73,33 +18,27 @@ export function getPlainNode(nodeList, parentPath = '') {
   return arr;
 }
 
-/**
- * 返回数组 index
- * @param arr 含有 {id:'x'} 的数组
- * @param id
- * @example
- * const arr = ([{id:'3'},{id:'4'}])
- * findIndexById(arr,'4') => 1
- * findIndexById(arr,'6') => Error
- */
-export const findIndexById = (arr: Array<any>, id: string): number => {
-  const index = arr.findIndex((i) => i.id === id);
-  if (index > -1) {
-    return index;
-  } else throw new Error('id 不正确，请重试');
-};
 
-export const generateId = (): string => {
+
+export const generateKey = (): string => {
   shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ%@');
   return shortid.generate();
 };
 
+/**
+ * 判断是否是 URL
+ * @param path:地址
+ */
 export function isUrl(path) {
   /* eslint no-useless-escape:0 */
   const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g;
   return reg.test(path);
 }
 
+/**
+ * 纵向拖拽函数
+ * @param
+ */
 export const dragDirection = (
   dragIndex,
   hoverIndex,
@@ -116,6 +55,10 @@ export const dragDirection = (
     return 'upward';
   }
 };
+/**
+ * 横向拖拽函数
+ * @param
+ */
 export const dragHDirection = (
   dragIndex,
   hoverIndex,
@@ -140,11 +83,3 @@ export const reorder = <T>(list: T[], startIndex: number, endIndex: number): T[]
 
   return result;
 };
-
-// export const colorPalette = () => {
-//   const paletteLess = fs.readFileSync('../styles/themes/color.less', 'utf8');
-//   const palette = lessToJs(paletteLess);
-//
-//   const displayPalette = Object.keys(palette).filter((color) => color.indexOf('displayColor') > -1);
-//   return displayPalette
-// };

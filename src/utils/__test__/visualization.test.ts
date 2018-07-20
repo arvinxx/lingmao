@@ -1,5 +1,5 @@
-import { clusterArray } from '../../mock/clusterResults';
-import { getAccumulation, getCountAndPercent } from './dataMath';
+import { clusterArray } from '@/mock/clusterResults';
+import { getAccumulation, getCountAndPercent } from '../visualization';
 
 it('getCountAndPercent', () => {
   expect(getCountAndPercent(clusterArray)).toEqual([

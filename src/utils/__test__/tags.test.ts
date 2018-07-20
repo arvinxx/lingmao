@@ -1,4 +1,4 @@
-import { extractTags, getStarData, getTagsArrById, TStarData, TStarModel } from './tags';
+import { extractTags, getStarData, getTagsArrById, TStarData, TStarModel } from '../tags';
 
 describe('extractTags', () => {
   const tagGroups = [

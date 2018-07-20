@@ -1,19 +1,29 @@
 import { getCountAndPercent } from './index';
 import { DataView } from '@antv/data-set';
-import { TQuesData, TSelectedQue } from '../models/data';
+import { TQuesData, IKeyDimension } from '@/models/data';
 
-export const getChartsDataSets = (quesData: TQuesData, id: string, selectedQue: TSelectedQue) => {
-  const answersOrders = quesData.map((dim) => {
-    if (dim.length > 0) {
-      const index = dim.findIndex((i) => i.tagId === id);
-      return dim[index].answer.order;
+/**
+ * 从选择的维度获得所需的图表数据
+ * @param quesData:问卷数据
+ * @param key:label Key
+ * @param keyDimension:选择维度
+ */
+export const getChartsDataSets = (
+  quesData: TQuesData,
+  key: string,
+  keyDimension: IKeyDimension
+) => {
+  const answersOrders = quesData.map((quesItems) => {
+    if (quesItems.length > 0) {
+      const index = quesItems.findIndex((i) => i.key === key);
+      return quesItems[index].answer.order;
     } else return [];
   });
   const percent = getCountAndPercent(answersOrders);
-  return percent.map((result, rIndex) => {
+  return percent.map((result, index) => {
     return {
       count: result.count,
-      item: selectedQue.answers[rIndex].name,
+      item: keyDimension.answers[index].text,
     };
   });
 };
