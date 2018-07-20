@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { Button } from 'antd';
-import { TDim, TSelectedDims } from '../../../../models/data';
-import DimSelect from './DimsSelect';
+import { ILabel,TSelectedTags } from '@/models/tag';
+import LabelSelector from '../LabelSelector';
+import { DispatchProp } from 'react-redux';
 
 interface IClusterDimProps {
-  dispatch: Function;
-  dims: Array<TDim>;
-  selectedDims: TSelectedDims;
+  labels: ILabel[];
+  selectedLabels: TSelectedTags;
 }
-export default class ClusterDim extends Component<IClusterDimProps> {
+export default class ClusterDim extends Component<IClusterDimProps & DispatchProp> {
   static defaultProps: IClusterDimProps = {
-    dims: [],
-    dispatch: () => {},
-    selectedDims: [],
+    labels: [],
+    selectedLabels: [],
   };
 
   selectDims = (checked, id) => {
@@ -27,13 +26,17 @@ export default class ClusterDim extends Component<IClusterDimProps> {
   };
 
   render() {
-    const { dims, selectedDims } = this.props;
+    const { labels, selectedLabels } = this.props;
     return (
       <div style={{ marginLeft: 24 }}>
         <div style={{ marginBottom: 20 }}>点击选择参与聚类的维度</div>
-        <DimSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
+        <LabelSelector
+          selectedLabels={selectedLabels}
+          labels={labels}
+          handleSelect={this.selectDims}
+        />
         <div>
-          <Button disabled={selectedDims.length === 0} onClick={this.resetSelect}>
+          <Button disabled={selectedLabels.length === 0} onClick={this.resetSelect}>
             重置
           </Button>
         </div>

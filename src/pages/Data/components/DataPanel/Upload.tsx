@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
 import { Button, Icon, Upload } from 'antd';
-import { readAsArrayBufferAsync } from '../../../../utils';
-import { xlsxToJson } from '../../../../services';
+import { readAsArrayBufferAsync, xlsxToJson } from '@/utils';
 
 import styles from './Upload.less';
+import { DispatchProp } from 'react-redux';
 
-interface IUploadDataProps {
-  dispatch: Function;
+export interface IUploadDataProps {
   analysisStage: number;
 }
 interface IUploadDataStates {
-  fileList: Array<object>;
+  fileList: object[];
   uploading: boolean;
-  rawData: Array<JSON>;
+  rawData: object[];
 }
 
-export default class UploadData extends Component<IUploadDataProps, IUploadDataStates> {
+export default class UploadData extends Component<
+  IUploadDataProps & DispatchProp,
+  IUploadDataStates
+> {
   state = {
     fileList: [],
     uploading: false,
     rawData: [],
   };
-  static defaultProps = {
+  static defaultProps: IUploadDataProps = {
     analysisStage: 0,
   };
   readFile = async (file: File) => {

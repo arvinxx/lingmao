@@ -1,27 +1,27 @@
-import model from '@/models/menu';
+import model from '../menu';
 
 const reducers = model.reducers;
 
 describe('Reducers', () => {
-  it('changeMenuState', () => {
-    const reducer = reducers.changeMenuState;
+  it('handleVisibility', () => {
+    const reducer = reducers.handleVisibility;
     const state = {
-      showMenu: true,
+      visible: true,
     };
     const action = {
-      type: 'menu/changeMenuState',
+      type: 'menu/handleVisibility',
     };
     expect(reducer(state)).toEqual({
-      showMenu: false,
+      visible: false,
     });
   });
-  it('changeMenuCollapsed', () => {
-    const reducer = reducers.changeMenuCollapsed;
+  it('handleCollapsed', () => {
+    const reducer = reducers.handleCollapsed;
     const state = {
       collapsed: false,
     };
     const action = {
-      type: 'menu/changeMenuCollapsed',
+      type: 'menu/handleCollapsed',
       payload: true,
     };
     expect(reducer(state, action)).toEqual({

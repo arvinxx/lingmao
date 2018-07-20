@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Button, InputNumber, Checkbox, Select } from 'antd';
 import router from 'umi/router';
-import { DispatchProp } from 'react-redux';
 import styles from './ReductionOpts.less';
 
-import { getBaseUrl, getFilterQuesData, getNumberDataFromQuesData } from '../../../../utils';
-import { TQuesData, TSelectedDims } from '../../../../models/data';
-import { getFA, getPCA } from '../../../../services/ml';
+import { getBaseUrl, getFilterQuesData, getValueFromQuesData } from '@/utils';
+import { getFA, getPCA } from '@/services';
+
+import { TQuesData } from '@/models/data';
+import { TSelectedLabelKeys } from '@/models/tag';
+import { DispatchProp } from 'react-redux';
 
 const { Option } = Select;
 const CheckboxGroup = Checkbox.Group;
@@ -16,7 +18,7 @@ const plainOptions = ['相关系数表', '碎石图', '方差解释表'];
 export interface IReductionOptsProps {
   pathname: string;
   tabStage: string;
-  selectedDims: TSelectedDims;
+  selectedLabels: TSelectedLabelKeys;
   diagrams: string[];
   quesData: TQuesData;
 }
@@ -25,7 +27,7 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
     pathname: '',
     tabStage: '',
     diagrams: [],
-    selectedDims: [],
+    selectedLabels: [],
     quesData: [],
   };
   state = {
@@ -61,10 +63,10 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
     this.props.dispatch({ type: 'stage/handleReductionDiagrams', payload: diagrams });
   };
   startReduction = async () => {
-    const { quesData, selectedDims, dispatch } = this.props;
+    const { quesData, selectedLabels, dispatch } = this.props;
     const { method, count, value, rotationMethod } = this.state;
-    const filterData = getFilterQuesData(quesData, selectedDims);
-    const data = getNumberDataFromQuesData(filterData);
+    const filterData = getFilterQuesData(quesData, selectedLabels);
+    const data = getValueFromQuesData(filterData);
     const extractMethod = {};
     extractMethod[method] = method === 'extractRate' ? value : count;
 

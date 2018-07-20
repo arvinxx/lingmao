@@ -4,8 +4,8 @@ import { connect } from 'dva';
 import { DispatchProp } from 'react-redux';
 
 import Upload from './Upload';
-import DataIndex from './DataIndex';
-import DimMatch from './DimMatch';
+import QuestionSelector from './QuestionSelector';
+import LabelMatch from './LabelMatch';
 import Charts from './Charts';
 import ReduceDims from './ReduceDims';
 import ReductionOpts from './ReductionOpts';
@@ -14,26 +14,24 @@ import ClusterMethod from './ClusterMethod';
 
 import styles from './index.less';
 
-import { extractTags, getFilterDims } from '../../../../utils';
-import { queryDocument, getCleanTagGroups } from '../../../../services';
+import { getFilterLabels } from '@/utils';
 
-import { dims } from '../../../../../mock/dims';
-import { TDataModel } from '../../../../models/data';
-import { TStageModel } from '../../../../models/stage';
-import { TTag } from '../../../../models/tag';
+import { IDataState } from '@/models/data';
+import { IStageState } from '../../models/stage';
+import { ILabel } from '@/models/tag';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
 
 interface IDataPanelProps {
-  data: TDataModel;
-  stage: TStageModel;
-  tags: TTag[];
+  data: IDataState;
+  stage: IStageState;
+  labels: ILabel[];
   location: { pathname: string };
 }
 @connect(({ data, routing, tag, stage }) => ({
   data,
-  tags: extractTags(tag.tagGroups),
+  labels: tag.labels,
   stage,
   location: routing.location,
 }))
@@ -41,10 +39,9 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
   static defaultProps: IDataPanelProps = {
     data: {
       quesData: [],
-      selectedQues: [],
-      reductionSelectedDims: [],
-      clusterSelectedDims: [],
-      matchSelectedDims: [],
+      keyDimensions: [],
+      reductionSelectedLabels: [],
+      clusterSelectedLabels: [],
       selectClusterIndex: 0,
       clusterResults: [],
       displayPanel: true,
@@ -64,7 +61,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       },
       sig: 0,
     },
-    tags: [],
+    labels: [],
     stage: {
       indexState: 0,
       analysisStage: 0,
@@ -82,17 +79,6 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
     location: { pathname: '' },
   };
 
-  async componentDidMount() {
-    let documents = await queryDocument();
-    documents = Array.isArray(documents) ? documents : [];
-    if (documents.length > 0) {
-      this.props.dispatch({
-        type: 'tag/querryTagGroups',
-        payload: getCleanTagGroups(documents[0]),
-      });
-    }
-  }
-
   changeTabStage = (key) => {
     this.props.dispatch({ type: 'stage/changeTabStage', payload: key });
   };
@@ -100,58 +86,40 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
     this.props.dispatch({ type: 'stage/handlePanelClick', payload: key });
   };
   render() {
-    const { data, dispatch, stage, location, tags: dims } = this.props;
+    const { data, dispatch, stage, location, labels } = this.props;
+
     const {
-      selectedQues,
+      keyDimensions,
       quesData,
-      matchSelectedDims,
-      reductionSelectedDims,
-      clusterSelectedDims,
+      reductionSelectedLabels,
+      clusterSelectedLabels,
       KMO,
       sig,
     } = data;
-    const {
-      analysisStage,
-      indexState,
-      tabStage,
-      activePanelList,
-      questionState,
-      tagMatchState,
-      reduction,
-    } = stage;
+
+    const { analysisStage, tabStage, activePanelList, tagMatchState, reduction } = stage;
 
     const { reductionDiagrams } = reduction;
-    const matchDims = getFilterDims(dims, matchSelectedDims, false);
+    const matchDims = getFilterLabels(labels, false);
 
     const CollapseArray = [
+      { text: '上传文件', component: <Upload dispatch={dispatch} analysisStage={analysisStage} /> },
       {
-        text: '数据文件',
-        component: <Upload dispatch={dispatch} analysisStage={analysisStage} />,
-      },
-      {
-        text: '数据编码',
+        text: '选择问题',
         component: (
-          <DataIndex
-            selectedQues={selectedQues}
-            quesData={quesData}
-            indexState={indexState}
-            questionState={questionState}
-            dispatch={dispatch}
-            analysisStage={analysisStage}
-          />
+          <QuestionSelector quesData={quesData} dispatch={dispatch} analysisStage={analysisStage} />
         ),
       },
       {
         text: '维度匹配',
         component: (
-          <DimMatch
+          <LabelMatch
             dispatch={dispatch}
             tagMatchState={tagMatchState}
             pathname={location.pathname}
-            dims={dims}
-            selectedDims={matchSelectedDims}
+            labels={labels}
             analysisStage={analysisStage}
-            selectedQues={selectedQues}
+            keyDimensions={keyDimensions}
           />
         ),
       },
@@ -170,8 +138,8 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
         text: '选择维度',
         component: (
           <ReduceDims
-            dims={matchDims}
-            selectedDims={reductionSelectedDims}
+            labels={matchDims}
+            selectedLabels={reductionSelectedLabels}
             percent={KMO}
             sig={sig}
             quesData={quesData}
@@ -184,7 +152,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
         component: (
           <ReductionOpts
             pathname={location.pathname}
-            selectedDims={reductionSelectedDims}
+            selectedLabels={reductionSelectedLabels}
             dispatch={dispatch}
             diagrams={reductionDiagrams}
             tabStage={tabStage}
@@ -196,8 +164,8 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
         text: '选择维度',
         component: (
           <ClusterDim
-            dims={matchDims}
-            selectedDims={clusterSelectedDims}
+            labels={matchDims}
+            selectedLabels={clusterSelectedLabels}
             dispatch={dispatch}
           />
         ),
@@ -208,8 +176,8 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
           <ClusterMethod
             pathname={location.pathname}
             dispatch={dispatch}
-            selectedQues={selectedQues}
-            selectedDims={clusterSelectedDims}
+            keyDimensions={keyDimensions}
+            selectedLabels={clusterSelectedLabels}
             quesData={quesData}
           />
         ),

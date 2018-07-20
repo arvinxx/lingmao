@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { Input } from 'antd';
 import { isEmpty } from 'lodash';
 
-import DescriptionList from '../DescriptionList';
-import { MiniProgress, Pie } from '../Charts';
+import { DescriptionList, MiniProgress, Pie } from '@/components';
 
 import styles from './index.less';
 import colorPalette from './color';
-import { TClusterResult, TPersonaQuesData, TPersonaQuesDatum } from '../../models/data';
+import { TClusterResult, TPersonaQuesData, TPersonaQuesDatum } from '@/models/data';
 import { DispatchProp } from 'react-redux';
 const { Description } = DescriptionList;
 

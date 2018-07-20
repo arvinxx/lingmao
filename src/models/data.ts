@@ -1,60 +1,22 @@
-import { DvaModel } from '../../typings/dva';
-import { getAnswers } from '../utils';
+import { DvaModel } from '@/typings/dva';
+import { getAnswers } from '@/utils';
 import { concat } from 'lodash';
 import update from 'immutability-helper';
 
-export type TQuesData = TQuesRecord[];
-export type TQuesRecord = TQuesDataItem[];
-export type TQuesDataItem = {
+export type TQuesData = TQuesItems[];
+export type TQuesItems = IQuesItem[];
+export interface IQuesItem {
   key: string;
-  tagId: string;
-  tagText: string;
   question: string;
   answer: {
     text: string;
     order: number;
   };
-  type: number;
-  typeName: string;
-};
-
-export type TTableData = {
-  key: string;
-  name: string;
-};
-export type TColumn = {
-  key: string;
-  title: string;
-  dataIndex: string;
-};
-
-export type TDim = {
-  id: string;
-  text: string;
-};
-
-export type TClusterDim = { text: string; value: number; tagText: string };
-
-export interface IPCAResult {
-  eigenValues: number[];
-  componentMatrix: number[][];
-  corr: number[][];
-  percent: number[];
+  labelKey?: string;
+  labelText?: string;
+  type?: number;
+  typeName?: string;
 }
-export type TClusterResult = {
-  dims: Array<TClusterDim>;
-  percent: number;
-  title: string;
-};
-export type TClusterResults = TClusterResult[];
-export type TSelectedQue = {
-  question: TTableData;
-  answers: Array<TTableData>;
-  tagId: string;
-  tagText: string;
-  average: number;
-};
-export type TSelectedDims = string[];
 
 export type TPersonaQuesData = TPersonaQuesDatum[];
 export type TPersonaQuesDatum = {
@@ -66,7 +28,7 @@ export type TPersonaQuesDatum = {
 
 export type TPersonaQuesItem = {
   key: string;
-  tagId: string;
+  tagKey: string;
   tagText: string;
   question: string;
   answer: {
@@ -74,14 +36,46 @@ export type TPersonaQuesItem = {
     order: number;
   };
 };
+export interface IKeyDimension {
+  question: ITextItem;
+  answers: ITextItem[];
+  tagKey?: string;
+  tagText?: string;
+  average?: number;
+}
 
-export type TDataModel = {
-  quesData: TQuesData;
+export interface ITextItem {
+  key: string;
+  text: string;
+}
+
+export interface IClusterLabel {
+  text: string;
+  value: number;
+  tagText: string;
+}
+
+export interface IPCAResult {
+  eigenValues: number[];
+  componentMatrix: number[][];
+  corr: number[][];
+  percent: number[];
+}
+export interface IClusterResult {
+  dimensions: IClusterLabel[];
+  percent: number;
+  title: string;
+}
+export type TClusterResults = IClusterResult[];
+
+export type TSelectedLabels = string[];
+
+export interface IDataState {
+  quesData: TQuesData; // 问卷数据
+  keyDimensions: IKeyDimension[]; // 参与聚类的维度
   personaQuesData: TPersonaQuesData;
-  selectedQues: Array<TSelectedQue>;
-  matchSelectedDims: TSelectedDims;
-  reductionSelectedDims: TSelectedDims;
-  clusterSelectedDims: TSelectedDims;
+  reductionSelectedLabels: TSelectedLabels; //参与降维的维度标签
+  clusterSelectedLabels: TSelectedLabels; // 参与聚类的维度标签
   selectClusterIndex: number;
   clusterResults: TClusterResults;
   FAResult: IPCAResult;
@@ -90,19 +84,16 @@ export type TDataModel = {
   sig: number;
   displayText: boolean;
   displayPanel: boolean;
-};
-interface model extends DvaModel {
-  state: TDataModel;
 }
-const model: model = {
-  namespace: 'data',
+
+const model: DvaModel & { state: IDataState } = {
   state: {
     quesData: [],
+    keyDimensions: [],
     personaQuesData: [],
-    selectedQues: [],
-    clusterSelectedDims: [],
-    matchSelectedDims: [],
-    reductionSelectedDims: [],
+    clusterSelectedLabels: [],
+    matchSelectedLabels: [],
+    reductionSelectedLabels: [],
     selectClusterIndex: 0,
     clusterResults: [],
     KMO: 0,
@@ -126,103 +117,53 @@ const model: model = {
     handleQuesData(state, { payload: quesData }) {
       return { ...state, quesData };
     },
-
-    handleSelectedQuestions(state, { payload: selectedQuestions }: { payload: TTableData[] }) {
+    handleKeyDimensions(state, { payload: questions }) {
       return {
         ...state,
-        selectedQues: selectedQuestions.map((selectedQuestion) => ({
-          question: selectedQuestion,
+        keyDimensions: questions.map((question: string) => ({
+          question: { text: question, key: question },
+          answers: getAnswers(state.quesData, question),
         })),
-      };
-    },
-    addAnswersToSelectQues(state, action) {
-      {
-        return {
-          ...state,
-          selectedQues: state.selectedQues.map((selectedQue) => ({
-            question: selectedQue.question,
-            answers: getAnswers(state.quesData, selectedQue.question.name),
-          })),
-        };
-      }
-    },
-
-    handleSelectedQues(state, { payload: selectedQues }) {
-      return { ...state, selectedQues };
-    },
-    reorderSelectedAnswers(state, { payload }) {
-      const { dragIndex, hoverIndex, index } = payload;
-      const dragRow = state.selectedQues[index].answers[dragIndex];
-      return {
-        ...state,
-        selectedQues: update(state.selectedQues, {
-          [index]: {
-            answers: {
-              $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
-            },
-          },
-        }),
-      };
-    },
-
-    addMatchSelectionDims(state, { payload: newDimId }) {
-      return { ...state, matchSelectedDims: [...state.matchSelectedDims, newDimId] };
-    },
-    changeMatchSelectedDims(state, { payload }) {
-      const { oldId, newId } = payload;
-      return {
-        ...state,
-        matchSelectedDims: [...state.matchSelectedDims.filter((id) => id !== oldId), newId],
-      };
-    },
-    removeMatchSelectionDims(state, { payload: index }) {
-      const oldId = state.selectedQues[index].tagId;
-      return {
-        ...state,
-        selectedQues: update(state.selectedQues, {
-          [index]: { tagId: { $set: '' }, tagText: { $set: '' } },
-        }),
-        matchSelectedDims: state.matchSelectedDims.filter((id) => id !== oldId),
       };
     },
 
     // 降维维度选择
-    addReductionSelectedDims(state, { payload: newDims }) {
-      return { ...state, reductionSelectedDims: [...state.reductionSelectedDims, newDims] };
+    addReductionSelectedLabels(state, { payload: newLabels }) {
+      return { ...state, reductionSelectedLabels: [...state.reductionSelectedLabels, newLabels] };
     },
-    removeReductionSelectedDims(state, { payload: removeId }) {
+    removeReductionSelectedLabels(state, { payload: removeId }) {
       return {
         ...state,
-        reductionSelectedDims: state.reductionSelectedDims.filter((id) => id !== removeId),
+        reductionSelectedLabels: state.reductionSelectedLabels.filter((id) => id !== removeId),
       };
     },
-    handleReductionSelectedDims(state, { payload: reductionSelectedDims }) {
-      return { ...state, reductionSelectedDims };
+    handleReductionSelectedLabels(state, { payload: reductionSelectedLabels }) {
+      return { ...state, reductionSelectedLabels };
     },
 
     // 聚类维度选择
-    addClusterSelectedDims(state, { payload: newDims }) {
-      return { ...state, clusterSelectedDims: [...state.clusterSelectedDims, newDims] };
+    addClusterSelectedLabels(state, { payload: newLabels }) {
+      return { ...state, clusterSelectedLabels: [...state.clusterSelectedLabels, newLabels] };
     },
-    removeClusterSelectedDims(state, { payload: removeId }) {
+    removeClusterSelectedLabels(state, { payload: removeId }) {
       return {
         ...state,
-        clusterSelectedDims: state.clusterSelectedDims.filter((id) => id !== removeId),
+        clusterSelectedLabels: state.clusterSelectedLabels.filter((id) => id !== removeId),
       };
     },
-    handleClusterSelectedDims(state, { payload: clusterSelectedDims }) {
-      return { ...state, clusterSelectedDims };
+    handleClusterSelectedLabels(state, { payload: clusterSelectedLabels }) {
+      return { ...state, clusterSelectedLabels };
     },
 
-    addOrderToQuesData(state, { payload: selectedQues }) {
+    addOrderToQuesData(state, { payload: keyDimensions }) {
       const quesData: TQuesData = concat(state.quesData);
-      selectedQues.forEach((selectedQue: TSelectedQue) => {
-        const { question: selectedQuestion, answers: selectedAnswers } = selectedQue;
+      keyDimensions.forEach((selectedQue: IKeyDimension) => {
+        const { question: keyDimensionstion, answers: selectedAnswers } = selectedQue;
         selectedAnswers.forEach((selectedAnswer, index) => {
           quesData.forEach((TQuesDataRecord) => {
             TQuesDataRecord.forEach((TQuesDataItem) => {
               const { answer, question } = TQuesDataItem;
-              if (question === selectedQuestion.name && selectedAnswer.name === answer.text) {
+              if (question === keyDimensionstion.text && selectedAnswer.text === answer.text) {
                 answer.order = index;
               }
             });
@@ -233,18 +174,18 @@ const model: model = {
     },
 
     addMatchTagToQuesData(state, action) {
-      const { quesData, selectedQues } = state;
+      const { quesData, keyDimensions } = state;
 
       return {
         ...state,
-        quesData: quesData.map((quesRecord: TQuesRecord) => {
+        quesData: quesData.map((quesRecord: TQuesItems) => {
           return quesRecord.map((quesDataItem) => {
             const { question } = quesDataItem;
-            selectedQues.forEach((item: TSelectedQue) => {
-              const { tagId, tagText } = item;
-              if (item.question.name === question) {
-                quesDataItem.tagText = tagText;
-                quesDataItem.tagId = tagId;
+            keyDimensions.forEach((item: IKeyDimension) => {
+              const { tagKey, tagText } = item;
+              if (item.question.text === question) {
+                quesDataItem.labelText = tagText;
+                quesDataItem.labelKey = tagKey;
               }
             });
             return quesDataItem;
@@ -260,7 +201,7 @@ const model: model = {
       return {
         ...state,
         quesData: state.quesData.map((item, index) =>
-          item.map((quesDataItem: TQuesDataItem) => {
+          item.map((quesDataItem: IQuesItem) => {
             quesDataItem.type = cluster[index];
             return quesDataItem;
           })

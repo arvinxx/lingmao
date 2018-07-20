@@ -1,6 +1,8 @@
 import { concat } from 'lodash';
-import { findIndexByKey, generateKey, reorder } from '@/utils';
+import { generateKey, reorder } from '@/utils';
 import { findIndex } from 'lodash';
+
+import { queryTags } from '@/services';
 
 import { DvaModel } from '@/typings/dva';
 import update from 'immutability-helper';
@@ -16,11 +18,13 @@ export interface ITag {
 export interface ILabel {
   text: string;
   key: string;
+  questionKey: string;
   tags: Array<ITag>;
   inputVisible: boolean;
 }
 
 export type TSelectedTags = string[];
+export type TSelectedLabelKeys = string[];
 
 export interface ITagState {
   tagVisible: boolean;
@@ -32,12 +36,14 @@ export interface ITagState {
 const tag: DvaModel & { state: ITagState } = {
   state: {
     tagVisible: true,
-    labels: [{ text: '未分组', key: generateKey(), tags: [], inputVisible: false }],
+    labels: [
+      { text: '未分组', key: generateKey(), tags: [], inputVisible: false, questionKey: 'none' },
+    ],
     selectedTags: [],
     exportDisplay: '1',
   },
   reducers: {
-    getLabels(state, { payload: labels }) {
+    handleTags(state, { payload: labels }) {
       return { ...state, labels };
     },
 
@@ -117,6 +123,35 @@ const tag: DvaModel & { state: ITagState } = {
               },
             }),
           };
+    },
+
+    selectMatchLabel(state, { payload }) {
+      const { questionKey, labelKey } = payload;
+      const { labels } = state;
+      const index = labels.findIndex((label: ILabel) => label.key === labelKey);
+      return {
+        ...state,
+        labels: update(labels, {
+          [index]: {
+            questionKey: {
+              $set: questionKey,
+            },
+          },
+        }),
+      };
+    },
+    removeMatchLabel(state, { payload: labelIndex }) {
+      const { labels } = state;
+      return {
+        ...state,
+        labels: update(labels, {
+          [labelIndex]: {
+            questionKey: {
+              $set: '',
+            },
+          },
+        }),
+      };
     },
 
     handleSelectedTags(state, { payload }) {
@@ -246,6 +281,25 @@ const tag: DvaModel & { state: ITagState } = {
               };
         }),
       };
+    },
+  },
+  effects: {
+    *queryTags(payload, { call, put }) {
+      const { data } = yield call(queryTags);
+      yield put({
+        type: 'handleTags',
+        payload: data,
+      });
+    },
+  },
+  subscriptions: {
+    setup({ history, dispatch }) {
+      // 监听 history 变化，当进入 `/` 时触发 `load` action
+      return history.listen(({ pathname }) => {
+        if (pathname === '/data/table') {
+          dispatch({ type: 'queryTags' });
+        }
+      });
     },
   },
 };

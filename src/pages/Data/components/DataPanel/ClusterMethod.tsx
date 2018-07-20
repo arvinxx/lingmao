@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Button, InputNumber, Checkbox, Select } from 'antd';
-import { TQuesData, TSelectedDims, TSelectedQue } from '../../../../models/data';
+import { TQuesData, IKeyDimension } from '@/models/data';
 import {
   getBaseUrl,
-  getNumberDataFromQuesData,
+  getValueFromQuesData,
   getFilterQuesData,
   getCountAndPercent,
-} from '../../../../utils';
+} from '@/utils';
 import router from 'umi/router';
-import { cluster, getClusterDims, getPersonaQuesDatum } from '../../../../services/ml';
+import { cluster, getClusterDims, getPersonaQuesDatum } from '@/services';
+import { TSelectedLabelKeys } from '@/models/tag';
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -16,9 +17,9 @@ const Option = Select.Option;
 interface IClusterMethodProps {
   dispatch: Function;
   pathname: string;
-  selectedDims: TSelectedDims;
+  selectedLabels: TSelectedLabelKeys;
   quesData: TQuesData;
-  selectedQues: TSelectedQue[];
+  keyDimensions: IKeyDimension[];
 }
 interface IClusterMethodStates {
   K: number;
@@ -30,8 +31,8 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
     dispatch: () => {},
     pathname: '',
     quesData: [],
-    selectedQues: [],
-    selectedDims: [],
+    keyDimensions: [],
+    selectedLabels: [],
   };
 
   state = {
@@ -42,7 +43,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
   plainOptions = ['ANOVA 表', '以实际个案为中心'];
 
   startCluster = async () => {
-    const { quesData, selectedDims, dispatch, selectedQues } = this.props;
+    const { quesData, selectedLabels, dispatch, keyDimensions } = this.props;
     const { K, options, method } = this.state;
     if (method === '1') {
       if (options.indexOf('以实际个案为中心') > -1) {
@@ -53,8 +54,8 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
         //TODO: 检验聚类有效性的 ANOVA 表
         console.log('ANOVA 表');
       }
-      const filterData = getFilterQuesData(quesData, selectedDims);
-      const data = { data: getNumberDataFromQuesData(filterData), K };
+      const filterData = getFilterQuesData(quesData, selectedLabels);
+      const data = { data: getValueFromQuesData(filterData), K };
       const { clusters } = await cluster(data);
       const results = getCountAndPercent(clusters);
       dispatch({ type: 'data/addClusterTypeToQuesData', payload: clusters });
@@ -63,7 +64,7 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
         payload: results.map((result, index) => ({
           percent: result.percent,
           title: `聚类 ${index + 1}`,
-          dims: getClusterDims(clusters, filterData, index, selectedQues),
+          dims: getClusterDims(clusters, filterData, index, keyDimensions),
         })),
       });
       //获得取得每个问题完整平均值的画像信息
@@ -117,7 +118,6 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
                 min={2}
                 max={9}
                 value={K}
-                // size="small"
                 onChange={this.changeK}
               />
             </Fragment>

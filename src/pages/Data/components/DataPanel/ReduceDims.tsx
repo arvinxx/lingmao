@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import { Button, Progress, Icon, Tooltip } from 'antd';
-import { DispatchProp } from 'react-redux';
-import DimsSelect from './DimsSelect';
+import LabelSelector from '../LabelSelector';
+
 import styles from './RecuceDims.less';
-import { TDim, TQuesData, TSelectedDims } from '../../../../models/data';
-import { getFilterQuesData, getNumberDataFromQuesData } from '../../../../utils';
-import { getKMO } from '../../../../services/ml';
+
+import { getFilterQuesData, getValueFromQuesData } from '@/utils';
+import { getKMO } from '@/services';
+
+import { TQuesData } from '@/models/data';
+import { ILabel, TSelectedLabelKeys } from '@/models/tag';
+import { DispatchProp } from 'react-redux';
 
 export interface IReduceDimsProps {
-  dims: Array<TDim>;
+  labels: ILabel[];
   percent: number;
   sig: number;
   quesData: TQuesData;
-
-  selectedDims: TSelectedDims;
+  selectedLabels: TSelectedLabelKeys;
 }
 export default class ReduceDims extends Component<IReduceDimsProps & DispatchProp> {
   static defaultProps: IReduceDimsProps = {
-    dims: [],
+    labels: [],
     percent: 0,
     sig: 0,
-    selectedDims: [],
+    selectedLabels: [],
     quesData: [],
   };
   selectDims = (checked, id) => {
@@ -35,9 +38,9 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
     this.props.dispatch({ type: 'data/handleReductionSelectedDims', payload: [] });
   };
   confirmSelection = async () => {
-    const { quesData, selectedDims, dispatch } = this.props;
-    const filterData = getFilterQuesData(quesData, selectedDims);
-    const data = getNumberDataFromQuesData(filterData);
+    const { quesData, selectedLabels, dispatch } = this.props;
+    const filterData = getFilterQuesData(quesData, selectedLabels);
+    const data = getValueFromQuesData(filterData);
     try {
       const { kmo, sig } = await getKMO(data);
       dispatch({ type: 'data/handleKMO', payload: kmo });
@@ -58,7 +61,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
   };
 
   render() {
-    const { percent, dims, selectedDims, sig } = this.props;
+    const { percent, labels, selectedLabels, sig } = this.props;
     const percentValue = Math.floor(percent * 100);
 
     const status = this.getStatus(percentValue);
@@ -66,10 +69,14 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
     return (
       <div className={styles.container}>
         <p>点击选择参与降维的维度</p>
-        <DimsSelect selectedDims={selectedDims} dims={dims} handleSelect={this.selectDims} />
+        <LabelSelector
+          selectedLabels={selectedLabels}
+          labels={labels}
+          handleSelect={this.selectDims}
+        />
         <div>
           <Button
-            disabled={selectedDims.length === 0}
+            disabled={selectedLabels.length === 0}
             onClick={this.resetSelection}
             style={{ marginRight: 16 }}
           >
@@ -79,7 +86,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
             id="check"
             type="primary"
             ghost
-            disabled={selectedDims.length <= 1}
+            disabled={selectedLabels.length <= 1}
             onClick={this.confirmSelection}
           >
             检验

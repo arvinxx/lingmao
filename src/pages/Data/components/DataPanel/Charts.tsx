@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { Icon, Button } from 'antd';
 import router from 'umi/router';
-import { getBaseUrl } from '../../../../utils';
+import { getBaseUrl } from '@/utils';
 import styles from './Charts.less';
+import { DispatchProp } from 'react-redux';
 
 interface IValidationProps {
-  dispatch: Function;
   analysisStage: number;
   tabStage: string;
   pathname: string;
 }
-export default class Charts extends Component<IValidationProps> {
+export default class Charts extends Component<IValidationProps & DispatchProp> {
   static defaultProps: IValidationProps = {
     analysisStage: 0,
-    dispatch: () => {},
     pathname: '',
     tabStage: '1',
   };
