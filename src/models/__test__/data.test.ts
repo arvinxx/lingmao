@@ -170,19 +170,58 @@ it('handleKeyDimensions', () => {
   });
 });
 
-it('removeMatchSelectedLabels', () => {
-  const reducer = reducers.removeMatchSelectedLabels;
+it('addLabelsToKeyDimensions ', () => {
+  const reducer = reducers.addLabelsToKeyDimensions;
   const state = {
-    matchSelectedDims: ['2', '5', '6'],
-    keyDimensions: [{ tagId: '1' }, { tagId: '2' }, { tagId: '5', tagText: 'dsda' }],
+    keyDimensions: [
+      {
+        question: {
+          text: '2.您的性别',
+          key: '2.您的性别',
+        },
+      },
+      {
+        question: {
+          text: '3.您的年龄',
+          key: '3.您的年龄',
+        },
+      },
+    ],
   };
   const action = {
-    type: 'data/removeMatchSelectedLabels',
-    payload: 2,
+    type: 'data/addLabelsToKeyDimensions',
+    payload: [
+      {
+        text: '标签的撒',
+        key: 'S1a3uMt0M',
+        questionKey: '2.您的性别',
+      },
+      {
+        text: '未的方式',
+        key: 'Sy4JKMF0M',
+        questionKey: '3.您的年龄',
+      },
+    ],
   };
   expect(reducer(state, action)).toEqual({
-    matchSelectedDims: ['2', '6'],
-    keyDimensions: [{ tagKey: '1' }, { tagKey: '2' }, { tagKey: '', tagText: '' }],
+    keyDimensions: [
+      {
+        question: {
+          text: '2.您的性别',
+          key: '2.您的性别',
+        },
+        labelText: '标签的撒',
+        labelKey: 'S1a3uMt0M',
+      },
+      {
+        question: {
+          text: '3.您的年龄',
+          key: '3.您的年龄',
+        },
+        labelText: '未的方式',
+        labelKey: 'Sy4JKMF0M',
+      },
+    ],
   });
 });
 

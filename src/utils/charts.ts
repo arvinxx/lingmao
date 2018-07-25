@@ -15,7 +15,7 @@ export const getChartsDataSets = (
 ) => {
   const answersOrders = quesData.map((quesItems) => {
     if (quesItems.length > 0) {
-      const index = quesItems.findIndex((i) => i.key === key);
+      const index = quesItems.findIndex((i) => i.labelKey === key);
       return quesItems[index].answer.order;
     } else return [];
   });

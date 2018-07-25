@@ -164,8 +164,8 @@ export const getAnswersByOrder = (quesData: TQuesData, question: string, order: 
 export const getFilterQuesData = (quesData: TQuesData, selectedLabelKeys: string[]): TQuesData => {
   return quesData.map((quesDataItems) =>
     quesDataItems.filter((quesDataItem) => {
-      const { labelKey } = quesDataItem;
-      return selectedLabelKeys.some((key) => key === labelKey);
+      const { question } = quesDataItem;
+      return selectedLabelKeys.some((key) => key === question);
     })
   );
 };

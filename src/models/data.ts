@@ -2,6 +2,7 @@ import { DvaModel } from '@/typings/dva';
 import { getAnswers } from '@/utils';
 import { concat } from 'lodash';
 import update from 'immutability-helper';
+import { ILabel } from '@/models/tag';
 
 export type TQuesData = TQuesItems[];
 export type TQuesItems = IQuesItem[];
@@ -39,8 +40,8 @@ export type TPersonaQuesItem = {
 export interface IKeyDimension {
   question: ITextItem;
   answers: ITextItem[];
-  tagKey?: string;
-  tagText?: string;
+  labelKey?: string;
+  labelText?: string;
   average?: number;
 }
 
@@ -114,16 +115,34 @@ const model: DvaModel & { state: IDataState } = {
     displayPanel: true,
   },
   reducers: {
-    handleQuesData(state, { payload: quesData }) {
+    handleQuesData(state: IDataState, { payload: quesData }) {
       return { ...state, quesData };
     },
-    handleKeyDimensions(state, { payload: questions }) {
+    handleKeyDimensions(state: IDataState, { payload: questions }) {
       return {
         ...state,
         keyDimensions: questions.map((question: string) => ({
           question: { text: question, key: question },
           answers: getAnswers(state.quesData, question),
         })),
+      };
+    },
+    addLabelsToKeyDimensions(state: IDataState, { payload: labels }: { payload: ILabel[] }) {
+      return {
+        ...state,
+        keyDimensions: state.keyDimensions.map((keyDimension) => {
+          const index = labels.findIndex(
+            (label) => label.questionKey === keyDimension.question.key
+          );
+          // 判断 label 中是否包含关键维度中的问题 key
+          // 如果没有则返回原值,如果有则更新其 labelKey 和 labelText
+          return index < 0
+            ? keyDimension
+            : update(keyDimension, {
+                labelKey: { $set: labels[index].key },
+                labelText: { $set: labels[index].text },
+              });
+        }),
       };
     },
 
@@ -182,10 +201,10 @@ const model: DvaModel & { state: IDataState } = {
           return quesRecord.map((quesDataItem) => {
             const { question } = quesDataItem;
             keyDimensions.forEach((item: IKeyDimension) => {
-              const { tagKey, tagText } = item;
+              const { labelKey, labelText } = item;
               if (item.question.text === question) {
-                quesDataItem.labelText = tagText;
-                quesDataItem.labelKey = tagKey;
+                quesDataItem.labelText = labelText;
+                quesDataItem.labelKey = labelKey;
               }
             });
             return quesDataItem;

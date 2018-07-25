@@ -18,7 +18,7 @@ export interface ITag {
 export interface ILabel {
   text: string;
   key: string;
-  questionKey: string;
+  questionKey?: string;
   tags: Array<ITag>;
   inputVisible: boolean;
 }

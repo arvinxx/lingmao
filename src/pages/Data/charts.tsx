@@ -1,84 +1,90 @@
 import React, { Component } from 'react';
 import { Chart, Geom, Axis, Tooltip, Legend, Coord, Label } from 'bizcharts';
-import { DataView } from '@antv/data-set';
 
 import styles from './charts.less';
-import { extractTags, getFilterDims, getFilterQuesData } from '../../utils';
+import {
+  getFilterLabels,
+  getFilterQuesData,
+  getChartsDataSets,
+  initDataSets,
+  getMatchLabelKeys,
+} from '@/utils';
 import { connect } from 'dva';
 
-import { TDataModel } from '../../models/data';
+import { IDataState } from '@/models/data';
+import { ILabel } from '@/models/tag';
 import { DispatchProp } from 'react-redux';
-import { TTag } from '../../models/tag';
-import { getChartsDataSets, initDataSets } from '../../utils/charts';
 
 interface IChartsProps {
-  data: TDataModel;
-  tags: TTag[];
+  data: IDataState;
+  labels: ILabel[];
   showCharts: boolean;
 }
 
 @connect(({ data, tag, stage }) => ({
   data,
-  tags: extractTags(tag.tagGroups),
+  labels: tag.labels,
   showCharts: stage.showCharts,
 }))
 export default class Charts extends Component<IChartsProps & DispatchProp> {
   render() {
-    const { data, tags: dims, showCharts } = this.props;
-    const { matchSelectedDims, quesData, selectedQues } = data;
-    const matchDims = getFilterDims(dims, matchSelectedDims, false);
-    const dimData = getFilterQuesData(quesData, matchSelectedDims);
+    const { data, labels, showCharts } = this.props;
+    const { quesData, keyDimensions } = data;
+    const matchedLabelKeys = getMatchLabelKeys(labels);
+    const matchLabels = getFilterLabels(labels, false);
+    const filteredQuesData = getFilterQuesData(quesData, matchedLabelKeys);
 
-    if (showCharts) {
-      if (matchSelectedDims.length === 0 || dimData.every((dim) => dim.length === 0)) {
-        return <div> no data</div>;
-      } else {
-        return (
-          <div className={styles.container}>
-            {matchDims.map((dim, index) => {
-              const selectedQue = selectedQues.find((selectedQue) => selectedQue.tagId === dim.id);
-              if (selectedQue !== undefined) {
-                const data = getChartsDataSets(dimData, dim.id, selectedQue);
-                const { cols, dv } = initDataSets(data);
-                return (
-                  <div key={dim.id}>
-                    <div style={{ textAlign: 'center' }}> {dim.text}</div>
-                    <Chart height={400} data={dv} scale={cols} padding={[80, 100, 80, 80]} forceFit>
-                      <Coord type="theta" radius={0.75} />
-                      <Axis name="percent" />
-                      <Legend position="right" offsetY={-100} offsetX={-50} />
-                      <Tooltip
-                        showTitle={false}
-                        itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name} ： {value}</li>"
-                      />
-                      <Geom
-                        type="intervalStack"
-                        position="percent"
-                        color="item"
-                        tooltip={[
-                          'item*percent',
-                          (item, percent) => ({
-                            name: item,
-                            value: Math.floor(percent * 100) + '%',
-                          }),
-                        ]}
-                        style={{ lineWidth: 1, stroke: '#fff' }}
-                      >
-                        <Label
-                          content="percent"
-                          formatter={(val, item) => {
-                            return item.point.item + ': ' + val;
-                          }}
-                        />
-                      </Geom>
-                    </Chart>
-                  </div>
-                );
-              } else return <div>no data</div>;
-            })}}
-          </div>
-        );
-      }
-    } else return <div>no data</div>;
+    return !showCharts ||
+      matchedLabelKeys.length === 0 ||
+      filteredQuesData.every((quesDataItem) => quesDataItem.length === 0) ? (
+      <div> no data</div>
+    ) : (
+      <div className={styles.container}>
+        {matchLabels.map((label) => {
+          const keyDimension = keyDimensions.find(
+            (keyDimension) => keyDimension.labelKey === label.key
+          );
+          console.log(keyDimension);
+          if (keyDimension !== undefined) {
+            const data = getChartsDataSets(filteredQuesData, label.key, keyDimension);
+            const { cols, dv } = initDataSets(data);
+            return (
+              <div key={label.key}>
+                <div style={{ textAlign: 'center' }}> {label.text}</div>
+                <Chart height={400} data={dv} scale={cols} padding={[80, 100, 80, 80]} forceFit>
+                  <Coord type="theta" radius={0.75} />
+                  <Axis name="percent" />
+                  <Legend position="right" offsetY={-100} offsetX={-50} />
+                  <Tooltip
+                    showTitle={false}
+                    itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name} ： {value}</li>"
+                  />
+                  <Geom
+                    type="intervalStack"
+                    position="percent"
+                    color="item"
+                    tooltip={[
+                      'item*percent',
+                      (item, percent) => ({
+                        name: item,
+                        value: Math.floor(percent * 100) + '%',
+                      }),
+                    ]}
+                    style={{ lineWidth: 1, stroke: '#fff' }}
+                  >
+                    <Label
+                      content="percent"
+                      formatter={(val, item) => {
+                        return item.point.item + ': ' + val;
+                      }}
+                    />
+                  </Geom>
+                </Chart>
+              </div>
+            );
+          } else return <div>no data</div>;
+        })}
+      </div>
+    );
   }
 }

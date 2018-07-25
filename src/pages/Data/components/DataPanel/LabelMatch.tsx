@@ -3,6 +3,7 @@ import { Button, Tag, List } from 'antd';
 import router from 'umi/router';
 
 import { getBaseUrl, getFilterLabels } from '@/utils';
+import { compact } from 'lodash';
 
 import styles from './LabelMatch.less';
 
@@ -60,7 +61,13 @@ export default class LabelMatch extends Component<ILabelMatchProps & DispatchPro
     console.log('skip');
   };
   finish = () => {
-    const { dispatch, analysisStage, pathname } = this.props;
+    const { dispatch, analysisStage, pathname, labels } = this.props;
+    const filterLabels = labels.filter((label) => label.questionKey !== undefined);
+    console.log(filterLabels);
+    dispatch({
+      type: 'data/addLabelsToKeyDimensions',
+      payload: filterLabels,
+    });
     dispatch({
       type: 'data/addMatchTagToQuesData',
     });
