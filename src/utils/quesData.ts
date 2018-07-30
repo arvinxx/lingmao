@@ -1,6 +1,6 @@
 import { uniqBy, orderBy } from 'lodash';
 import XLSX from 'xlsx';
-import { ITextItem, TQuesData, TPersonaQuesData, TQuesItems } from '@/models/data';
+import { ITextItem, TQuesData, IQuesRecord } from '@/models/data';
 
 import { getAccumulation, generateKey, generateTagId } from '@/utils';
 
@@ -58,15 +58,13 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
   let saveData: TQuesData = [];
   rawData.map((item) => {
     const entries = Object.entries(item);
-    let record: TQuesItems = [];
+    const record: IQuesRecord = {
+      records: [],
+    };
     entries.map((entry) => {
       const question = entry[0];
       const answer: string = entry[1];
-      record.push({
-        labelKey: '',
-        labelText: '',
-        type: null,
-        typeName: '',
+      record.records.push({
         key: generateKey(),
         question,
         answer: { text: answer, order: getAnswerOrder(answer) },
@@ -83,7 +81,7 @@ export const rawToSaved = (rawData: Array<object>): TQuesData => {
  * @param  quesData: 问卷数据
  */
 export const getQuestions = (quesData: TQuesData): Array<ITextItem> => {
-  return quesData[0].map((ques) => ({ text: ques.question, key: ques.question }));
+  return quesData[0].records.map((ques) => ({ text: ques.question, key: ques.question }));
 };
 /**
  * 抽取一个问题的所有回答
@@ -92,8 +90,8 @@ export const getQuestions = (quesData: TQuesData): Array<ITextItem> => {
  */
 export const getAnswers = (quesData: TQuesData, question: string): Array<ITextItem> => {
   let answers: Array<ITextItem> = [];
-  quesData.forEach((ques) => {
-    ques.forEach((item) => {
+  quesData.forEach((quesRecord) => {
+    quesRecord.records.forEach((item) => {
       if (item.question === question) {
         answers.push({ text: item.answer.text, key: generateKey() });
       }
@@ -143,10 +141,10 @@ export const getAnswerOrder = (answer: string): number => {
  * @param question: 问题
  * @param order: 排序
  */
-export const getAnswersByOrder = (quesData: TQuesData, question: string, order: number): string => {
+export const getAnswerByOrder = (quesData: TQuesData, question: string, order: number): string => {
   let answers = [];
-  quesData.forEach((ques) => {
-    ques.map((item) => {
+  quesData.forEach((quesRecord) => {
+    quesRecord.records.map((item) => {
       if (item.question === question) {
         answers.push({ ...item.answer });
       }
@@ -155,19 +153,21 @@ export const getAnswersByOrder = (quesData: TQuesData, question: string, order: 
   // 求唯一
   answers = uniqBy(answers, 'text');
   //取数
-  return answers.find((answer) => answer.order === order).text;
+  const answer = answers.find((answer) => answer.order === order).text;
+  return answer === undefined ? answers[0].text : answer;
 };
 
 /**
  *  根据选择标签过滤问卷数据，用于降维与聚类
  */
 export const getFilterQuesData = (quesData: TQuesData, selectedLabelKeys: string[]): TQuesData => {
-  return quesData.map((quesDataItems) =>
-    quesDataItems.filter((quesDataItem) => {
-      const { question } = quesDataItem;
-      return selectedLabelKeys.some((key) => key === question);
-    })
-  );
+  return quesData.map((quesRecord) => ({
+    ...quesRecord,
+    records: quesRecord.records.filter((quesDataItem) => {
+      const { labelKey } = quesDataItem;
+      return selectedLabelKeys.some((key) => key === labelKey);
+    }),
+  }));
 };
 
 /**
@@ -175,7 +175,7 @@ export const getFilterQuesData = (quesData: TQuesData, selectedLabelKeys: string
  * @param quesData:问卷数据
  */
 export const getValueFromQuesData = (quesData: TQuesData): number[][] => {
-  return quesData.map((quesDataItems) =>
-    quesDataItems.map((quesDataItem) => quesDataItem.answer.order + 1)
+  return quesData.map((quesRecord) =>
+    quesRecord.records.map((quesDataItem) => quesDataItem.answer.order + 1)
   );
 };

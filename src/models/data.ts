@@ -2,10 +2,17 @@ import { DvaModel } from '@/typings/dva';
 import { getAnswers } from '@/utils';
 import { concat } from 'lodash';
 import update from 'immutability-helper';
-import { ILabel } from '@/models/tag';
+import { ILabel } from '@/models/label';
 
-export type TQuesData = TQuesItems[];
-export type TQuesItems = IQuesItem[];
+export type TQuesData = IQuesRecord[];
+
+export interface IQuesRecord {
+  type?: number; // 聚类后的值
+  typeName?: string; // 类型名称
+  percent?: number; // 类型百分比
+  records: IQuesItem[]; //单条记录
+}
+
 export interface IQuesItem {
   key: string;
   question: string;
@@ -15,28 +22,8 @@ export interface IQuesItem {
   };
   labelKey?: string;
   labelText?: string;
-  type?: number;
-  typeName?: string;
 }
 
-export type TPersonaQuesData = TPersonaQuesDatum[];
-export type TPersonaQuesDatum = {
-  type: number;
-  percent: number;
-  typeName: string;
-  quesData: TPersonaQuesItem[];
-};
-
-export type TPersonaQuesItem = {
-  key: string;
-  tagKey: string;
-  tagText: string;
-  question: string;
-  answer: {
-    text: string;
-    order: number;
-  };
-};
 export interface IKeyDimension {
   question: ITextItem;
   answers: ITextItem[];
@@ -62,25 +49,23 @@ export interface IPCAResult {
   corr: number[][];
   percent: number[];
 }
+
 export interface IClusterResult {
   dimensions: IClusterLabel[];
   percent: number;
   title: string;
 }
-export type TClusterResults = IClusterResult[];
 
-export type TSelectedLabels = string[];
+export type TClusterResults = IClusterResult[];
 
 export interface IDataState {
   quesData: TQuesData; // 问卷数据
   keyDimensions: IKeyDimension[]; // 参与聚类的维度
-  personaQuesData: TPersonaQuesData;
-  reductionSelectedLabels: TSelectedLabels; //参与降维的维度标签
-  clusterSelectedLabels: TSelectedLabels; // 参与聚类的维度标签
-  selectClusterIndex: number;
-  clusterResults: TClusterResults;
-  FAResult: IPCAResult;
-  PCAResult: IPCAResult;
+  userModels: TQuesData; // 聚类后得到的用户数据
+  selectClusterIndex: number; // 选中的聚类次数
+  clusterResults: TClusterResults; // 聚类结果
+  FAResult: IPCAResult; // FA降维结果
+  PCAResult: IPCAResult; // PCA降维结果
   KMO: number;
   sig: number;
   displayText: boolean;
@@ -91,10 +76,7 @@ const model: DvaModel & { state: IDataState } = {
   state: {
     quesData: [],
     keyDimensions: [],
-    personaQuesData: [],
-    clusterSelectedLabels: [],
-    matchSelectedLabels: [],
-    reductionSelectedLabels: [],
+    userModels: [],
     selectClusterIndex: 0,
     clusterResults: [],
     KMO: 0,
@@ -131,10 +113,10 @@ const model: DvaModel & { state: IDataState } = {
       return {
         ...state,
         keyDimensions: state.keyDimensions.map((keyDimension) => {
+          // 判断 label 中是否包含关键维度中的问题 key
           const index = labels.findIndex(
             (label) => label.questionKey === keyDimension.question.key
           );
-          // 判断 label 中是否包含关键维度中的问题 key
           // 如果没有则返回原值,如果有则更新其 labelKey 和 labelText
           return index < 0
             ? keyDimension
@@ -145,86 +127,43 @@ const model: DvaModel & { state: IDataState } = {
         }),
       };
     },
-
-    // 降维维度选择
-    addReductionSelectedLabels(state, { payload: newLabels }) {
-      return { ...state, reductionSelectedLabels: [...state.reductionSelectedLabels, newLabels] };
-    },
-    removeReductionSelectedLabels(state, { payload: removeId }) {
-      return {
-        ...state,
-        reductionSelectedLabels: state.reductionSelectedLabels.filter((id) => id !== removeId),
-      };
-    },
-    handleReductionSelectedLabels(state, { payload: reductionSelectedLabels }) {
-      return { ...state, reductionSelectedLabels };
-    },
-
-    // 聚类维度选择
-    addClusterSelectedLabels(state, { payload: newLabels }) {
-      return { ...state, clusterSelectedLabels: [...state.clusterSelectedLabels, newLabels] };
-    },
-    removeClusterSelectedLabels(state, { payload: removeId }) {
-      return {
-        ...state,
-        clusterSelectedLabels: state.clusterSelectedLabels.filter((id) => id !== removeId),
-      };
-    },
-    handleClusterSelectedLabels(state, { payload: clusterSelectedLabels }) {
-      return { ...state, clusterSelectedLabels };
-    },
-
-    addOrderToQuesData(state, { payload: keyDimensions }) {
-      const quesData: TQuesData = concat(state.quesData);
-      keyDimensions.forEach((selectedQue: IKeyDimension) => {
-        const { question: keyDimensionstion, answers: selectedAnswers } = selectedQue;
-        selectedAnswers.forEach((selectedAnswer, index) => {
-          quesData.forEach((TQuesDataRecord) => {
-            TQuesDataRecord.forEach((TQuesDataItem) => {
-              const { answer, question } = TQuesDataItem;
-              if (question === keyDimensionstion.text && selectedAnswer.text === answer.text) {
-                answer.order = index;
-              }
-            });
-          });
-        });
-      });
-      return { ...state, quesData };
-    },
-
-    addMatchTagToQuesData(state, action) {
+    addMatchLabelToQuesData(state: IDataState, action) {
       const { quesData, keyDimensions } = state;
-
       return {
         ...state,
-        quesData: quesData.map((quesRecord: TQuesItems) => {
-          return quesRecord.map((quesDataItem) => {
-            const { question } = quesDataItem;
-            keyDimensions.forEach((item: IKeyDimension) => {
-              const { labelKey, labelText } = item;
-              if (item.question.text === question) {
-                quesDataItem.labelText = labelText;
-                quesDataItem.labelKey = labelKey;
-              }
-            });
-            return quesDataItem;
-          });
-        }),
+        quesData: quesData.map((quesRecord: IQuesRecord) => ({
+          ...quesRecord,
+          records: quesRecord.records.map((quesItem) => {
+            const { question } = quesItem;
+            // 查询问题
+            const questionIndex = keyDimensions.findIndex(
+              (keyDimension) => keyDimension.question.text === question
+            );
+            // 如果没查到则返回原值 查到则更新 label
+            if (questionIndex === -1) {
+              return quesItem;
+            } else {
+              const { labelKey, labelText } = keyDimensions[questionIndex];
+              return update(quesItem, {
+                labelKey: { $set: labelKey },
+                labelText: { $set: labelText },
+              });
+            }
+          }),
+        })),
       };
     },
 
     handleClusterResults(state, { payload: clusterResults }) {
       return { ...state, clusterResults };
     },
-    addClusterTypeToQuesData(state, { payload: cluster }) {
+    addClusterTypeToQuesData(state: IDataState, { payload: cluster }) {
       return {
         ...state,
-        quesData: state.quesData.map((item, index) =>
-          item.map((quesDataItem: IQuesItem) => {
-            quesDataItem.type = cluster[index];
-            return quesDataItem;
-          })
-        ),
+        quesData: state.quesData.map((quesRecord: IQuesRecord, index) => ({
+          ...quesRecord,
+          type: cluster[index],
+        })),
       };
     },
     handleKMO(state, { payload: KMO }) {
@@ -249,17 +188,16 @@ const model: DvaModel & { state: IDataState } = {
     handleDisplayPanel(state, action) {
       return { ...state, displayPanel: !state.displayPanel };
     },
-    handlePersonaQuesData(state, { payload: personaQuesData }) {
-      return { ...state, personaQuesData };
+    handleUserModels(state, { payload: userModels }) {
+      return { ...state, userModels };
     },
 
     changePersonaTypeName(state, { payload }) {
       const { value, index } = payload;
-      console.log(value, index);
       try {
         return {
           ...state,
-          personaQuesData: update(state.personaQuesData, {
+          userModels: update(state.userModels, {
             [index]: {
               typeName: {
                 $set: value,
