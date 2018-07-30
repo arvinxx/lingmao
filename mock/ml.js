@@ -1,4 +1,4 @@
-export default {
+const pca = {
   componentMatrix: [
     [
       0.9224099305201091,
@@ -166,8 +166,13 @@ export default {
     0.05208088581485182,
   ],
 };
-
-export const Validation = {
+const Validation = {
   kmo: 0.8446176212081956,
   sig: 7.635458224337769e-110,
+};
+
+export default {
+  'post /ml/kmo': { kmo: Math.random().toFixed(2), sig: Math.random().toFixed(3) },
+  'post /ml/pca': pca,
+  'post /ml/fa': pca,
 };
