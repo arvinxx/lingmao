@@ -1,6 +1,6 @@
 export default {
   plugins: [
-    ['umi-plugin-dva', { immer: true }],
+    'umi-plugin-dva',
     [
       'umi-plugin-routes',
       {
@@ -9,7 +9,7 @@ export default {
           /\.test\.[jt]sx?$/,
           /service\.[jt]sx?$/,
           /models\//,
-          /components\//,
+          /components/,
           /services\//,
         ],
       },
