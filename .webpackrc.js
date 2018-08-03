@@ -8,12 +8,8 @@ export default {
     '@/services': resolve(__dirname, './src/services'),
     '@/common': resolve(__dirname, './src/common'),
     '@/assets': resolve(__dirname, './src/assets'),
-    styles: resolve(__dirname, './src/styles'),
+    '@/typings': resolve(__dirname, './typings'),
+    '@/mock': resolve(__dirname, './mock'),
+    styles: resolve(__dirname, './src/styles'), // less 全局样式文件
   },
-  proxy: process.env.MOCK
-    ? {}
-    : {
-        '/api': 'http://localhost:7001/',
-        '/ml': 'http://localhost:9898',
-      },
 };
