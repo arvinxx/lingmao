@@ -1,10 +1,9 @@
-import { getTagsArrById } from '../utils';
+import { DvaModel } from '@/typings/dva';
+import { getTagsArrById } from '@/utils';
 import update from 'immutability-helper';
-import { DvaModel } from '../../typings/dva';
-import { TPersonaQuesData, TPersonaQuesDatum, TQuesRecord } from './data';
-import { basicInfo, dimGroups } from '../common/persona';
-import { generateTagId } from '../utils/persona';
-import Mock from 'mockjs';
+import { TUserModels, IUserModel, IQuesRecord } from './data';
+import { basicInfo, dimGroups } from '@/common';
+import { generateTagId } from '@/utils';
 
 export type TPersonaDim = {
   tagId: string;
@@ -39,7 +38,7 @@ export type TPersonaDatum = {
   typeName: string;
 };
 export type TPersonaData = TPersonaDatum[];
-export type TPersona = {
+export interface IPersonaState {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
@@ -47,12 +46,9 @@ export type TPersona = {
   personaDisplayDimGroups: TPersonaDimGroups;
   showText: boolean;
   displayIndex: string;
-};
-interface IPersonaModel extends DvaModel {
-  state: TPersona;
 }
-const persona: IPersonaModel = {
-  namespace: 'persona',
+
+const persona: DvaModel<IPersonaState> = {
   state: {
     dimVisible: true,
     exportVisible: false,
@@ -103,7 +99,7 @@ const persona: IPersonaModel = {
       };
     },
 
-    handleDisplayDimGroups(state: TPersona, action) {
+    handleDisplayDimGroups(state: IPersonaState, action) {
       const { personaData, displayIndex } = state;
       const { dimGroups, checkedDims } = personaData[Number(displayIndex)];
       const filterDimGroups = dimGroups.filter((dimGroup: TPersonaDimGroup) =>
@@ -198,7 +194,7 @@ const persona: IPersonaModel = {
     initPersonaData(state, { payload: personaQuesData }) {
       return {
         ...state,
-        personaData: personaQuesData.map((personaQuesDatum: TPersonaQuesDatum) => {
+        personaData: personaQuesData.map((personaQuesDatum: IUserModel) => {
           return {
             dimGroups,
             checkedDims: [],
@@ -218,7 +214,7 @@ const persona: IPersonaModel = {
         payload,
       }: {
         payload: {
-          personaQuesData: TPersonaQuesData;
+          personaQuesData: TUserModels;
           personaDimId: string;
           groupId: string;
         };
@@ -228,7 +224,7 @@ const persona: IPersonaModel = {
       // 前提： personaData 存在数据
       return {
         ...state,
-        personaData: personaQuesData.map((personaQuesDatum: TPersonaQuesDatum, index) => {
+        personaData: personaQuesData.map((personaQuesDatum: IUserModel, index) => {
           // 三个值用于赋给 persona 的 dim
           const { quesData } = personaQuesDatum;
           const { tagText, answer, question } = quesData.find((item) => {

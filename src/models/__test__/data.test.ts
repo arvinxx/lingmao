@@ -1,5 +1,6 @@
 import model from '../data';
 import { getAnswers } from '@/utils';
+import { quesData, keyDimensions } from '@/mock/data';
 
 const reducers = model.reducers;
 
@@ -10,115 +11,14 @@ it('handleQuesData', () => {
   };
   const action = {
     type: 'data/handleQuesData',
-    payload: [
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12433241231',
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12453241231',
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '124324871231',
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12432411231',
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
-    ],
+    payload: quesData,
   };
-  expect(reducer(state, action)).toEqual({
-    quesData: [
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12433241231',
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12453241231',
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '124324871231',
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12432411231',
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
-    ],
-  });
+  expect(reducer(state, action)).toEqual({ quesData });
 });
 it('handleKeyDimensions', () => {
   const reducer = reducers.handleKeyDimensions;
   const state = {
-    quesData: [
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12433241231',
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12453241231',
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '124324871231',
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12432411231',
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
-    ],
+    quesData,
     keyDimensions: [],
   };
   const action = {
@@ -126,40 +26,7 @@ it('handleKeyDimensions', () => {
     payload: ['aaaaa', 'gdfycvh'],
   };
   expect(reducer(state, action)).toEqual({
-    quesData: [
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12433241231',
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12453241231',
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '124324871231',
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12432411231',
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
-    ],
+    quesData,
     keyDimensions: [
       { question: { key: 'aaaaa', text: 'aaaaa' }, answers: getAnswers(state.quesData, 'aaaaa') },
       {
@@ -225,140 +92,68 @@ it('addLabelsToKeyDimensions ', () => {
   });
 });
 
-it('addMatchTagToQuesData ', () => {
-  const reducer = reducers.addMatchTagToQuesData;
+it('addMatchLabelToQuesData ', () => {
+  const reducer = reducers.addMatchLabelToQuesData;
   const state = {
-    quesData: [
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12433241231',
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12453241231',
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '',
-          tagText: '',
-          key: '124324871231',
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '',
-          tagText: '',
-          key: '12432411231',
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
-    ],
-    keyDimensions: [
-      {
-        question: { name: 'aaaaa', key: 'aaaaa' },
-        answers: [{ name: '1345', key: 'dsad' }, { name: '5463121', key: 'fdsfg' }],
-        tagId: '123',
-        tagText: '标签1',
-      },
-      {
-        question: { name: 'gdfycvh', key: 'gdfycvh' },
-        answers: [{ name: '3464', key: 'fgrew' }, { name: '357323bvf', key: 'vcxnnh' }],
-        tagKey: '3334',
-        tagText: '标签2',
-      },
-    ],
+    quesData,
+    keyDimensions,
   };
+  const action = {
+    type: 'data/addMatchLabelToQuesData',
+  };
+
+  expect(reducer(state, action)).toEqual({
+    quesData: [
+      {
+        records: [
+          {
+            labelKey: '123',
+            labelText: '标签1',
+            ...quesData[0].records[0],
+          },
+          {
+            labelKey: '3334',
+            labelText: '标签2',
+            ...quesData[0].records[1],
+          },
+        ],
+      },
+      {
+        records: [
+          {
+            labelKey: '123',
+            labelText: '标签1',
+            ...quesData[1].records[0],
+          },
+          {
+            labelKey: '3334',
+            labelText: '标签2',
+            ...quesData[1].records[1],
+          },
+        ],
+      },
+    ],
+    keyDimensions,
+  });
 });
 
 it('addClusterTypeToQuesData ', () => {
   const reducer = reducers.addClusterTypeToQuesData;
-  const state = {
-    quesData: [
-      [
-        {
-          tagKey: '123',
-          tagText: '标签1',
-          key: '12433241231',
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '3334',
-          tagText: '标签2',
-          key: '12453241231',
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '123',
-          tagText: '标签1',
-          key: '124324871231',
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '3334',
-          tagText: '标签2',
-          key: '12432411231',
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
-    ],
-  };
+  const state = { quesData };
   const action = {
     type: 'data/addClusterTypeToQuesData',
     payload: [0, 1],
   };
   expect(reducer(state, action)).toEqual({
     quesData: [
-      [
-        {
-          tagKey: '123',
-          tagText: '标签1',
-          key: '12433241231',
-          type: 0,
-          question: 'aaaaa',
-          answer: { text: '1345', order: 0 },
-        },
-        {
-          tagKey: '3334',
-          tagText: '标签2',
-          key: '12453241231',
-          type: 0,
-          question: 'gdfycvh',
-          answer: { text: '3464', order: 0 },
-        },
-      ],
-      [
-        {
-          tagKey: '123',
-          tagText: '标签1',
-          key: '124324871231',
-          type: 1,
-          question: 'aaaaa',
-          answer: { text: '5463121', order: 0 },
-        },
-        {
-          tagKey: '3334',
-          tagText: '标签2',
-          key: '12432411231',
-          type: 1,
-          question: 'gdfycvh',
-          answer: { text: '357323bvf', order: 0 },
-        },
-      ],
+      {
+        type: 0,
+        records: quesData[0].records,
+      },
+      {
+        type: 1,
+        records: quesData[1].records,
+      },
     ],
   });
 });
@@ -366,7 +161,7 @@ it('addClusterTypeToQuesData ', () => {
 it('changePersonaTypeName', () => {
   const reducer = reducers.changePersonaTypeName;
   const state = {
-    personaQuesData: [
+    userModels: [
       {
         typeName: '1',
       },
@@ -380,7 +175,7 @@ it('changePersonaTypeName', () => {
     payload: { value: 'das', index: 1 },
   };
   expect(reducer(state, action)).toEqual({
-    personaQuesData: [
+    userModels: [
       {
         typeName: '1',
       },

@@ -1,4 +1,4 @@
-import model from '../tag';
+import model from '../label';
 import { generateKey } from '@/utils';
 
 const reducers = model.reducers;

@@ -1,18 +1,16 @@
 export default {
-  namespace: 'menu',
-
   state: {
     collapsed: false,
-    showMenu: true,
+    visible: true,
   },
   reducers: {
-    changeMenuCollapsed(state, { payload: collapsed }) {
+    handleCollapsed(state, { payload: collapsed }) {
       return { ...state, collapsed };
     },
-    changeMenuState(state) {
+    handleVisibility(state) {
       return {
         ...state,
-        showMenu: !state.showMenu,
+        visible: !state.visible,
       };
     },
   },

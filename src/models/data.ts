@@ -72,7 +72,7 @@ export interface IDataState {
   displayPanel: boolean;
 }
 
-const model: DvaModel & { state: IDataState } = {
+const model: DvaModel<IDataState> = {
   state: {
     quesData: [],
     keyDimensions: [],
