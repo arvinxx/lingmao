@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Table } from 'antd';
 const { Column } = Table;
 
-import { TColumn } from '../../../models/data';
+import { ITableColumn } from '../../../models/data';
 interface ICorrTableProps {
   data: object[];
-  columns: TColumn[];
+  columns: ITableColumn[];
 }
 export default class CorrTable extends Component<ICorrTableProps> {
   static defaultProps: ICorrTableProps = {

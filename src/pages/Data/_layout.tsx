@@ -4,11 +4,11 @@ import withRouter from 'umi/withRouter';
 import { connect } from 'dva';
 
 import { data as header } from '../../common/header';
-import { Header } from '../../components';
+import { Header } from '@/components';
 import { DataPanel } from './components';
 
-import styles from './layout.less';
-import { getLastRouter } from '../../utils';
+import styles from './_layout.less';
+import { getLastRouter } from '@/utils';
 
 const { Content } = Layout;
 @(withRouter as any)

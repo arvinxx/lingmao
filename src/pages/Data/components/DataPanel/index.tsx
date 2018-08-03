@@ -18,7 +18,7 @@ import { getFilterLabels } from '@/utils';
 
 import { IDataState } from '@/models/data';
 import { IStageState } from '../../models/stage';
-import { ILabel } from '@/models/tag';
+import { ILabel, ILabelState, TKeys } from '@/models/label';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
@@ -27,11 +27,15 @@ interface IDataPanelProps {
   data: IDataState;
   stage: IStageState;
   labels: ILabel[];
+  clusterLabels: TKeys;
+  reductionLabels: TKeys;
   location: { pathname: string };
 }
-@connect(({ data, routing, tag, stage }) => ({
+@connect(({ data, routing, label, stage }) => ({
   data,
-  labels: tag.labels,
+  labels: label.labels,
+  clusterLabels: label.clusterLabels,
+  reductionLabels: label.reductionLabels,
   stage,
   location: routing.location,
 }))
@@ -39,9 +43,8 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
   static defaultProps: IDataPanelProps = {
     data: {
       quesData: [],
+      userModels: [],
       keyDimensions: [],
-      reductionSelectedLabels: [],
-      clusterSelectedLabels: [],
       selectClusterIndex: 0,
       clusterResults: [],
       displayPanel: true,
@@ -61,7 +64,9 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       },
       sig: 0,
     },
+    clusterLabels: [],
     labels: [],
+    reductionLabels: [],
     stage: {
       indexState: 0,
       analysisStage: 0,
@@ -86,20 +91,14 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
     this.props.dispatch({ type: 'stage/handlePanelClick', payload: key });
   };
   render() {
-    const { data, dispatch, stage, location, labels } = this.props;
+    const { data, dispatch, stage, location, labels, reductionLabels, clusterLabels } = this.props;
 
-    const {
-      keyDimensions,
-      quesData,
-      reductionSelectedLabels,
-      clusterSelectedLabels,
-      KMO,
-      sig,
-    } = data;
+    const { keyDimensions, quesData, KMO, sig } = data;
 
     const { analysisStage, tabStage, activePanelList, tagMatchState, reduction } = stage;
 
     const { reductionDiagrams } = reduction;
+
     const matchDims = getFilterLabels(labels, false);
 
     const CollapseArray = [
@@ -139,7 +138,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
         component: (
           <ReduceDims
             labels={matchDims}
-            selectedLabels={reductionSelectedLabels}
+            selectedLabels={reductionLabels}
             percent={KMO}
             sig={sig}
             quesData={quesData}
@@ -152,7 +151,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
         component: (
           <ReductionOpts
             pathname={location.pathname}
-            selectedLabels={reductionSelectedLabels}
+            selectedLabels={reductionLabels}
             dispatch={dispatch}
             diagrams={reductionDiagrams}
             tabStage={tabStage}
@@ -163,11 +162,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
       {
         text: '选择维度',
         component: (
-          <ClusterDim
-            labels={matchDims}
-            selectedLabels={clusterSelectedLabels}
-            dispatch={dispatch}
-          />
+          <ClusterDim labels={matchDims} selectedLabels={clusterLabels} dispatch={dispatch} />
         ),
       },
       {
@@ -177,7 +172,7 @@ export default class DataPanel extends Component<IDataPanelProps & DispatchProp>
             pathname={location.pathname}
             dispatch={dispatch}
             keyDimensions={keyDimensions}
-            selectedLabels={clusterSelectedLabels}
+            selectedLabels={clusterLabels}
             quesData={quesData}
           />
         ),

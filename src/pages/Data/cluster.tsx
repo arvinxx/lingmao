@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { ClusterDisplay } from '../../components';
+import { ClusterDisplay } from './components';
 import styles from './cluster.less';
 import { connect } from 'dva';
-import { TClusterResults, TPersonaQuesData } from '../../models/data';
+import { TClusterResults, TUserModels } from '@/models/data';
 import { DispatchProp } from 'react-redux';
 
 interface IClusterProps {
-  personaQuesData: TPersonaQuesData;
+  userModels: TUserModels;
   displayText: boolean;
 }
 interface IClusterDefaultProps {
@@ -15,7 +15,7 @@ interface IClusterDefaultProps {
 @connect(({ data }) => ({
   clusterResults: data.clusterResults,
   displayText: data.displayText,
-  personaQuesData: data.personaQuesData,
+  userModels: data.userModels,
 }))
 export default class Cluster extends Component<
   IClusterProps & IClusterDefaultProps & DispatchProp
@@ -24,7 +24,7 @@ export default class Cluster extends Component<
     clusterResults: [],
   };
   render() {
-    const { clusterResults, displayText, dispatch, personaQuesData } = this.props;
+    const { clusterResults, displayText, dispatch, userModels } = this.props;
 
     return clusterResults.length > 0 ? (
       <div className={styles.container}>
@@ -33,7 +33,7 @@ export default class Cluster extends Component<
             key={index + 'DISPLAY'}
             index={index}
             clusterResult={clusterResult}
-            personaQuesDatum={personaQuesData.length > 0 ? personaQuesData[index] : null}
+            personaQuesDatum={userModels.length > 0 ? userModels[index] : null}
             displayText={displayText}
             dispatch={dispatch}
           />

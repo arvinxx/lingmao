@@ -1,28 +1,32 @@
-import React, { Component, Fragment } from 'react';
-import { Table, Input, Button, Card } from 'antd';
+import React, { Component } from 'react';
+import { Table, Button } from 'antd';
 import { connect } from 'dva';
 import styles from './table.less';
-import { Ellipsis } from '../../components';
+import { Ellipsis } from '@/components';
 import { isEqual } from 'lodash';
 
-import { getFilterTableData, getColumns, getTableData, getFilterColumns } from '../../utils';
-import { TColumn, TQuesData, TSelectedQue } from '../../models/data';
-import { TTableModel } from '../../models/table';
+import { getFilterTableData, getColumns, getTableData, getFilterColumns } from '@/utils';
+import { TQuesData, IKeyDimension } from '@/models/data';
+import { ITableColumn, ITableState } from './models/table';
+
+import { DispatchProp } from 'react-redux';
 const { Column } = Table;
 
 interface ITableDataProps {
   quesData: TQuesData;
-  dispatch: Function;
-  table: TTableModel;
-  selectedQues: TSelectedQue[];
+  table: ITableState;
+  keyDimensions: IKeyDimension[];
 }
 
-@connect(({ data, table }) => ({ quesData: data.quesData, table, selectedQues: data.selectedQues }))
-export default class TableData extends Component<ITableDataProps> {
+@connect(({ data, table }) => ({
+  quesData: data.quesData,
+  keyDimensions: data.keyDimensions,
+  table,
+}))
+export default class TableData extends Component<ITableDataProps & DispatchProp> {
   static defaultProps: ITableDataProps = {
     quesData: [],
-    selectedQues: [],
-    dispatch: () => {},
+    keyDimensions: [],
     table: {
       displayOrder: false,
       displayFilter: false,
@@ -54,12 +58,12 @@ export default class TableData extends Component<ITableDataProps> {
     });
   };
   render() {
-    const { quesData, table, selectedQues } = this.props;
+    const { quesData, table, keyDimensions } = this.props;
     const { displayOrder, displayFilter } = table;
     const columns = getColumns(quesData);
     const tableData = getTableData(quesData, displayOrder);
-    const filterData = getFilterTableData(tableData, selectedQues, displayFilter);
-    const filterColumns = getFilterColumns(columns, selectedQues, displayFilter);
+    const filterData = getFilterTableData(tableData, keyDimensions, displayFilter);
+    const filterColumns = getFilterColumns(columns, keyDimensions, displayFilter);
     const width = 120 * filterColumns.length;
 
     return (
@@ -80,7 +84,7 @@ export default class TableData extends Component<ITableDataProps> {
           onChange={this.onChange}
           scroll={{ x: width, y: 550 }}
         >
-          {filterColumns.map((column: TColumn, index) => {
+          {filterColumns.map((column: ITableColumn, index) => {
             const { key, title, dataIndex } = column;
             return (
               <Column
@@ -92,7 +96,7 @@ export default class TableData extends Component<ITableDataProps> {
                 width={width / filterColumns.length}
                 key={key + index}
                 dataIndex={dataIndex}
-                render={(text, record) => {
+                render={(text) => {
                   return (
                     <Ellipsis length={15} tooltip>
                       {text}

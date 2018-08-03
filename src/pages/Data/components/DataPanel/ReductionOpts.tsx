@@ -7,7 +7,7 @@ import { getBaseUrl, getFilterQuesData, getValueFromQuesData } from '@/utils';
 import { getFA, getPCA } from '@/services';
 
 import { TQuesData } from '@/models/data';
-import { TSelectedLabelKeys } from '@/models/tag';
+import { TKeys } from '@/models/label';
 import { DispatchProp } from 'react-redux';
 
 const { Option } = Select;
@@ -18,7 +18,7 @@ const plainOptions = ['相关系数表', '碎石图', '方差解释表'];
 export interface IReductionOptsProps {
   pathname: string;
   tabStage: string;
-  selectedLabels: TSelectedLabelKeys;
+  selectedLabels: TKeys;
   diagrams: string[];
   quesData: TQuesData;
 }
@@ -69,10 +69,9 @@ export default class ReductionOpts extends Component<IReductionOptsProps & Dispa
     const data = getValueFromQuesData(filterData);
     const extractMethod = {};
     extractMethod[method] = method === 'extractRate' ? value : count;
-
-    console.log(data);
     try {
       const res = await getPCA(data, extractMethod);
+      console.log(res);
       dispatch({ type: 'data/handlePCAResult', payload: res });
       if (rotationMethod === '1') {
         const FARes = await getFA(data, extractMethod);

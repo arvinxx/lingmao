@@ -3,14 +3,13 @@ import { Button, Tag, List } from 'antd';
 import router from 'umi/router';
 
 import { getBaseUrl, getFilterLabels } from '@/utils';
-import { compact } from 'lodash';
 
 import styles from './LabelMatch.less';
 
 import { data } from '@/common';
 
 import { IKeyDimension } from '@/models/data';
-import { ILabel } from '@/models/tag';
+import { ILabel } from '@/models/label';
 import { DispatchProp } from 'react-redux';
 
 const { Item } = List;
@@ -37,7 +36,7 @@ export default class LabelMatch extends Component<ILabelMatchProps & DispatchPro
     if (keyDimensions.length > tagMatchState) {
       // 将 keyDimensions 的 question.text 添加到 labels 的 questionKey 中
       dispatch({
-        type: 'tag/selectMatchLabel',
+        type: 'label/selectMatchLabel',
         payload: { questionKey: keyDimensions[tagMatchState].question.text, labelKey: key },
       });
       // 当前匹配状态 ++
@@ -47,7 +46,7 @@ export default class LabelMatch extends Component<ILabelMatchProps & DispatchPro
 
   removeMatchLabel = (index) => {
     if (index > -1) {
-      this.props.dispatch({ type: 'tag/removeMatchLabel', payload: index });
+      this.props.dispatch({ type: 'label/removeMatchLabel', payload: index });
     }
   };
 
@@ -69,7 +68,7 @@ export default class LabelMatch extends Component<ILabelMatchProps & DispatchPro
       payload: filterLabels,
     });
     dispatch({
-      type: 'data/addMatchTagToQuesData',
+      type: 'data/addMatchLabelToQuesData',
     });
     if (analysisStage === 2) {
       dispatch({ type: 'stage/addAnalysisStageCount' });

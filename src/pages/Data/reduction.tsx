@@ -4,9 +4,9 @@ import { Collapse } from 'antd';
 import styles from './reduction.less';
 
 import { Plots, VarianceExplain, CorrTable, CompMatrixTable } from './components';
-import { TReductionDiagrams } from '../../models/stage';
-import { getColumnsAndData, getEigenValuesData } from '../../utils';
-import { IPCAResult } from '../../models/data';
+import { TReductionDiagrams } from './models/stage';
+import { getColumnsAndData, getEigenValuesData } from '@/utils';
+import { IPCAResult } from '@/models/data';
 
 const Panel = Collapse.Panel;
 

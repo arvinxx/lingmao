@@ -1,15 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Button, InputNumber, Checkbox, Select } from 'antd';
 import { TQuesData, IKeyDimension } from '@/models/data';
-import {
-  getBaseUrl,
-  getValueFromQuesData,
-  getFilterQuesData,
-  getCountAndPercent,
-} from '@/utils';
+import { getBaseUrl, getValueFromQuesData, getFilterQuesData, getCountAndPercent } from '@/utils';
 import router from 'umi/router';
-import { cluster, getClusterDims, getPersonaQuesDatum } from '@/services';
-import { TSelectedLabelKeys } from '@/models/tag';
+import { cluster, getClusterDims, getUserModel } from '@/services';
+import { TKeys } from '@/models/label';
 
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -17,7 +12,7 @@ const Option = Select.Option;
 interface IClusterMethodProps {
   dispatch: Function;
   pathname: string;
-  selectedLabels: TSelectedLabelKeys;
+  selectedLabels: TKeys;
   quesData: TQuesData;
   keyDimensions: IKeyDimension[];
 }
@@ -55,8 +50,10 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
         console.log('ANOVA 表');
       }
       const filterData = getFilterQuesData(quesData, selectedLabels);
+      console.log(filterData);
       const data = { data: getValueFromQuesData(filterData), K };
       const { clusters } = await cluster(data);
+      console.log(clusters);
       const results = getCountAndPercent(clusters);
       dispatch({ type: 'data/addClusterTypeToQuesData', payload: clusters });
       dispatch({
@@ -69,10 +66,8 @@ export default class ClusterMethod extends Component<IClusterMethodProps, IClust
       });
       //获得取得每个问题完整平均值的画像信息
       dispatch({
-        type: 'data/handlePersonaQuesData',
-        payload: results.map((result, index) =>
-          getPersonaQuesDatum(quesData, index, result.percent)
-        ),
+        type: 'data/handleUserModels',
+        payload: results.map((result, index) => getUserModel(filterData, index, result.percent)),
       });
     }
 

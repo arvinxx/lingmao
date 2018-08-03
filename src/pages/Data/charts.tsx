@@ -12,7 +12,7 @@ import {
 import { connect } from 'dva';
 
 import { IDataState } from '@/models/data';
-import { ILabel } from '@/models/tag';
+import { ILabel } from '@/models/label';
 import { DispatchProp } from 'react-redux';
 
 interface IChartsProps {
@@ -21,9 +21,9 @@ interface IChartsProps {
   showCharts: boolean;
 }
 
-@connect(({ data, tag, stage }) => ({
+@connect(({ data, label, stage }) => ({
   data,
-  labels: tag.labels,
+  labels: label.labels,
   showCharts: stage.showCharts,
 }))
 export default class Charts extends Component<IChartsProps & DispatchProp> {
@@ -33,10 +33,10 @@ export default class Charts extends Component<IChartsProps & DispatchProp> {
     const matchedLabelKeys = getMatchLabelKeys(labels);
     const matchLabels = getFilterLabels(labels, false);
     const filteredQuesData = getFilterQuesData(quesData, matchedLabelKeys);
-
+    console.log(filteredQuesData);
     return !showCharts ||
       matchedLabelKeys.length === 0 ||
-      filteredQuesData.every((quesDataItem) => quesDataItem.length === 0) ? (
+      filteredQuesData.every((quesRecord) => quesRecord.records.length === 0) ? (
       <div> no data</div>
     ) : (
       <div className={styles.container}>
@@ -44,7 +44,6 @@ export default class Charts extends Component<IChartsProps & DispatchProp> {
           const keyDimension = keyDimensions.find(
             (keyDimension) => keyDimension.labelKey === label.key
           );
-          console.log(keyDimension);
           if (keyDimension !== undefined) {
             const data = getChartsDataSets(filteredQuesData, label.key, keyDimension);
             const { cols, dv } = initDataSets(data);

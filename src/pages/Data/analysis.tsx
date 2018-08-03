@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { List, Card } from 'antd';
+import { Bar } from '@/components';
+import { ClusterDisplay } from './components';
 import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
-import H from 'History';
-
 import { connect } from 'dva';
-import { ClusterDisplay, Bar } from '../../components';
-import { TTag, TTagGroup } from '../../models/tag';
 
 import styles from './analysis.less';
-import { getBaseUrl } from '../../utils';
-import { TClusterResults } from '../../models/data';
+import { getBaseUrl } from '@/utils';
+
+import { ITag } from '@/models/label';
+import { TClusterResults } from '@/models/data';
 
 const { Item } = List;
 const mockDims = [
@@ -69,7 +69,7 @@ export default class Index extends Component<IAnalysisProps> {
                   <Card title={item.text}>
                     <List
                       dataSource={item.dims}
-                      renderItem={(tag: TTag) => <Item> {tag.text}</Item>}
+                      renderItem={(tag: ITag) => <Item> {tag.text}</Item>}
                     />
                   </Card>
                 </Item>

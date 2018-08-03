@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Button } from 'antd';
-import { ILabel,TSelectedTags } from '@/models/tag';
+import { ILabel, TKeys } from '@/models/label';
 import LabelSelector from '../LabelSelector';
 import { DispatchProp } from 'react-redux';
 
 interface IClusterDimProps {
   labels: ILabel[];
-  selectedLabels: TSelectedTags;
+  selectedLabels: TKeys;
 }
 export default class ClusterDim extends Component<IClusterDimProps & DispatchProp> {
   static defaultProps: IClusterDimProps = {
@@ -16,13 +16,13 @@ export default class ClusterDim extends Component<IClusterDimProps & DispatchPro
 
   selectDims = (checked, id) => {
     if (checked) {
-      this.props.dispatch({ type: 'data/addClusterSelectedDims', payload: id });
+      this.props.dispatch({ type: 'label/addClusterLabels', payload: id });
     } else {
-      this.props.dispatch({ type: 'data/removeClusterSelectedDims', payload: id });
+      this.props.dispatch({ type: 'label/removeClusterLabels', payload: id });
     }
   };
   resetSelect = () => {
-    this.props.dispatch({ type: 'data/handleClusterSelectedDims', payload: [] });
+    this.props.dispatch({ type: 'label/handleClusterLabels', payload: [] });
   };
 
   render() {

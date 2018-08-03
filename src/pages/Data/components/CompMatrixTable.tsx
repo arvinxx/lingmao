@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-// import styles from './CompMatrixTable.less';
 import { Table, Button, Collapse } from 'antd';
-import { TColumn } from '../../../models/data';
+import { ITableColumn } from '@/models/data';
+// import styles from './CompMatrixTable.less';
 const Panel = Collapse.Panel;
 const { Column } = Table;
 interface ICompMatrixTableProps {
   data: object[];
-  columns: TColumn[];
+  columns: ITableColumn[];
 }
 export default class CompMatrixTable extends Component<ICompMatrixTableProps> {
   static defaultProps: ICompMatrixTableProps = {

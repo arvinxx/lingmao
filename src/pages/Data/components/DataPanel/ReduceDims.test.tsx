@@ -84,8 +84,8 @@ describe('function', () => {
       expect(getStatus(76)).toEqual(null);
     });
   });
-  describe('selectDims', () => {
-    const selectDims = (wrapper.instance() as App).selectDims;
+  describe('selectLabels', () => {
+    const selectDims = (wrapper.instance() as App).selectLabels;
     it('should dispatch add', () => {
       selectDims(true, '1');
       expect(dispatch.callCount).toEqual(1);

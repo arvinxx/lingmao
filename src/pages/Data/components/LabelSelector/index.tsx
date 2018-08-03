@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ILabel } from '@/models/tag';
+import { ILabel } from '@/models/label';
 import { Tag } from 'antd';
 import styles from './index.less';
 const { CheckableTag } = Tag;

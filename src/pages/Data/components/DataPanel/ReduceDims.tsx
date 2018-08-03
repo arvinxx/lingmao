@@ -8,7 +8,7 @@ import { getFilterQuesData, getValueFromQuesData } from '@/utils';
 import { getKMO } from '@/services';
 
 import { TQuesData } from '@/models/data';
-import { ILabel, TSelectedLabelKeys } from '@/models/tag';
+import { ILabel, TKeys } from '@/models/label';
 import { DispatchProp } from 'react-redux';
 
 export interface IReduceDimsProps {
@@ -16,7 +16,7 @@ export interface IReduceDimsProps {
   percent: number;
   sig: number;
   quesData: TQuesData;
-  selectedLabels: TSelectedLabelKeys;
+  selectedLabels: TKeys;
 }
 export default class ReduceDims extends Component<IReduceDimsProps & DispatchProp> {
   static defaultProps: IReduceDimsProps = {
@@ -26,16 +26,16 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
     selectedLabels: [],
     quesData: [],
   };
-  selectDims = (checked, id) => {
+  selectLabels = (checked, id) => {
     if (checked) {
-      this.props.dispatch({ type: 'data/addReductionSelectedDims', payload: id });
+      this.props.dispatch({ type: 'label/addReductionLabels', payload: id });
     } else {
-      this.props.dispatch({ type: 'data/removeReductionSelectedDims', payload: id });
+      this.props.dispatch({ type: 'label/removeReductionLabels', payload: id });
     }
   };
 
   resetSelection = () => {
-    this.props.dispatch({ type: 'data/handleReductionSelectedDims', payload: [] });
+    this.props.dispatch({ type: 'label/handleReductionLabels', payload: [] });
   };
   confirmSelection = async () => {
     const { quesData, selectedLabels, dispatch } = this.props;
@@ -72,7 +72,7 @@ export default class ReduceDims extends Component<IReduceDimsProps & DispatchPro
         <LabelSelector
           selectedLabels={selectedLabels}
           labels={labels}
-          handleSelect={this.selectDims}
+          handleSelect={this.selectLabels}
         />
         <div>
           <Button
