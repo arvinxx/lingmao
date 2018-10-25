@@ -1,8 +1,7 @@
 import axios from 'axios';
-import request from '../utils/request';
 
 export async function query() {
-  return request('/api/users');
+  return axios.get('/api/users');
 }
 
 export async function queryCurrent() {
