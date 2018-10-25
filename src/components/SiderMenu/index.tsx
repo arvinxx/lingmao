@@ -1,4 +1,4 @@
-import React, { PureComponent, ReactNode } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import Link from 'umi/link';
@@ -35,7 +35,7 @@ interface MenuObj {
   target: string;
 }
 
-export default class SiderMenu extends PureComponent<any> {
+export default class SiderMenu extends Component<any> {
   menus: Array<MenuObj>;
 
   constructor(props) {
@@ -166,7 +166,14 @@ export default class SiderMenu extends PureComponent<any> {
   }
 
   render() {
-    const { logo, collapsed, location: { pathname }, onCollapse, width, showMenu } = this.props;
+    const {
+      logo,
+      collapsed,
+      location: { pathname },
+      onCollapse,
+      width,
+      showMenu,
+    } = this.props;
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed ? {} : {};
     // if pathname can't match, use the nearest parent's key

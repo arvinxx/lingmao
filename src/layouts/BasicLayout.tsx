@@ -14,13 +14,13 @@ import logo from '@/assets/logo.png';
 export interface IBasicLayoutProps {
   collapsed?: boolean;
   location?: any;
-  showMenu?: boolean;
+  visible?: boolean;
 }
 
 @(withRouter as any)
 @connect(({ menu }) => ({
   collapsed: menu.collapsed,
-  showMenu: menu.showMenu,
+  visible: menu.visible,
 }))
 export default class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
   handleMenuCollapse = (collapsedState) => {
@@ -31,13 +31,13 @@ export default class BasicLayout extends Component<IBasicLayoutProps & DispatchP
   };
 
   render() {
-    const { collapsed, location, children, showMenu } = this.props;
+    const { collapsed, location, children, visible } = this.props;
     const defaultSideWith = 140;
     return (
       <Layout>
         <SiderMenu
           logo={logo}
-          showMenu={showMenu}
+          showMenu={visible}
           menuData={getMenuData()}
           collapsed={collapsed}
           location={location}
@@ -46,7 +46,7 @@ export default class BasicLayout extends Component<IBasicLayoutProps & DispatchP
         />
         <Layout
           className={styles.layout}
-          style={showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith } : {}}
+          style={visible ? { paddingLeft: collapsed ? 80 : defaultSideWith } : {}}
         >
           <Fragment>{children}</Fragment>
         </Layout>
