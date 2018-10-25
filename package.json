@@ -1,6 +1,6 @@
 {
-  "name": "Lingmao",
-  "version": "0.1.0",
+  "name": "lingmao",
+  "version": "1.1.0",
   "description": "A revolution solution for design research",
   "private": true,
   "scripts": {
@@ -83,9 +83,7 @@
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
     "umi": "latest",
-    "umi-plugin-dll": "^0.2.1",
-    "umi-plugin-dva": "^0.9.0",
-    "umi-plugin-routes": "^0.1.2"
+    "umi-plugin-react": "^1.0.0"
   },
   "lint-staged": {
     "**/*.{js,jsx}": [
