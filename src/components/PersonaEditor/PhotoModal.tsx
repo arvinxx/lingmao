@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Upload, Modal, Icon, message } from 'antd';
 const Dragger = Upload.Dragger;
 import styles from './PhotoModal.less';
-import { photo } from '../../../mock/persona';
+import { photo } from '@/mock/persona';
 const props = {
   name: 'file',
   multiple: true,
@@ -56,7 +56,7 @@ export default class PhotoModal extends Component<IPhotoModalProps> {
           </div>
           <div className={styles.right}>
             预览
-            <img src={photo.value} className={styles.photo}/>
+            <img src={photo.value} className={styles.photo} />
           </div>
         </div>
       </Modal>
