@@ -16,7 +16,7 @@ export interface IStageState {
   activePanelList: Array<string>;
   reduction: IReduction;
 }
-const stage: DvaModel & { state: IStageState } = {
+const stage: DvaModel<IStageState> = {
   state: {
     indexState: 0,
     questionState: 0,

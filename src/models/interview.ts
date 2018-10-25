@@ -1,5 +1,5 @@
-import { DvaModel } from '../../typings/dva';
-import { generateId, initRecords } from '../utils';
+import { DvaModel } from '@/typings/dva';
+import { generateKey, initRecords } from '@/utils';
 
 export interface IInterview {
   title: string;
@@ -9,15 +9,11 @@ export interface IInterview {
   tagVisible: boolean;
 }
 
-interface IInterviewModel extends DvaModel {
-  state: IInterview;
-}
-const interview: IInterviewModel = {
-  namespace: 'interview',
+const interview: DvaModel<IInterview> = {
   state: {
     title: '',
     records: initRecords(''),
-    id: generateId(),
+    id: generateKey(),
     uploadVisible: true,
     tagVisible: true,
   },
