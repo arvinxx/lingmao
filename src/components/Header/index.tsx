@@ -64,7 +64,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
 
   changeMenuState = () => {
     this.props.dispatch({
-      type: 'global/changeMenuState',
+      type: 'menu/handleVisibility',
     });
   };
 

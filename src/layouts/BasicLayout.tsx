@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, ComponentClass, Fragment } from 'react';
 
 import { Layout } from 'antd';
 import { DispatchProp } from 'react-redux';
@@ -14,30 +14,30 @@ import logo from '@/assets/logo.png';
 export interface IBasicLayoutProps {
   collapsed?: boolean;
   location?: any;
-  visible?: boolean;
+  showMenu?: boolean;
 }
 
 @(withRouter as any)
 @connect(({ menu }) => ({
   collapsed: menu.collapsed,
-  visible: menu.visible,
+  showMenu: menu.visible,
 }))
-export default class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
+class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
   handleMenuCollapse = (collapsedState) => {
     this.props.dispatch({
-      type: 'menu/changeMenuCollapsed',
+      type: 'menu/handleCollapsed',
       payload: collapsedState,
     });
   };
 
   render() {
-    const { collapsed, location, children, visible } = this.props;
+    const { collapsed, location, children, showMenu } = this.props;
     const defaultSideWith = 140;
     return (
       <Layout>
         <SiderMenu
           logo={logo}
-          showMenu={visible}
+          showMenu={showMenu}
           menuData={getMenuData()}
           collapsed={collapsed}
           location={location}
@@ -46,7 +46,7 @@ export default class BasicLayout extends Component<IBasicLayoutProps & DispatchP
         />
         <Layout
           className={styles.layout}
-          style={visible ? { paddingLeft: collapsed ? 80 : defaultSideWith } : {}}
+          style={showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith } : {}}
         >
           <Fragment>{children}</Fragment>
         </Layout>
@@ -54,3 +54,5 @@ export default class BasicLayout extends Component<IBasicLayoutProps & DispatchP
     );
   }
 }
+
+export default BasicLayout as ComponentClass;
