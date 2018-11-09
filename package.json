@@ -4,9 +4,9 @@
   "description": "A revolution solution for design research",
   "private": true,
   "scripts": {
-    "start": "cross-env BROWSER=none ESLINT=none umi dev",
-    "start:no-proxy": "cross-env BROWSER=none ESLINT=none MOCK=none umi dev",
-    "build": "cross-env umi build",
+    "start": "umi dev",
+    "start:no-proxy": "cross-env MOCK=none umi dev",
+    "build": "umi build",
     "analyze": "cross-env ANALYZE=true umi build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
     "lint-staged": "lint-staged",

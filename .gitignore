@@ -22,7 +22,6 @@ yarn-error.log*
 .eslintcache
 
 # dotenv environment variables file(s)
-.env
 .env.*
 
 #Build generated
