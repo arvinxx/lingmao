@@ -11,10 +11,6 @@ import styles from './index.less';
 
 import { ILabel, ITag } from '@/models/label';
 
-const map = {
-  tab: 'tab',
-};
-
 export interface ITagSelectorProps {
   labels: ILabel[];
   selectedTags: string[];
@@ -44,7 +40,7 @@ export default class TagSelector extends Component<
     const text = this.state.newLabel;
     if (text !== '') {
       this.props.dispatch({
-        type: 'tag/addLabel',
+        type: 'label/addLabel',
         payload: text,
       });
     }
@@ -54,7 +50,7 @@ export default class TagSelector extends Component<
     const text = this.state.newLabel;
     if (text !== '') {
       this.props.dispatch({
-        type: 'tag/addLabel',
+        type: 'label/addLabel',
         payload: text,
       });
     }
@@ -64,7 +60,7 @@ export default class TagSelector extends Component<
   render() {
     const { labels, dispatch, selectedTags } = this.props;
     return (
-      <HotKeys keyMap={map}>
+      <HotKeys keyMap={{ tab: 'tab' }}>
         <div className={styles.container}>
           {labels.map((label) => {
             const { key, text, tags, inputVisible } = label;

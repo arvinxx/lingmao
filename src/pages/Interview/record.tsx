@@ -16,12 +16,12 @@ interface IRecordProps {
   record: IRecordState;
   loading: boolean;
   interviewDisplay: IInterviewDisplayState;
-  tag: ILabelState;
+  label: ILabelState;
 }
-@connect(({ record, tag, loading, interviewDisplay }) => ({
+@connect(({ record, label, loading, interviewDisplay }) => ({
   record,
   interviewDisplay,
-  tag,
+  label,
   loading: loading.models.record,
 }))
 export default class Record extends Component<IRecordProps & DispatchProp> {
@@ -32,7 +32,7 @@ export default class Record extends Component<IRecordProps & DispatchProp> {
       title: '',
     },
     loading: false,
-    tag: {
+    label: {
       labels: [],
       selectedTags: [],
     },
@@ -53,9 +53,9 @@ export default class Record extends Component<IRecordProps & DispatchProp> {
 
   render() {
     const minPanelSize = 150;
-    const { record, tag, interviewDisplay, dispatch } = this.props;
+    const { record, label, interviewDisplay, dispatch } = this.props;
     const { title, records } = record;
-    const { labels, selectedTags } = tag;
+    const { labels, selectedTags } = label;
     const { labelMenuVisible, uploadVisible } = interviewDisplay;
     return (
       <div className={styles.container}>

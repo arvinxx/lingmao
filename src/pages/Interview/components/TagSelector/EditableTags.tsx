@@ -24,33 +24,33 @@ export default class EditableTags extends Component<IEditableTagsProps & Dispatc
 
   editTagText = (e, key) => {
     this.props.dispatch({
-      type: 'tag/changeTagText',
+      type: 'label/changeTagText',
       payload: { key, text: e.target.value },
     });
   };
   deleteTag = (key) => {
     this.props.dispatch({
-      type: 'tag/deleteTag',
+      type: 'label/deleteTag',
       payload: key,
     });
   };
 
   showTagEdit = (key) => {
     this.props.dispatch({
-      type: 'tag/showTagEdit',
+      type: 'label/showTagEdit',
       payload: key,
     });
   };
   hideTagEdit = (key) => {
     this.props.dispatch({
-      type: 'tag/hideTagEdit',
+      type: 'label/hideTagEdit',
       payload: key,
     });
   };
 
   handleSelected = (key, checked) => {
     this.props.dispatch({
-      type: 'tag/handleSelectedTags',
+      type: 'label/handleSelectedTags',
       payload: { key, checked },
     });
   };

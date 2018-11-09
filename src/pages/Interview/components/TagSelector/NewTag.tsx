@@ -22,7 +22,7 @@ export default class NewTag extends PureComponent<IValueInputProps & DispatchPro
   handleKeyDown = (e, key) => {
     if (e.key === 'Escape') {
       this.props.dispatch({
-        type: 'tag/hideTagInput',
+        type: 'label/hideTagInput',
         payload: key,
       });
       this.setState({ text: '' });
@@ -33,13 +33,13 @@ export default class NewTag extends PureComponent<IValueInputProps & DispatchPro
       const { text } = this.state;
       if (text !== '') {
         this.props.dispatch({
-          type: 'tag/addTag',
+          type: 'label/addTag',
           payload: { key, text },
         });
       }
       if (e.key === 'Enter') {
         this.props.dispatch({
-          type: 'tag/hideTagInput',
+          type: 'label/hideTagInput',
           payload: key,
         });
       }
@@ -49,7 +49,7 @@ export default class NewTag extends PureComponent<IValueInputProps & DispatchPro
 
   showTagInput = (key) => {
     this.props.dispatch({
-      type: 'tag/showTagInput',
+      type: 'label/showTagInput',
       payload: key,
     });
   };
@@ -57,12 +57,12 @@ export default class NewTag extends PureComponent<IValueInputProps & DispatchPro
     const { text } = this.state;
     if (text !== '') {
       this.props.dispatch({
-        type: 'tag/addTag',
+        type: 'label/addTag',
         payload: { key, text },
       });
     }
     this.props.dispatch({
-      type: 'tag/hideTagInput',
+      type: 'label/hideTagInput',
       payload: key,
     });
     this.setState({ text: '' });

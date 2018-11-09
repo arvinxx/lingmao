@@ -17,13 +17,13 @@ export default class Label extends Component<ILabelProps & DispatchProp> {
 
   changeLabel = (e, key) => {
     this.props.dispatch({
-      type: 'tag/changeLabelText',
+      type: 'label/changeLabelText',
       payload: { key, text: e.target.value },
     });
   };
   deleteLabel = (key) => {
     this.props.dispatch({
-      type: 'tag/deleteLabel',
+      type: 'label/deleteLabel',
       payload: key,
     });
   };
@@ -31,7 +31,7 @@ export default class Label extends Component<ILabelProps & DispatchProp> {
     const key = e.target.id;
     e.preventDefault();
     this.props.dispatch({
-      type: 'tag/showTagInput',
+      type: 'label/showTagInput',
       payload: key,
     });
   };
