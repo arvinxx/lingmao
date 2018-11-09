@@ -9,8 +9,6 @@
     "build": "umi build",
     "analyze": "cross-env ANALYZE=true umi build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
-    "lint-staged": "lint-staged",
-    "precommit": "npm run lint-staged",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "test": "umi test",
     "test:watch": "umi test --watch",
@@ -83,12 +81,6 @@
     "stylelint-config-standard": "^18.0.0",
     "umi": "latest",
     "umi-plugin-react": "^1.0.0"
-  },
-  "lint-staged": {
-    "**/*.{js,jsx}": [
-      "prettier --trailing-comma all --single-quote --write"
-    ],
-    "**/*.less": "stylelint --syntax less --fix"
   },
   "browserslist": [
     "> 1%",
