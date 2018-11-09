@@ -1,21 +1,24 @@
 import React, { PureComponent } from 'react';
-import { TTagGroup } from '../../../../models/tag';
-import styles from './index.less';
-import { DispatchProp } from 'react-redux';
-import ListEditor from './ListEditor';
-import initValue from '../../../../../mock/records';
 import { Value, Block } from 'slate';
+import ListEditor from './ListEditor';
 import PopupMenu from './PopupMenu';
+
+import styles from './index.less';
+
+import initValue from '@/mock/records';
+
+import { DispatchProp } from 'react-redux';
+import { ILabel } from '@/models/label';
 
 export interface IRecordListProps {
   records: object;
-  tagGroups: Array<TTagGroup>;
+  labels: Array<ILabel>;
 }
 
 export default class RecordList extends PureComponent<IRecordListProps & DispatchProp> {
   static defaultProps: IRecordListProps = {
     records: {},
-    tagGroups: [],
+    labels: [],
   };
   state = {
     value: Value.fromJSON(initValue),
@@ -63,7 +66,7 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
   onChange = ({ value }) => {
     const { dispatch } = this.props;
     if (value.document !== this.state.value.document) {
-      dispatch({ type: 'interview/changeRecords', payload: value.toJSON() });
+      dispatch({ type: 'record/changeRecords', payload: value.toJSON() });
     }
     this.setState({ value });
   };
@@ -77,7 +80,7 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
   };
 
   render() {
-    const { records, dispatch, tagGroups } = this.props;
+    const { records, dispatch, labels } = this.props;
     const value: Value = this.state.value;
 
     return (
@@ -85,7 +88,7 @@ export default class RecordList extends PureComponent<IRecordListProps & Dispatc
         {/*<div onClick={this.addNewContent}> add text</div>*/}
         <ListEditor
           dispatch={dispatch}
-          tagGroups={tagGroups}
+          tagGroups={labels}
           records={records}
           value={value}
           onChange={this.onChange}

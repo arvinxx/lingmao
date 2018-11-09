@@ -1,4 +1,4 @@
-import { getFilterLabels } from '../label';
+import { getFilterLabels } from '@/utils';
 
 describe('getFilterLabels', () => {
   it('should return filtered Dims ', () => {

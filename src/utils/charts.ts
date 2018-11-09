@@ -13,10 +13,10 @@ export const getChartsDataSets = (
   key: string,
   keyDimension: IKeyDimension
 ) => {
-  const answersOrders = quesData.map((quesItems) => {
-    if (quesItems.length > 0) {
-      const index = quesItems.findIndex((i) => i.labelKey === key);
-      return quesItems[index].answer.order;
+  const answersOrders = quesData.map((quesRecord) => {
+    if (quesRecord.records.length > 0) {
+      const index = quesRecord.records.findIndex((i) => i.labelKey === key);
+      return quesRecord.records[index].answer.order;
     } else return [];
   });
   const percent = getCountAndPercent(answersOrders);

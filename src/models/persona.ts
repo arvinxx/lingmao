@@ -1,9 +1,9 @@
 import { DvaModel } from '@/typings/dva';
 import { getTagsArrById } from '@/utils';
 import update from 'immutability-helper';
-import { TUserModels, IUserModel, IQuesRecord } from './data';
 import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
+import { TQuesData, IUserModel, IQuesRecord } from './data';
 
 export type TPersonaDim = {
   tagId: string;
@@ -214,7 +214,7 @@ const persona: DvaModel<IPersonaState> = {
         payload,
       }: {
         payload: {
-          personaQuesData: TUserModels;
+          personaQuesData: TQuesData;
           personaDimId: string;
           groupId: string;
         };
@@ -301,6 +301,15 @@ const persona: DvaModel<IPersonaState> = {
           };
         }),
       };
+    },
+  },
+  subscriptions: {
+    setup({ history, dispatch }) {
+      return history.listen(({ pathname }) => {
+        if (pathname === '/persona') {
+          dispatch({ type: 'initUserModel' });
+        }
+      });
     },
   },
 };

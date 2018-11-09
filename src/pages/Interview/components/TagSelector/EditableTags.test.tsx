@@ -1,16 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IDimValueProps } from './EditableTags';
+import App, { IEditableTagsProps } from './EditableTags';
 import { spy } from 'sinon';
 
 const setup = () => {
   const dispatch = spy();
-  const props: IDimValueProps = {
-    id: 'rercxc',
-    vid: 'dsdsaadfewc',
+  const props: IEditableTagsProps = {
+    labelKey: 'rercxc',
+    tagKey: 'dsdsaadfewc',
     editable: false,
     text: 'test',
-    selectedValues: [],
+    selected: [],
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };

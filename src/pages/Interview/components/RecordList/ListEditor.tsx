@@ -8,7 +8,7 @@ import initValue from '../../../../../mock/records';
 
 import { Value } from 'slate';
 import { extractTags } from '../../../../utils';
-import { TTagGroup } from '../../../../models/tag';
+import { ILabel } from '../../../../models/label';
 import InputTooltip from './InputTooltip';
 import styles from './ListEditor.less';
 const { Provider, Consumer } = createContext();
@@ -17,7 +17,7 @@ const plugins = [plugin];
 
 export interface IListEditorProps {
   records: object;
-  tagGroups: Array<TTagGroup>;
+  tagGroups: Array<ILabel>;
   onChange: Function;
   value: Value;
 }

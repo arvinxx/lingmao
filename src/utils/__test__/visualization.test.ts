@@ -1,5 +1,5 @@
 import { clusterArray } from '@/mock/clusterResults';
-import { getAccumulation, getCountAndPercent } from '../visualization';
+import { getAccumulation, getCountAndPercent } from '@/utils';
 
 it('getCountAndPercent', () => {
   expect(getCountAndPercent(clusterArray)).toEqual([
@@ -19,6 +19,6 @@ it('getCountAndPercent', () => {
 });
 
 it('getAccumulation', () => {
-  const a = [1, 2, 3, 4,6];
-  expect(getAccumulation(a)).toEqual([1, 3, 6, 10,16]);
+  const a = [1, 2, 3, 4, 6];
+  expect(getAccumulation(a)).toEqual([1, 3, 6, 10, 16]);
 });

@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Tabs, Icon } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
-import { drop, dropRight, last } from 'lodash';
+import { last } from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import HeaderSearch from './HeaderSearch';
 
 import router from 'umi/router';
-import { generateId, getBaseUrl } from '../../utils';
+import { getBaseUrl } from '@/utils';
+import { DispatchProp } from 'react-redux';
 
 const TabPane = Tabs.TabPane;
 type TIcon = {
@@ -25,24 +26,22 @@ type TPanel = {
 interface IHeaderProps {
   header: Array<TPanel>;
   pathname?: string;
-  dispatch?: any;
-  showMenu?: boolean;
+  visible?: boolean;
 }
 
 interface IHeaderStates {
   currentPanel: string;
 }
 
-@connect(({ routing, global }) => ({
+@connect(({ routing, menu }) => ({
   pathname: routing.location.pathname,
-  showMenu: global.showMenu,
+  visible: menu.visible,
 }))
-export default class Header extends Component<IHeaderProps, IHeaderStates> {
+export default class Header extends Component<IHeaderProps & DispatchProp, IHeaderStates> {
   static defaultProps: IHeaderProps = {
-    dispatch: () => {},
     header: [],
     pathname: '',
-    showMenu: true,
+    visible: true,
   };
   state = {
     currentPanel: '',
@@ -51,7 +50,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
     const { pathname } = this.props;
     this.urlPanelParse(pathname);
   }
-  componentWillReceiveProps(nextProps:IHeaderProps) {
+  componentWillReceiveProps(nextProps: IHeaderProps) {
     this.urlPanelParse(nextProps.pathname);
   }
   // 根据路由状态更新
@@ -81,7 +80,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
   };
 
   render() {
-    const { header, showMenu } = this.props;
+    const { header, visible } = this.props;
     const { currentPanel } = this.state;
     const center = header.map((header) => ({ text: header.text, path: header.path }));
     return header.map((header, index) => {
@@ -93,7 +92,7 @@ export default class Header extends Component<IHeaderProps, IHeaderStates> {
               <Icon
                 key="menu-hide"
                 onClick={this.changeMenuState}
-                type={showMenu ? 'menu-fold' : 'menu-unfold'}
+                type={visible ? 'menu-fold' : 'menu-unfold'}
                 className={styles.icon}
               />
               {left.map((item) => {

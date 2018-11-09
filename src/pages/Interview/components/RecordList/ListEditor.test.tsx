@@ -13,7 +13,7 @@ const setup = () => {
     tagGroups: [],
     value: initRecordsAsValue(''),
     onChange: ({ value }) => {
-      dispatch({ type: 'interview/changeRecords', payload: value.toJSON() });
+      dispatch({ type: 'record/changeRecords', payload: value.toJSON() });
     },
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
@@ -74,7 +74,7 @@ describe('function', () => {
     // expect(renderMark(props)).toEqual(
     //   <InputTooltip
     //     props={props}
-    //     tags={tags}
+    //     tags={labels}
     //     value={initRecordsAsValue('')}
     //     onChange={onChange}
     //     dispatch={dispatch}

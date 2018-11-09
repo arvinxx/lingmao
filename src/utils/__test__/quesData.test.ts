@@ -4,6 +4,7 @@ import {
   getValueFromQuesData,
   generateKey,
   getFilterQuesData,
+  getAnswerByOrder,
 } from '@/utils';
 
 jest.mock('shortid');
@@ -123,6 +124,76 @@ it('getAnswers', () => {
   ]);
 });
 
+fit('getAnswerByOrder', () => {
+  const quesData = [
+    [
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 0 },
+      },
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的性别是？',
+        answer: { text: 'A.男', order: 0 },
+      },
+    ],
+    [
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 0 },
+      },
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的性别是？',
+        answer: { text: 'C.女', order: 1 },
+      },
+    ],
+    [
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的名字是？',
+        answer: { text: '小A', order: 0 },
+      },
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的性别是？',
+        answer: { text: 'B.不男不女', order: 3 },
+      },
+    ],
+    [
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的名字是？',
+        answer: { text: '小B', order: 0 },
+      },
+      {
+        labelKey: '',
+        labelText: '',
+        key: generateKey(),
+        question: '你的性别是？',
+        answer: { text: 'C.女', order: 1 },
+      },
+    ],
+  ];
+
+  expect(getAnswerByOrder(quesData, '你的性别是？', 0)).toEqual('A.男');
+});
 
 it('getFilterQuesData', () => {
   const quesData = [
@@ -289,4 +360,3 @@ it('getValueFromQuesData', () => {
   ];
   expect(getValueFromQuesData(quesData)).toEqual([[2, 2, 1, 2], [3, 3, 2, 1]]);
 });
-

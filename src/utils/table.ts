@@ -10,10 +10,10 @@ export const getTableData = (quesData: TQuesData, displayOrder: boolean): Array<
   let tableData: object[] = [];
   quesData.map((ques) => {
     let record: object = {};
-    ques.map((entries) => {
-      const { question, answer, labelText, labelKey, key } = entries;
+    ques.records.map((quesItem) => {
+      const { question, answer, labelText, labelKey, key } = quesItem;
       record['key'] = key;
-      if (labelText !== '') {
+      if (labelText !== undefined) {
         record[labelKey] = displayOrder ? (answer.order + 1).toString() : answer.text;
       } else {
         record[question] = displayOrder ? (answer.order + 1).toString() : answer.text;
@@ -57,12 +57,12 @@ export const getFilterTableData = (
  */
 export const getColumns = (quesData: TQuesData): Array<ITableColumn> => {
   let columns: ITableColumn[] = [];
-  if (quesData.length > 0 && quesData[0].length > 0) {
-    quesData[0].map((record) => {
+  if (quesData.length > 0 && quesData[0].records.length > 0) {
+    quesData[0].records.map((record) => {
       const { labelKey, labelText, key, question } = record;
       columns.push({
         key: key,
-        dataIndex: labelText !== '' ? labelKey : question,
+        dataIndex: labelText !== undefined ? labelKey : question,
         title: question,
       });
     });

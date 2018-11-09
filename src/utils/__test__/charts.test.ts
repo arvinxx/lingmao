@@ -1,4 +1,4 @@
-import { generateKey } from '../utils';
+import { generateKey } from '@/utils';
 import { getChartsDataSets } from '@/utils';
 const quesData = [
   [

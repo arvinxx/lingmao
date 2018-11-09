@@ -22,14 +22,14 @@ import App, { getMeunMatcheys } from './index';
 //   dispatch.resetHistory();
 // });
 
-const meun = ['/dashboard', '/interview', '/data', '/userinfo/:id', '/userinfo/:id/info'];
+const meun = ['/dashboard', '/interview', '/data', '/userinfo/:id', '/userinfo/:key/info'];
 
 describe('test meun match', () => {
   it('simple path', () => {
     expect(getMeunMatcheys(meun, '/dashboard')).toEqual(['/dashboard']);
   });
   it('error path', () => {
-    expect(getMeunMatcheys(meun, '/interview')).toEqual(['/interview']);
+    expect(getMeunMatcheys(meun, '/interview')).toEqual(['/record']);
   });
 
   it('Secondary path', () => {

@@ -14,7 +14,7 @@ const setup = () => {
     },
     value: {},
     onChange: spy(),
-    tags: [{ id: '23', text: '231', refText: '3412', groupId: 'hjrtf' }],
+    tags: [{ id: '23', text: '231', refText: '3412', groupKey: 'hjrtf' }],
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };

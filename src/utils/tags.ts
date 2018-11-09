@@ -1,4 +1,4 @@
-import { ITag, ILabel } from '@/models/tag';
+import { ITag, ILabel } from '@/models/label';
 import { tail } from 'lodash';
 import { TPersonaDims } from '@/models/persona';
 

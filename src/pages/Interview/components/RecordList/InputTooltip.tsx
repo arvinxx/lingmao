@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Popover, Input, Popconfirm, Icon } from 'antd';
-import { TTag } from '../../../../models/tag';
+import { ITag } from '../../../../models/label';
 import styles from './InputTooltip.less';
 import { DispatchProp } from 'react-redux';
 import { Value } from 'slate';
 export interface IInputTooltipProps {
-  tags: TTag[];
+  tags: ITag[];
   props: { children; attributes; editor; text };
   onChange: Function;
   value: Value;
@@ -50,7 +50,7 @@ export default class InputTooltip extends Component<IInputTooltipProps & Dispatc
         <Popover
           overlayClassName={styles['tag-pop']}
           getPopupContainer={() => document.getElementById('tooltip') || document.body}
-          content={tags.map((tag: TTag) => {
+          content={tags.map((tag: ITag) => {
             const { id, text: value, refText } = tag;
             return text === refText ? (
               <div key={id + 'tag-container'} className={styles['tag-container']}>

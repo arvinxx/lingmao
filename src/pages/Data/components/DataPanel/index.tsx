@@ -18,7 +18,7 @@ import { getFilterLabels } from '@/utils';
 
 import { IDataState } from '@/models/data';
 import { IStageState } from '../../models/stage';
-import { ILabel, ILabelState, TKeys } from '@/models/label';
+import { ILabel, TKeys } from '@/models/label';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;

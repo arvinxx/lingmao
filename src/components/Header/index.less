@@ -1,4 +1,4 @@
-@import '../../styles/themes/default';
+@import '~styles/themes/default';
 
 .header {
   background: @base-white;
@@ -9,6 +9,18 @@
   display: flex;
   justify-content: space-between;
   z-index: 100;
+
+  :global {
+    .ant-tabs-bar {
+      border-bottom: 0;
+      //border-image: linear-gradient(#439afc, #99f5ff) 1 1;
+      margin: 0;
+    }
+    .ant-tabs-ink-bar {
+      height: 3px;
+      background: linear-gradient(to right, #439afc, #99f5ff);
+    }
+  }
 }
 
 .tool-container {
@@ -31,16 +43,5 @@
       display: table-cell;
       vertical-align: middle;
     }
-  }
-}
-:global {
-  .ant-tabs-bar {
-    border-bottom: 0;
-    //border-image: linear-gradient(#439afc, #99f5ff) 1 1;
-    margin: 0;
-  }
-  .ant-tabs-ink-bar {
-    height: 3px;
-    background: linear-gradient(to right, #439afc, #99f5ff);
   }
 }

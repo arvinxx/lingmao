@@ -1,6 +1,6 @@
 import { tail, compact } from 'lodash';
 
-import { ILabel } from '@/models/tag';
+import { ILabel } from '@/models/label';
 
 /**
  * 根据选择维度过滤已有的维度标签

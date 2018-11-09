@@ -9,7 +9,7 @@ import NewTag from './NewTag';
 
 import styles from './index.less';
 
-import { ILabel, ITag } from '@/models/tag';
+import { ILabel, ITag } from '@/models/label';
 
 const map = {
   tab: 'tab',

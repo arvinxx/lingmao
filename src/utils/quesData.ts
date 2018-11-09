@@ -3,6 +3,7 @@ import XLSX from 'xlsx';
 import { ITextItem, TQuesData, IQuesRecord } from '@/models/data';
 
 import { getAccumulation, generateKey, generateTagId } from '@/utils';
+import { quesData } from '@/mock/data';
 
 /**
  * 读取文件转换为 Buffer
@@ -161,11 +162,13 @@ export const getAnswerByOrder = (quesData: TQuesData, question: string, order: n
  *  根据选择标签过滤问卷数据，用于降维与聚类
  */
 export const getFilterQuesData = (quesData: TQuesData, selectedLabelKeys: string[]): TQuesData => {
+  console.log(selectedLabelKeys);
+  console.log(quesData);
   return quesData.map((quesRecord) => ({
     ...quesRecord,
     records: quesRecord.records.filter((quesDataItem) => {
-      const { labelKey } = quesDataItem;
-      return selectedLabelKeys.some((key) => key === labelKey);
+      const { question } = quesDataItem;
+      return selectedLabelKeys.some((key) => key === question);
     }),
   }));
 };
@@ -179,3 +182,141 @@ export const getValueFromQuesData = (quesData: TQuesData): number[][] => {
     quesRecord.records.map((quesDataItem) => quesDataItem.answer.order + 1)
   );
 };
+
+export class QuesData {
+  private quesData: TQuesData;
+  private questions: Array<ITextItem>;
+  private values: number[][];
+
+  constructor(rawData) {
+    rawData.map((item) => {
+      const entries = Object.entries(item);
+      const record: IQuesRecord = {
+        records: [],
+      };
+      entries.map((entry: {}) => {
+        const question = entry[0];
+        const answer = entry[1];
+        record.records.push({
+          key: generateKey(),
+          question,
+          answer: { text: answer, order: this.getAnswerOrder(answer) },
+        });
+      });
+      this.quesData.push(record);
+    });
+    this.questions = this.quesData[0].records.map((ques) => ({
+      text: ques.question,
+      key: ques.question,
+    }));
+    this.values = this.quesData.map((quesRecord) =>
+      quesRecord.records.map((quesDataItem) => quesDataItem.answer.order + 1)
+    );
+    console.log(this.quesData);
+    console.log(this.questions);
+    console.log(this.values);
+  }
+
+  /**
+   * 抽取问题列表
+   */
+  public getQuestions = (): Array<ITextItem> => {
+    return this.questions;
+  };
+
+  /**
+   * 从问卷数据获得降维所需数据
+   */
+  public getValues = (): number[][] => {
+    return this.values;
+  };
+
+  /**
+   * 抽取一个问题的所有回答
+   * @param question: 问题
+   */
+  public getAnswers = (question: string): Array<ITextItem> => {
+    let answers: Array<ITextItem> = [];
+    this.quesData.forEach((quesRecord) => {
+      quesRecord.records.forEach((item) => {
+        if (item.question === question) {
+          answers.push({ text: item.answer.text, key: generateKey() });
+        }
+      });
+    });
+    // 先求唯一，再排序
+    return orderBy(uniqBy(answers, 'text'), 'text');
+  };
+
+  /**
+   * 根据答案排序获取回答
+   * @param question: 问题
+   * @param order: 排序
+   */
+  public getAnswerByOrder = (question: string, order: number): string => {
+    let answers = [];
+    this.quesData.forEach((quesRecord) => {
+      quesRecord.records.map((item) => {
+        if (item.question === question) {
+          answers.push({ ...item.answer });
+        }
+      });
+    });
+    // 求唯一
+    answers = uniqBy(answers, 'text');
+    //取数
+    const answer = answers.find((answer) => answer.order === order).text;
+    return answer === undefined ? answers[0].text : answer;
+  };
+
+  /**
+   *  根据选择标签过滤问卷数据，用于降维与聚类
+   */
+  public filterQuesDataBy = (selectedLabelKeys: string[]): TQuesData => {
+    console.log(selectedLabelKeys);
+    console.log(this.quesData);
+    return this.quesData.map((quesRecord) => ({
+      ...quesRecord,
+      records: quesRecord.records.filter((quesDataItem) => {
+        const { question } = quesDataItem;
+        return selectedLabelKeys.some((key) => key === question);
+      }),
+    }));
+  };
+
+  /**
+   * 得到答案排序
+   * @param answer:答案
+   */
+  private getAnswerOrder = (answer: string): number => {
+    // TODO 修改成更加灵活的方法
+    let order = 0;
+    switch (answer.slice(0, 1)) {
+      case 'A' || 'a':
+        order = 0;
+        break;
+      case 'B' || 'b':
+        order = 1;
+        break;
+      case 'C' || 'c':
+        order = 2;
+        break;
+      case 'D' || 'd':
+        order = 3;
+        break;
+      case 'E' || 'e':
+        order = 4;
+        break;
+      case 'F' || 'f':
+        order = 5;
+        break;
+      case 'G' || 'g':
+        order = 6;
+        break;
+      case 'H' || 'h':
+        order = 7;
+        break;
+    }
+    return order;
+  };
+}

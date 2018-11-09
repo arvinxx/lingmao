@@ -1,9 +1,10 @@
-import { TPersonaDimGroups } from '../models/persona';
+import { TPersonaDimGroups } from '@/models/persona';
+import { keyDimensions } from "@/mock/data";
 
-export const extractDims = (dimGroups: TPersonaDimGroups) => {
+export const extractKeyDimensions = (keyDimensions: TPersonaDimGroups) => {
   let dims = [];
-  dimGroups.forEach((dimGroup) => {
-    dimGroup.dims.forEach((dim) => {
+  keyDimensions.forEach((keyDimension) => {
+    keyDimension.dims.forEach((dim) => {
       dims.push(dim.tagId);
     });
   });

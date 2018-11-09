@@ -1,4 +1,4 @@
 import React from 'react';
 import Redirect from 'umi/redirect';
 
-export default () => <Redirect to="/persona/match" />;
+export default () => <Redirect to="/persona/edit" />;

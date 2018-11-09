@@ -1,0 +1,138 @@
+@import '~styles/themes/default';
+
+.text-container {
+  margin: 0 auto;
+  width: 96%;
+  text-align: center;
+}
+
+.base-card {
+  background: @base-white;
+  box-shadow: @shadow-1;
+  border-radius: 4px;
+}
+
+.left {
+  align-self: left;
+  width: 200px;
+  //display: flex;
+  .base-card;
+  .upload {
+    min-height: 200px;
+    margin: 12px 12px 0 12px;
+    :global {
+      .ant-upload.ant-upload-drag {
+        border-radius: 4px;
+        background: @base-white;
+        //padding: 0;
+      }
+    }
+  }
+
+  .button-container {
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-around;
+    .button-style {
+      //width: 74px;
+      padding: 0 10px;
+      border-radius: 16px;
+    }
+  }
+
+  .preview {
+    margin: 12px 0;
+    background: @white-1;
+    padding: 0 16px;
+
+    .pre-container {
+      display: flex;
+      height: 100%;
+      margin-bottom: 8px;
+
+      .circle {
+        &::before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 8px;
+          width: 6px;
+          height: 6px;
+          background: @dark-6;
+          border-radius: 50%;
+        }
+      }
+    }
+    :global {
+      .ant-list {
+        color: @dark-7;
+      }
+    }
+  }
+
+  .advanced {
+    //height: 200px;
+    margin-bottom: 16px;
+    .description {
+      margin: -4px 0 8px 24px;
+      color: @dark-6;
+    }
+    .radio-group {
+      margin-left: 24px;
+      .radio-style {
+        display: block;
+        height: 26px;
+        line-height: 26px;
+        font-size: @font-size-base;
+        color: @white-7;
+        &:hover {
+          color: @dark-6;
+        }
+      }
+    }
+
+    .delete {
+      margin: 16px 0 0 16px;
+      font-size: @font-size-sm;
+      .delete-number {
+        //border-radius: 10px;
+        width: 40px;
+        margin: 0 8px;
+        :global {
+          .ant-input-number {
+            font-size: @font-size-sm;
+          }
+        }
+      }
+    }
+
+    :global {
+      .ant-radio-wrapper-checked > span {
+        color: @dark-6;
+      }
+      .ant-collapse-item {
+        border-bottom: 0;
+        .ant-collapse-header {
+          line-height: 20px;
+          font-size: @font-size-base;
+          color: @dark-6;
+        }
+      }
+      .ant-radio {
+        vertical-align: middle;
+      }
+      .ant-radio-inner {
+        width: 12px;
+        height: 12px;
+        &::after {
+          width: 6px;
+          height: 6px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+}

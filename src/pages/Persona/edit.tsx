@@ -3,22 +3,21 @@ import { connect } from 'dva';
 import { Tabs } from 'antd';
 
 import { DispatchProp } from 'react-redux';
-import { DimensionList, PersonaEditor } from '../../components';
+import { PersonaEditor, DimensionList } from './components';
 
 import styles from './edit.less';
-import { TPersona } from '../../models/persona';
-import { TPersonaQuesData } from '../../models/data';
-// import { personaQuesData as clusterResult } from '../../../mock/data';
+import { IPersonaState } from '@/models/persona';
+import { TQuesData } from '@/models/data';
 
 const { TabPane } = Tabs;
 interface IEditProps {
-  persona: TPersona;
-  clusterResult: TPersonaQuesData;
+  persona: IPersonaState;
+  clusterResult: TQuesData;
 }
 interface IEditDefaultProps {}
 @connect(({ persona, data }) => ({
   persona,
-  clusterResult: data.personaQuesData,
+  clusterResult: data.userModels,
 }))
 export default class Edit extends Component<IEditProps & IEditDefaultProps & DispatchProp> {
   changePersonaIndex = (key) => {

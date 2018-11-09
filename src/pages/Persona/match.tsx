@@ -4,26 +4,24 @@ import { Icon } from 'antd';
 import { DraggableTag, DraggableList } from './components';
 
 import { connect } from 'dva';
-import { extractTags, getFilterPersonaQuesData } from '../../utils';
-import { extractDims, generateTagId } from '../../utils/persona';
+import { extractTags, extractKeyDimensions, generateTagId, getFilterQuesData } from '@/utils';
 
-import { TPersonaQuesData } from '../../models/data';
-import { TPersonaData } from '../../models/persona';
-import { TTag } from '../../models/tag';
+import { TPersonaData } from '@/models/persona';
+import { ILabel } from '@/models/label';
 import { DispatchProp } from 'react-redux';
 
 import { personaQuesData } from '../../../mock/data';
 
 interface IMatchProps {
-  personaQuesData: TPersonaQuesData;
+  personaQuesData: TPersonaData;
   personaData: TPersonaData;
-  tags: TTag[];
+  tags: ILabel[];
 }
 
-@connect(({ data, persona, tag }) => ({
+@connect(({ data, persona, label }) => ({
   personaQuesData: data.personaQuesData,
   personaData: persona.personaData,
-  tags: extractTags(tag.tagGroups),
+  tags: extractTags(label.labels),
 }))
 export default class Match extends Component<IMatchProps & DispatchProp> {
   static defaultProps: IMatchProps = {
@@ -48,8 +46,8 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
     if (personaData.length === 0 || personaQuesData.length === 0) {
       return <div>noData</div>;
     }
-    const selectDims = extractDims(personaData[0].dimGroups);
-    const filterPersonaQuesData = getFilterPersonaQuesData(personaQuesData, selectDims);
+    const selectDims = extractKeyDimensions(personaData[0].dimGroups);
+    const filterPersonaQuesData = getFilterQuesData(personaQuesData, selectDims);
     return (
       <div className={styles.container}>
         <div className={styles.content}>

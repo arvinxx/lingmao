@@ -18,13 +18,13 @@ export const interview = [
       {
         text: 'sync',
         dispatch: {
-          type: 'interview/sync',
+          type: 'record/sync',
         },
       },
       {
         text: 'inbox',
         dispatch: {
-          type: 'interview/changeUploadVisible',
+          type: 'record/changeUploadVisible',
         },
       },
     ],
@@ -32,7 +32,7 @@ export const interview = [
       {
         text: 'tags-o',
         dispatch: {
-          type: 'interview/changeTagVisible',
+          type: 'record/changeLabelMenuVisible',
         },
       },
     ],
@@ -156,27 +156,27 @@ export const data = [
       { text: 'bars', dispatch: { type: 'data/handleDisplayPanel' } },
     ],
   },
+  {
+    text: '分析汇总',
+    path: 'analysis',
+    left: [
+      {
+        text: 'left',
+        onClick: (e) => {
+          console.log(e);
+        },
+      },
+    ],
+    right: [
+      {
+        text: 'profile',
+        dispatch: {
+          type: 'data/handleDisplayText',
+        },
+      },
+    ],
+  },
 ];
-// {
-//   text: '分析汇总',
-//   path: 'analysis',
-//   left: [
-//     {
-//       text: 'left',
-//       onClick: (e) => {
-//         console.log(e);
-//       },
-//     },
-//   ],
-//   right: [
-//     {
-//       text: 'profile',
-//       dispatch: {
-//         type: 'data/handleDisplayText',
-//       },
-//     },
-//   ],
-// },
 export const persona = [
   {
     text: '匹配',
@@ -219,7 +219,7 @@ export const dashboard = {
     {
       text: 'upload',
       dispatch: {
-        type: 'interview/changeUploadVisible',
+        type: 'record/changeUploadVisible',
       },
     },
     {
