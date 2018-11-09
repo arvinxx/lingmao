@@ -24,7 +24,7 @@ export const interview = [
       {
         text: 'inbox',
         dispatch: {
-          type: 'record/changeUploadVisible',
+          type: 'interviewDisplay/changeUploadVisible',
         },
       },
     ],
@@ -32,7 +32,7 @@ export const interview = [
       {
         text: 'tags-o',
         dispatch: {
-          type: 'record/changeLabelMenuVisible',
+          type: 'interviewDisplay/changeLabelMenuVisible',
         },
       },
     ],
