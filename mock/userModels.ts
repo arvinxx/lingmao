@@ -6,6 +6,6 @@ const Random = Mock.Random;
 export const userModels: TQuesData = quesData.map((item) => ({
   ...item,
   type: Random.natural(1, 5),
-  typeName: Random.word(),
+  typeName: Random.cword(),
   percent: Random.natural(1, 40),
 }));

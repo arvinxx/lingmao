@@ -9,7 +9,6 @@ import styles from './edit.less';
 import { IPersonaState } from '@/models/persona';
 import { TQuesData } from '@/models/data';
 import { personaData } from '@/mock/persona';
-import { userModels as clusterResult } from '@/mock/userModels';
 const { TabPane } = Tabs;
 
 interface IEditProps {
@@ -38,7 +37,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     const {
       persona,
       dispatch,
-      // clusterResult
+      clusterResult
     } = this.props;
     const {
       dimVisible,
@@ -51,7 +50,6 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     // if (personaData.length === 0) {
     //   return <div>no persona data</div>;
     // }
-    console.log(clusterResult);
     const { checkedDims, dimGroups, basicInfo } = personaData[Number(displayIndex)];
 
     return (
@@ -63,7 +61,9 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
             activeKey={displayIndex}
             onChange={(key) => this.changePersonaIndex(key)}
           >
-            {clusterResult.map((cluster, index) => <TabPane tab={cluster.typeName} key={index} />)}
+            {clusterResult.map((cluster, index) => (
+              <TabPane tab={cluster.typeName} key={String(index)} />
+            ))}
           </Tabs>
           <div className={styles.editor}>
             <PersonaEditor

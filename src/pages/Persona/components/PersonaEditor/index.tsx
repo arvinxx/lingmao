@@ -154,8 +154,8 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                   <div style={{ marginBottom: 24 }}>
                     <div className={styles.info}> 基本信息 </div>
                     {personaDimGroups[0].dims.map((item) => (
-                      <div key={item.tagId} style={{ fontSize: 14, marginBottom: 8 }}>
-                        <span> {item.tagText}</span>
+                      <div key={item.labelKey} style={{ fontSize: 14, marginBottom: 8 }}>
+                        <span> {item.labelText}</span>
                         ： {item.text}
                       </div>
                     ))}
@@ -172,10 +172,10 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                           {dimGroup.dims.map(
                             (dim) =>
                               showText ? (
-                                <li key={dim.tagId}>{dim.text}</li>
+                                <li key={dim.labelKey}>{dim.text}</li>
                               ) : (
-                                <div key={dim.tagId}>
-                                  {dim.tagText}
+                                <div key={dim.labelKey}>
+                                  {dim.labelText}
                                   <MiniProgress
                                     percent={dim.value * 10}
                                     color={'l(0) 0:#99f5ff 1:#a6a6ff'}
