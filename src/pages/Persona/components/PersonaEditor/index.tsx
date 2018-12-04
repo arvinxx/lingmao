@@ -8,13 +8,13 @@ import DraggableBlock from './DraggableBlock';
 import PhotoModal from './PhotoModal';
 import { MiniProgress } from '@/components';
 
-import { TBasicInfo, TPersonaDimGroups } from '@/models/persona';
+import { IBasicInfo, TPersonaDimGroups } from '@/models/persona';
 import { TQuesData } from '@/models/data';
 
 const { TextArea } = Input;
 
 interface IPersonaEditorProps {
-  persona: TBasicInfo;
+  persona: IBasicInfo;
   personaDimGroups: TPersonaDimGroups;
   clusterResult: TQuesData;
   index: number;
@@ -71,7 +71,8 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
     const { keywords, name, photo, bios, career, percent } = persona;
 
     // 根据性别判断采用男性图片或女性图片
-    let gender = clusterResult[index].quesData.find((item) => item.tagText === '性别').answer.text;
+    // let gender = clusterResult[index].records.find((item) => item.labelText === '性别').answer.text || '男';
+    let gender = '男';
     let img = photo.value;
     const res = gender.match(/[男女]/);
     gender = res.length !== 0 ? res[0] : '';

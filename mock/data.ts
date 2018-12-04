@@ -1,5 +1,6 @@
 import { generateKey } from '@/utils';
-export const quesData = [
+import { TQuesData } from '@/models/data';
+export const quesData: TQuesData = [
   {
     records: [
       {

@@ -3,23 +3,23 @@ import { getTagsArrById } from '@/utils';
 import update from 'immutability-helper';
 import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
-import { TQuesData, IUserModel, IQuesRecord } from './data';
+import { TQuesData, IQuesRecord } from './data';
 
-export type TPersonaDim = {
-  tagId: string;
-  value: number;
+export interface IPersonaDim {
   text: string;
-  tagText: string;
-};
-export type TPersonaDims = TPersonaDim[];
-export type TPersonaDimGroup = {
+  value: number;
+  labelKey: string;
+  labelText: string;
+}
+
+export interface IPersonaDimGroup {
   text: string;
   key: string;
-  dims?: TPersonaDims;
-};
-export type TPersonaDimGroups = TPersonaDimGroup[];
+  dims?: IPersonaDim[];
+}
+export type TPersonaDimGroups = IPersonaDimGroup[];
 
-export type TBasicInfo = {
+export interface IBasicInfo {
   percent: number;
   keywords: string;
   name: string;
@@ -30,20 +30,23 @@ export type TBasicInfo = {
     value: any[];
     text: string;
   };
-};
-export type TPersonaDatum = {
-  dimGroups: TPersonaDimGroups;
-  checkedDims: Array<string>;
-  basicInfo: TBasicInfo;
-  typeName: string;
-};
-export type TPersonaData = TPersonaDatum[];
+}
+
+// 单个画像数据结构
+export interface IPersona {
+  dimGroups: TPersonaDimGroups; //维度信息,如基本信息 动机 目标等
+  checkedDims: string[]; // 进行展示的维度
+  basicInfo: IBasicInfo; // 基本信息
+  typeName: string; // 画像类别名称
+}
+// 多个画像形成的画像列表
+export type TPersonaList = IPersona[];
 export interface IPersonaState {
   dimVisible: boolean;
   exportVisible: boolean;
   expandedDims: Array<string>;
-  personaData: TPersonaData;
-  personaDisplayDimGroups: TPersonaDimGroups;
+  personaList: TPersonaList; // 画像列表
+  displayDimGroups: TPersonaDimGroups;
   showText: boolean;
   displayIndex: string;
 }
@@ -53,8 +56,8 @@ const persona: DvaModel<IPersonaState> = {
     dimVisible: true,
     exportVisible: false,
     expandedDims: [],
-    personaData: [],
-    personaDisplayDimGroups: [],
+    personaList: [],
+    displayDimGroups: [],
     displayIndex: '0',
     showText: false,
   },
@@ -82,7 +85,7 @@ const persona: DvaModel<IPersonaState> = {
       const { checkedDims, index } = payload;
       return {
         ...state,
-        personaData: update(state.personaData, {
+        personaList: update(state.personaList, {
           [index]: {
             checkedDims: {
               $set: checkedDims,
@@ -100,16 +103,16 @@ const persona: DvaModel<IPersonaState> = {
     },
 
     handleDisplayDimGroups(state: IPersonaState, action) {
-      const { personaData, displayIndex } = state;
-      const { dimGroups, checkedDims } = personaData[Number(displayIndex)];
-      const filterDimGroups = dimGroups.filter((dimGroup: TPersonaDimGroup) =>
-        dimGroup.dims.some((dim) => checkedDims.some((item) => item === dim.tagId))
+      const { personaList, displayIndex } = state;
+      const { dimGroups, checkedDims } = personaList[Number(displayIndex)];
+      const filterDimGroups = dimGroups.filter((dimGroup: KeyDimension) =>
+        dimGroup.dims.some((dim) => checkedDims.some((item) => item === dim.labelKey))
       );
       return {
         ...state,
         personaDisplayDimGroups: filterDimGroups.map((dimGroup) => ({
           ...dimGroup,
-          dims: dimGroup.dims.filter((dim) => checkedDims.some((id) => id === dim.tagId)),
+          dims: dimGroup.dims.filter((dim) => checkedDims.some((id) => id === dim.labelKey)),
         })),
       };
     },
@@ -128,7 +131,7 @@ const persona: DvaModel<IPersonaState> = {
       const { text, index } = payload;
       return {
         ...state,
-        personaData: update(state.personaData, {
+        personaList: update(state.personaList, {
           [index]: {
             basicInfo: {
               keywords: {
@@ -143,7 +146,7 @@ const persona: DvaModel<IPersonaState> = {
       const { text, index } = payload;
       return {
         ...state,
-        personaData: update(state.personaData, {
+        personaList: update(state.personaList, {
           [index]: {
             basicInfo: {
               bios: {
@@ -158,7 +161,7 @@ const persona: DvaModel<IPersonaState> = {
       const { text, index } = payload;
       return {
         ...state,
-        personaData: update(state.personaData, {
+        personaList: update(state.personaList, {
           [index]: {
             basicInfo: {
               career: {
@@ -173,7 +176,7 @@ const persona: DvaModel<IPersonaState> = {
       const { text, index } = payload;
       return {
         ...state,
-        personaData: update(state.personaData, {
+        personaList: update(state.personaList, {
           [index]: {
             basicInfo: {
               name: {
@@ -194,14 +197,14 @@ const persona: DvaModel<IPersonaState> = {
     initPersonaData(state, { payload: personaQuesData }) {
       return {
         ...state,
-        personaData: personaQuesData.map((personaQuesDatum: IUserModel) => {
+        personaList: personaQuesData.map((personaQuesRecord: IQuesRecord) => {
           return {
             dimGroups,
             checkedDims: [],
-            typeName: personaQuesDatum.typeName,
+            typeName: personaQuesRecord.typeName,
             basicInfo: {
               ...basicInfo(),
-              percent: personaQuesDatum.percent || 0,
+              percent: personaQuesRecord.percent || 0,
             },
           };
         }),
@@ -221,18 +224,18 @@ const persona: DvaModel<IPersonaState> = {
       }
     ) {
       const { personaQuesData, personaDimId, groupId } = payload;
-      // 前提： personaData 存在数据
+      // 前提： personaList 存在数据
       return {
         ...state,
-        personaData: personaQuesData.map((personaQuesDatum: IUserModel, index) => {
+        personaList: personaQuesData.map((personaQuesRecord: IQuesRecord, index) => {
           // 三个值用于赋给 persona 的 dim
-          const { quesData } = personaQuesDatum;
-          const { tagText, answer, question } = quesData.find((item) => {
-            // 如果不存在 tagId 时用 question 替换，传进来的 tagId 也是一样的操作逻辑
-            return generateTagId(item.tagId, item.question) === personaDimId;
+          const { records } = personaQuesRecord;
+          const { labelText, answer, question } = records.find((item) => {
+            // 如果不存在 labelKey 时用 question 替换，传进来的 labelKey 也是一样的操作逻辑
+            return generateTagId(item.labelKey, item.question) === personaDimId;
           });
 
-          const personaDatum: TPersonaDatum = state.personaData[index];
+          const personaDatum: TPersonaDatum = state.personaList[index];
           const { dimGroups, ...resData } = personaDatum;
           // 找到丢进去的组别序号
           const dIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === groupId);
@@ -243,8 +246,8 @@ const persona: DvaModel<IPersonaState> = {
                 dims: {
                   $push: [
                     {
-                      tagId: personaDimId,
-                      tagText: tagText === '' ? question : tagText,
+                      labelKey: personaDimId,
+                      labelText: labelText === '' ? question : labelText,
                       text: answer.text,
                       value: answer.order,
                     },
@@ -258,15 +261,17 @@ const persona: DvaModel<IPersonaState> = {
     },
 
     removeDimFromDimGroup(state, { payload }) {
-      const { tagId, index } = payload;
+      const { labelKey, index } = payload;
       return {
         ...state,
-        personaData: state.personaData.map((i) => ({
+        personaList: state.personaList.map((i) => ({
           ...i,
           dimGroups: update(i.dimGroups, {
             [index]: {
               dims: {
-                $set: i.dimGroups[index].dims.filter((dim: TPersonaDim) => dim.tagId !== tagId),
+                $set: i.dimGroups[index].dims.filter(
+                  (dim: IPersonaDim) => dim.labelKey !== labelKey
+                ),
               },
             },
           }),
@@ -279,7 +284,7 @@ const persona: DvaModel<IPersonaState> = {
 
       return {
         ...state,
-        personaData: state.personaData.map((i: TPersonaDatum) => {
+        personaList: state.personaList.map((i: TPersonaDatum) => {
           const { dimGroups } = i;
           const dragGroupIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === dragGroup);
           const dropGroupIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === dropGroup);
@@ -289,7 +294,7 @@ const persona: DvaModel<IPersonaState> = {
               [dragGroupIndex]: {
                 dims: {
                   $apply: (dims: TPersonaDims) =>
-                    dims.filter((dim) => dim.tagId !== (dragDim as TPersonaDim).tagId),
+                    dims.filter((dim) => dim.labelKey !== (dragDim as IPersonaDim).labelKey),
                 },
               },
               [dropGroupIndex]: {
