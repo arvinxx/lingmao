@@ -30,7 +30,7 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
     tags: [],
   };
   componentDidMount() {
-    // 根据 personaQuesData 初始化 personaData 数据
+    // 根据 personaQuesData 初始化 personaList 数据
     const { personaData, dispatch, personaQuesData } = this.props;
     if (personaQuesData.length !== 0 && personaQuesData.length !== personaData.length) {
       dispatch({
@@ -42,7 +42,7 @@ export default class Match extends Component<IMatchProps & DispatchProp> {
 
   render() {
     const { personaData, dispatch, personaQuesData } = this.props;
-    // 从 personaData 中抽取 id
+    // 从 personaList 中抽取 id
     if (personaData.length === 0 || personaQuesData.length === 0) {
       return <div>noData</div>;
     }

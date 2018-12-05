@@ -162,13 +162,11 @@ export const getAnswerByOrder = (quesData: TQuesData, question: string, order: n
  *  根据选择标签过滤问卷数据，用于降维与聚类
  */
 export const getFilterQuesData = (quesData: TQuesData, selectedLabelKeys: string[]): TQuesData => {
-  console.log(selectedLabelKeys);
-  console.log(quesData);
   return quesData.map((quesRecord) => ({
     ...quesRecord,
     records: quesRecord.records.filter((quesDataItem) => {
-      const { question } = quesDataItem;
-      return selectedLabelKeys.some((key) => key === question);
+      const { question, labelKey } = quesDataItem;
+      return selectedLabelKeys.some((key) => key === labelKey && key === question);
     }),
   }));
 };

@@ -5,6 +5,7 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.js',
     '@/models/(.*)$': '<rootDir>/src/models/$1',
     '@/mock/(.*)$': '<rootDir>/mock/$1',
+    '@/typings/(.*)$': '<rootDir>/typings/$1',
     '@/(.*)$': '<rootDir>/src/$1',
   },
 };

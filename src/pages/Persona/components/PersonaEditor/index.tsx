@@ -8,15 +8,15 @@ import DraggableBlock from './DraggableBlock';
 import PhotoModal from './PhotoModal';
 import { MiniProgress } from '@/components';
 
-import { IBasicInfo, TPersonaDimGroups } from '@/models/persona';
-import { TQuesData } from '@/models/data';
+import { IBasicInfo, TDimGroups } from '@/models/persona';
+import { IQuesRecord, TQuesData } from '@/models/data';
 
 const { TextArea } = Input;
 
 interface IPersonaEditorProps {
   persona: IBasicInfo;
-  personaDimGroups: TPersonaDimGroups;
-  clusterResult: TQuesData;
+  personaDimGroups: TDimGroups;
+  clusterResult: IQuesRecord;
   index: number;
   showText: boolean;
 }
@@ -66,7 +66,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
   };
 
   render() {
-    const { dispatch, persona, personaDimGroups, index, showText, clusterResult } = this.props;
+    const { dispatch, persona, personaDimGroups, index, showText } = this.props;
     const { modalVisible, imgIndex } = this.state;
     const { keywords, name, photo, bios, career, percent } = persona;
 

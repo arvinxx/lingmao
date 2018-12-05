@@ -2,15 +2,15 @@ import React, { Component, Fragment } from 'react';
 import { Tree } from 'antd';
 
 import styles from './index.less';
-import { TPersonaDimGroups, TPersonaDims } from '../../models/persona';
+import { TDimGroups } from '@/models/persona';
 import { DispatchProp } from 'react-redux';
 
 const TreeNode = Tree.TreeNode;
 
 interface IDimensionListProps {
-  expandedDims: Array<string>;
-  checkedDims: Array<string>;
-  personaDimGroups: TPersonaDimGroups;
+  expandedDims: string[];
+  checkedDims: string[];
+  dimGroups: TDimGroups;
   index: number;
 }
 
@@ -18,7 +18,7 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
   static defaultProps: IDimensionListProps = {
     checkedDims: [],
     expandedDims: [],
-    personaDimGroups: [],
+    dimGroups: [],
     index: 0,
   };
   onExpand = (expandedDims) => {
@@ -37,13 +37,17 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
     });
   };
 
-  renderTreeNodes = (personaDimGroups: TPersonaDimGroups) => {
-    return personaDimGroups.map((personaDimGroup) => {
-      const { dims, text, key } = personaDimGroup;
+  /**
+   * 生成选择树列
+   * @param dimGroups 维度群组
+   */
+  renderTreeNodes = (dimGroups: TDimGroups) => {
+    return dimGroups.map((dimGroup) => {
+      const { dims, text, key } = dimGroup;
       if (dims.length > 0) {
         return (
-          <TreeNode title={text} key={key} dataRef={personaDimGroup}>
-            {dims.map((dim) => <TreeNode title={dim.tagText} key={dim.tagId} dataRef={dim} />)}
+          <TreeNode title={text} key={key} dataRef={dimGroup}>
+            {dims.map((dim) => <TreeNode title={dim.labelText} key={dim.labelKey} dataRef={dim} />)}
           </TreeNode>
         );
       } else return <Fragment key={key} />;
@@ -51,7 +55,7 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
   };
 
   render() {
-    const { expandedDims, checkedDims, personaDimGroups, index } = this.props;
+    const { expandedDims, checkedDims, dimGroups, index } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.title}>选择维度</div>
@@ -63,7 +67,7 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
           onCheck={(e) => this.onCheck(e, index)}
           checkedKeys={checkedDims}
         >
-          {this.renderTreeNodes(personaDimGroups)}
+          {this.renderTreeNodes(dimGroups)}
         </Tree>
       </div>
     );

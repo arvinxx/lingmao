@@ -4,6 +4,8 @@ import { concat } from 'lodash';
 import update from 'immutability-helper';
 import { ILabel } from '@/models/label';
 
+import { userModels } from '@/mock/userModels';
+
 export type TQuesData = IQuesRecord[];
 
 export interface IQuesRecord {
@@ -76,7 +78,7 @@ const model: DvaModel<IDataState> = {
   state: {
     quesData: [],
     keyDimensions: [],
-    userModels: [],
+    userModels: userModels,
     selectClusterIndex: 0,
     clusterResults: [],
     KMO: 0,
@@ -211,5 +213,6 @@ const model: DvaModel<IDataState> = {
       return state;
     },
   },
+  subscriptions: {},
 };
 export default model;

@@ -6,9 +6,9 @@ import { DispatchProp } from 'react-redux';
 import { PersonaEditor, DimensionList } from './components';
 
 import styles from './edit.less';
-import { IPersonaState } from '@/models/persona';
+import { IPersona, IPersonaState } from '@/models/persona';
 import { TQuesData } from '@/models/data';
-import { personaData } from '@/mock/persona';
+
 const { TabPane } = Tabs;
 
 interface IEditProps {
@@ -24,33 +24,30 @@ interface IEditDefaultProps {}
 }))
 export default class Edit extends Component<IEditProps & IEditDefaultProps & DispatchProp> {
   changePersonaIndex = (key) => {
+    // 改变显示的画像
     this.props.dispatch({
       type: 'persona/handleDisplayIndex',
       payload: key,
     });
+    // 用于刷新展示的维度群组
+    // 如果没有这行,那么显示的维度群组仍然是之前一个画像的维度群组
     this.props.dispatch({
       type: 'persona/handleDisplayDimGroups',
     });
   };
 
   render() {
-    const {
-      persona,
-      dispatch,
-      clusterResult
-    } = this.props;
+    const { persona, dispatch, clusterResult } = this.props;
     const {
       dimVisible,
       expandedDims,
-      // personaData,
+      personaList,
       displayDimGroups,
       displayIndex,
       showText,
     } = persona;
-    // if (personaData.length === 0) {
-    //   return <div>no persona data</div>;
-    // }
-    const { checkedDims, dimGroups, basicInfo } = personaData[Number(displayIndex)];
+
+    const { checkedDims, dimGroups, basicInfo } = personaList[displayIndex] as IPersona;
 
     return (
       <Fragment>
@@ -61,20 +58,21 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
             activeKey={displayIndex}
             onChange={(key) => this.changePersonaIndex(key)}
           >
-            {clusterResult.map((cluster, index) => (
-              <TabPane tab={cluster.typeName} key={String(index)} />
-            ))}
+            {clusterResult.map((cluster, index) => {
+              return (
+                <TabPane tab={cluster.typeName} key={String(index)} className={styles.editor}>
+                  <PersonaEditor
+                    personaDimGroups={displayDimGroups}
+                    clusterResult={cluster}
+                    dispatch={dispatch}
+                    persona={basicInfo}
+                    showText={showText}
+                    index={index}
+                  />
+                </TabPane>
+              );
+            })}
           </Tabs>
-          <div className={styles.editor}>
-            <PersonaEditor
-              personaDimGroups={displayDimGroups}
-              clusterResult={clusterResult}
-              dispatch={dispatch}
-              persona={basicInfo}
-              showText={showText}
-              index={Number(displayIndex)}
-            />
-          </div>
         </div>
         {dimVisible ? (
           <div className={styles.right}>
@@ -83,7 +81,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
               checkedDims={checkedDims}
               expandedDims={expandedDims}
               dispatch={dispatch}
-              personaDimGroups={dimGroups}
+              dimGroups={dimGroups}
             />
           </div>
         ) : null}

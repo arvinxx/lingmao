@@ -50,28 +50,28 @@ const mockDimGroups = [
     key: 'basicInfo',
     dims: [
       {
-        tagId: '@guid',
-        text: '@natural(18,55)',
-        tagText: '年龄',
+        LabelKey: '@guid',
+        lext: '@natural(18,55)',
+        labelText: '年龄',
       },
       {
-        tagId: '@guid',
-        tagText: '性别',
+        labelKey: '@guid',
+        labelText: '性别',
         'text|1': ['男', '女'],
       },
       {
-        tagId: '@guid',
-        tagText: '@ctitle',
+        labelKey: '@guid',
+        labelText: '@ctitle',
         text: '@ctitle',
       },
       {
-        tagId: '@guid',
-        tagText: '@ctitle',
+        labelKey: '@guid',
+        labelText: '@ctitle',
         text: '@ctitle',
       },
       {
-        tagId: '@guid',
-        tagText: '@ctitle',
+        labelKey: '@guid',
+        labelText: '@ctitle',
         text: '@ctitle',
       },
     ],
@@ -123,7 +123,7 @@ const mockDimGroups = [
   },
 ];
 
-export const personaData = Mock.mock({
+export const personaList = Mock.mock({
   data: [
     {
       dimGroups: mockDimGroups,

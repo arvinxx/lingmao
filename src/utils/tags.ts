@@ -1,23 +1,32 @@
 import { ITag, ILabel } from '@/models/label';
 import { tail } from 'lodash';
-import { TPersonaDims } from '@/models/persona';
+import { IPersonaDim } from '@/models/persona';
 
-export const extractTags = (tagGroups: Array<ILabel>): Array<ITag> => {
-  let tags: Array<ITag> = [];
-  if (tagGroups !== undefined) {
-    tagGroups.map((tagGroup: ILabel) => {
-      tags.push(...tagGroup.tags);
+/**
+ * 将标签组拍平成标签数组
+ * @param labels 标签群组
+ */
+export const extractTags = (labels: ILabel[]): ITag[] => {
+  let tags: ITag[] = [];
+  if (labels !== undefined) {
+    labels.map((label: ILabel) => {
+      tags.push(...label.tags);
     });
     return tags;
   } else return [];
 };
 
-export const getTagsArrById = (tagGroups: Array<ILabel>, Ids: Array<string>): Array<ITag> => {
-  if (tagGroups !== undefined && Ids !== undefined) {
-    let tagsArr: Array<ITag> = [];
-    Ids.map((id) => {
-      tagGroups.map((tagGroup) => {
-        const temp = tagGroup.tags.filter((tag) => tag.id === id);
+/**
+ * 根据 Key 获取标签数组
+ * @param labels 标签群组
+ * @param keys 唯一编码数组
+ */
+export const getTagsArrByKey = (labels: ILabel[], keys: string[]): ITag[] => {
+  if (labels !== undefined && keys !== undefined) {
+    let tagsArr: ITag[] = [];
+    keys.map((key) => {
+      labels.map((label) => {
+        const temp = label.tags.filter((tag) => tag.key === key);
         tagsArr = tagsArr.concat(temp);
       });
     });
@@ -69,9 +78,9 @@ export const getStarData = (tagGroups: Array<ILabel>): TStarModel => {
   return { data, categories, links };
 };
 
-export const getTagGroupId = (personaRecord: TPersonaDims): TPersonaDims => {
+export const getTagGroupId = (personaRecord: IPersonaDim[]): IPersonaDim[] => {
   return personaRecord.map((item) => {
-    if (item.tagGroupId !== '') {
+    if (item.text !== '') {
       return item;
     } else {
       //TODO : 获取 GroupId

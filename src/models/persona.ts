@@ -1,9 +1,12 @@
 import { DvaModel } from '@/typings/dva';
-import { getTagsArrById } from '@/utils';
+import { getTagsArrByKey } from '@/utils';
 import update from 'immutability-helper';
 import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
 import { TQuesData, IQuesRecord } from './data';
+
+import { personaList } from '@/mock/persona';
+import { userModels } from '@/mock/userModels';
 
 export interface IPersonaDim {
   text: string;
@@ -12,12 +15,12 @@ export interface IPersonaDim {
   labelText: string;
 }
 
-export interface IPersonaDimGroup {
+export interface IDimGroup {
   text: string;
   key: string;
   dims?: IPersonaDim[];
 }
-export type TPersonaDimGroups = IPersonaDimGroup[];
+export type TDimGroups = IDimGroup[];
 
 export interface IBasicInfo {
   percent: number;
@@ -34,7 +37,7 @@ export interface IBasicInfo {
 
 // 单个画像数据结构
 export interface IPersona {
-  dimGroups: TPersonaDimGroups; //维度信息,如基本信息 动机 目标等
+  dimGroups: TDimGroups; //维度信息,如基本信息 动机 目标等
   checkedDims: string[]; // 进行展示的维度
   basicInfo: IBasicInfo; // 基本信息
   typeName: string; // 画像类别名称
@@ -46,7 +49,7 @@ export interface IPersonaState {
   exportVisible: boolean;
   expandedDims: Array<string>;
   personaList: TPersonaList; // 画像列表
-  displayDimGroups: TPersonaDimGroups;
+  displayDimGroups: TDimGroups;
   showText: boolean;
   displayIndex: string;
 }
@@ -56,7 +59,7 @@ const persona: DvaModel<IPersonaState> = {
     dimVisible: true,
     exportVisible: false,
     expandedDims: [],
-    personaList: [],
+    personaList: personaList,
     displayDimGroups: [],
     displayIndex: '0',
     showText: false,
@@ -98,31 +101,38 @@ const persona: DvaModel<IPersonaState> = {
       const { tagGroups } = payload;
       return {
         ...state,
-        disPlayDims: getTagsArrById(tagGroups, state.checkedDims),
+        disPlayDims: getTagsArrByKey(tagGroups, state.checkedDims),
       };
     },
 
-    handleDisplayDimGroups(state: IPersonaState, action) {
+    /**
+     * 该函数控制在画像上显示的维度群组
+     */
+    handleDisplayDimGroups(state: IPersonaState) {
       const { personaList, displayIndex } = state;
       const { dimGroups, checkedDims } = personaList[Number(displayIndex)];
-      const filterDimGroups = dimGroups.filter((dimGroup: KeyDimension) =>
+      const filterDimGroups = dimGroups.filter((dimGroup: IDimGroup) =>
         dimGroup.dims.some((dim) => checkedDims.some((item) => item === dim.labelKey))
       );
       return {
         ...state,
-        personaDisplayDimGroups: filterDimGroups.map((dimGroup) => ({
+        displayDimGroups: filterDimGroups.map((dimGroup) => ({
           ...dimGroup,
           dims: dimGroup.dims.filter((dim) => checkedDims.some((id) => id === dim.labelKey)),
         })),
       };
     },
-
+    /**
+     * 拖拽排列显示的维度群组
+     * dragIndex: 拖拽起始序号
+     * dropIndex: 拖拽终点序号
+     */
     handleDragDisplayDim(state, { payload }) {
       const { dragIndex, dropIndex } = payload;
-      const dragItem = state.personaDisplayDimGroups[dragIndex];
+      const dragItem = state.displayDimGroups[dragIndex];
       return {
         ...state,
-        personaDisplayDimGroups: update(state.personaDisplayDimGroups, {
+        displayDimGroups: update(state.displayDimGroups, {
           $splice: [[dragIndex, 1], [dropIndex, 0, dragItem]],
         }),
       };
@@ -194,36 +204,29 @@ const persona: DvaModel<IPersonaState> = {
       return { ...state, showText: !state.showText };
     },
 
-    initPersonaData(state, { payload: personaQuesData }) {
+    initUserModel(state, { payload: userModels }) {
       return {
         ...state,
-        personaList: personaQuesData.map((personaQuesRecord: IQuesRecord) => {
+        personaList: userModels.map((userModel: IQuesRecord) => {
           return {
             dimGroups,
             checkedDims: [],
-            typeName: personaQuesRecord.typeName,
+            typeName: userModel.typeName,
             basicInfo: {
               ...basicInfo(),
-              percent: personaQuesRecord.percent || 0,
+              percent: userModel.percent || 0,
             },
           };
         }),
       };
     },
 
-    addDimToPersonaGroups(
-      state,
-      {
-        payload,
-      }: {
-        payload: {
-          personaQuesData: TQuesData;
-          personaDimId: string;
-          groupId: string;
-        };
-      }
-    ) {
-      const { personaQuesData, personaDimId, groupId } = payload;
+    addDimToPersonaGroups(state, { payload }) {
+      const { personaQuesData, personaDimId, groupId } = payload as {
+        personaQuesData: TQuesData;
+        personaDimId: string;
+        groupId: string;
+      };
       // 前提： personaList 存在数据
       return {
         ...state,
@@ -235,8 +238,8 @@ const persona: DvaModel<IPersonaState> = {
             return generateTagId(item.labelKey, item.question) === personaDimId;
           });
 
-          const personaDatum: TPersonaDatum = state.personaList[index];
-          const { dimGroups, ...resData } = personaDatum;
+          const persona: IPersona = state.personaList[index];
+          const { dimGroups, ...resData } = persona;
           // 找到丢进去的组别序号
           const dIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === groupId);
           return {
@@ -284,7 +287,7 @@ const persona: DvaModel<IPersonaState> = {
 
       return {
         ...state,
-        personaList: state.personaList.map((i: TPersonaDatum) => {
+        personaList: state.personaList.map((i: IPersona) => {
           const { dimGroups } = i;
           const dragGroupIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === dragGroup);
           const dropGroupIndex = dimGroups.findIndex((dimGroup) => dimGroup.key === dropGroup);
@@ -293,7 +296,7 @@ const persona: DvaModel<IPersonaState> = {
             dimGroups: update(dimGroups, {
               [dragGroupIndex]: {
                 dims: {
-                  $apply: (dims: TPersonaDims) =>
+                  $apply: (dims: IPersonaDim[]) =>
                     dims.filter((dim) => dim.labelKey !== (dragDim as IPersonaDim).labelKey),
                 },
               },
@@ -309,13 +312,13 @@ const persona: DvaModel<IPersonaState> = {
     },
   },
   subscriptions: {
-    setup({ history, dispatch }) {
-      return history.listen(({ pathname }) => {
-        if (pathname === '/persona') {
-          dispatch({ type: 'initUserModel' });
-        }
-      });
-    },
+    // setup({ history, dispatch }) {
+    //   return history.listen(({ pathname }) => {
+    //     if (pathname === '/persona') {
+    //       dispatch({ type: 'initUserModel' });
+    //     }
+    //   });
+    // },
   },
 };
 
