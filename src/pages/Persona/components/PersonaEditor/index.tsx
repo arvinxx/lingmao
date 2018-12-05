@@ -15,7 +15,7 @@ const { TextArea } = Input;
 
 interface IPersonaEditorProps {
   persona: IBasicInfo;
-  personaDimGroups: TDimGroups;
+  dimGroups: TDimGroups;
   clusterResult: IQuesRecord;
   index: number;
   showText: boolean;
@@ -66,7 +66,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
   };
 
   render() {
-    const { dispatch, persona, personaDimGroups, index, showText } = this.props;
+    const { dispatch, persona, dimGroups, index, showText } = this.props;
     const { modalVisible, imgIndex } = this.state;
     const { keywords, name, photo, bios, career, percent } = persona;
 
@@ -150,10 +150,10 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
             </div>
             <div className={styles.body}>
               <div className={styles.basic}>
-                {personaDimGroups.length > 0 && personaDimGroups[0].text === '基本信息' ? (
+                {dimGroups.length > 0 && dimGroups[0].text === '基本信息' ? (
                   <div style={{ marginBottom: 24 }}>
                     <div className={styles.info}> 基本信息 </div>
-                    {personaDimGroups[0].dims.map((item) => (
+                    {dimGroups[0].dims.map((item) => (
                       <div key={item.labelKey} style={{ fontSize: 14, marginBottom: 8 }}>
                         <span> {item.labelText}</span>
                         ： {item.text}
@@ -163,7 +163,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 ) : null}
               </div>
               <div className={styles.right}>
-                {personaDimGroups.map(
+                {dimGroups.map(
                   (dimGroup, index) =>
                     dimGroup.text !== '基本信息' ? (
                       <DraggableBlock key={index} dispatch={dispatch} index={index}>

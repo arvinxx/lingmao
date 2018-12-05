@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Tabs } from 'antd';
-
-import { DispatchProp } from 'react-redux';
+import { Tabs, Button } from 'antd';
 import { PersonaEditor, DimensionList } from './components';
 
 import styles from './edit.less';
+
+import { DispatchProp } from 'react-redux';
 import { IPersona, IPersonaState } from '@/models/persona';
 import { TQuesData } from '@/models/data';
 
@@ -36,6 +36,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     });
   };
 
+
   render() {
     const { persona, dispatch, clusterResult } = this.props;
     const {
@@ -62,7 +63,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
               return (
                 <TabPane tab={cluster.typeName} key={String(index)} className={styles.editor}>
                   <PersonaEditor
-                    personaDimGroups={displayDimGroups}
+                    dimGroups={displayDimGroups}
                     clusterResult={cluster}
                     dispatch={dispatch}
                     persona={basicInfo}

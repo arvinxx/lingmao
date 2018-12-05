@@ -27,7 +27,6 @@ export interface IBasicInfo {
   keywords: string;
   name: string;
   bios: string;
-  displayIndex: string;
   career: string;
   photo: {
     value: any[];
@@ -37,9 +36,9 @@ export interface IBasicInfo {
 
 // 单个画像数据结构
 export interface IPersona {
-  dimGroups: TDimGroups; //维度信息,如基本信息 动机 目标等
+  dimGroups: TDimGroups; //维度群组,如基本信息 动机 目标等
   checkedDims: string[]; // 进行展示的维度
-  basicInfo: IBasicInfo; // 基本信息
+  basicInfo: IBasicInfo; // 画像的基本信息
   typeName: string; // 画像类别名称
 }
 // 多个画像形成的画像列表
