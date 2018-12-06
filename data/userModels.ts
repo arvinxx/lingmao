@@ -1,4 +1,4 @@
-import { quesData } from './data';
+import { quesData } from '@/mock/data';
 import { TQuesData } from '@/models/data';
 import Mock from 'mockjs';
 const Random = Mock.Random;
