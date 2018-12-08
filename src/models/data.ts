@@ -4,7 +4,7 @@ import { concat } from 'lodash';
 import update from 'immutability-helper';
 import { ILabel } from '@/models/label';
 
-import { userModels } from '@/mock/userModels';
+import { userModels } from '@/data/userModels';
 
 export type TQuesData = IQuesRecord[];
 

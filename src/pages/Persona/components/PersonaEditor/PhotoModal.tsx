@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Upload, Modal, Icon, message } from 'antd';
 const Dragger = Upload.Dragger;
 import styles from './PhotoModal.less';
-import { photo } from '@/mock/persona';
+import { photo } from '@/data/persona';
 const props = {
   name: 'file',
   multiple: true,

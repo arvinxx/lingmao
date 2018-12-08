@@ -5,8 +5,8 @@ import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
 import { TQuesData, IQuesRecord } from './data';
 
-import { personaList } from '@/mock/persona';
-import { userModels } from '@/mock/userModels';
+import { personaList } from '@/data/persona';
+import { userModels } from '@/data/userModels';
 
 export interface IPersonaDim {
   text: string;

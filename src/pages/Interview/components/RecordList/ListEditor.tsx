@@ -4,7 +4,7 @@ import { Editor } from 'slate-react';
 import { DispatchProp } from 'react-redux';
 import { createContext } from 'react-broadcast';
 import PluginEditList from './Editor';
-import initValue from '../../../../../mock/records';
+import initValue from '@/data/records';
 
 import { Value } from 'slate';
 import { extractTags } from '../../../../utils';

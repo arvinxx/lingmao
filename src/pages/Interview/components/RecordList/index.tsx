@@ -5,7 +5,7 @@ import PopupMenu from './PopupMenu';
 
 import styles from './index.less';
 
-import initValue from '@/mock/records';
+import initValue from '@/data/records';
 
 import { DispatchProp } from 'react-redux';
 import { ILabel } from '@/models/label';

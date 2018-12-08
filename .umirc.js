@@ -32,6 +32,7 @@ export default {
     '@/assets': resolve(__dirname, './src/assets'),
     '@/typings': resolve(__dirname, './typings'),
     '@/mock': resolve(__dirname, './mock'),
+    '@/data': resolve(__dirname, './data'),
     styles: resolve(__dirname, './src/styles'), // less 全局样式文件
   },
 };

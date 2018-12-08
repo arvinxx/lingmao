@@ -17,6 +17,7 @@
       "@/services": ["./src/services"],
       "@/typings/*": ["./typings/*"],
       "@/mock/*": ["./mock/*"],
+      "@/data/*": ["./data/*"],
       "@/assets/*": ["./src/assets/*"]
     }
   }
