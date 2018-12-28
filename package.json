@@ -79,7 +79,7 @@
     "slate-prop-types": "^0.4.29",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
-    "umi": "latest",
+    "umi": "^2.3.1",
     "umi-plugin-react": "^1.0.0"
   },
   "browserslist": [
