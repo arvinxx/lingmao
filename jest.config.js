@@ -8,4 +8,9 @@ module.exports = {
     '@/typings/(.*)$': '<rootDir>/typings/$1',
     '@/(.*)$': '<rootDir>/src/$1',
   },
+  globals: {
+    'ts-jest': {
+      diagnostics: false, // 关掉 ts-test 的语法检测
+    },
+  },
 };
