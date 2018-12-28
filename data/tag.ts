@@ -8,6 +8,11 @@ export const littleTags = [
         key: 'rJecwftRf',
         refText: '21312',
       },
+      {
+        text: '测试标签2',
+        key: 'rJecwfsdstRf',
+        refText: '1352dx',
+      },
     ],
   },
 ];
@@ -35,11 +40,15 @@ export const largeTags = [
     ],
   },
   {
-    text: '标签的撒',
+    text: '性别',
     key: 'S1a3uMt0M',
     tags: [
       {
-        text: '。体而改几些地共类',
+        text: '男',
+        key: 'Byb9PfYRG',
+      },
+      {
+        text: '女',
         key: 'Byb9PfYRG',
       },
     ],

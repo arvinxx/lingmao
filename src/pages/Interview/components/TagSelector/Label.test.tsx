@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { IDimGroupProps } from './Label';
+import App, { ILabelProps } from './Label';
 import { spy } from 'sinon';
 
 const setup = () => {
   const dispatch = spy();
-  const props: IDimGroupProps = { id: '123', value: '24124' };
+  const props: ILabelProps = { labelKey: '123', value: '24124' };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };
 };
@@ -27,7 +27,7 @@ describe('response', () => {
     describe('编辑模式下可直接编辑内容', () => {
       it('changeLabel should run when change', () => {
         wrapper.find('Input').simulate('change', { target: { value: '1' } });
-        expect(dispatch.callCount).toEqual(2);
+        expect(dispatch.callCount).toEqual(1);
       });
     });
   });
@@ -43,8 +43,24 @@ describe('response', () => {
       it('deleteLabel should run when confirm', () => {
         const wrapper = shallow(<App {...props} dispatch={dispatch} />);
         wrapper.find('Popconfirm').simulate('confirm');
-        expect(dispatch.callCount).toEqual(2);
+        expect(dispatch.callCount).toEqual(1);
       });
+    });
+  });
+  describe('按 shift 结束 Label 编辑', () => {
+    it('dispatch should run once in shiftTagInput when press tab', () => {
+      const wrapper = shallow(<App {...props} dispatch={dispatch} />);
+      wrapper
+        .find('Input')
+        .simulate('keydown', { target: { id: '3' }, key: 'Tab', preventDefault: () => {} });
+      expect(dispatch.callCount).toEqual(1);
+    });
+    it('dispatch should not run in shiftTagInput when not press tab', () => {
+      const wrapper = shallow(<App {...props} dispatch={dispatch} />);
+      wrapper
+        .find('Input')
+        .simulate('keydown', { target: { id: '3' }, key: 'a', preventDefault: () => {} });
+      expect(dispatch.callCount).toEqual(0);
     });
   });
 });

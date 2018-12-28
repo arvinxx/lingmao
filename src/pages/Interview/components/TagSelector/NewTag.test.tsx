@@ -7,7 +7,7 @@ import { spy } from 'sinon';
 const setup = () => {
   const dispatch = spy();
   const props: IValueInputProps = {
-    id: 'rercxc',
+    labelKey: 'rercxc',
     inputVisible: false,
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
@@ -44,18 +44,37 @@ describe('Input', () => {
 
   describe('交互行为', () => {
     describe('聚焦时可正常编辑内容', () => {
-      it('newValueOnInput should run when change', () => {
+      it('newTagOnInput should run when change', () => {
         Input.simulate('change', { target: { value: '23' } });
-        expect(wrapper.state('newValue')).toEqual('23');
+        expect(wrapper.state('text')).toEqual('23');
       });
     });
-    describe('修改完毕后按回车保存修改', () => {
-      it('newValueOnConfirm should run when pressEnter', () => {
-        Input.simulate('pressEnter');
+    describe('修改完毕后按 Enter 保存修改,并结束创建标签', () => {
+      it('dispatch should run once when text is empty & press Enter', () => {
+        wrapper.setState({ text: '' });
+        Input.simulate('keydown', { key: 'Enter', preventDefault: () => {} });
         expect(dispatch.callCount).toEqual(1);
       });
+      it('dispatch should run twice when text is not empty & press Enter', () => {
+        wrapper.setState({ text: 'test' });
+        Input.simulate('keydown', { key: 'Enter', preventDefault: () => {} });
+        expect(dispatch.callCount).toEqual(2);
+      });
     });
-    describe('撤销修改按 ESC 退出', () => {
+    describe('修改完毕后按Tab保存修改,并继续创建新标签', () => {
+      it('dispatch should run once when text is not empty & press Tab', () => {
+        wrapper.setState({ text: '3223' });
+        Input.simulate('keydown', { key: 'Tab', preventDefault: () => {} });
+        expect(dispatch.callCount).toEqual(1);
+      });
+      it('dispatch should not run when text is empty & press Tab', () => {
+        wrapper.setState({ text: '' });
+        Input.simulate('keydown', { key: 'Tab', preventDefault: () => {} });
+        expect(dispatch.callCount).toEqual(0);
+      });
+    });
+
+    describe('按 ESC 撤销修改并退出', () => {
       it('cancelVOnEsc should run when press esc', () => {
         Input.simulate('keydown', { key: 's' });
         Input.simulate('keydown', { key: 'Escape' });
@@ -64,11 +83,11 @@ describe('Input', () => {
     });
 
     describe('鼠标单击空白时取消激活，并保存修改内容', () => {
-      it('newValueOnBlur should run when blur', () => {
-        wrapper.setState({ newValue: '3223' });
+      it('newTagOnBlur should run when blur', () => {
+        wrapper.setState({ text: '3223' });
         Input.simulate('blur');
         expect(dispatch.callCount).toEqual(2);
-        expect(wrapper.state('newValue')).toEqual('');
+        expect(wrapper.state('text')).toEqual('');
       });
     });
   });
