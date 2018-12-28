@@ -10,6 +10,7 @@ export const quesData: TQuesData = [
       },
       {
         key: generateKey(),
+        labelKey: 'gender',
         question: '你的性别是？',
         answer: { text: 'B.男', order: 1 },
       },
@@ -29,6 +30,7 @@ export const quesData: TQuesData = [
       },
       {
         key: generateKey(),
+        labelKey: 'gender',
         question: '你的性别是？',
         answer: { text: 'A.女', order: 0 },
       },

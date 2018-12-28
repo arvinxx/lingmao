@@ -2,9 +2,9 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { spy } from 'sinon';
 import App, { IVarianceExplainProps } from './VarianceExplain';
-import FA from '../../../../mock/FA';
-import { getAccumulation } from '../../../utils';
-const { eigenValues, percent } = FA;
+import { pca } from '@/data/ml';
+import { getAccumulation } from '@/utils';
+const { eigenValues, percent } = pca;
 const vEData = eigenValues.map((i, index) => ({
   key: index,
   eigenValue: i.toFixed(3),

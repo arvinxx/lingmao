@@ -10,7 +10,7 @@ const setup = () => {
     tabStage: '1',
     diagrams: [],
     quesData: [],
-    selectedDims: [],
+    selectedLabels: [],
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };
