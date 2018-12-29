@@ -1,22 +1,23 @@
-import { generateKey, getChartsDataSets } from '@/utils';
+import { getChartsDataSets } from '@/utils';
 import { quesData } from '@/data/quesData';
+import { IKeyDimension } from '@/models/data';
 
-const selectedQue = {
-  question: { key: '你的名字是?', name: '你的名字是?' },
+const keyDimension: IKeyDimension = {
+  question: { key: '你的名字是?', text: '你的名字是?' },
   answers: [
     {
-      name: '小A',
+      text: '小A',
       key: '1',
     },
     {
-      name: '小B',
+      text: '小B',
       key: '2',
     },
   ],
 };
 
 it('getChartsDataSets', () => {
-  expect(getChartsDataSets(quesData, '1', selectedQue)).toEqual([
+  expect(getChartsDataSets(quesData, '1', keyDimension)).toEqual([
     {
       count: 1,
       item: '小A',

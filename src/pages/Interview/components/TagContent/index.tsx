@@ -51,7 +51,9 @@ export default class TagContent extends Component<ITagContentProps & DispatchPro
                             okText="是"
                             cancelText="否"
                           >
-                            {text}
+                            <span id="label" onClick={() => this.filterRecord(key)}>
+                              {text}
+                            </span>
                             {/*<Icon type="close" className={styles.close} />*/}
                           </Popconfirm>
                         }

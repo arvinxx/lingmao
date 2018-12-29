@@ -8,8 +8,42 @@ import {
 } from '@/utils';
 import { IKeyDimension } from '@/models/data';
 import { quesData } from '@/data/quesData';
+import update from 'immutability-helper';
 
-
+const quesDataWithLabel = update(quesData, {
+  0: {
+    records: {
+      0: {
+        labelKey: { $set: 'name' },
+        labelText: { $set: '姓名' },
+      },
+      1: {
+        labelKey: { $set: 'gender' },
+        labelText: { $set: '性别' },
+      },
+      2: {
+        labelKey: { $set: 'address' },
+        labelText: { $set: '地址' },
+      },
+    },
+  },
+  1: {
+    records: {
+      0: {
+        labelKey: { $set: 'name' },
+        labelText: { $set: '姓名' },
+      },
+      1: {
+        labelKey: { $set: 'gender' },
+        labelText: { $set: '性别' },
+      },
+      2: {
+        labelKey: { $set: 'address' },
+        labelText: { $set: '地址' },
+      },
+    },
+  },
+});
 jest.mock('shortid');
 it('rawToSaved ', () => {
   const rawData = [
@@ -47,59 +81,19 @@ describe('getTableData', () => {
     expect(getTableData(quesData, false)).toEqual(tableData);
   });
   describe('should return labelKey as key', () => {
-    const quesDataWithLabel = [
-      {
-        records: [
-          {
-            labelKey: '1111',
-            labelText: '标签1',
-            ...quesData[0].records[0],
-          },
-          {
-            labelKey: '2222',
-            labelText: '标签2',
-            ...quesData[0].records[1],
-          },
-          {
-            labelKey: '3333',
-            labelText: '标签2',
-            ...quesData[0].records[2],
-          },
-        ],
-      },
-      {
-        records: [
-          {
-            labelKey: '1111',
-            labelText: '标签1',
-            ...quesData[1].records[0],
-          },
-          {
-            labelKey: '2222',
-            labelText: '标签2',
-            ...quesData[1].records[1],
-          },
-          {
-            labelKey: '3333',
-            labelText: '标签2',
-            ...quesData[0].records[2],
-          },
-        ],
-      },
-    ];
     it('should return labelKey as key', () => {
       const tableData = [
         {
           key: generateKey(),
-          '1111': 'A.小A',
+          name: 'A.小A',
           gender: 'B.男',
-          '3333': 'A.A',
+          address: 'A.A',
         },
         {
           key: generateKey(),
-          '1111': 'B.小B',
+          name: 'B.小B',
           gender: 'A.女',
-          '3333': 'A.A',
+          address: 'B.B',
         },
       ];
       expect(getTableData(quesDataWithLabel, false)).toEqual(tableData);
@@ -108,15 +102,15 @@ describe('getTableData', () => {
       const tableData = [
         {
           key: generateKey(),
-          '1111': '1',
+          name: '1',
           gender: '2',
-          '3333': '1',
+          address: '1',
         },
         {
           key: generateKey(),
-          '1111': '2',
+          name: '2',
           gender: '1',
-          '3333': '1',
+          address: '2',
         },
       ];
 
@@ -229,7 +223,7 @@ describe('getColumns', () => {
     ];
     const column = [
       { key: generateKey(), title: '你的名字是？', dataIndex: '1111' },
-      { key: generateKey(), title: '你的性别是？', dataIndex: 'gender' },
+      { key: generateKey(), title: '你的性别是？', dataIndex: '2222' },
       { key: generateKey(), title: '你住在？', dataIndex: '3333' },
     ];
     expect(getColumns(quesDataWithLabel)).toEqual(column);

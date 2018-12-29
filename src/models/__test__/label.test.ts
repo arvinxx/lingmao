@@ -1,5 +1,6 @@
 import model from '../label';
 import { generateKey } from '@/utils';
+import { mediumLabel } from '@/data/labels';
 
 const reducers = model.reducers;
 
@@ -304,251 +305,93 @@ describe('Reducers', () => {
 
   describe('handleTagIndexDrag', () => {
     const reducer = reducers.handleTagIndexDrag;
-    xit('should switch tag index if in the same group', () => {
+    it('should switch tag index if in the same group', () => {
       const state = {
-        tagGroups: [
-          {
-            text: '未分组',
-            id: '78979',
-            tags: [
-              {
-                id: '3',
-                text: '测试5',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-          {
-            id: '143213',
-            text: '分组1',
-            tags: [
-              {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-        ],
+        labels: mediumLabel,
       };
 
       const action = {
         type: 'tag/handleTagIndexDrag',
         payload: {
-          start: { dragIndex: 0, dragId: '1' },
-          end: { dropIndex: 1, dropId: '2' },
+          start: { dragIndex: 0, dragKey: 'rJecwftRf' },
+          end: { dropIndex: 1, dropKey: 'rJecwfsdstRf' },
         },
       };
       expect(reducer(state, action)).toEqual({
-        tagGroups: [
+        labels: [
           {
             text: '未分组',
-            id: '78979',
+            key: '1526132530988',
             tags: [
               {
-                id: '3',
-                text: '测试5',
-                refText: '',
-                refId: '',
-                groupId: '',
+                text: '测试标签2',
+                key: 'rJecwfsdstRf',
+                refText: '1352dx',
+              },
+              {
+                text: '测试标签1',
+                key: 'rJecwftRf',
+                refText: '21312',
               },
             ],
           },
           {
-            id: '143213',
-            text: '分组1',
+            text: '性别',
+            key: 'S1a3uMt0M',
             tags: [
               {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
+                text: '男',
+                key: 'Byb9PfYRG',
               },
               {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
+                text: '女',
+                key: 'Byb9PfY2RG',
               },
             ],
           },
         ],
       });
     });
-    xit('should add to the end group if in the different group', () => {
+    it('should add to the end group if in the different group', () => {
       const state = {
-        tagGroups: [
-          {
-            text: '未分组',
-            id: '78979',
-            tags: [
-              {
-                id: '3',
-                text: '测试5',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-          {
-            id: '143213',
-            text: '分组1',
-            tags: [
-              {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-        ],
+        labels: mediumLabel,
       };
       const action = {
         type: 'tag/handleTagIndexDrag',
         payload: {
-          start: { dragIndex: 0, dragId: '1' },
-          end: { dropIndex: 0, dropId: '3' },
+          start: { dragIndex: 0, dragKey: 'rJecwftRf' },
+          end: { dropIndex: 0, dropKey: 'Byb9PfYRG' },
         },
       };
       expect(reducer(state, action)).toEqual({
-        tagGroups: [
+        labels: [
           {
             text: '未分组',
-            id: '78979',
+            key: '1526132530988',
             tags: [
               {
-                id: '1',
-                text: '测试1',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-              {
-                id: '3',
-                text: '测试5',
-                refText: '',
-                refId: '',
-                groupId: '',
+                text: '测试标签2',
+                key: 'rJecwfsdstRf',
+                refText: '1352dx',
               },
             ],
           },
           {
-            id: '143213',
-            text: '分组1',
+            text: '性别',
+            key: 'S1a3uMt0M',
             tags: [
               {
-                id: '2',
-                text: '测试2',
-                refText: '',
-                refId: '',
-                groupId: '',
-              },
-            ],
-          },
-        ],
-      });
-    });
-
-    xit('should switch tag index if in the same group', () => {
-      const state = {
-        tagGroups: [
-          {
-            id: '1526132530988',
-            text: '未分组',
-            tags: [
-              {
-                refId: '1525949157016',
-                id: '1526132589586',
-                text: '。但火',
-                _id: '5af6ef700616452eb85a28b0',
+                text: '测试标签1',
+                key: 'rJecwftRf',
+                refText: '21312',
               },
               {
-                refId: 'HJ@OwGtAG',
-                id: 'rJecwftRf',
-                text: '少门分，用被孟',
-                _id: '5afb98a5aec4ec586cd4bd86',
+                text: '男',
+                key: 'Byb9PfYRG',
               },
               {
-                refId: 'HJ@OwGtAG',
-                id: 'SJQcwMYAz',
-                text: '格活最任，问',
-                _id: '5afb98a5aec4ec586cd4bd84',
-              },
-              {
-                _id: '5afc6a4e29917c234c05ecbd',
-                text: '百管百',
-                id: 'r1H89JcRz',
-                refId: 'ryaD76uCz',
-              },
-            ],
-          },
-        ],
-      };
-      const action = {
-        type: 'tag/handleTagIndexDrag',
-        payload: {
-          start: {
-            dragIndex: 2,
-            dragId: 'SJQcwMYAz',
-          },
-          end: {
-            dropIndex: 1,
-            dropId: 'rJecwftRf',
-          },
-        },
-      };
-      expect(reducer(state, action)).toEqual({
-        tagGroups: [
-          {
-            id: '1526132530988',
-            text: '未分组',
-            tags: [
-              {
-                refId: '1525949157016',
-                id: '1526132589586',
-                text: '。但火',
-                _id: '5af6ef700616452eb85a28b0',
-              },
-              {
-                refId: 'HJ@OwGtAG',
-                id: 'SJQcwMYAz',
-                text: '格活最任，问',
-                _id: '5afb98a5aec4ec586cd4bd84',
-              },
-              {
-                refId: 'HJ@OwGtAG',
-                id: 'rJecwftRf',
-                text: '少门分，用被孟',
-                _id: '5afb98a5aec4ec586cd4bd86',
-              },
-              {
-                _id: '5afc6a4e29917c234c05ecbd',
-                text: '百管百',
-                id: 'r1H89JcRz',
-                refId: 'ryaD76uCz',
+                text: '女',
+                key: 'Byb9PfY2RG',
               },
             ],
           },

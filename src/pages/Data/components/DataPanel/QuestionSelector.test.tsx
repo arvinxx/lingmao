@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import App, { IQuestionSelectorProps } from './QuestionSelector';
 import { spy } from 'sinon';
 import { quesData } from '@/data/quesData';
@@ -10,7 +10,7 @@ const setup = () => {
     analysisStage: 0,
     quesData,
   };
-  const wrapper = shallow(<App {...props} dispatch={dispatch} />);
+  const wrapper = mount(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };
 };
 
@@ -27,16 +27,46 @@ describe('Response', () => {
   describe('单击重置按钮重置选项', () => {
     it('resetSelection should run when click', () => {
       console.log(wrapper.find('Button').length);
-      console.log('safdfwegfethtttttttt');
-      wrapper.find('#reset').simulate('click');
+      wrapper
+        .find('#reset')
+        .at(0)
+        .simulate('click');
       expect(dispatch.callCount).toEqual(1);
     });
   });
   describe('单击确认按钮完成确认', () => {
-    it('handleSelected should run when click', () => {
-      console.log(wrapper.find('#confirm'));
-      wrapper.find('#confirm').simulate('click');
+    it('dispatch should run once when selectedQuestionKeys is not empty & analysisStage is not 1', () => {
+      wrapper.setState({
+        selectedQuestionKeys: ['1', '2'],
+      });
+      wrapper
+        .find('#confirm')
+        .at(0) // TODO 问题:为什么会 find 两个 confirm 的 button
+        .simulate('click');
       expect(dispatch.callCount).toEqual(1);
+    });
+    it('dispatch should not run when selectedQuestionKeys is empty & analysisStage is not 1', () => {
+      wrapper.setState({
+        selectedQuestionKeys: [],
+      });
+      wrapper
+        .find('#confirm')
+        .at(0)
+        .simulate('click');
+      expect(dispatch.callCount).toEqual(0);
+    });
+    it('dispatch should run four times when selectedQuestionKeys is not empty & analysisStage is 1', () => {
+      wrapper.setState({
+        selectedQuestionKeys: ['1', '2'],
+      });
+      wrapper.setProps({
+        analysisStage: 1,
+      });
+      wrapper
+        .find('#confirm')
+        .at(0)
+        .simulate('click');
+      expect(dispatch.callCount).toEqual(4);
     });
   });
 });
