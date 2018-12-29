@@ -29,7 +29,7 @@ describe('test meun match', () => {
     expect(getMeunMatcheys(meun, '/dashboard')).toEqual(['/dashboard']);
   });
   it('error path', () => {
-    expect(getMeunMatcheys(meun, '/interview')).toEqual(['/record']);
+    expect(getMeunMatcheys(meun, '/interview')).toEqual(['/interview']);
   });
 
   it('Secondary path', () => {
@@ -41,6 +41,6 @@ describe('test meun match', () => {
   });
 
   it('three parameter path', () => {
-    expect(getMeunMatcheys(meun, '/userinfo/2144/info')).toEqual(['/userinfo/:id/info']);
+    expect(getMeunMatcheys(meun, '/userinfo/2144/info')).toEqual(['/userinfo/:key/info']);
   });
 });

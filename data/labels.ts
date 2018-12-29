@@ -1,4 +1,6 @@
-export const littleTags = [
+import { ILabel } from '@/models/label';
+
+export const smallLabel: ILabel[] = [
   {
     text: '未分组',
     key: '1526132530988',
@@ -16,7 +18,39 @@ export const littleTags = [
     ],
   },
 ];
-export const largeTags = [
+export const mediumLabel: ILabel[] = [
+  {
+    text: '未分组',
+    key: '1526132530988',
+    tags: [
+      {
+        text: '测试标签1',
+        key: 'rJecwftRf',
+        refText: '21312',
+      },
+      {
+        text: '测试标签2',
+        key: 'rJecwfsdstRf',
+        refText: '1352dx',
+      },
+    ],
+  },
+  {
+    text: '性别',
+    key: 'S1a3uMt0M',
+    tags: [
+      {
+        text: '男',
+        key: 'Byb9PfYRG',
+      },
+      {
+        text: '女',
+        key: 'Byb9PfY2RG',
+      },
+    ],
+  },
+];
+export const largeLabel: ILabel[] = [
   {
     text: '未分组',
     key: '1526132530988',
@@ -49,7 +83,7 @@ export const largeTags = [
       },
       {
         text: '女',
-        key: 'Byb9PfYRG',
+        key: 'Byb9PfY2RG',
       },
     ],
   },

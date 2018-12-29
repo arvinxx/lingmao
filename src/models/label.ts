@@ -11,17 +11,17 @@ import { DvaModel } from '@/typings/dva';
 export interface ITag {
   key: string;
   text: string;
-  refText: string;
-  value: number;
-  editable: boolean;
+  refText?: string;
+  value?: number;
+  editable?: boolean;
 }
 
 export interface ILabel {
   text: string;
   key: string;
-  questionKey?: string;
   tags: Array<ITag>;
-  inputVisible: boolean;
+  questionKey?: string;
+  inputVisible?: boolean;
 }
 
 export type TKeys = string[];

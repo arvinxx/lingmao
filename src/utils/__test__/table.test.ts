@@ -7,7 +7,8 @@ import {
   getTableData,
 } from '@/utils';
 import { IKeyDimension } from '@/models/data';
-import { quesData } from '@/mock/data';
+import { quesData } from '@/data/quesData';
+
 
 jest.mock('shortid');
 it('rawToSaved ', () => {
@@ -91,30 +92,30 @@ describe('getTableData', () => {
         {
           key: generateKey(),
           '1111': 'A.小A',
-          '2222': 'B.男',
+          gender: 'B.男',
           '3333': 'A.A',
         },
         {
           key: generateKey(),
           '1111': 'B.小B',
-          '2222': 'A.女',
+          gender: 'A.女',
           '3333': 'A.A',
         },
       ];
       expect(getTableData(quesDataWithLabel, false)).toEqual(tableData);
     });
-    fit('should return order as answer', () => {
+    it('should return order as answer', () => {
       const tableData = [
         {
           key: generateKey(),
           '1111': '1',
-          '2222': '2',
+          gender: '2',
           '3333': '1',
         },
         {
           key: generateKey(),
           '1111': '2',
-          '2222': '1',
+          gender: '1',
           '3333': '1',
         },
       ];
@@ -228,7 +229,7 @@ describe('getColumns', () => {
     ];
     const column = [
       { key: generateKey(), title: '你的名字是？', dataIndex: '1111' },
-      { key: generateKey(), title: '你的性别是？', dataIndex: '2222' },
+      { key: generateKey(), title: '你的性别是？', dataIndex: 'gender' },
       { key: generateKey(), title: '你住在？', dataIndex: '3333' },
     ];
     expect(getColumns(quesDataWithLabel)).toEqual(column);

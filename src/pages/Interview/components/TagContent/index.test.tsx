@@ -1,15 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { spy } from 'sinon';
-import App, { ITagListProps } from './index';
+import App, { ITagContentProps } from './index';
 
 const setup = () => {
   const dispatch = spy();
-  const props: ITagListProps = {
-    tags: [
+  const props: ITagContentProps = {
+    labels: [
       {
         text: '123',
-        id: '1',
+        key: '1',
         groupKey: 'dsad',
         refId: 'efw',
         refText: 't123',

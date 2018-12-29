@@ -1,5 +1,5 @@
-import { largeTags } from '../data/tag';
+import { largeLabel } from '../data/labels';
 
 export default {
-  'get /api/tags': largeTags,
+  'get /api/tags': largeLabel,
 };

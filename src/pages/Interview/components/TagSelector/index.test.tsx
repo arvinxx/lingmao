@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import App, { ITagSelectorProps } from './index';
 import { spy } from 'sinon';
-import { littleTags as labels } from '@/data/tag';
+import { smallLabel as labels } from '@/data/labels';
 
 const setup = () => {
   const dispatch = spy();

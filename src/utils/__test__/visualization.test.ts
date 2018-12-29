@@ -1,4 +1,4 @@
-import { clusterArray } from '@/mock/clusterResults';
+import { clusterArray } from '@/data/clusterResults';
 import { getAccumulation, getCountAndPercent } from '@/utils';
 
 it('getCountAndPercent', () => {

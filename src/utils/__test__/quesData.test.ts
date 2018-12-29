@@ -6,10 +6,27 @@ import {
   getFilterQuesData,
   getAnswerByOrder,
 } from '@/utils';
-import { quesData } from '@/data/quesData';
+import { quesData as undealQuesData } from '@/data/quesData';
+import update from 'immutability-helper';
 
 jest.mock('shortid');
 
+const quesData = update(undealQuesData, {
+  0: {
+    records: {
+      1: {
+        labelKey: { $set: 'gender' },
+      },
+    },
+  },
+  1: {
+    records: {
+      1: {
+        labelKey: { $set: 'gender' },
+      },
+    },
+  },
+});
 it('getQuestions', () => {
   expect(getQuestions(quesData)).toEqual([
     { key: '你的名字是？', text: '你的名字是？' },
