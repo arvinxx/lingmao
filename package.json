@@ -65,7 +65,6 @@
     "@types/react-dom": "^16.0.5",
     "@types/react-redux": "^6.0.0",
     "@types/sinon": "^4.3.3",
-    "canvas": "^2.2.0",
     "commitlint-config-gitmoji": "^1.0.1",
     "cross-env": "^5.1.5",
     "cross-port-killer": "^1.0.1",
