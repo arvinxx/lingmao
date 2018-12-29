@@ -1,77 +1,76 @@
-import { extractTags, getStarData, getTagsArrById, TStarData, TStarModel } from '../tags';
+import { extractTags, getStarData, getTagsArrByKey, TStarModel } from '../tags';
+import { largeLabel as labels } from '@/data/labels';
 
 describe('extractTags', () => {
-  const tagGroups = [
-    {
-      text: 'ungroup',
-      id: '222',
-      tags: [
-        {
-          id: '1',
-          text: '测试1',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-        {
-          id: '2',
-          text: '测试2',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-      ],
-    },
-    {
-      text: '31',
-      id: '111',
-      tags: [
-        {
-          id: '5',
-          text: '测试1',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-        {
-          id: '7',
-          text: '测试2',
-          refText: '',
-          refId: '',
-          groupId: '',
-        },
-      ],
-    },
-  ];
   it('return array', () => {
-    expect(extractTags(tagGroups)).toEqual([
+    expect(extractTags(labels)).toEqual([
       {
-        id: '1',
-        text: '测试1',
-        refText: '',
-        refId: '',
-        groupId: '',
+        text: '少门分，用被孟',
+        key: 'rJecwftRf',
       },
       {
-        id: '2',
-        text: '测试2',
-        refText: '',
-        refId: '',
-        groupId: '',
+        text: '格活最任，问',
+        key: 'SJQcwMYAz',
       },
       {
-        id: '5',
-        text: '测试1',
-        refText: '',
-        refId: '',
-        groupId: '',
+        key: 'r1H89JcRz',
+        text: '百管百',
       },
       {
-        id: '7',
-        text: '测试2',
-        refText: '',
-        refId: '',
-        groupId: '',
+        key: 'ry2koFcAz',
+        text: '离格活最',
+      },
+      {
+        text: '男',
+        key: 'Byb9PfYRG',
+      },
+      {
+        text: '女',
+        key: 'Byb9PfY2RG',
+      },
+      {
+        text: '约车，正各发存转论西月',
+        key: 'BJhdPGt0M',
+      },
+      {
+        text: '我柜把',
+        key: 'BkjODGtAG',
+      },
+      {
+        text: '门识二此里除青，由门之六料',
+        key: 'HkJtwMFRM',
+      },
+      {
+        text: '身门识二此里除',
+        key: 'ry0twGtCM',
+      },
+      {
+        text: '问出豆',
+        key: 'rkrYvGtRz',
+      },
+      {
+        text: '体而改几些地共类边，',
+        key: 'HJetvGFRM',
+      },
+      {
+        text: 'D候我柜',
+        key: 'r1FYPftAM',
+      },
+      {
+        text: '节受三自验始候，',
+        key: 'r1U9wzFRG',
+      },
+      {
+        text: '各发存转论',
+        key: 'HJjFvfF0M',
+      },
+      {
+        text: '节受三自验始候',
+        key: 'BkwKDMKCz',
+      },
+      {
+        text: '传门',
+        key: 'Bk3twMKAf',
       },
     ]);
   });
@@ -81,84 +80,33 @@ describe('extractTags', () => {
   });
 });
 
-describe('getTagsArrById', () => {
+describe('getTagsArrByKey', () => {
   it('should reture tag arrays', () => {
-    const tagGroups = [
+    const keys = ['Byb9PfYRG', 'BJhdPGt0M', 'rJecwftRf'];
+    expect(getTagsArrByKey(labels, keys)).toEqual([
       {
-        text: 'ungroup',
-        id: '222',
-        tags: [
-          {
-            id: '1',
-            text: '测试1',
-            refText: '',
-            refId: '',
-            groupId: '',
-          },
-          {
-            id: '2',
-            text: '测试2',
-            refText: '',
-            refId: '',
-            groupId: '',
-          },
-        ],
+        text: '男',
+        key: 'Byb9PfYRG',
       },
       {
-        text: '31',
-        id: '111',
-        tags: [
-          {
-            id: '5',
-            text: '测试1',
-            refText: '',
-            refId: '',
-            groupId: '',
-          },
-          {
-            id: '7',
-            text: '测试2',
-            refText: '',
-            refId: '',
-            groupId: '',
-          },
-        ],
-      },
-    ];
-    const tagIds = ['1', '2', '5'];
-    expect(getTagsArrById(tagGroups, tagIds)).toEqual([
-      {
-        id: '1',
-        text: '测试1',
-        refText: '',
-        refId: '',
-        groupId: '',
+        text: '约车，正各发存转论西月',
+        key: 'BJhdPGt0M',
       },
       {
-        id: '2',
-        text: '测试2',
-        refText: '',
-        refId: '',
-        groupId: '',
-      },
-      {
-        id: '5',
-        text: '测试1',
-        refText: '',
-        refId: '',
-        groupId: '',
+        text: '少门分，用被孟',
+        key: 'rJecwftRf',
       },
     ]);
   });
   it('should reture empty', () => {
-    const tagGroups = undefined;
+    const labels = undefined;
     const tagIds = undefined;
-    expect(getTagsArrById(tagGroups, tagIds)).toEqual([]);
+    expect(getTagsArrByKey(labels, tagIds)).toEqual([]);
   });
 });
 
 describe('getStarData', () => {
-  const tagGroups = [
+  const labels = [
     {
       text: 'ungroup',
       id: '222',
@@ -239,5 +187,5 @@ describe('getStarData', () => {
       { name: '测试53', value: '0', category: 1 },
     ],
   };
-  expect(getStarData(tagGroups)).toEqual(startData);
+  expect(getStarData(labels)).toEqual(startData);
 });

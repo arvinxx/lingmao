@@ -18,7 +18,7 @@ export interface IPersonaDim {
 export interface IDimGroup {
   text: string;
   key: string;
-  dims?: IPersonaDim[];
+  dims: IPersonaDim[];
 }
 export type TDimGroups = IDimGroup[];
 
@@ -61,7 +61,7 @@ const persona: DvaModel<IPersonaState> = {
     personaList: personaList,
     displayDimGroups: [],
     displayIndex: '0',
-    showText: false,
+    showText: true,
   },
   effects: {},
   reducers: {
@@ -133,6 +133,28 @@ const persona: DvaModel<IPersonaState> = {
         ...state,
         displayDimGroups: update(state.displayDimGroups, {
           $splice: [[dragIndex, 1], [dropIndex, 0, dragItem]],
+        }),
+      };
+    },
+    handleDimText(state, {payload}) {
+      // 编辑文字 + 找到用户->知道是哪一个维度->该维度的哪一个被编辑->更改
+      const {text, index, dimIndex, itemIndex} = payload;
+      return {
+        ...state,
+        personaList: update(state.personaList, {
+          [index]: {
+            dimGroups: {
+              [dimIndex]: {
+                dims:{
+                  [itemIndex]: {
+                    text: {
+                      $set: text,
+                    },
+                  },
+                },
+              },
+            },
+          },
         }),
       };
     },

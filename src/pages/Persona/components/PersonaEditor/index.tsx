@@ -64,6 +64,12 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
       payload: { text: e.target.value, index },
     });
   };
+  changeItemText = (e, index, dimIndex, itemIndex) => {
+    this.props.dispatch({
+      type: 'persona/handleDimText',
+      payload: {text: e.target.value, index, dimIndex, itemIndex},
+    });
+  };
 
   render() {
     const { dispatch, persona, dimGroups, index, showText } = this.props;
@@ -153,10 +159,17 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 {dimGroups.length > 0 && dimGroups[0].text === '基本信息' ? (
                   <div style={{ marginBottom: 24 }}>
                     <div className={styles.info}> 基本信息 </div>
-                    {dimGroups[0].dims.map((item) => (
+                    {dimGroups[0].dims.map((item, itemIndex) => (
                       <div key={item.labelKey} style={{ fontSize: 14, marginBottom: 8 }}>
                         <span> {item.labelText}</span>
-                        ： {item.text}
+                        {/*： {item.text}*/}
+                        :
+                        <Input
+                          style={{ width: item.text.length * 17}}
+                          onChange={(e) => this.changeItemText(e, this.props.index, 0, itemIndex)}
+                          className={styles.itemtext}
+                          value={item.text}
+                        />
                       </div>
                     ))}
                   </div>
@@ -170,9 +183,15 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                         <div key={index} className={styles.behaviors}>
                           <div className={styles.info}>{dimGroup.text}</div>
                           {dimGroup.dims.map(
-                            (dim) =>
+                            (dim, itemIndex) =>
                               showText ? (
-                                <li key={dim.labelKey}>{dim.text}</li>
+                                <li key={dim.labelKey}>
+                                  <Input
+                                    style={{ width: dim.text.length * 17}}
+                                    onChange={(e) => this.changeItemText(e, this.props.index, index, itemIndex)}
+                                    className={styles.itemtext}
+                                    value={dim.text}
+                                  /></li>
                               ) : (
                                 <div key={dim.labelKey}>
                                   {dim.labelText}

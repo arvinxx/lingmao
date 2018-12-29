@@ -85,7 +85,6 @@ export default class EditableTags extends Component<IEditableTagsProps & Dispatc
             <CheckableTag
               key={tagKey + 'checkbleTag'}
               checked={selected.indexOf(tagKey) > -1}
-              //@ts-ignore Antd 未定义事件 props
               onDoubleClick={() => this.showTagEdit(tagKey)}
               onChange={(checked) => this.handleSelected(tagKey, checked)}
             >

@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import App, { IListEditorProps } from './ListEditor';
 
 import { spy } from 'sinon';
-import { extractTags, initRecords, initRecordsAsValue } from '../../../../utils';
+import { extractTags, initRecords, initRecordsAsValue } from '@/utils';
 
 const setup = () => {
   const dispatch = spy();

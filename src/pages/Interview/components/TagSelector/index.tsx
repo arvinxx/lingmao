@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import { DispatchProp } from 'react-redux';
-import { HotKeys } from 'react-hotkeys';
 
 import Label from './Label';
 import EditableTags from './EditableTags';
@@ -60,46 +59,44 @@ export default class TagSelector extends Component<
   render() {
     const { labels, dispatch, selectedTags } = this.props;
     return (
-      <HotKeys keyMap={{ tab: 'tab' }}>
-        <div className={styles.container}>
-          {labels.map((label) => {
-            const { key, text, tags, inputVisible } = label;
-            return (
-              <div key={key + 'd-container'} className={styles['dimension-container']}>
-                <Label labelKey={key} dispatch={dispatch} value={text} />
-                <div className={styles['tag-container']}>
-                  {tags.map((tag: ITag) => {
-                    const { text, key: tagKey, editable } = tag;
-                    return (
-                      <EditableTags
-                        key={tagKey}
-                        tagKey={tagKey}
-                        labelKey={key}
-                        dispatch={dispatch}
-                        editable={editable}
-                        selected={selectedTags}
-                        text={text}
-                      />
-                    );
-                  })}
-                  <NewTag labelKey={key} inputVisible={inputVisible} dispatch={dispatch} />
-                </div>
+      <div className={styles.container}>
+        {labels.map((label) => {
+          const { key, text, tags, inputVisible } = label;
+          return (
+            <div key={key + 'd-container'} className={styles['dimension-container']}>
+              <Label labelKey={key} dispatch={dispatch} value={text} />
+              <div className={styles['tag-container']}>
+                {tags.map((tag: ITag) => {
+                  const { text, key: tagKey, editable } = tag;
+                  return (
+                    <EditableTags
+                      key={tagKey}
+                      tagKey={tagKey}
+                      labelKey={key}
+                      dispatch={dispatch}
+                      editable={editable}
+                      selected={selectedTags}
+                      text={text}
+                    />
+                  );
+                })}
+                <NewTag labelKey={key} inputVisible={inputVisible} dispatch={dispatch} />
               </div>
-            );
-          })}
-          <div className={styles['dimension-container']}>
-            <Input
-              className={styles['add-key']}
-              value={this.state.newLabel}
-              placeholder={this.state.newLabelPlaceHolder}
-              onChange={this.newLabelOnInput}
-              onFocus={this.newLabelOnFocus}
-              onBlur={this.newLabelOnBlur}
-              onPressEnter={this.newLabelOnPressEnter}
-            />
-          </div>
+            </div>
+          );
+        })}
+        <div className={styles['dimension-container']}>
+          <Input
+            className={styles['add-key']}
+            value={this.state.newLabel}
+            placeholder={this.state.newLabelPlaceHolder}
+            onChange={this.newLabelOnInput}
+            onFocus={this.newLabelOnFocus}
+            onBlur={this.newLabelOnBlur}
+            onPressEnter={this.newLabelOnPressEnter}
+          />
         </div>
-      </HotKeys>
+      </div>
     );
   }
 }

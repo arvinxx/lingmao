@@ -6,16 +6,18 @@ import App, { IReduceDimsProps } from './ReduceDims';
 const setup = () => {
   const dispatch = spy();
   const props: IReduceDimsProps = {
-    dims: [
+    labels: [
       {
         text: '11',
-        id: '11',
+        key: '11',
+        inputVisible: false,
+        tags: [],
       },
     ],
     percent: 0.5,
     sig: 0,
     quesData: [],
-    selectedDims: ['11', '768'],
+    selectedLabels: ['11', '768'],
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return { props, wrapper, dispatch };
@@ -27,9 +29,9 @@ afterEach(() => {
 });
 
 describe('render', () => {
-  it('should render normal', () => {
+  it('正常渲染', () => {
     expect(wrapper.find('.down').length).toEqual(1);
-    expect(wrapper.find('DimsSelect').length).toEqual(1);
+    expect(wrapper.find('LabelSelector').length).toEqual(1);
   });
   describe('Progress', () => {
     it('should have yellow class name when 50<percentValue<=70', () => {
@@ -90,7 +92,7 @@ describe('function', () => {
       selectDims(true, '1');
       expect(dispatch.callCount).toEqual(1);
       expect(dispatch.args[0][0]).toEqual({
-        type: 'data/addReductionSelectedDims',
+        type: 'label/addReductionLabels',
         payload: '1',
       });
     });
@@ -98,7 +100,7 @@ describe('function', () => {
       selectDims(false, '1');
       expect(dispatch.callCount).toEqual(1);
       expect(dispatch.args[0][0]).toEqual({
-        type: 'data/removeReductionSelectedDims',
+        type: 'label/removeReductionLabels',
         payload: '1',
       });
     });

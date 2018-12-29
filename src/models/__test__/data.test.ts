@@ -1,6 +1,7 @@
 import model from '../data';
-import { getAnswers } from '@/utils';
-import { quesData, keyDimensions } from '@/mock/data';
+import { generateKey, getAnswers } from '@/utils';
+import { quesData } from '@/data/quesData';
+import keyDimensions from '@/data/keyDimensions';
 
 const reducers = model.reducers;
 
@@ -107,28 +108,38 @@ it('addMatchLabelToQuesData ', () => {
       {
         records: [
           {
-            labelKey: '123',
-            labelText: '标签1',
+            labelKey: 'name',
+            labelText: '姓名',
             ...quesData[0].records[0],
           },
           {
-            labelKey: '3334',
-            labelText: '标签2',
+            labelKey: 'gender',
+            labelText: '性别',
             ...quesData[0].records[1],
+          },
+          {
+            key: generateKey(),
+            question: '你住在？',
+            answer: { text: 'A.A', order: 0 },
           },
         ],
       },
       {
         records: [
           {
-            labelKey: '123',
-            labelText: '标签1',
+            labelKey: 'name',
+            labelText: '姓名',
             ...quesData[1].records[0],
           },
           {
-            labelKey: '3334',
-            labelText: '标签2',
+            labelKey: 'gender',
+            labelText: '性别',
             ...quesData[1].records[1],
+          },
+          {
+            key: generateKey(),
+            question: '你住在？',
+            answer: { text: 'B.B', order: 1 },
           },
         ],
       },

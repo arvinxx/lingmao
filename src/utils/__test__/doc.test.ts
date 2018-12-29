@@ -2,7 +2,7 @@ import { extractPlainText } from '../doc';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-const text = readFileSync(resolve(__dirname, '../../mock/txt.txt'), 'utf-8');
+const text = readFileSync(resolve(__dirname, '../../../data/txt.txt'), 'utf-8');
 
 describe('extractPlainText ', () => {
   it('should split string by enter', async () => {

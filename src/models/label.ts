@@ -11,17 +11,17 @@ import { DvaModel } from '@/typings/dva';
 export interface ITag {
   key: string;
   text: string;
-  refText: string;
-  value: number;
-  editable: boolean;
+  refText?: string;
+  value?: number;
+  editable?: boolean;
 }
 
 export interface ILabel {
   text: string;
   key: string;
-  questionKey?: string;
   tags: Array<ITag>;
-  inputVisible: boolean;
+  questionKey?: string;
+  inputVisible?: boolean;
 }
 
 export type TKeys = string[];
@@ -170,55 +170,68 @@ const label: DvaModel<ILabelState> = {
     },
 
     handleTagIndexDrag(
-      state,
+      state: ILabelState,
       {
         payload,
       }: {
         payload: {
-          start: { dragIndex: number; dragId: string };
-          end: { dropIndex: number; dropId: string };
+          start: { dragIndex: number; dragKey: string };
+          end: { dropIndex: number; dropKey: string };
         };
       }
     ) {
-      const labels: Array<ILabel> = state.labels;
+      const { labels } = state;
       const { start, end } = payload;
-      const { dragId, dragIndex } = start;
-      const { dropId, dropIndex } = end;
+      const { dragKey, dragIndex } = start;
+      const { dropKey, dropIndex } = end;
 
-      const isInTagsGroup = (key, tags: Array<ITag>) => tags.some((tag: ITag) => tag.key === key);
+      // 根据 key 判断是否在该 label 组中
+      const isInLabel = (tagKey, tags: Array<ITag>) => tags.some((tag: ITag) => tag.key === tagKey);
+
       let isSameGroup = false;
-      // 判断是否属于同一组
-      labels.forEach((label: ILabel) => {
+      let newLabels: ILabel[];
+
+      // 判断是否属于同一组,如果是则交换顺序
+      newLabels = labels.map((label: ILabel) => {
         const { tags } = label;
-        if (isInTagsGroup(dragId, tags) && isInTagsGroup(dropId, tags)) {
-          const newTags = reorder(tags, dragIndex, dropIndex);
+        if (isInLabel(dragKey, tags) && isInLabel(dropKey, tags)) {
           isSameGroup = true;
-          label.tags = newTags;
-          return { ...state, labels };
-        }
+          return update(label, {
+            tags: { $set: reorder(tags, dragIndex, dropIndex) },
+          });
+        } else return label;
       });
-      //不是同一组的情况下，将加入那一组
+      //不是同一组的情况下，将 tag 移出原组,移入新组
       if (!isSameGroup) {
-        let removed: ITag;
-        labels.forEach((label: ILabel) => {
+        let moved: ITag; // 定义移出的 tag 容器
+        //tag 移出原组
+        newLabels = labels.map((label: ILabel) => {
           const { tags } = label;
-          if (isInTagsGroup(dragId, tags)) {
-            [removed] = tags.splice(dragIndex, 1);
-            label.tags = concat(tags);
-            return { ...state, labels };
-          }
+          if (isInLabel(dragKey, tags)) {
+            [moved] = tags.splice(dragIndex, 1);
+            return update(label, {
+              tags: {
+                $splice: [[dragIndex, 0]],
+              },
+            });
+          } else return label;
         });
-        labels.forEach((label: ILabel) => {
+        //tag 移入新组
+        newLabels = labels.map((label: ILabel) => {
           const { tags } = label;
-          if (isInTagsGroup(dropId, tags)) {
-            tags.splice(dropIndex, 0, removed);
-            label.tags = concat(tags);
-            return { ...state, labels };
-          }
+          if (isInLabel(dropKey, tags)) {
+            return update(label, {
+              tags: {
+                $splice: [[dropIndex, 0, moved]],
+              },
+            });
+          } else return label;
         });
       }
-      const newLabels = concat(labels);
-      return { ...state, labels: newLabels };
+      return {
+        ...state,
+        labels: newLabels,
+      };
     },
 
     showTagInput(state, { payload: key }) {

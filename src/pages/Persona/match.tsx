@@ -10,7 +10,7 @@ import { TPersonaData } from '@/models/persona';
 import { ILabel } from '@/models/label';
 import { DispatchProp } from 'react-redux';
 
-import { quesData } from '@/mock/data';
+import { quesData } from '@/data/quesData';
 
 interface IMatchProps {
   personaQuesData: TPersonaData;

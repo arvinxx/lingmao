@@ -3,14 +3,14 @@ import { shallow } from 'enzyme';
 import App, { IRecordListProps } from './index';
 import Plain from 'slate-plain-serializer';
 import { spy } from 'sinon';
-import tagGroups from '../../../../../mock/tag';
+import { largeLabel } from '@/data/labels';
 
 const setup = () => {
   const dispatch = spy();
 
   const props: IRecordListProps = {
     records: Plain.deserialize('12345'),
-    labels: tagGroups,
+    labels: largeLabel,
   };
   const wrapper = shallow(<App {...props} dispatch={dispatch} />);
   return {

@@ -40,40 +40,30 @@ export default class TagContent extends Component<ITagContentProps & DispatchPro
                 <TreeNode title={text} key={key}>
                   {tags.map((tag) => {
                     const { key, text } = tag;
-                    return <TreeNode key={key} title={text} />;
+                    return (
+                      <TreeNode
+                        key={key}
+                        title={
+                          <Popconfirm
+                            key={'ppp'}
+                            title="确认要删除吗?"
+                            onConfirm={() => this.deleteTag(key)}
+                            okText="是"
+                            cancelText="否"
+                          >
+                            <span id="label" onClick={() => this.filterRecord(key)}>
+                              {text}
+                            </span>
+                            {/*<Icon type="close" className={styles.close} />*/}
+                          </Popconfirm>
+                        }
+                      />
+                    );
                   })}
                 </TreeNode>
               );
             })}
           </Tree>
-          {/*<Menu*/}
-          {/*style={{ width: 200 }}*/}
-          {/*defaultSelectedKeys={['1']}*/}
-          {/*defaultOpenKeys={['sub1']}*/}
-          {/*mode="inline"*/}
-          {/*>*/}
-          {/*{labels.map((tag) => {*/}
-          {/*const { text, key } = tag;*/}
-          {/*return (*/}
-          {/*<Menu.Item*/}
-          {/*className={styles.labels}*/}
-          {/*key={key}*/}
-          {/*onClick={() => this.filterRecord(key)}*/}
-          {/*>*/}
-          {/*{text}*/}
-          {/*<Popconfirm*/}
-          {/*key={'ppp'}*/}
-          {/*title="确认要删除吗?"*/}
-          {/*onConfirm={() => this.deleteTag(key)}*/}
-          {/*okText="是"*/}
-          {/*cancelText="否"*/}
-          {/*>*/}
-          {/*<Icon type="close" className={styles.close} />*/}
-          {/*</Popconfirm>*/}
-          {/*</Menu.Item>*/}
-          {/*);*/}
-          {/*})}*/}
-          {/*</Menu>*/}
         </div>
       </div>
     );

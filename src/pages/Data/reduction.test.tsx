@@ -2,13 +2,14 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { spy } from 'sinon';
 import App, { IReductionProps } from './reduction';
-import FA from '../../../mock/FA';
+import { pca } from '@/data/ml';
 
 const diagrams = ['碎石图', '方差解释表', '相关系数表'];
 const setup = () => {
   const dispatch = spy();
   const props: IReductionProps = {
-    FAResult: FA,
+    PCAResult: pca,
+    FAResult: pca,
     diagrams,
     isReduced: true,
     rotation: false,

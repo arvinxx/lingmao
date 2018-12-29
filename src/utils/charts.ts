@@ -16,7 +16,7 @@ export const getChartsDataSets = (
   const answersOrders = quesData.map((quesRecord) => {
     if (quesRecord.records.length > 0) {
       const index = quesRecord.records.findIndex((i) => i.labelKey === key);
-      return quesRecord.records[index].answer.order;
+      return index < 0 ? [] : quesRecord.records[index].answer.order;
     } else return [];
   });
   const percent = getCountAndPercent(answersOrders);

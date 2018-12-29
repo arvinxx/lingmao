@@ -7,8 +7,43 @@ import {
   getTableData,
 } from '@/utils';
 import { IKeyDimension } from '@/models/data';
-import { quesData } from '@/mock/data';
+import { quesData } from '@/data/quesData';
+import update from 'immutability-helper';
 
+const quesDataWithLabel = update(quesData, {
+  0: {
+    records: {
+      0: {
+        labelKey: { $set: 'name' },
+        labelText: { $set: '姓名' },
+      },
+      1: {
+        labelKey: { $set: 'gender' },
+        labelText: { $set: '性别' },
+      },
+      2: {
+        labelKey: { $set: 'address' },
+        labelText: { $set: '地址' },
+      },
+    },
+  },
+  1: {
+    records: {
+      0: {
+        labelKey: { $set: 'name' },
+        labelText: { $set: '姓名' },
+      },
+      1: {
+        labelKey: { $set: 'gender' },
+        labelText: { $set: '性别' },
+      },
+      2: {
+        labelKey: { $set: 'address' },
+        labelText: { $set: '地址' },
+      },
+    },
+  },
+});
 jest.mock('shortid');
 it('rawToSaved ', () => {
   const rawData = [
@@ -46,76 +81,36 @@ describe('getTableData', () => {
     expect(getTableData(quesData, false)).toEqual(tableData);
   });
   describe('should return labelKey as key', () => {
-    const quesDataWithLabel = [
-      {
-        records: [
-          {
-            labelKey: '1111',
-            labelText: '标签1',
-            ...quesData[0].records[0],
-          },
-          {
-            labelKey: '2222',
-            labelText: '标签2',
-            ...quesData[0].records[1],
-          },
-          {
-            labelKey: '3333',
-            labelText: '标签2',
-            ...quesData[0].records[2],
-          },
-        ],
-      },
-      {
-        records: [
-          {
-            labelKey: '1111',
-            labelText: '标签1',
-            ...quesData[1].records[0],
-          },
-          {
-            labelKey: '2222',
-            labelText: '标签2',
-            ...quesData[1].records[1],
-          },
-          {
-            labelKey: '3333',
-            labelText: '标签2',
-            ...quesData[0].records[2],
-          },
-        ],
-      },
-    ];
     it('should return labelKey as key', () => {
       const tableData = [
         {
           key: generateKey(),
-          '1111': 'A.小A',
-          '2222': 'B.男',
-          '3333': 'A.A',
+          name: 'A.小A',
+          gender: 'B.男',
+          address: 'A.A',
         },
         {
           key: generateKey(),
-          '1111': 'B.小B',
-          '2222': 'A.女',
-          '3333': 'A.A',
+          name: 'B.小B',
+          gender: 'A.女',
+          address: 'B.B',
         },
       ];
       expect(getTableData(quesDataWithLabel, false)).toEqual(tableData);
     });
-    fit('should return order as answer', () => {
+    it('should return order as answer', () => {
       const tableData = [
         {
           key: generateKey(),
-          '1111': '1',
-          '2222': '2',
-          '3333': '1',
+          name: '1',
+          gender: '2',
+          address: '1',
         },
         {
           key: generateKey(),
-          '1111': '2',
-          '2222': '1',
-          '3333': '1',
+          name: '2',
+          gender: '1',
+          address: '2',
         },
       ];
 

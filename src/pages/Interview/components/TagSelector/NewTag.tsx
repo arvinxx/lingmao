@@ -20,6 +20,7 @@ export default class NewTag extends PureComponent<IValueInputProps & DispatchPro
   };
 
   handleKeyDown = (e, key) => {
+    // 按 ESC 撤销修改并退出
     if (e.key === 'Escape') {
       this.props.dispatch({
         type: 'label/hideTagInput',
@@ -28,6 +29,8 @@ export default class NewTag extends PureComponent<IValueInputProps & DispatchPro
       this.setState({ text: '' });
     }
 
+    // 修改完毕后按 Tab 保存修改,并继续创建新标签
+    // 修改完毕后按 Enter 保存修改,并结束创建标签
     if (e.key === 'Tab' || e.key === 'Enter') {
       e.preventDefault();
       const { text } = this.state;

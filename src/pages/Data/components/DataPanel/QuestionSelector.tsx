@@ -89,7 +89,11 @@ export default class QuestionSelector extends Component<IQuestionSelectorProps &
               rowSelection={rowSelection}
               footer={() => (
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button id="reset" style={{ marginRight: 16 }} onClick={this.resetSelection}>
+                  <Button
+                    id="reset"
+                    style={{ marginRight: 16 }}
+                    onClick={this.resetSelection}
+                  >
                     重置
                   </Button>
                   <Button

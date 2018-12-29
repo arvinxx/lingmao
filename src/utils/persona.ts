@@ -1,5 +1,5 @@
 import { TDimGroups } from '@/models/persona';
-import { keyDimensions } from "@/mock/data";
+import keyDimensions from '@/data/keyDimensions';
 
 export const extractKeyDimensions = (keyDimensions: TDimGroups) => {
   let dims = [];

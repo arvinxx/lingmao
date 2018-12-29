@@ -2,8 +2,7 @@ import { uniqBy, orderBy } from 'lodash';
 import XLSX from 'xlsx';
 import { ITextItem, TQuesData, IQuesRecord } from '@/models/data';
 
-import { getAccumulation, generateKey, generateTagId } from '@/utils';
-import { quesData } from '@/mock/data';
+import { generateKey } from '@/utils';
 
 /**
  * 读取文件转换为 Buffer
@@ -164,9 +163,9 @@ export const getAnswerByOrder = (quesData: TQuesData, question: string, order: n
 export const getFilterQuesData = (quesData: TQuesData, selectedLabelKeys: string[]): TQuesData => {
   return quesData.map((quesRecord) => ({
     ...quesRecord,
-    records: quesRecord.records.filter((quesDataItem) => {
-      const { question, labelKey } = quesDataItem;
-      return selectedLabelKeys.some((key) => key === labelKey && key === question);
+    records: quesRecord.records.filter((record) => {
+      const { question, labelKey } = record;
+      return selectedLabelKeys.some((key) => key === labelKey || key === question);
     }),
   }));
 };
