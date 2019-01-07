@@ -18,7 +18,8 @@
       "@/typings/*": ["./typings/*"],
       "@/mock/*": ["./mock/*"],
       "@/data/*": ["./data/*"],
-      "@/assets/*": ["./src/assets/*"]
+      "@/assets/*": ["./src/assets/*"],
+      "@/src/*": ["./src/*"]
     }
   }
 }
