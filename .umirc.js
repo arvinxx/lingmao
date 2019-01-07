@@ -19,7 +19,7 @@ export default {
         },
         dynamicImport: {
           webpackChunkName: true,
-          loadingComponent: './components/Loading.js',
+          loadingComponent: './components/PageLoading',
         },
         dll: {
           include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'antd/es'],
@@ -40,9 +40,7 @@ export default {
     '@/src': resolve(__dirname, './src'),
     styles: resolve(__dirname, './src/styles'), // less 全局样式文件
   },
-  "proxy":{
-    '/api/v1':{
-
-    }
-  }
+  proxy: {
+    '/api/v1': 'http://127.0.0.1:7001/api/v1/',
+  },
 };

@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 import { DispatchProp } from 'react-redux';
 import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
-import { SiderMenu } from '@/components';
+import { SiderMenu, Topbar } from '@/components';
 
 import { getMenuData } from '@/utils';
 
@@ -35,20 +35,23 @@ class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
     const defaultSideWith = 140;
     return (
       <Layout>
-        <SiderMenu
-          logo={logo}
-          showMenu={showMenu}
-          menuData={getMenuData()}
-          collapsed={collapsed}
-          location={location}
-          onCollapse={this.handleMenuCollapse}
-          width={defaultSideWith}
-        />
-        <Layout
-          className={styles.layout}
-          style={showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith } : {}}
-        >
-          <Fragment>{children}</Fragment>
+        <Topbar />
+        <Layout>
+          <SiderMenu
+            logo={logo}
+            showMenu={showMenu}
+            menuData={getMenuData()}
+            collapsed={collapsed}
+            location={location}
+            onCollapse={this.handleMenuCollapse}
+            width={defaultSideWith}
+          />
+          <Layout
+            className={styles.layout}
+            style={showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith, paddingTop: '7vh' } : {}}
+          >
+            <Fragment>{children}</Fragment>
+          </Layout>
         </Layout>
       </Layout>
     );
