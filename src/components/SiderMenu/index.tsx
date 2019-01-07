@@ -167,7 +167,6 @@ export default class SiderMenu extends Component<any> {
 
   render() {
     const {
-      logo,
       collapsed,
       location: { pathname },
       onCollapse,
@@ -195,11 +194,6 @@ export default class SiderMenu extends Component<any> {
           className={styles.sider}
         >
           <div className={styles.container}>
-            <div className={styles.logo} key="logo">
-              <Link to="/">
-                <img src={logo} alt="logo" />
-              </Link>
-            </div>
             <Menu
               key="Menu"
               mode="inline"

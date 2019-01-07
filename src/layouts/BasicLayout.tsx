@@ -1,4 +1,4 @@
-import React, { Component, ComponentClass, Fragment } from 'react';
+import React, { Component, ComponentClass } from 'react';
 
 import { Layout } from 'antd';
 import { DispatchProp } from 'react-redux';
@@ -10,6 +10,8 @@ import { getMenuData } from '@/utils';
 
 import styles from './BasicLayout.less';
 import logo from '@/assets/logo.png';
+
+const { Content } = Layout;
 
 export interface IBasicLayoutProps {
   collapsed?: boolean;
@@ -48,9 +50,11 @@ class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
           />
           <Layout
             className={styles.layout}
-            style={showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith, paddingTop: '7vh' } : {}}
+            style={
+              showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith, paddingTop: '7vh' } : {}
+            }
           >
-            <Fragment>{children}</Fragment>
+            <Content>{children}</Content>
           </Layout>
         </Layout>
       </Layout>

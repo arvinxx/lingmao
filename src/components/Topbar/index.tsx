@@ -12,7 +12,7 @@ const Search = Input.Search;
   project,
   login,
 }))
-export default class topbar extends Component<DispatchProp> {
+export default class Topbar extends Component<DispatchProp> {
   state = {
     titleName: '灵猫',
     iconState: {
