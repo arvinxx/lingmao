@@ -1,12 +1,13 @@
 import { DvaModel } from '@/typings/dva';
 import { getTagsArrByKey } from '@/utils';
 import update from 'immutability-helper';
+import router from 'umi/router';
 import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
 import { TQuesData, IQuesRecord } from './data';
 
 import { personaList } from '@/data/persona';
-import { userModels } from '@/data/userModels';
+import { fetchPersonaData } from '@/services';
 
 export interface IPersonaDim {
   text: string;
@@ -63,8 +64,74 @@ const persona: DvaModel<IPersonaState> = {
     displayIndex: '0',
     showText: true,
   },
-  effects: {},
+  effects: {
+    *fetchPersona({ payload }, { put, select, call }) {
+      const { isLogin, phoneNumber } = yield select((state) => state.login);
+      const currentProject = yield select((state) => state.project.currentProject);
+      let projectId;
+      if (currentProject === null) return;
+      else {
+        projectId = currentProject.id;
+      }
+      // check it right:
+      console.log('get login status:', isLogin, phoneNumber);
+      if (isLogin) {
+        const PersonaData = yield call(fetchPersonaData, projectId);
+        const data = PersonaData.data;
+        // 测试数据后端获取：
+        console.log('all persona data', PersonaData.data);
+        yield put({
+          type: 'savePersonaList',
+          payload: data,
+        });
+        // const data = {
+        //   starProjectList: starData.data,
+        //   recentProjectList: recentData.data,
+        //   allProjectList: allData.data,
+        // };
+        // yield put({
+        //   type: 'saveProjectList',
+        //   payload: data
+        // });
+      } else {
+        router.push('/user');
+      }
+    },
+  },
   reducers: {
+    savePersonaList(state, {payload: data}) {
+      console.log('data',data);
+      let personaList = [];
+      data.forEach(item => {
+        let photoInfo = JSON.parse(item.photo);
+        let basicInfo = {
+          percent: item.percent,
+          keywords: item.quote,
+          name: item.name,
+          bios: item.bios,
+          career: item.career,
+          photo: photoInfo
+        };
+        let personaItem = {
+          // dimGroups: '', //维度群组,如基本信息 动机 目标等
+          // checkedDims: '', // 进行展示的维度
+          basicInfo: basicInfo, // 画像的基本信息
+          // typeName: '', // 画像类别名称
+        };
+        personaList.push(personaItem);
+      });
+      console.log('personaList',personaList);
+
+      // const basicInfo = {
+      //   percent: ,
+      //   keywords: string,
+      //   name: string,
+      //   bios: string,
+      //   career: string,
+      //   photo: ,
+      // };
+      return { ...state, personaList};
+    },
     changeDimVisible(state, action) {
       return {
         ...state,
@@ -333,13 +400,13 @@ const persona: DvaModel<IPersonaState> = {
     },
   },
   subscriptions: {
-    // setup({ history, dispatch }) {
-    //   return history.listen(({ pathname }) => {
-    //     if (pathname === '/persona') {
-    //       dispatch({ type: 'initUserModel' });
-    //     }
-    //   });
-    // },
+    setup({ history, dispatch }) {
+      return history.listen(({ pathname }) => {
+        if (pathname === '/persona/edit') {
+          dispatch({ type: 'fetchPersona' });
+        }
+      });
+    },
   },
 };
 
