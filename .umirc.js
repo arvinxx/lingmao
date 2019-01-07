@@ -17,6 +17,10 @@ export default {
             /services\//,
           ],
         },
+        dynamicImport: {
+          webpackChunkName: true,
+          loadingComponent: './components/Loading.js',
+        },
         dll: {
           include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'antd/es'],
         },
@@ -33,6 +37,12 @@ export default {
     '@/typings': resolve(__dirname, './typings'),
     '@/mock': resolve(__dirname, './mock'),
     '@/data': resolve(__dirname, './data'),
+    '@/src': resolve(__dirname, './src'),
     styles: resolve(__dirname, './src/styles'), // less 全局样式文件
   },
+  "proxy":{
+    '/api/v1':{
+
+    }
+  }
 };

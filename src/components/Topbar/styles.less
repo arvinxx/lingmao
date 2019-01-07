@@ -1,0 +1,62 @@
+@import '../../styles/themes/default';
+.display {
+  position: fixed;
+  min-height: 5vh;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  height: 7vh;
+  width: 100vw;
+  border-bottom: @border-width-base @border-style-base @border-color-split;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.left {
+  display: flex;
+  flex-direction: row;
+  width: 76px;
+  height: 24px;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  img {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+}
+.logoTitle {
+  height: 24px;
+  line-height: 24px;
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.right {
+  display: flex;
+  flex-direction: row;
+  width: 306px;
+  height: 24px;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
