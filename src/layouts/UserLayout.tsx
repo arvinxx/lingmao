@@ -6,7 +6,6 @@ import Link from 'umi/link';
 
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
-import { GlobalFooter } from '@/components';
 import { getPageTitle } from '@/utils';
 
 import styles from './UserLayout.less';
@@ -63,7 +62,7 @@ export default class UserLayout extends Component<IUserLayoutProps> {
               <Redirect exact from="/user" to="/user/login" />
             </Switch>
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
+          {/* <GlobalFooter links={links} copyright={copyright} /> */}
         </div>
       </DocumentTitle>
     );

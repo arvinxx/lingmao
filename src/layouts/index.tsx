@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import H from 'history';
 import withRouter from 'umi/withRouter';
-
+import DocumentTitle from 'react-document-title';
 import UserLayout from './UserLayout';
 import BasicLayout from './BasicLayout';
 
-import { UserLayout as UserLayoutList } from '@/common';
+import { UserLayout as UserLayoutList, getPageTitle } from '@/common';
 
 export interface ILayoutEntryProps {
   location: H.Location;
@@ -18,13 +18,21 @@ export default class LayoutEntry extends Component<ILayoutEntryProps> {
   render() {
     const { location, children } = this.props;
     const { pathname } = location;
-
+    const pageTitle = getPageTitle(pathname);
     // 如果路由地址是登录注册的话，使用登录注册布局
     // 否则使用基础布局
     if (UserLayoutList.indexOf(pathname) > -1) {
-      return <UserLayout id="UserLayout">{children}</UserLayout>;
+      return (
+        <DocumentTitle title={pageTitle}>
+          <UserLayout id="UserLayout">{children}</UserLayout>
+        </DocumentTitle>
+      );
     } else {
-      return <BasicLayout id="BasicLayout">{children}</BasicLayout>;
+      return (
+        <DocumentTitle title={pageTitle}>
+          <BasicLayout id="BasicLayout">{children}</BasicLayout>
+        </DocumentTitle>
+      );
     }
   }
 }
