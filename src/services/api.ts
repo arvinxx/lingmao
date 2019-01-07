@@ -44,14 +44,6 @@ export async function queryNotices() {
   return get('/api/notices');
 }
 
-export async function asyncLogin(params) {
-  return post(config.backendurl + 'login', params);
-}
-
-export async function asyncRegister(params) {
-  return post(config.backendurl + 'register', params);
-}
-
 export async function fetchProjectData() {
   return get(config.backendurl + 'projects');
 }
@@ -75,5 +67,5 @@ export async function deleteOneProject(id) {
 }
 
 export async function fetchPersonaData(pid) {
-  return get(config.backendurl + 'projects/'+pid+'/personas');
+  return get(config.backendurl + 'projects/' + pid + '/personas');
 }

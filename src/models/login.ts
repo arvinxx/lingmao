@@ -37,8 +37,8 @@ const login: DvaModel<ILoginState> = {
       return { ...state, userInfo };
     },
     logout(state) {
-      return {...state, userInfo: null, isLogin: false};
-    }
+      return { ...state, userInfo: null, isLogin: false };
+    },
   },
   effects: {
     *login({ payload }, { put, select, call }) {
@@ -47,15 +47,14 @@ const login: DvaModel<ILoginState> = {
       // console.log(phoneNumber, password);
       const data = {
         mobile: phoneNumber,
-        password: password,
+        password,
       };
       let isLogin = false;
-      const originData = yield call(asyncLogin, data);
-      const userInfo = originData.data.userInfo;
-      if (originData.data.isValid) {
+      const { resData } = yield call(asyncLogin, data);
+      const userInfo = resData.userInfo;
+      if (resData.isValid) {
         isLogin = true;
-      }
-      else message.warning('密码与用户名不匹配', 2.5);
+      } else message.warning('密码与用户名不匹配', 2.5);
       yield put({
         type: 'changeIsLogin',
         payload: { isLogin },
