@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Button } from 'antd';
+import { Card, Button } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
 
@@ -11,17 +11,21 @@ import { IProjectState } from './models/project';
 const { Meta } = Card;
 const projectListName = ['星标项目', '最近查看', '全部项目'];
 
+export interface IViewProps {
+  project: IProjectState;
+}
 @connect(({ project, user }) => ({
   project,
   user,
 }))
-export default class View extends Component<DispatchProp> {
+export default class View extends Component<IViewProps & DispatchProp> {
   static defaultProps: IProjectState = {
     projectList: {
       starProjectList: [],
       recentProjectList: [],
       allProjectList: [],
     },
+    currentProject: {},
   };
   deleteProject = (index) => {
     console.log('delete index:', index);
@@ -41,7 +45,6 @@ export default class View extends Component<DispatchProp> {
     console.log(this.props);
     const projectList = this.props.project.projectList;
     const { starProjectList, recentProjectList, allProjectList } = projectList;
-    // console.log(projectList);
     return (
       <div className={styles.container}>
         <div className={styles.projectBox}>
