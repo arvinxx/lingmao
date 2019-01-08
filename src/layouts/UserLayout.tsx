@@ -2,7 +2,6 @@ import React, { Fragment, Component } from 'react';
 import H from 'history';
 
 import { Redirect, Switch, withRouter } from 'react-router';
-import Link from 'umi/link';
 
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
@@ -11,7 +10,6 @@ import { GlobalFooter } from '@/components';
 import { getPageTitle } from '@/utils';
 
 import styles from './UserLayout.less';
-import logo from '@/assets/logo.png';
 
 const links = [
   {
@@ -50,15 +48,6 @@ export default class UserLayout extends Component<IUserLayoutProps> {
       <DocumentTitle title={getPageTitle(pathname, title)}>
         <div className={styles.container}>
           <div className={styles.content}>
-            <div className={styles.top}>
-              <div className={styles.header}>
-                <Link to="/">
-                  <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>灵 猫</span>
-                </Link>
-              </div>
-              <div className={styles.desc}>友好强大的用户研究工具</div>
-            </div>
             <Switch>
               <Fragment>{children}</Fragment>
               <Redirect exact from="/user" to="/user/login" />
