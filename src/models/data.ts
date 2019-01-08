@@ -78,7 +78,14 @@ const model: DvaModel<IDataState> = {
   state: {
     quesData: [],
     keyDimensions: [],
-    userModels: [],
+    userModels: [
+      {
+        records: [],
+        typeName: '画像一',
+        percent: Math.floor(Math.random() * 100),
+        type: 0,
+      },
+    ],
     selectClusterIndex: 0,
     clusterResults: [],
     KMO: 0,
