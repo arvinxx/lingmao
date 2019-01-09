@@ -62,8 +62,8 @@ export default class Login extends Component<DispatchProp> {
           </Button>
           <div className={styles['account-container']}>
             <div className={styles.login}>
-              <span>已有账号？</span>
-              <Link to="/user/register">直接登录</Link>
+              <span>还没有账号？</span>
+              <Link to="/user/register">立即注册</Link>
             </div>
             <div className={styles['OAuth-container']}>
               <div>第三方登录</div>
@@ -75,7 +75,7 @@ export default class Login extends Component<DispatchProp> {
                   <Icon className={styles.icon} type="qq" />
                 </span>
                 <span className={styles['icon-bg']}>
-                  <Icon className={styles.icon} type="taobao" />
+                  <Icon className={styles.icon} type="dingding" />
                 </span>
                 <span className={styles['icon-bg']}>
                   <Icon className={styles.icon} type="weibo" />
