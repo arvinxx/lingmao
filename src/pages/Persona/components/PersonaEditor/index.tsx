@@ -16,7 +16,6 @@ const { TextArea } = Input;
 interface IPersonaEditorProps {
   persona: IBasicInfo;
   dimGroups: TDimGroups;
-  clusterResult: IQuesRecord;
   index: number;
   showText: boolean;
 }

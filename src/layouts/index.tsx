@@ -1,9 +1,3 @@
-/**
- * authority: [admin, user]
- * Routes:
- *   - ./src/pages/Authorized.tsx
- *
- */
 import React, { Component } from 'react';
 import H from 'history';
 import withRouter from 'umi/withRouter';

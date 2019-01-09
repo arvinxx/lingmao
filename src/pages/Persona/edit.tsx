@@ -31,9 +31,9 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     });
     // 用于刷新展示的维度群组
     // 如果没有这行,那么显示的维度群组仍然是之前一个画像的维度群组
-    this.props.dispatch({
-      type: 'persona/handleDisplayDimGroups',
-    });
+    // this.props.dispatch({
+    //   type: 'persona/handleDisplayDimGroups',
+    // });
   };
 
 
@@ -49,7 +49,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     } = persona;
 
     const { checkedDims, dimGroups, basicInfo } = personaList[displayIndex] as IPersona;
-
+    console.log( dimGroups);
     return (
       <Fragment>
         <div className={styles.left}>
@@ -59,12 +59,11 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
             activeKey={displayIndex}
             onChange={(key) => this.changePersonaIndex(key)}
           >
-            {clusterResult.map((cluster, index) => {
+            {personaList.map((item, index) => {
               return (
-                <TabPane tab={cluster.typeName} key={String(index)} className={styles.editor}>
+                <TabPane tab={item.typeName} key={String(index)} className={styles.editor}>
                   <PersonaEditor
                     dimGroups={displayDimGroups}
-                    clusterResult={cluster}
                     dispatch={dispatch}
                     persona={basicInfo}
                     showText={showText}
