@@ -18,7 +18,6 @@
 .left {
   display: flex;
   flex-direction: row;
-  width: 76px;
   height: 24px;
   justify-content: space-between;
   align-items: center;
@@ -28,8 +27,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  height: 72px;
   overflow: hidden;
   img {
     display: inline-block;
@@ -48,15 +46,70 @@
 .right {
   display: flex;
   flex-direction: row;
-  width: 306px;
-  height: 24px;
   justify-content: space-between;
   align-items: center;
 }
 .modal {
+  width: 368px;
   height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
+.searchbar {
+  width: 240px;
+  margin-right: 24px;
+  background-color: @transBlack-9;
+  &:focus {
+    border: none;
+    background-color: @transBlack-9;
+  }
+}
+
+.icon {
+  transition: all @animation-duration-base;
+  font-size: 20px;
+  color: @dark-7;
+  margin-right: 16px;
+  font-weight: 300;
+  &:hover {
+    color: @blue-5;
+  }
+}
+
+.icon-add {
+  .icon;
+  color: @primary-4;
+  &:hover {
+    color: @blue-6;
+  }
+}
+
+.add-project {
+  width: 184px;
+  left: 80px;
+  text-align: center;
+  .add-project-title {
+    margin: 6px;
+  }
+  .add-project-text {
+    &:hover {
+      background-color: @background-color-light;
+    }
+  }
+}
+.user-setting {
+  width: 184px;
+  left: 56px;
+  .user-setting-text {
+    &:hover {
+      background-color: @background-color-base;
+    }
+  }
+}
+.modal-add {
+  font-weight: 400;
+  color: @text-color;
+}
+

@@ -47,7 +47,7 @@ export default class Topbar extends Component<DispatchProp> {
     console.log('name,description', name, description);
     this.props.dispatch({
       type: 'project/createNew',
-      payload: {name,description}
+      payload: { name, description },
     });
     this.setState({ newProjectName: '', newProjectDescription: '' });
   };
@@ -66,39 +66,54 @@ export default class Topbar extends Component<DispatchProp> {
     const userInfo = this.props.login.userInfo;
     const nickname = userInfo === null ? 'tourist' : userInfo.nickname;
     const ProjectDropdownMenu = (
-      <Menu>
-        <Menu.Item key="0" disabled>
-          创建
-        </Menu.Item>
+      <Menu className={styles['add-project']}>
+        <span className={styles['add-project-title']}>创建</span>
         <Menu.Divider />
-        <Menu.Item key="1" onClick={(e) => this.createNewProject()}>
+        <Menu.Item
+          className={styles['add-project-text']}
+          key="1"
+          onClick={(e) => this.createNewProject()}
+        >
           创建项目
         </Menu.Item>
       </Menu>
     );
     const UserDropdownMenu = (
-      <Menu>
+      <Menu className={styles['user-setting']}>
         <Menu.Item key="0" disabled>
           {nickname}
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="1">个人资料</Menu.Item>
-        <Menu.Item key="2">我的项目</Menu.Item>
-        <Menu.Item key="3">账户设置</Menu.Item>
+        <Menu.Item key="1" className={styles['user-setting-text']}>
+          个人资料
+        </Menu.Item>
+        <Menu.Item key="2" className={styles['user-setting-text']}>
+          我的项目
+        </Menu.Item>
+        <Menu.Item key="3" className={styles['user-setting-text']}>
+          账户设置
+        </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="4">帮助</Menu.Item>
-        <Menu.Item key="5">快捷键</Menu.Item>
-        <Menu.Item key="6">更改语言</Menu.Item>
+        <Menu.Item key="4" className={styles['user-setting-text']}>
+          帮助
+        </Menu.Item>
+        <Menu.Item key="5" className={styles['user-setting-text']}>
+          快捷键
+        </Menu.Item>
+        <Menu.Item key="6" className={styles['user-setting-text']}>
+          更改语言
+        </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="7" onClick={(e) => this.logout()}>
+        <Menu.Item key="7" className={styles['user-setting-text']} onClick={(e) => this.logout()}>
           登出
         </Menu.Item>
       </Menu>
     );
-    const {newProjectName,newProjectDescription} = this.state;
+    const { newProjectName, newProjectDescription } = this.state;
     return (
       <div className={styles.display}>
         <Modal
+          className={styles.modal}
           title="创建新项目"
           centered
           visible={this.state.modalVisible}
@@ -123,29 +138,24 @@ export default class Topbar extends Component<DispatchProp> {
             <div className={styles.logo}>
               <img src={logo} alt="logo" />
             </div>
-            <div className={styles.logoTitle}>{this.state.titleName}</div>
           </div>
           <div className={styles.right}>
             <Search
               placeholder="搜索我的个人项目"
               onSearch={(value) => console.log(value)}
-              style={{ width: 200 }}
+              className={styles.searchbar}
             />
             <Dropdown overlay={ProjectDropdownMenu}>
-              <Icon
-                type="plus-circle"
-                theme="filled"
-                style={{ color: 'lightblue', fontSize: 20 }}
-              />
+              <Icon type="plus-circle" theme="filled" className={styles['icon-add']} />
             </Dropdown>
-            <Icon type="bell" theme="outlined" style={{ fontSize: 20 }} />
+            <Icon type="bell" theme="outlined" className={styles['icon']} />
             <Dropdown
               overlay={UserDropdownMenu}
               onVisibleChange={(visible) => {
                 this.changeIconStateForUser(visible);
               }}
             >
-              <Icon type="user" theme="outlined" style={{ fontSize: 20 }} />
+              <Icon type="user" theme="outlined" className={styles['icon']} />
             </Dropdown>
           </div>
         </div>

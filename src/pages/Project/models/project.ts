@@ -9,10 +9,18 @@ import {
   deleteOneProject,
 } from '@/services';
 
+interface IProjectItem {
+  id: number;
+  name: string;
+  description: string;
+  create_time: string;
+  star: boolean;
+}
+
 export interface IProjectList {
-  starProjectList: Array<string>;
-  recentProjectList: Array<string>;
-  allProjectList: Array<string>;
+  starProjectList: IProjectItem[];
+  recentProjectList: IProjectItem[];
+  allProjectList: IProjectItem[];
 }
 
 export interface IProjectState {
@@ -23,9 +31,9 @@ export interface IProjectState {
 const project: DvaModel<IProjectState> = {
   state: {
     projectList: {
-      starProjectList: ['aaa', 'bb'],
-      recentProjectList: ['cc'],
-      allProjectList: ['dddddd'],
+      allProjectList: [],
+      recentProjectList: [],
+      starProjectList: [],
     },
     currentProject: null,
   },
@@ -90,26 +98,26 @@ const project: DvaModel<IProjectState> = {
       const { isLogin, phoneNumber } = yield select((state) => state.login);
       // check it right:
       console.log('get login status:', isLogin, phoneNumber);
-      if (isLogin) {
-        const allData = yield call(fetchProjectData);
-        const starData = yield call(fetchProjectStarData);
-        const recentData = yield call(fetchProjectRecentData);
-        // 测试数据后端获取：
-        console.log('all project data', allData.data);
-        console.log('all star data', starData.data);
-        console.log('all recent data', recentData.data);
-        const data = {
-          starProjectList: starData.data,
-          recentProjectList: recentData.data,
-          allProjectList: allData.data,
-        };
-        yield put({
-          type: 'saveProjectList',
-          payload: data,
-        });
-      } else {
-        router.push('/user');
-      }
+      // if (isLogin) {
+      const allData = yield call(fetchProjectData);
+      const starData = yield call(fetchProjectStarData);
+      const recentData = yield call(fetchProjectRecentData);
+      // 测试数据后端获取：
+      console.log('all project data', allData.data);
+      console.log('all star data', starData.data);
+      console.log('all recent data', recentData.data);
+      const data = {
+        starProjectList: starData.data,
+        recentProjectList: recentData.data,
+        allProjectList: allData.data,
+      };
+      yield put({
+        type: 'saveProjectList',
+        payload: data,
+      });
+      // } else {
+      // router.push('/user');
+      // }
     },
   },
   subscriptions: {
