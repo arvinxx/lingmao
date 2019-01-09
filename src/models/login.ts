@@ -53,9 +53,8 @@ const login: DvaModel<ILoginState> = {
       };
       let isLogin = false;
       const { data: resData } = yield call(asyncLogin, data);
-      console.log(resData);
-      const userInfo = resData.userInfo;
-      if (resData.isValid) {
+      const { userInfo, isValid } = resData;
+      if (isValid) {
         isLogin = true;
         reloadAuthorized();
       } else message.warning('密码与用户名不匹配', 2.5);
