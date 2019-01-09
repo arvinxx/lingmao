@@ -1,10 +1,9 @@
 import axios from 'axios';
-import config from '@/src/globalconfig';
 const { post } = axios;
 export async function asyncLogin(data) {
-  return post(config.backendurl + 'login', data);
+  return post('/api/v1/login', data);
 }
 
 export async function asyncRegister(params) {
-  return post(config.backendurl + 'register', params);
+  return post('/api/v1/register', params);
 }

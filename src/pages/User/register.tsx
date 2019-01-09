@@ -5,7 +5,6 @@ import { DispatchProp } from 'react-redux';
 import Link from 'umi/link';
 import DocumentTitle from 'react-document-title';
 import logo from '@/assets/logo.png';
-
 import styles from './register.less';
 
 @connect(({ register }) => ({
@@ -30,7 +29,6 @@ export default class Register extends Component<DispatchProp> {
           <div className={styles.header}>
             <Link to="/">
               <img alt="logo" className={styles.logo} src={logo} />
-              <span className={styles.title}>灵 猫</span>
             </Link>
           </div>
           <Input

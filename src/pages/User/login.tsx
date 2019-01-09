@@ -30,7 +30,6 @@ export default class Login extends Component<DispatchProp> {
           <div className={styles.header}>
             <Link to="/">
               <img alt="logo" className={styles.logo} src={logo} />
-              <span className={styles.title}>灵 猫</span>
             </Link>
           </div>
           <Input

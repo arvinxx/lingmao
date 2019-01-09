@@ -50,9 +50,9 @@ const login: DvaModel<ILoginState> = {
         password,
       };
       let isLogin = false;
-      const { resData } = yield call(asyncLogin, data);
-      const userInfo = resData.userInfo;
-      if (resData.isValid) {
+      const { data: resData } = yield call(asyncLogin, data);
+      const { userInfo, isValid } = resData;
+      if (isValid) {
         isLogin = true;
       } else message.warning('密码与用户名不匹配', 2.5);
       yield put({

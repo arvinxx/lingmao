@@ -1,5 +1,5 @@
 export default {
-  'post /login': ["hello"],//{userInfo: {}, isValid: true},
+  'post /api/v1/login': {userInfo: {}, isValid: true},
 };
 
 
