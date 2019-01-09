@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.47",
+    "ant-design-pro": "^2.1.1",
     "axios": "^0.18.0",
     "bizcharts": "^3.1.7",
     "bizcharts-plugin-slider": "^2.0.3",
@@ -73,7 +74,9 @@
     "lint-staged": "^6.0.0",
     "mockdate": "^2.0.2",
     "mockjs": "^1.0.1-beta3",
+    "path-to-regexp": "^2.4.0",
     "prettier": "^1.12.1",
+    "qs": "^6.6.0",
     "regenerator-runtime": "^0.11.1",
     "sinon": "^5.0.7",
     "slate-prop-types": "^0.4.29",

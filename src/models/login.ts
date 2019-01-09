@@ -1,6 +1,8 @@
 import { DvaModel } from '@/typings/dva';
 import { message } from 'antd';
 import router from 'umi/router';
+import { setAuthority } from '@/utils';
+import { reloadAuthorized } from '@/utils';
 import { asyncLogin } from '@/services';
 
 export interface ILoginState {
@@ -50,10 +52,12 @@ const login: DvaModel<ILoginState> = {
         password,
       };
       let isLogin = false;
-      const { resData } = yield call(asyncLogin, data);
+      const { data: resData } = yield call(asyncLogin, data);
+      console.log(resData);
       const userInfo = resData.userInfo;
       if (resData.isValid) {
         isLogin = true;
+        reloadAuthorized();
       } else message.warning('密码与用户名不匹配', 2.5);
       yield put({
         type: 'changeIsLogin',

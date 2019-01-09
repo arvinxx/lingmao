@@ -95,9 +95,9 @@ const project: DvaModel<IProjectState> = {
         const starData = yield call(fetchProjectStarData);
         const recentData = yield call(fetchProjectRecentData);
         // 测试数据后端获取：
-        // console.log('all project data', allData.data);
-        // console.log('all star data', starData.data);
-        // console.log('all recent data', recentData.data);
+        console.log('all project data', allData.data);
+        console.log('all star data', starData.data);
+        console.log('all recent data', recentData.data);
         const data = {
           starProjectList: starData.data,
           recentProjectList: recentData.data,
@@ -108,7 +108,7 @@ const project: DvaModel<IProjectState> = {
           payload: data,
         });
       } else {
-        router.push('/login');
+        router.push('/user');
       }
     },
   },

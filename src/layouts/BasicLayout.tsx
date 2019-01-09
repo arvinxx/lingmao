@@ -5,9 +5,7 @@ import { DispatchProp } from 'react-redux';
 import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
 import { SiderMenu, Topbar } from '@/components';
-
 import { getMenuData } from '@/utils';
-
 import styles from './BasicLayout.less';
 import logo from '@/assets/logo.png';
 
@@ -31,7 +29,6 @@ class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
       payload: collapsedState,
     });
   };
-
   render() {
     const { collapsed, location, children, showMenu } = this.props;
     const defaultSideWith = 140;
@@ -54,7 +51,7 @@ class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
               showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith, paddingTop: '7vh' } : {}
             }
           >
-            <Content>{children}</Content>
+              <Content>{children}</Content>
           </Layout>
         </Layout>
       </Layout>

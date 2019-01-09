@@ -17,3 +17,7 @@ export * from './router';
 export * from './layout';
 export * from './utils';
 export * from './menu';
+
+// auth
+export * from './authority';
+export * from './Authorized';

@@ -3,6 +3,6 @@ import Redirect from 'umi/redirect';
 
 export default class Index extends Component {
   render() {
-    return <Redirect to="/user" />;
+    return <Redirect to="/project/" />;
   }
 }

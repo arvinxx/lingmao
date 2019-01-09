@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App, { ILayoutEntryProps } from './index';
+import App, { ILayoutEntryProps } from '.';
 import { spy } from 'sinon';
 
 const setup = () => {
