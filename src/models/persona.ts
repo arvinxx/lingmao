@@ -6,7 +6,7 @@ import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
 import { TQuesData, IQuesRecord } from './data';
 
-import { personaList } from '@/data/persona';
+import { NewPersona, personaList } from '@/data/persona';
 import { fetchPersonaData } from '@/services';
 
 export interface IPersonaDim {
@@ -51,7 +51,7 @@ export interface IPersonaState {
   personaList: TPersonaList; // 画像列表
   displayDimGroups: TDimGroups;
   showText: boolean;
-  displayIndex: string;
+  displayIndex: number;
 }
 
 const persona: DvaModel<IPersonaState> = {
@@ -61,76 +61,70 @@ const persona: DvaModel<IPersonaState> = {
     expandedDims: [],
     personaList: personaList,
     displayDimGroups: [],
-    displayIndex: '0',
+    displayIndex: 0,
     showText: true,
   },
   effects: {
     *fetchPersona({ payload }, { put, select, call }) {
-      const { isLogin, phoneNumber } = yield select((state) => state.login);
       const currentProject = yield select((state) => state.project.currentProject);
       let projectId;
       if (currentProject === null) return;
-      else {
-        projectId = currentProject.id;
-      }
-      // check it right:
-      console.log('get login status:', isLogin, phoneNumber);
-      if (isLogin) {
-        const PersonaData = yield call(fetchPersonaData, projectId);
-        const data = PersonaData.data;
-        // 测试数据后端获取：
-        console.log('all persona data', PersonaData.data);
-        yield put({
-          type: 'savePersonaList',
-          payload: data,
-        });
-        // const data = {
-        //   starProjectList: starData.data,
-        //   recentProjectList: recentData.data,
-        //   allProjectList: allData.data,
-        // };
-        // yield put({
-        //   type: 'saveProjectList',
-        //   payload: data
-        // });
-      } else {
-        router.push('/user');
-      }
+      else projectId = currentProject.id;
+      const PersonaData = yield call(fetchPersonaData, projectId);
+      const data = PersonaData.data;
+      // 测试数据后端获取：
+      console.log('all persona data', PersonaData.data);
+      yield put({
+        type: 'savePersonaList',
+        payload: data.map((persona) => ({
+          ...persona,
+          dimGroups: persona.dimension.map((dimGroup) => ({
+            text: dimGroup.text,
+            key: String(dimGroup.id),
+            dims: JSON.parse(dimGroup.dim),
+          })),
+        })),
+      });
     },
   },
   reducers: {
-    savePersonaList(state, {payload: data}) {
-      console.log('data',data);
+    addNewPersona(state, { payload }) {
+      return { ...state, personaList: update(state.personaList, { $push: [NewPersona] }) };
+    },
+    removeOnePersona(state, { payload: targetKey }) {
+      const delKey = parseInt(targetKey); // assure the number datatype;
+      const willChangeDisplayIndex =
+        (state.displayIndex > delKey) ||
+        (state.displayIndex === state.personaList.length - 1 && state.displayIndex === delKey);
+      return {
+        ...state,
+        personaList: update(state.personaList, { $splice: [[targetKey, 1]] }),
+        displayIndex: willChangeDisplayIndex ? state.displayIndex - 1 : state.displayIndex,
+      };
+    },
+    savePersonaList(state, { payload: data }) {
+      console.log('data', data);
       let personaList = [];
-      data.forEach(item => {
-        let photoInfo = JSON.parse(item.photo);
-        let basicInfo = {
+      personaList = data.map((item) => ({
+        basicInfo: {
           percent: item.percent,
           keywords: item.quote,
           name: item.name,
           bios: item.bios,
           career: item.career,
-          photo: photoInfo
-        };
-        let personaItem = {
-          // dimGroups: '', //维度群组,如基本信息 动机 目标等
-          // checkedDims: '', // 进行展示的维度
-          basicInfo: basicInfo, // 画像的基本信息
-          // typeName: '', // 画像类别名称
-        };
-        personaList.push(personaItem);
-      });
-      console.log('personaList',personaList);
+          photo: {
+            value: item.photoInfo,
+            text: 'personaPhoto',
+          },
+        },
+        typeName: item.typeName,
+        checkedDims: [],
+        dimGroups: item.dimGroups,
+      }));
 
-      // const basicInfo = {
-      //   percent: ,
-      //   keywords: string,
-      //   name: string,
-      //   bios: string,
-      //   career: string,
-      //   photo: ,
-      // };
-      return { ...state, personaList};
+      console.log('personaList', personaList);
+
+      return { ...state, personaList };
     },
     changeDimVisible(state, action) {
       return {
@@ -203,16 +197,16 @@ const persona: DvaModel<IPersonaState> = {
         }),
       };
     },
-    handleDimText(state, {payload}) {
+    handleDimText(state, { payload }) {
       // 编辑文字 + 找到用户->知道是哪一个维度->该维度的哪一个被编辑->更改
-      const {text, index, dimIndex, itemIndex} = payload;
+      const { text, index, dimIndex, itemIndex } = payload;
       return {
         ...state,
         personaList: update(state.personaList, {
           [index]: {
             dimGroups: {
               [dimIndex]: {
-                dims:{
+                dims: {
                   [itemIndex]: {
                     text: {
                       $set: text,
@@ -263,6 +257,21 @@ const persona: DvaModel<IPersonaState> = {
           [index]: {
             basicInfo: {
               career: {
+                $set: text,
+              },
+            },
+          },
+        }),
+      };
+    },
+    handlePercent(state, { payload }) {
+      const { text, index } = payload;
+      return {
+        ...state,
+        personaList: update(state.personaList, {
+          [index]: {
+            basicInfo: {
+              percent: {
                 $set: text,
               },
             },

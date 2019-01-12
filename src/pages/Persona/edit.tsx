@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Tabs, Button } from 'antd';
+import { Tabs, Button, Icon } from 'antd';
 import { PersonaEditor, DimensionList } from './components';
 
 import styles from './edit.less';
@@ -27,15 +27,30 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
     // 改变显示的画像
     this.props.dispatch({
       type: 'persona/handleDisplayIndex',
-      payload: key,
+      payload: parseInt(key),
     });
     // 用于刷新展示的维度群组
     // 如果没有这行,那么显示的维度群组仍然是之前一个画像的维度群组
+    // this.props.dispatch({
+    //   type: 'persona/handleDisplayDimGroups',
+    // });
+  };
+  onEdit = (targetKey, action) => {
+    this[action](targetKey);
+  };
+  add = () => {
+    console.log('add one ');
     this.props.dispatch({
-      type: 'persona/handleDisplayDimGroups',
+      type: 'persona/addNewPersona',
     });
   };
-
+  remove = (targetKey) => {
+    console.log('delete one persona:', targetKey);
+    this.props.dispatch({
+      type: 'persona/removeOnePersona',
+      payload: targetKey,
+    });
+  };
 
   render() {
     const { persona, dispatch, clusterResult } = this.props;
@@ -47,24 +62,27 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
       displayIndex,
       showText,
     } = persona;
-
     const { checkedDims, dimGroups, basicInfo } = personaList[displayIndex] as IPersona;
-
     return (
       <Fragment>
         <div className={styles.left}>
           <Tabs
-            type="card"
+            type="editable-card"
             className={styles.tabs}
-            activeKey={displayIndex}
+            activeKey={String(displayIndex)}
+            onEdit={this.onEdit}
             onChange={(key) => this.changePersonaIndex(key)}
           >
-            {clusterResult.map((cluster, index) => {
+            {personaList.map((item, index) => {
               return (
-                <TabPane tab={cluster.typeName} key={String(index)} className={styles.editor}>
+                <TabPane
+                  tab={item.typeName}
+                  key={String(index)}
+                  className={styles.editor}
+                  closable={personaList.length > 1}
+                >
                   <PersonaEditor
                     dimGroups={displayDimGroups}
-                    clusterResult={cluster}
                     dispatch={dispatch}
                     persona={basicInfo}
                     showText={showText}
@@ -73,6 +91,13 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
                 </TabPane>
               );
             })}
+            {/*<TabPane*/}
+            {/*tab={<span><Icon type="plus" /></span>}*/}
+            {/*key={String(personaList.length+1)}*/}
+            {/*className={styles.editor}*/}
+            {/*onclick={this.addPersona()}*/}
+            {/*>*/}
+            {/*</TabPane>*/}
           </Tabs>
         </div>
         {dimVisible ? (

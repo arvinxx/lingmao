@@ -126,6 +126,9 @@ const mockDimGroups = [
 export const personaList = Mock.mock({
   data: [
     {
+      typeName: Mock.mock({
+        'data|1': ['乐观人群', '技术人群', '悲观人群', '职业经理人'],
+      }).data,
       dimGroups: mockDimGroups,
       checkedDims: [],
       basicInfo: {
@@ -145,6 +148,9 @@ export const personaList = Mock.mock({
       },
     },
     {
+      typeName: Mock.mock({
+        'data|1': ['乐观人群', '技术人群', '悲观人群', '职业经理人'],
+      }).data,
       dimGroups: mockDimGroups,
       checkedDims: [],
       basicInfo: {
@@ -162,6 +168,9 @@ export const personaList = Mock.mock({
       },
     },
     {
+      typeName: Mock.mock({
+        'data|1': ['乐观人群', '技术人群', '悲观人群', '职业经理人'],
+      }).data,
       dimGroups: mockDimGroups,
       checkedDims: [],
       basicInfo: {
@@ -179,4 +188,26 @@ export const personaList = Mock.mock({
       },
     },
   ],
+}).data;
+
+export const NewPersona = Mock.mock({
+  data:
+    {
+      typeName: '画像类别名',
+      dimGroups: mockDimGroups,
+      checkedDims: [],
+      basicInfo: {
+        percent: Mock.mock({
+          data: '@natural(1,40)',
+        }).data,
+        keywords: '',
+        name: Mock.mock({ data: '@cname' }).data,
+        bios: '',
+        career: '职业名',
+        photo: {
+          text: '画像',
+          value: 'photo1',
+        },
+      },
+    }
 }).data;
