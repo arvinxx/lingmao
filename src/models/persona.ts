@@ -6,7 +6,7 @@ import { basicInfo, dimGroups } from '@/common';
 import { generateTagId } from '@/utils';
 import { TQuesData, IQuesRecord } from './data';
 
-import { personaList } from '@/data/persona';
+import { NewPersona, personaList } from '@/data/persona';
 import { fetchPersonaData } from '@/services';
 
 export interface IPersonaDim {
@@ -51,7 +51,7 @@ export interface IPersonaState {
   personaList: TPersonaList; // 画像列表
   displayDimGroups: TDimGroups;
   showText: boolean;
-  displayIndex: string;
+  displayIndex: number;
 }
 
 const persona: DvaModel<IPersonaState> = {
@@ -61,7 +61,7 @@ const persona: DvaModel<IPersonaState> = {
     expandedDims: [],
     personaList: personaList,
     displayDimGroups: [],
-    displayIndex: '1',
+    displayIndex: 0,
     showText: true,
   },
   effects: {
@@ -69,9 +69,7 @@ const persona: DvaModel<IPersonaState> = {
       const currentProject = yield select((state) => state.project.currentProject);
       let projectId;
       if (currentProject === null) return;
-      else {
-        projectId = currentProject.id;
-      }
+      else projectId = currentProject.id;
       const PersonaData = yield call(fetchPersonaData, projectId);
       const data = PersonaData.data;
       // 测试数据后端获取：
@@ -82,7 +80,7 @@ const persona: DvaModel<IPersonaState> = {
           ...persona,
           dimGroups: persona.dimension.map((dimGroup) => ({
             text: dimGroup.text,
-            key: dimGroup.id,
+            key: String(dimGroup.id),
             dims: JSON.parse(dimGroup.dim),
           })),
         })),
@@ -90,6 +88,20 @@ const persona: DvaModel<IPersonaState> = {
     },
   },
   reducers: {
+    addNewPersona(state, { payload }) {
+      return { ...state, personaList: update(state.personaList, { $push: [NewPersona] }) };
+    },
+    removeOnePersona(state, { payload: targetKey }) {
+      const delKey = parseInt(targetKey); // assure the number datatype;
+      const willChangeDisplayIndex =
+        (state.displayIndex > delKey) ||
+        (state.displayIndex === state.personaList.length - 1 && state.displayIndex === delKey);
+      return {
+        ...state,
+        personaList: update(state.personaList, { $splice: [[targetKey, 1]] }),
+        displayIndex: willChangeDisplayIndex ? state.displayIndex - 1 : state.displayIndex,
+      };
+    },
     savePersonaList(state, { payload: data }) {
       console.log('data', data);
       let personaList = [];
@@ -245,6 +257,21 @@ const persona: DvaModel<IPersonaState> = {
           [index]: {
             basicInfo: {
               career: {
+                $set: text,
+              },
+            },
+          },
+        }),
+      };
+    },
+    handlePercent(state, { payload }) {
+      const { text, index } = payload;
+      return {
+        ...state,
+        personaList: update(state.personaList, {
+          [index]: {
+            basicInfo: {
+              percent: {
                 $set: text,
               },
             },

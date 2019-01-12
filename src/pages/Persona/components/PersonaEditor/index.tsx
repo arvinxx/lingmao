@@ -45,6 +45,15 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
       payload: { text: e.target.value, index },
     });
   };
+  changePercent = (e, index) => {
+    console.log(index,e.target.value);
+    let value = 0;
+    if(e.target.value !== '') value = parseInt(e.target.value);
+    this.props.dispatch({
+      type: 'persona/handlePercent',
+      payload: { text: value, index },
+    });
+  };
   changeCareer = (e, index) => {
     this.props.dispatch({
       type: 'persona/handleCareer',
@@ -66,7 +75,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
   changeItemText = (e, index, dimIndex, itemIndex) => {
     this.props.dispatch({
       type: 'persona/handleDimText',
-      payload: {text: e.target.value, index, dimIndex, itemIndex},
+      payload: { text: e.target.value, index, dimIndex, itemIndex },
     });
   };
 
@@ -116,23 +125,25 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 }}
               >
                 <Input
-                  style={{ width: name.length * 36 }}
+                  style={{ width: name.length > 0 ? name.length * 36 : 72 }}
                   onChange={(e) => this.changeName(e, index)}
                   value={name}
                   className={styles.name}
+                  placeholder="姓名"
                 />
                 <Input
-                  style={{ width: career.length * 16 }}
+                  style={{ width: career.length > 0 ? career.length * 16 : 72 }}
                   onChange={(e) => this.changeCareer(e, index)}
                   value={career}
                   className={styles.career}
+                  placeholder="职业"
                 />
               </div>
               <div className={styles.percent}>
                 <div className={styles.text}>
                   <div style={{ width: 64, marginRight: 4 }}>人群占比</div>
-                  <div style={{ width: 64 }}>
-                    <span className={styles.number}> {percent.toFixed(0)} </span> %
+                  <div style={{ width: 64 }} className={styles.number}>
+                    <Input onChange={(e) => this.changePercent(e, index)} value={percent.toFixed(0)} placeholder="比例" />%
                   </div>
                 </div>
                 <MiniProgress
@@ -164,7 +175,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                         {/*： {item.text}*/}
                         :
                         <Input
-                          style={{ width: item.text.length * 17}}
+                          style={{ width: item.text.length * 17 }}
                           onChange={(e) => this.changeItemText(e, this.props.index, 0, itemIndex)}
                           className={styles.itemtext}
                           value={item.text}
@@ -175,37 +186,38 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 ) : null}
               </div>
               <div className={styles.right}>
-                {dimGroups.map(
-                  (dimGroup, index) =>
-                    dimGroup.text !== '基本信息' ? (
-                      <DraggableBlock key={index} dispatch={dispatch} index={index}>
-                        <div key={index} className={styles.behaviors}>
-                          <div className={styles.info}>{dimGroup.text}</div>
-                          {dimGroup.dims.map(
-                            (dim, itemIndex) =>
-                              showText ? (
-                                <li key={dim.labelKey}>
-                                  <Input
-                                    style={{ width: dim.text.length * 17}}
-                                    onChange={(e) => this.changeItemText(e, this.props.index, index, itemIndex)}
-                                    className={styles.itemtext}
-                                    value={dim.text}
-                                  /></li>
-                              ) : (
-                                <div key={dim.labelKey}>
-                                  {dim.labelText}
-                                  <MiniProgress
-                                    percent={dim.value * 10}
-                                    color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                                    target={0}
-                                    strokeWidth={8}
-                                  />
-                                </div>
-                              )
-                          )}
-                        </div>
-                      </DraggableBlock>
-                    ) : null
+                {dimGroups.map((dimGroup, index) =>
+                  dimGroup.text !== '基本信息' ? (
+                    //<DraggableBlock key={index} dispatch={dispatch} index={index}>
+                      <div key={index} className={styles.behaviors}>
+                        <div className={styles.info}>{dimGroup.text}</div>
+                        {dimGroup.dims.map((dim, itemIndex) =>
+                          showText ? (
+                            <li key={dim.labelKey}>
+                              <Input
+                                style={{ width: dim.text.length * 17 }}
+                                onChange={(e) =>
+                                  this.changeItemText(e, this.props.index, index, itemIndex)
+                                }
+                                className={styles.itemtext}
+                                value={dim.text}
+                              />
+                            </li>
+                          ) : (
+                            <div key={dim.labelKey}>
+                              {dim.labelText}
+                              <MiniProgress
+                                percent={dim.value * 10}
+                                color={'l(0) 0:#99f5ff 1:#a6a6ff'}
+                                target={0}
+                                strokeWidth={8}
+                              />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    // </DraggableBlock>
+                  ) : null
                 )}
               </div>
             </div>
