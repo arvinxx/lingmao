@@ -23,14 +23,45 @@
   }
 }
 .photo-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
+  align-items: center;
   .photo {
-    width: 100%;
+    height: 100%;
+    max-height: 100%;
     object-fit: cover;
+  }
+  .name {
+    top: -160px;
+    color: white;
+    text-align: center;
+    letter-spacing: 10px;
+    background-color: transparent;
+    font-size: 56px;
+    padding: 0;
+    height: 72px;
+  }
+  .keywords {
+    text-align: center;
+    top: -128px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 72px;
+    font-size: 16px;
+    :global {
+      .ant-input {
+        min-width: 120px;
+      }
+    }
+    .mantra {
+      background-color: transparent;
+      color: white;
+    }
   }
 }
 .toolbar-container {
@@ -78,13 +109,6 @@
   flex-direction: row;
   align-items: end;
   justify-content: space-between;
-  .name {
-    font-size: 32px;
-    padding: 0;
-    margin-right: 12px;
-    height: 40px;
-    padding-bottom: 5px;
-  }
   .career {
     font-size: 16px;
     padding: 0;
@@ -119,17 +143,6 @@
   padding-bottom: 5px;
 }
 
-.keywords {
-  display: flex;
-  align-items: center;
-  padding: 0 @padding-sm @padding-sm;
-  font-size: 16px;
-  :global {
-    .ant-input {
-      min-width: 120px;
-    }
-  }
-}
 .bios {
   font-size: 14px;
   //background: @white-2;
@@ -143,11 +156,28 @@
 }
 .body {
   display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  width: 800px;
+
+  .dimension-container {
+    margin-right: 10px;
+    flex-direction: column;
+    width: 200px;
+    margin-right: 50px;
+    .behaviors {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 40px;
+    }
+  }
   .info {
-    font-size: 16px;
-    margin-bottom: @padding-xs;
-    border-bottom: 1px dashed @transBlack-4;
+    font-size: 18px;
+    margin-bottom: 5px;
     padding-bottom: @padding-xs;
+    color: @blue-6;
+    font-weight: 500;
   }
   .basic {
     display: flex;
@@ -177,10 +207,6 @@
           }
         }
       }
-    }
-    .behaviors {
-      display: flex;
-      flex-direction: column;
     }
   }
 }

@@ -120,14 +120,12 @@ export default class Topbar extends Component<DispatchProp> {
           onOk={() => this.doCreateNewProject()}
           onCancel={() => this.setModalVisible(false)}
         >
-          <div className={styles.modal}>
-            <Input
-              size="large"
+          <div className={styles['modal-content']}>
+            <Input className={styles['modal-input']}
               placeholder={newProjectName === '' ? '项目名称' : newProjectName}
               onChange={(e) => this.changeNewProjectName(e)}
             />
-            <Input
-              size="large"
+            <Input className={styles['modal-input']}
               placeholder={newProjectDescription === '' ? '项目简介' : newProjectDescription}
               onChange={(e) => this.changeNewProjectDescription(e)}
             />

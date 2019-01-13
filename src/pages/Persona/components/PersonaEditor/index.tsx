@@ -46,9 +46,9 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
     });
   };
   changePercent = (e, index) => {
-    console.log(index,e.target.value);
+    console.log(index, e.target.value);
     let value = 0;
-    if(e.target.value !== '') value = parseInt(e.target.value);
+    if (e.target.value !== '') value = parseInt(e.target.value);
     this.props.dispatch({
       type: 'persona/handlePercent',
       payload: { text: value, index },
@@ -98,12 +98,30 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
         img = females;
         break;
     }
+    console.log(dimGroups);
     return (
       <Fragment>
         <div className={styles.container}>
           <div className={styles['photo-combine']}>
             <div className={styles['photo-container']}>
               <img className={styles.photo} src={img[imgIndex]} alt="用户画像" />
+              <Input
+                style={{ width: name.length > 0 ? name.length * 96 : 108 }}
+                onChange={(e) => this.changeName(e, index)}
+                value={name}
+                className={styles.name}
+                placeholder="姓名"
+              />
+              <div className={styles.keywords}>
+                <span style={{ fontSize: 36, marginRight: 24, color: 'white' }}>"</span>
+                <Input
+                  className={styles.mantra}
+                  onChange={(e) => this.changeKeywords(e, index)}
+                  value={keywords}
+                  placeholder="请输入口头禅"
+                />
+                <span style={{ fontSize: 36, marginLeft: 24, color: 'white' }}>"</span>
+              </div>
             </div>
             <div className={styles['toolbar-container']}>
               <div className={styles.toolbar}>
@@ -121,29 +139,27 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'end',
+                  alignItems: 'start',
                 }}
               >
-                <Input
-                  style={{ width: name.length > 0 ? name.length * 36 : 72 }}
-                  onChange={(e) => this.changeName(e, index)}
-                  value={name}
-                  className={styles.name}
-                  placeholder="姓名"
-                />
-                <Input
-                  style={{ width: career.length > 0 ? career.length * 16 : 72 }}
-                  onChange={(e) => this.changeCareer(e, index)}
-                  value={career}
-                  className={styles.career}
-                  placeholder="职业"
-                />
+                {/*<Input*/}
+                {/*style={{ width: career.length > 0 ? career.length * 16 : 72 }}*/}
+                {/*onChange={(e) => this.changeCareer(e, index)}*/}
+                {/*value={career}*/}
+                {/*className={styles.career}*/}
+                {/*placeholder="职业"*/}
+                {/*/>*/}
               </div>
               <div className={styles.percent}>
                 <div className={styles.text}>
                   <div style={{ width: 64, marginRight: 4 }}>人群占比</div>
-                  <div style={{ width: 64 }} className={styles.number}>
-                    <Input onChange={(e) => this.changePercent(e, index)} value={percent.toFixed(0)} placeholder="比例" />%
+                  <div style={{ width: 48 }} className={styles.number}>
+                    <Input
+                      onChange={(e) => this.changePercent(e, index)}
+                      value={percent.toFixed(0)}
+                      placeholder="比例"
+                    />
+                    %
                   </div>
                 </div>
                 <MiniProgress
@@ -154,18 +170,8 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 />
               </div>
             </div>
-            <div className={styles.keywords}>
-              <span style={{ fontSize: 36, marginRight: 24 }}>"</span>
-              <Input
-                style={{ maxWidth: keywords.length * 20 }}
-                onChange={(e) => this.changeKeywords(e, index)}
-                value={keywords}
-                placeholder="请输入口头禅"
-              />
-              <span style={{ fontSize: 36, marginLeft: 24 }}>"</span>
-            </div>
             <div className={styles.body}>
-              <div className={styles.basic}>
+              <div className={styles['dimension-container']}>
                 {dimGroups.length > 0 && dimGroups[0].text === '基本信息' ? (
                   <div style={{ marginBottom: 24 }}>
                     <div className={styles.info}> 基本信息 </div>
@@ -184,53 +190,121 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                     ))}
                   </div>
                 ) : null}
-              </div>
-              <div className={styles.right}>
                 {dimGroups.map((dimGroup, index) =>
-                  dimGroup.text !== '基本信息' ? (
+                  dimGroup.text !== '基本信息' && index % 3 == 0 ? (
                     //<DraggableBlock key={index} dispatch={dispatch} index={index}>
-                      <div key={index} className={styles.behaviors}>
-                        <div className={styles.info}>{dimGroup.text}</div>
-                        {dimGroup.dims.map((dim, itemIndex) =>
-                          showText ? (
-                            <li key={dim.labelKey}>
-                              <Input
-                                style={{ width: dim.text.length * 17 }}
-                                onChange={(e) =>
-                                  this.changeItemText(e, this.props.index, index, itemIndex)
-                                }
-                                className={styles.itemtext}
-                                value={dim.text}
-                              />
-                            </li>
-                          ) : (
-                            <div key={dim.labelKey}>
-                              {dim.labelText}
-                              <MiniProgress
-                                percent={dim.value * 10}
-                                color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                                target={0}
-                                strokeWidth={8}
-                              />
-                            </div>
-                          )
-                        )}
-                      </div>
-                    // </DraggableBlock>
-                  ) : null
+                    <div key={index} className={styles.behaviors}>
+                      <div className={styles.info}>{dimGroup.text}</div>
+                      {dimGroup.dims.map((dim, itemIndex) =>
+                        showText ? (
+                          <li key={dim.labelKey}>
+                            <Input
+                              style={{ width: dim.text.length * 17 }}
+                              onChange={(e) =>
+                                this.changeItemText(e, this.props.index, index, itemIndex)
+                              }
+                              className={styles.itemtext}
+                              value={dim.text}
+                            />
+                          </li>
+                        ) : (
+                          <div key={dim.labelKey}>
+                            {dim.labelText}
+                            <MiniProgress
+                              percent={dim.value * 10}
+                              color={'l(0) 0:#99f5ff 1:#a6a6ff'}
+                              target={0}
+                              strokeWidth={8}
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : // </DraggableBlock>
+                  null
+                )}
+              </div>
+              <div className={styles['dimension-container']}>
+                {dimGroups.map((dimGroup, index) =>
+                  dimGroup.text !== '基本信息' && index % 3 == 1 ? (
+                    //<DraggableBlock key={index} dispatch={dispatch} index={index}>
+                    <div key={index} className={styles.behaviors}>
+                      <div className={styles.info}>{dimGroup.text}</div>
+                      {dimGroup.dims.map((dim, itemIndex) =>
+                        showText ? (
+                          <li key={dim.labelKey}>
+                            <Input
+                              style={{ width: dim.text.length * 17 }}
+                              onChange={(e) =>
+                                this.changeItemText(e, this.props.index, index, itemIndex)
+                              }
+                              className={styles.itemtext}
+                              value={dim.text}
+                            />
+                          </li>
+                        ) : (
+                          <div key={dim.labelKey}>
+                            {dim.labelText}
+                            <MiniProgress
+                              percent={dim.value * 10}
+                              color={'l(0) 0:#99f5ff 1:#a6a6ff'}
+                              target={0}
+                              strokeWidth={8}
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : // </DraggableBlock>
+                  null
+                )}
+              </div>
+              <div className={styles['dimension-container']}>
+                {dimGroups.map((dimGroup, index) =>
+                  dimGroup.text !== '基本信息' && index % 3 == 2 ? (
+                    //<DraggableBlock key={index} dispatch={dispatch} index={index}>
+                    <div key={index} className={styles.behaviors}>
+                      <div className={styles.info}>{dimGroup.text}</div>
+                      {dimGroup.dims.map((dim, itemIndex) =>
+                        showText ? (
+                          <li key={dim.labelKey}>
+                            <Input
+                              style={{ width: dim.text.length * 17 }}
+                              onChange={(e) =>
+                                this.changeItemText(e, this.props.index, index, itemIndex)
+                              }
+                              className={styles.itemtext}
+                              value={dim.text}
+                            />
+                          </li>
+                        ) : (
+                          <div key={dim.labelKey}>
+                            {dim.labelText}
+                            <MiniProgress
+                              percent={dim.value * 10}
+                              color={'l(0) 0:#99f5ff 1:#a6a6ff'}
+                              target={0}
+                              strokeWidth={8}
+                            />
+                          </div>
+                        )
+                      )}
+                    </div>
+                  ) : // </DraggableBlock>
+                  null
                 )}
               </div>
             </div>
-            {bios === undefined ? null : (
-              <div className={styles.bios}>
-                <TextArea
-                  autosize
-                  onChange={(e) => this.changeBios(e, index)}
-                  placeholder="请在此输入画像的个人介绍"
-                  value={bios}
-                />
-              </div>
-            )}
+            {/*{bios === undefined ? null : (*/}
+              {/*<div className={styles.bios}>*/}
+                {/*<TextArea*/}
+                  {/*autosize*/}
+                  {/*onChange={(e) => this.changeBios(e, index)}*/}
+                  {/*placeholder="请在此输入画像的个人介绍"*/}
+                  {/*value={bios}*/}
+                {/*/>*/}
+              {/*</div>*/}
+            {/*)}*/}
           </div>
         </div>
         <PhotoModal modalVisible={modalVisible} setModalVisible={this.setModalVisible} />

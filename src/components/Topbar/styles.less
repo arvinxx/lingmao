@@ -50,13 +50,23 @@
   align-items: center;
 }
 .modal {
-  width: 368px;
   height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+
+  .modal-content {
+    width: 450px;
+    .modal-input {
+      margin: 10px;
+      height: 45px;
+      width: 100%;
+    }
+  }
+
 }
+
 .searchbar {
   width: 240px;
   margin-right: 24px;
