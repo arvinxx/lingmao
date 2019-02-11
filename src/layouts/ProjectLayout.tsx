@@ -35,26 +35,15 @@ class BasicLayout extends Component<IBasicLayoutProps & DispatchProp> {
     return (
       <Layout>
         <Topbar />
-        <Layout>
-          <SiderMenu
-            logo={logo}
-            showMenu={showMenu}
-            menuData={getMenuData()}
-            collapsed={collapsed}
-            location={location}
-            onCollapse={this.handleMenuCollapse}
-            width={defaultSideWith}
-          />
-          <Layout
-            className={styles.layout}
-            style={
-              showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith, paddingTop: '7vh' } : {}
-            }
-          >
-            {/*<Content>*/}
-            {children}
-            {/*</Content>*/}
-          </Layout>
+        <Layout
+          className={styles.layout}
+          // style={
+          //   showMenu ? { paddingLeft: collapsed ? 80 : defaultSideWith, paddingTop: '7vh' } : {}
+          // }
+        >
+          {/*<Content>*/}
+          {children}
+          {/*</Content>*/}
         </Layout>
       </Layout>
     );

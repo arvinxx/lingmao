@@ -5,15 +5,16 @@ import DocumentTitle from 'react-document-title';
 import pathToRegexp from 'path-to-regexp';
 import UserLayout from './UserLayout';
 import BasicLayout from './BasicLayout';
+import ProjectLayout from './ProjectLayout';
 import { Alert } from 'antd';
 
-import { UserLayout as UserLayoutList, getPageTitle } from '@/common';
-import {Authorized} from "@/utils";
+import { UserLayout as UserLayoutList, ProjectLayout as ProjectList, getPageTitle } from '@/common';
+import { Authorized } from '@/utils';
 
 export interface ILayoutEntryProps {
   location: H.Location;
   history: H.History;
-  route: any
+  route: any;
 }
 
 @(withRouter as any)
@@ -24,7 +25,7 @@ export default class LayoutEntry extends Component<ILayoutEntryProps> {
     const getAuthority = (key, routes) => {
       routes.map((route) => {
         if (route.path && pathToRegexp(route.path).test(key)) {
-          if (route.authority !== null ) routeAuthority = route.authority;
+          if (route.authority !== null) routeAuthority = route.authority;
         } else if (route.routes) {
           routeAuthority = getAuthority(key, route.routes);
         }
@@ -36,10 +37,14 @@ export default class LayoutEntry extends Component<ILayoutEntryProps> {
     return getAuthority(pathname, routeData);
   };
   render() {
-    const { location, children, route:{routes} } = this.props;
+    const {
+      location,
+      children,
+      route: { routes },
+    } = this.props;
     const { pathname } = location;
     const pageTitle = getPageTitle(pathname);
-    console.log(location,routes);
+    console.log(location, routes);
     const routerConfig = this.getRouterAuthority(location.pathname, routes);
     console.log(routerConfig);
     // 如果路由地址是登录注册的话，使用登录注册布局
@@ -47,13 +52,19 @@ export default class LayoutEntry extends Component<ILayoutEntryProps> {
     if (UserLayoutList.indexOf(pathname) > -1) {
       return (
         <DocumentTitle title={pageTitle}>
-            <UserLayout id="UserLayout">{children}</UserLayout>
+          <UserLayout id="UserLayout">{children}</UserLayout>
         </DocumentTitle>
+      );
+    } else if (ProjectList.indexOf(pathname) > -1) {
+      return (
+        <Authorized authority={routerConfig} noMatch={<Alert message={'error'} />}>
+          <ProjectLayout id="ProjectLayout">{children}</ProjectLayout>
+        </Authorized>
       );
     } else {
       return (
         <DocumentTitle title={pageTitle}>
-          <Authorized a uthority={routerConfig} noMatch={<Alert message={"error"}/>}>
+          <Authorized authority={routerConfig} noMatch={<Alert message={'error'} />}>
             <BasicLayout id="BasicLayout">{children}</BasicLayout>
           </Authorized>
         </DocumentTitle>
