@@ -49,7 +49,6 @@ export interface IPersonaState {
   exportVisible: boolean;
   expandedDims: Array<string>;
   personaList: TPersonaList; // 画像列表
-  displayDimGroups: TDimGroups;
   showText: boolean;
   displayIndex: number;
 }
@@ -60,7 +59,6 @@ const persona: DvaModel<IPersonaState> = {
     exportVisible: false,
     expandedDims: [],
     personaList: personaList,
-    displayDimGroups: [],
     displayIndex: 0,
     showText: true,
   },
@@ -94,7 +92,7 @@ const persona: DvaModel<IPersonaState> = {
     removeOnePersona(state, { payload: targetKey }) {
       const delKey = parseInt(targetKey); // assure the number datatype;
       const willChangeDisplayIndex =
-        (state.displayIndex > delKey) ||
+        state.displayIndex > delKey ||
         (state.displayIndex === state.personaList.length - 1 && state.displayIndex === delKey);
       return {
         ...state,
@@ -166,34 +164,20 @@ const persona: DvaModel<IPersonaState> = {
     },
 
     /**
-     * 该函数控制在画像上显示的维度群组
-     */
-    handleDisplayDimGroups(state: IPersonaState) {
-      const { personaList, displayIndex } = state;
-      const { dimGroups, checkedDims } = personaList[Number(displayIndex)];
-      const filterDimGroups = dimGroups.filter((dimGroup: IDimGroup) =>
-        dimGroup.dims.some((dim) => checkedDims.some((item) => item === dim.labelKey))
-      );
-      return {
-        ...state,
-        displayDimGroups: filterDimGroups.map((dimGroup) => ({
-          ...dimGroup,
-          dims: dimGroup.dims.filter((dim) => checkedDims.some((id) => id === dim.labelKey)),
-        })),
-      };
-    },
-    /**
      * 拖拽排列显示的维度群组
      * dragIndex: 拖拽起始序号
      * dropIndex: 拖拽终点序号
      */
-    handleDragDisplayDim(state, { payload }) {
-      const { dragIndex, dropIndex } = payload;
-      const dragItem = state.displayDimGroups[dragIndex];
+    handleDragDimGroups(state: IPersonaState, { payload }) {
+      const { dimGroups, personaIndex } = payload;
       return {
         ...state,
-        displayDimGroups: update(state.displayDimGroups, {
-          $splice: [[dragIndex, 1], [dropIndex, 0, dragItem]],
+        personaList: update(state.personaList, {
+          [personaIndex]: {
+            dimGroups: {
+              $set: dimGroups,
+            },
+          },
         }),
       };
     },

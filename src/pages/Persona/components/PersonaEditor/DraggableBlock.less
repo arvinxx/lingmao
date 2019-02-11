@@ -1,8 +1,30 @@
 @import '~styles/themes/default';
 
-.block {
-  display: flex;
+.container {
   flex-direction: column;
-  width: 50%;
-  padding: 0 @padding-sm @padding-sm;
+  width: 200px;
+  margin-right: 50px;
+  padding: 8px;
+  transition: all ease-in-out @animation-duration-slow;
+  border-radius: 4px;
+  &:hover {
+    background: @white-2;
+  }
+}
+.info {
+  font-size: 18px;
+  margin-bottom: 5px;
+  padding-bottom: @padding-xs;
+  color: @blue-6;
+  font-weight: 500;
+}
+.dragging {
+  opacity: 0.5;
+  background: @blue-7;
+}
+.drop-right {
+  border-right: 2px dashed @blue-3;
+}
+.drop-left {
+  border-left: 2px dashed @blue-3;
 }

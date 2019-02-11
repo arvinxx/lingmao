@@ -136,11 +136,20 @@
     }
   }
 }
-
-.itemtext {
+.dim-item {
+  font-size: 14px;
+  margin-bottom: 8px;
+  transition: all @animation-duration-base ease-in-out;
+  padding: 0 4px;
+  &:hover {
+    background: @base-white;
+  }
+}
+.item-text {
   font-size: 14px;
   height: 24px;
   padding-bottom: 5px;
+  background: none;
 }
 
 .bios {
@@ -161,15 +170,18 @@
   width: 800px;
 
   .dimension-container {
-    margin-right: 10px;
     flex-direction: column;
     width: 200px;
     margin-right: 50px;
-    .behaviors {
-      width: 300px;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 40px;
+    padding: 8px;
+    transition: all ease-in-out @animation-duration-slow;
+    border-radius: 4px;
+    &:hover {
+      background: @white-2;
+    }
+    &:active {
+      background: @base-white;
+      box-shadow: @shadow-2;
     }
   }
   .info {

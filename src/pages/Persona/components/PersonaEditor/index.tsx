@@ -1,26 +1,32 @@
 import React, { Component, Fragment } from 'react';
 import { Input } from 'antd';
 import { DispatchProp } from 'react-redux';
-import { females, males } from '@/assets/photos';
+import { connect } from 'dva';
 
+import { females, males } from '@/assets/photos';
 import styles from './index.less';
-import DraggableBlock from './DraggableBlock';
+
+import ContentBlock from './ContentBlock';
 import PhotoModal from './PhotoModal';
-import { MiniProgress } from '@/components';
 
 import { IBasicInfo, TDimGroups } from '@/models/persona';
-import { IQuesRecord, TQuesData } from '@/models/data';
 
-const { TextArea } = Input;
-
+/**
+ * PersonaEditor 说明
+ * @interface persona 画布中展示的画像数量
+ * @interface displayDimGroups 展示在画布上的 dimGroups,经过勾选过滤
+ * @interface dimGroups 维度群组
+ * @interface personaIndex 展示画像的位次
+ * @interface showText 是否显示文字
+ */
 interface IPersonaEditorProps {
   persona: IBasicInfo;
   dimGroups: TDimGroups;
-  index: number;
+  displayDimGroups: TDimGroups;
+  personaIndex: number;
   showText: boolean;
 }
-
-export default class PersonaEditor extends Component<IPersonaEditorProps & DispatchProp> {
+class PersonaEditor extends Component<IPersonaEditorProps & DispatchProp> {
   state = {
     modalVisible: false,
     imgIndex: Math.floor(Math.random() * 4),
@@ -80,7 +86,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
   };
 
   render() {
-    const { dispatch, persona, dimGroups, index, showText } = this.props;
+    const { persona, dimGroups, displayDimGroups, personaIndex, showText, dispatch } = this.props;
     const { modalVisible, imgIndex } = this.state;
     const { keywords, name, photo, bios, career, percent } = persona;
 
@@ -98,7 +104,6 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
         img = females;
         break;
     }
-    console.log(dimGroups);
     return (
       <Fragment>
         <div className={styles.container}>
@@ -107,7 +112,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
               <img className={styles.photo} src={img[imgIndex]} alt="用户画像" />
               <Input
                 style={{ width: name.length > 0 ? name.length * 96 : 108 }}
-                onChange={(e) => this.changeName(e, index)}
+                onChange={(e) => this.changeName(e, personaIndex)}
                 value={name}
                 className={styles.name}
                 placeholder="姓名"
@@ -116,7 +121,7 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
                 <span style={{ fontSize: 36, marginRight: 24, color: 'white' }}>"</span>
                 <Input
                   className={styles.mantra}
-                  onChange={(e) => this.changeKeywords(e, index)}
+                  onChange={(e) => this.changeKeywords(e, personaIndex)}
                   value={keywords}
                   placeholder="请输入口头禅"
                 />
@@ -134,181 +139,21 @@ export default class PersonaEditor extends Component<IPersonaEditorProps & Dispa
               </div>
             </div>
           </div>
-          <div className={styles.content}>
-            <div className={styles.title}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'start',
-                }}
-              >
-                {/*<Input*/}
-                {/*style={{ width: career.length > 0 ? career.length * 16 : 72 }}*/}
-                {/*onChange={(e) => this.changeCareer(e, index)}*/}
-                {/*value={career}*/}
-                {/*className={styles.career}*/}
-                {/*placeholder="职业"*/}
-                {/*/>*/}
-              </div>
-              <div className={styles.percent}>
-                <div className={styles.text}>
-                  <div style={{ width: 64, marginRight: 4 }}>人群占比</div>
-                  <div style={{ width: 48 }} className={styles.number}>
-                    <Input
-                      onChange={(e) => this.changePercent(e, index)}
-                      value={percent.toFixed(0)}
-                      placeholder="比例"
-                    />
-                    %
-                  </div>
-                </div>
-                <MiniProgress
-                  percent={percent}
-                  color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                  target={100}
-                  strokeWidth={12}
-                />
-              </div>
-            </div>
-            <div className={styles.body}>
-              <div className={styles['dimension-container']}>
-                {dimGroups.length > 0 && dimGroups[0].text === '基本信息' ? (
-                  <div style={{ marginBottom: 24 }}>
-                    <div className={styles.info}> 基本信息 </div>
-                    {dimGroups[0].dims.map((item, itemIndex) => (
-                      <div key={item.labelKey} style={{ fontSize: 14, marginBottom: 8 }}>
-                        <span> {item.labelText}</span>
-                        {/*： {item.text}*/}
-                        :
-                        <Input
-                          style={{ width: item.text.length * 17 }}
-                          onChange={(e) => this.changeItemText(e, this.props.index, 0, itemIndex)}
-                          className={styles.itemtext}
-                          value={item.text}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-                {dimGroups.map((dimGroup, index) =>
-                  dimGroup.text !== '基本信息' && index % 3 == 0 ? (
-                    //<DraggableBlock key={index} dispatch={dispatch} index={index}>
-                    <div key={index} className={styles.behaviors}>
-                      <div className={styles.info}>{dimGroup.text}</div>
-                      {dimGroup.dims.map((dim, itemIndex) =>
-                        showText ? (
-                          <li key={dim.labelKey}>
-                            <Input
-                              style={{ width: dim.text.length * 17 }}
-                              onChange={(e) =>
-                                this.changeItemText(e, this.props.index, index, itemIndex)
-                              }
-                              className={styles.itemtext}
-                              value={dim.text}
-                            />
-                          </li>
-                        ) : (
-                          <div key={dim.labelKey}>
-                            {dim.labelText}
-                            <MiniProgress
-                              percent={dim.value * 10}
-                              color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                              target={0}
-                              strokeWidth={8}
-                            />
-                          </div>
-                        )
-                      )}
-                    </div>
-                  ) : // </DraggableBlock>
-                  null
-                )}
-              </div>
-              <div className={styles['dimension-container']}>
-                {dimGroups.map((dimGroup, index) =>
-                  dimGroup.text !== '基本信息' && index % 3 == 1 ? (
-                    //<DraggableBlock key={index} dispatch={dispatch} index={index}>
-                    <div key={index} className={styles.behaviors}>
-                      <div className={styles.info}>{dimGroup.text}</div>
-                      {dimGroup.dims.map((dim, itemIndex) =>
-                        showText ? (
-                          <li key={dim.labelKey}>
-                            <Input
-                              style={{ width: dim.text.length * 17 }}
-                              onChange={(e) =>
-                                this.changeItemText(e, this.props.index, index, itemIndex)
-                              }
-                              className={styles.itemtext}
-                              value={dim.text}
-                            />
-                          </li>
-                        ) : (
-                          <div key={dim.labelKey}>
-                            {dim.labelText}
-                            <MiniProgress
-                              percent={dim.value * 10}
-                              color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                              target={0}
-                              strokeWidth={8}
-                            />
-                          </div>
-                        )
-                      )}
-                    </div>
-                  ) : // </DraggableBlock>
-                  null
-                )}
-              </div>
-              <div className={styles['dimension-container']}>
-                {dimGroups.map((dimGroup, index) =>
-                  dimGroup.text !== '基本信息' && index % 3 == 2 ? (
-                    //<DraggableBlock key={index} dispatch={dispatch} index={index}>
-                    <div key={index} className={styles.behaviors}>
-                      <div className={styles.info}>{dimGroup.text}</div>
-                      {dimGroup.dims.map((dim, itemIndex) =>
-                        showText ? (
-                          <li key={dim.labelKey}>
-                            <Input
-                              style={{ width: dim.text.length * 17 }}
-                              onChange={(e) =>
-                                this.changeItemText(e, this.props.index, index, itemIndex)
-                              }
-                              className={styles.itemtext}
-                              value={dim.text}
-                            />
-                          </li>
-                        ) : (
-                          <div key={dim.labelKey}>
-                            {dim.labelText}
-                            <MiniProgress
-                              percent={dim.value * 10}
-                              color={'l(0) 0:#99f5ff 1:#a6a6ff'}
-                              target={0}
-                              strokeWidth={8}
-                            />
-                          </div>
-                        )
-                      )}
-                    </div>
-                  ) : // </DraggableBlock>
-                  null
-                )}
-              </div>
-            </div>
-            {/*{bios === undefined ? null : (*/}
-              {/*<div className={styles.bios}>*/}
-                {/*<TextArea*/}
-                  {/*autosize*/}
-                  {/*onChange={(e) => this.changeBios(e, index)}*/}
-                  {/*placeholder="请在此输入画像的个人介绍"*/}
-                  {/*value={bios}*/}
-                {/*/>*/}
-              {/*</div>*/}
-            {/*)}*/}
-          </div>
+          <ContentBlock
+            dispatch={dispatch}
+            bios={bios}
+            career={career}
+            percent={percent}
+            dimGroups={dimGroups}
+            displayDimGroups={displayDimGroups}
+            showText={showText}
+            personaIndex={personaIndex}
+          />
         </div>
         <PhotoModal modalVisible={modalVisible} setModalVisible={this.setModalVisible} />
       </Fragment>
     );
   }
 }
+
+export default connect()(PersonaEditor);

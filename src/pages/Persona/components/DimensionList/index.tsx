@@ -32,9 +32,6 @@ export default class DimensionList extends Component<IDimensionListProps & Dispa
       type: 'persona/changeCheckedDims',
       payload: { checkedDims, index },
     });
-    this.props.dispatch({
-      type: 'persona/handleDisplayDimGroups',
-    });
   };
 
   /**

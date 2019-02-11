@@ -1,23 +1,26 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Tabs, Button, Icon } from 'antd';
+import { Tabs, Layout } from 'antd';
 import { PersonaEditor, DimensionList } from './components';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 import styles from './edit.less';
 
 import { DispatchProp } from 'react-redux';
 import { IPersona, IPersonaState } from '@/models/persona';
 import { TQuesData } from '@/models/data';
+import { displayDimGroups } from '@/utils';
 
 const { TabPane } = Tabs;
-
+const { Content } = Layout;
 interface IEditProps {
   persona: IPersonaState;
   clusterResult: TQuesData;
 }
 
 interface IEditDefaultProps {}
-
+@(DragDropContext(HTML5Backend) as any)
 @connect(({ persona, data }) => ({
   persona,
   clusterResult: data.userModels,
@@ -53,18 +56,11 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
   };
 
   render() {
-    const { persona, dispatch, clusterResult } = this.props;
-    const {
-      dimVisible,
-      expandedDims,
-      personaList,
-      displayDimGroups,
-      displayIndex,
-      showText,
-    } = persona;
+    const { persona, dispatch } = this.props;
+    const { dimVisible, expandedDims, personaList, displayIndex, showText } = persona;
     const { checkedDims, dimGroups, basicInfo } = personaList[displayIndex] as IPersona;
     return (
-      <Fragment>
+      <Content style={{ display: 'flex' }}>
         <div className={styles.left}>
           <Tabs
             type="editable-card"
@@ -82,11 +78,11 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
                   closable={personaList.length > 1}
                 >
                   <PersonaEditor
-                    dimGroups={displayDimGroups}
-                    dispatch={dispatch}
+                    dimGroups={dimGroups}
+                    displayDimGroups={displayDimGroups(dimGroups, checkedDims)}
                     persona={basicInfo}
                     showText={showText}
-                    index={index}
+                    personaIndex={index}
                   />
                 </TabPane>
               );
@@ -111,7 +107,7 @@ export default class Edit extends Component<IEditProps & IEditDefaultProps & Dis
             />
           </div>
         ) : null}
-      </Fragment>
+      </Content>
     );
   }
 }
