@@ -24,7 +24,7 @@
     "classnames": "^2.2.5",
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.8",
-    "enquire-js": "^0.1.2",
+    "enquire-js": "0.2.1",
     "fastclick": "^1.0.6",
     "highlightable": "^1.0.7",
     "immutability-helper": "^2.7.0",
