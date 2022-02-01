@@ -58,7 +58,7 @@
     "@antv/data-set": "^0.8.8",
     "@commitlint/cli": "^6.2.0",
     "@types/enzyme": "^3.1.10",
-    "@types/jest": "^22.2.3",
+    "@types/jest": "22.2.3",
     "@types/lodash": "^4.14.108",
     "@types/mockdate": "^2.0.0",
     "@types/react": "^16.3.14",
