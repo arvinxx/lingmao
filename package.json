@@ -37,7 +37,7 @@
     "path-to-regexp": "^2.2.0",
     "qs": "^6.5.2",
     "react-broadcast": "^0.7.0",
-    "react-container-query": "^0.9.1",
+    "react-container-query": "0.12.1",
     "react-contextmenu": "^2.9.2",
     "react-dnd": "^2.6.0",
     "react-dnd-html5-backend": "^2.6.0",
