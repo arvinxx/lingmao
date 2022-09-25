@@ -47,7 +47,7 @@
     "react-hotkeys": "^1.1.4",
     "react-reflex": "^2.2.3",
     "shortid": "^2.2.8",
-    "slate": "^0.33.6",
+    "slate": "0.82.1",
     "slate-plain-serializer": "^0.5.12",
     "slate-react": "^0.12.6",
     "styled-components": "^3.2.2",
