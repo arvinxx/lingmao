@@ -55,7 +55,7 @@
     "xlsx": "^0.12.12"
   },
   "devDependencies": {
-    "@antv/data-set": "^0.8.8",
+    "@antv/data-set": "^0.11.0",
     "@commitlint/cli": "^6.2.0",
     "@types/enzyme": "^3.1.10",
     "@types/jest": "^22.2.3",
